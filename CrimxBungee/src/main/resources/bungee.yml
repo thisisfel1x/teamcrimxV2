@@ -1,0 +1,4 @@
+name: CrimxBungee
+version: ${project.version}
+main: de.fel1x.teamcrimx.crimxbungee.CrimxBungee
+description: A Bungee System for managing our sub-servers

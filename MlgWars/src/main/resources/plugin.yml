@@ -1,0 +1,13 @@
+name: MlgWars
+version: ${project.version}
+main: de.fel1x.teamcrimx.mlgwars.MlgWars
+api-version: 1.16
+authors: [fel1x]
+description: A minigame with too much mlg
+website: teamcrimx.de
+
+commands:
+  start:
+    description: Start the game
+  setup:
+    description: Setup a game

@@ -1,0 +1,15 @@
+name: CrimxLobby
+version: ${project.version}
+main: de.fel1x.teamcrimx.crimxlobby.CrimxLobby
+api-version: 1.16.1
+authors: [fel1x]
+description: Our Lobby System for navigating in our lobby
+website: teamcrimx.de
+depend:
+  - CrimxAPI
+
+commands:
+  build:
+    description: Activate or deactivate the build mode for yourself or for another player
+  setup:
+    description: Setup the lobby
