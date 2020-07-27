@@ -5,10 +5,8 @@ import de.fel1x.teamcrimx.mlgwars.commands.StartCommand;
 import de.fel1x.teamcrimx.mlgwars.gamestate.GamestateHandler;
 import de.fel1x.teamcrimx.mlgwars.listener.block.BlockBreakListener;
 import de.fel1x.teamcrimx.mlgwars.listener.block.BlockPlaceListener;
-import de.fel1x.teamcrimx.mlgwars.listener.player.InteractListener;
-import de.fel1x.teamcrimx.mlgwars.listener.player.JoinListener;
-import de.fel1x.teamcrimx.mlgwars.listener.player.MoveListener;
-import de.fel1x.teamcrimx.mlgwars.listener.player.QuitListener;
+import de.fel1x.teamcrimx.mlgwars.listener.entity.DamageListener;
+import de.fel1x.teamcrimx.mlgwars.listener.player.*;
 import de.fel1x.teamcrimx.mlgwars.listener.world.WeatherChangeListener;
 import de.fel1x.teamcrimx.mlgwars.maphandler.WorldLoader;
 import de.fel1x.teamcrimx.mlgwars.timer.ITimer;
@@ -64,6 +62,10 @@ public final class MlgWars extends JavaPlugin {
         new QuitListener(this);
         new MoveListener(this);
         new InteractListener(this);
+        new DeathListener(this);
+
+        // ENTITY
+        new DamageListener(this);
 
         // BLOCK
         new BlockBreakListener(this);
@@ -124,8 +126,7 @@ public final class MlgWars extends JavaPlugin {
     }
 
     public int getTeamSize() {
-        int teamSize = 1;
-        return teamSize;
+        return 1;
     }
 
     public ITimer getiTimer() {

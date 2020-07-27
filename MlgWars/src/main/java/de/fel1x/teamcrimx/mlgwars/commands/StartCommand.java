@@ -4,6 +4,7 @@ import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.timer.IdleTimer;
 import de.fel1x.teamcrimx.mlgwars.timer.LobbyTimer;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -44,12 +45,12 @@ public class StartCommand implements CommandExecutor {
         }
 
         if(gamestate == Gamestate.IDLE) {
-            IdleTimer idleTimer = new IdleTimer();
-            idleTimer.stop();
+            Bukkit.getScheduler().cancelTasks(this.mlgWars);
             lobbyTimer.start(10);
             player.sendMessage(this.mlgWars.getPrefix() + "§7Der Countdown wurde verkürzt und das Spiel wird gestartet");
             return true;
         } else {
+            Bukkit.getScheduler().cancelTasks(this.mlgWars);
             lobbyTimer.start(10);
             player.sendMessage(this.mlgWars.getPrefix() + "§7Der Countdown wurde verkürzt");
             return true;

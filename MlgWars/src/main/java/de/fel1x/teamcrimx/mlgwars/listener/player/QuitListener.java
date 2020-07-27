@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.timer.EndingTimer;
 import de.fel1x.teamcrimx.mlgwars.timer.IdleTimer;
+import de.fel1x.teamcrimx.mlgwars.utils.WinDetection;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,11 +49,7 @@ public class QuitListener implements Listener {
                 if(Bukkit.getOnlinePlayers().size() == 0) {
                     Bukkit.getServer().shutdown();
                 } else {
-                    if(this.mlgWars.getData().getPlayers().size() == 1) {
-                        this.mlgWars.startTimerByClass(EndingTimer.class);
-                    } else if(this.mlgWars.getData().getPlayers().size() == 0) {
-                        this.mlgWars.startTimerByClass(EndingTimer.class);
-                    }
+                    new WinDetection();
                 }
                 break;
         }

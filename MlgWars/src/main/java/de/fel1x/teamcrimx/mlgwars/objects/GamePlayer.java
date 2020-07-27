@@ -4,9 +4,12 @@ import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.Data;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class GamePlayer {
 
@@ -53,7 +56,16 @@ public class GamePlayer {
         this.player.setHealth(20);
         this.player.setFoodLevel(25);
 
+        this.player.setFlying(false);
+        this.player.setAllowFlight(false);
+        this.player.setFlying(false);
+
         this.player.getActivePotionEffects().forEach(potionEffect -> this.player.removePotionEffect(potionEffect.getType()));
+
+        Bukkit.getOnlinePlayers().forEach(onlinePlayers -> {
+            onlinePlayers.showPlayer(this.player);
+            this.player.showPlayer(onlinePlayers);
+        });
 
     }
 
@@ -85,4 +97,19 @@ public class GamePlayer {
     }
 
 
+    public void activateSpectatorMode() {
+
+        this.removeFromPlayers();
+        this.addToSpectators();
+
+        this.player.setGameMode(GameMode.ADVENTURE);
+
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false));
+
+        this.player.setAllowFlight(true);
+        this.player.setFlying(true);
+
+        this.data.getPlayers().forEach(ingamePlayer -> ingamePlayer.hidePlayer(this.player));
+
+    }
 }
