@@ -18,6 +18,10 @@ public class LobbyScoreboard {
 
     public LobbyScoreboard() {
 
+    }
+
+    public void setGameScoreboard(Player player) {
+
         gameScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
         objective = gameScoreboard.registerNewObjective("dummy", "test");
@@ -40,10 +44,6 @@ public class LobbyScoreboard {
         objective.getScore("§9").setScore(1);
         objective.getScore("§a").setScore(0);
 
-    }
-
-    public void setGameScoreboard(Player player) {
-
         if (!player.getScoreboard().equals(gameScoreboard)) {
             player.setScoreboard(gameScoreboard);
         }
@@ -52,8 +52,8 @@ public class LobbyScoreboard {
 
         if (player.getScoreboard().equals(gameScoreboard)) {
 
-            int coins = (int) lobbyPlayer.getObjectFromMongoDocument("coins", MongoDBCollection.USERS);
-            this.updateBoard(player, String.format("§8● §e%s Coins", coins), "coins", "§e");
+            int coinsInt = (int) lobbyPlayer.getObjectFromMongoDocument("coins", MongoDBCollection.USERS);
+            this.updateBoard(player, String.format("§8● §e%s Coins", coinsInt), "coins", "§e");
             this.updateBoard(player, "§8● §6Keine Daten", "playtime", "§6");
 
         }

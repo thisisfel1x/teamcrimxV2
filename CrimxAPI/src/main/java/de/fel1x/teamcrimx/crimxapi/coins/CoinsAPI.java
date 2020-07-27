@@ -10,9 +10,9 @@ import java.util.UUID;
 public class CoinsAPI {
 
     private final CrimxAPI crimxAPI = new CrimxAPI();
-    private Document playerNetworkDocument;
+    private final Document playerNetworkDocument;
 
-    public void init(UUID uuid) {
+    public CoinsAPI(UUID uuid) {
 
         this.playerNetworkDocument = crimxAPI.getMongoDB().getUserCollection().
                 find(new Document("_id", uuid.toString())).first();

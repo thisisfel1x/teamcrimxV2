@@ -1,5 +1,6 @@
 package de.fel1x.teamcrimx.crimxlobby.inventories;
 
+import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
@@ -19,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class NPCInventory implements InventoryProvider {
 
@@ -35,15 +37,15 @@ public class NPCInventory implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
 
-        LobbyPlayer lobbyPlayer = new LobbyPlayer(player, true);
-        CrimxPlayer crimxPlayer = new CrimxPlayer(lobbyPlayer.getCloudPlayer());
+        AtomicReference<LobbyPlayer> lobbyPlayer = new AtomicReference<>(new LobbyPlayer(player, true));
+        CrimxPlayer crimxPlayer = new CrimxPlayer(lobbyPlayer.get().getCloudPlayer());
 
         contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName(" ").toItemStack()));
 
         contents.set(0, 4, ClickableItem.empty(new ItemBuilder(crimxPlayer.getPlayerSkin()[0])
                 .setName("§8● §a" + player.getDisplayName()).addGlow().toItemStack()));
 
-        Date date = new Date(lobbyPlayer.getCloudPlayer().getFirstLoginTimeMillis());
+        Date date = new Date(lobbyPlayer.get().getCloudPlayer().getFirstLoginTimeMillis());
         DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy',' HH:mm:ss 'Uhr'");
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
         String dateFormatted = formatter.format(date);
@@ -51,7 +53,7 @@ public class NPCInventory implements InventoryProvider {
         contents.set(1, 2, ClickableItem.empty(new ItemBuilder(Material.EMERALD)
                 .setName("§7Erster Join §8● §a§l" + dateFormatted).toItemStack()));
 
-        date = new Date(lobbyPlayer.getCloudPlayer().getLastLoginTimeMillis());
+        date = new Date(lobbyPlayer.get().getCloudPlayer().getLastLoginTimeMillis());
         formatter = new SimpleDateFormat("dd.MM.yyyy',' HH:mm:ss 'Uhr'");
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
         dateFormatted = formatter.format(date);
@@ -84,9 +86,12 @@ public class NPCInventory implements InventoryProvider {
                 if(canGet) {
                     player.sendMessage(crimxLobby.getPrefix() + "§7Du hast §a100 Coins §7durch die tägliche Belohnung erhalten!");
                     crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setLastReward(System.currentTimeMillis());
-                    lobbyPlayer.saveObjectInDocument("last-reward", System.currentTimeMillis(), MongoDBCollection.LOBBY);
+                    lobbyPlayer.get().saveObjectInDocument("last-reward", System.currentTimeMillis(), MongoDBCollection.LOBBY);
                     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 2, 0.75f);
-                    int coins = (int) lobbyPlayer.getObjectFromMongoDocument("coins", MongoDBCollection.USERS);
+                    CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
+                    coinsAPI.addCoins(100);
+                    lobbyPlayer.set(new LobbyPlayer(player, true));
+                    int coins = (int) lobbyPlayer.get().getObjectFromMongoDocument("coins", MongoDBCollection.USERS);
                     this.crimxLobby.getLobbyScoreboard().updateBoard(player, String.format("§8● §e%s Coins", coins), "coins", "§e");
                 } else {
                     player.sendMessage(crimxLobby.getPrefix() + "§7Du hast bereits deine tägliche Belohnung abgeholt!");

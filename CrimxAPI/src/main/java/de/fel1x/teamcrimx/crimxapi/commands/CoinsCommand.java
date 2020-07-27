@@ -22,9 +22,7 @@ public class CoinsCommand implements CommandExecutor {
         }
 
         Player player = (Player) commandSender;
-        CoinsAPI coinsAPI = new CoinsAPI();
-
-        coinsAPI.init(player.getUniqueId());
+        CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
 
         boolean hasPermission = player.hasPermission("crimxapi.coins");
 
@@ -53,8 +51,7 @@ public class CoinsCommand implements CommandExecutor {
                     return false;
                 }
 
-                coinsAPI = new CoinsAPI();
-                coinsAPI.init(targetPlayer.getUniqueId());
+                coinsAPI = new CoinsAPI(player.getUniqueId());
 
                 switch (operation) {
                     case "get":
@@ -63,21 +60,21 @@ public class CoinsCommand implements CommandExecutor {
 
                     case "add":
                         coinsAPI.addCoins(coinsOperation);
-                        coinsAPI.init(player.getUniqueId());
+                        coinsAPI = new CoinsAPI(player.getUniqueId());
                         player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins gutgeschrieben! " +
                                 "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coinsAPI.getCoins() + " Coins");
                         break;
 
                     case "remove":
                         coinsAPI.removeCoins(coinsOperation);
-                        coinsAPI.init(player.getUniqueId());
+                        coinsAPI = new CoinsAPI(player.getUniqueId());
                         player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins entfernt! " +
                                 "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coinsAPI.getCoins() + " Coins");
                         break;
 
                     case "set":
                         coinsAPI.setCoins(coinsOperation);
-                        coinsAPI.init(player.getUniqueId());
+                        coinsAPI = new CoinsAPI(player.getUniqueId());
                         player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins gesetzt! " +
                                 "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coinsAPI.getCoins() + " Coins");
                         break;
