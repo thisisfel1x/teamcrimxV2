@@ -70,6 +70,9 @@ public class LobbyPlayer {
 
         this.lobbyDocument = this.data.getPlayerMongoDocument().get(player.getUniqueId());
         this.networkDocument = this.data.getPlayerMongoNetworkDocument().get(player.getUniqueId());
+
+        int coins = (int) this.getObjectFromMongoDocument("coins", MongoDBCollection.USERS);
+        this.crimxLobby.getLobbyScoreboard().updateBoard(player, String.format("§8● §e%s Coins", coins), "coins", "§e");
     }
 
     public ICloudPlayer getCloudPlayer() {
@@ -591,5 +594,9 @@ public class LobbyPlayer {
             player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
             player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
         }
+    }
+
+    public void setScoreboard() {
+        this.crimxLobby.getLobbyScoreboard().setGameScoreboard(player);
     }
 }

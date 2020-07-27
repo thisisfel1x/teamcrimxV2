@@ -49,6 +49,8 @@ public class JoinListener implements Listener {
         lobbyPlayer.setLobbyInventory();
         lobbyPlayer.teleportToSpawn();
 
+        lobbyPlayer.setScoreboard();
+
         lobbyPlayer.spawnPersonalNPC();
 
         boolean vipPerms = player.hasPermission("crimxlobby.vip");

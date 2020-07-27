@@ -86,6 +86,8 @@ public class NPCInventory implements InventoryProvider {
                     crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setLastReward(System.currentTimeMillis());
                     lobbyPlayer.saveObjectInDocument("last-reward", System.currentTimeMillis(), MongoDBCollection.LOBBY);
                     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 2, 0.75f);
+                    int coins = (int) lobbyPlayer.getObjectFromMongoDocument("coins", MongoDBCollection.USERS);
+                    this.crimxLobby.getLobbyScoreboard().updateBoard(player, String.format("§8● §e%s Coins", coins), "coins", "§e");
                 } else {
                     player.sendMessage(crimxLobby.getPrefix() + "§7Du hast bereits deine tägliche Belohnung abgeholt!");
                     player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);

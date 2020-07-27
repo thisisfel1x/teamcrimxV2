@@ -50,6 +50,7 @@ public class RainbowArmor implements ICosmetic {
 
     @Override
     public void startTrail(Player player) {
+        CrimxLobby.getInstance().getData().getCosmetic().remove(player.getUniqueId());
         CrimxLobby.getInstance().getData().getHueMap().put(player.getUniqueId(), 0.0f);
     }
 

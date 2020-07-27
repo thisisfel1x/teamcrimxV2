@@ -12,6 +12,7 @@ import de.fel1x.teamcrimx.crimxlobby.listeners.player.*;
 import de.fel1x.teamcrimx.crimxlobby.listeners.world.WeatherChangeListener;
 import de.fel1x.teamcrimx.crimxlobby.manager.SpawnManager;
 import de.fel1x.teamcrimx.crimxlobby.minigames.watermlg.WaterMlgHandler;
+import de.fel1x.teamcrimx.crimxlobby.scoreboard.LobbyScoreboard;
 import fr.minuskube.inv.InventoryManager;
 import net.jitse.npclib.NPCLib;
 import org.bukkit.Bukkit;
@@ -38,6 +39,8 @@ public final class CrimxLobby extends JavaPlugin {
     private SpawnManager spawnManager = new SpawnManager();
     private WaterMlgHandler waterMlgHandler;
 
+    private LobbyScoreboard lobbyScoreboard;
+
     public static CrimxLobby getInstance() {
         return instance;
     }
@@ -61,6 +64,8 @@ public final class CrimxLobby extends JavaPlugin {
         this.inventoryManager.init();
 
         this.waterMlgHandler = new WaterMlgHandler();
+
+        this.lobbyScoreboard = new LobbyScoreboard();
 
         this.registerCommands();
         this.registerListener();
@@ -110,22 +115,18 @@ public final class CrimxLobby extends JavaPlugin {
 
     private void runMainScheduler() {
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> this.getData().getHueMap().forEach(((uuid, hue) -> {
 
-            this.getData().getHueMap().forEach(((uuid, hue) -> {
+            Player player = Bukkit.getPlayer(uuid);
+            RainbowArmor rainbowArmor = new RainbowArmor();
 
-                Player player = Bukkit.getPlayer(uuid);
-                RainbowArmor rainbowArmor = new RainbowArmor();
+            if(player != null && player.isOnline()) {
+                hue = rainbowArmor.handleColor(hue, 0.005f);
+                rainbowArmor.setArmor(player, hue, 0.02f);
+                this.getData().getHueMap().put(uuid, hue);
+            }
 
-                if(player != null && player.isOnline()) {
-                    hue = rainbowArmor.handleColor(hue, 0.005f);
-                    rainbowArmor.setArmor(player, hue, 0.02f);
-                    this.getData().getHueMap().put(uuid, hue);
-                }
-
-            }));
-
-        }, 0L, 1L);
+        })), 0L, 1L);
 
     }
 
@@ -163,5 +164,9 @@ public final class CrimxLobby extends JavaPlugin {
 
     public WaterMlgHandler getWaterMlgHandler() {
         return waterMlgHandler;
+    }
+
+    public LobbyScoreboard getLobbyScoreboard() {
+        return lobbyScoreboard;
     }
 }
