@@ -11,6 +11,7 @@ import de.fel1x.teamcrimx.mlgwars.listener.world.WeatherChangeListener;
 import de.fel1x.teamcrimx.mlgwars.maphandler.WorldLoader;
 import de.fel1x.teamcrimx.mlgwars.timer.ITimer;
 import de.fel1x.teamcrimx.mlgwars.timer.IdleTimer;
+import fr.minuskube.inv.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,6 +27,7 @@ public final class MlgWars extends JavaPlugin {
     private Data date;
     private GamestateHandler gamestateHandler;
     private PluginManager pluginManager;
+    private InventoryManager inventoryManager;
 
     private WorldLoader worldLoader;
 
@@ -42,6 +44,9 @@ public final class MlgWars extends JavaPlugin {
         this.date = new Data();
         this.gamestateHandler = new GamestateHandler();
         this.pluginManager = Bukkit.getPluginManager();
+
+        this.inventoryManager = new InventoryManager(this);
+        this.inventoryManager.init();
 
         this.worldLoader = new WorldLoader();
 
@@ -153,7 +158,7 @@ public final class MlgWars extends JavaPlugin {
         this.noMap = noMap;
     }
 
-    public WorldLoader getWorldLoader() {
-        return worldLoader;
+    public InventoryManager getInventoryManager() {
+        return inventoryManager;
     }
 }

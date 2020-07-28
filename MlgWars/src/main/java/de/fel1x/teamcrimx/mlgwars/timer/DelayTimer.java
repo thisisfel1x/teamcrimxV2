@@ -40,7 +40,7 @@ public class DelayTimer implements ITimer {
                 switch (countdown) {
                     case 3: case 2: case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Das Spiel startet in §e"
-                                + (countdown == 1 ? "einer Sekunde" : this.countdown + " Sekunden"));
+                                + (countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
                         Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.NOTE_BASS, 1.5f, 0.75f));
                         break;
 

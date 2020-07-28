@@ -30,7 +30,7 @@ public class LobbyTimer implements ITimer {
                 switch (countdown) {
                     case 60: case 50: case 40: case 30: case 20: case 10: case 5: case 4: case 3: case 2: case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Die Runde startet in §e"
-                                + (countdown == 1 ? "einer Sekunde" : this.countdown + " Sekunden"));
+                                + (countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
                         Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.NOTE_BASS, 2f, 3f));
                         break;
 

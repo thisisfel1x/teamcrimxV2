@@ -2,6 +2,7 @@ package de.fel1x.teamcrimx.mlgwars.listener.player;
 
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
+import de.fel1x.teamcrimx.mlgwars.inventories.KitInventory;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -28,8 +29,8 @@ public class InteractListener implements Listener {
 
         if(gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
             if(event.hasItem()) {
-                if(event.getMaterial() == Material.CHEST) {
-                    player.sendMessage("kit");
+                if(event.getMaterial() == Material.STORAGE_MINECART) {
+                    KitInventory.KIT_OVERVIEW_INVENTORY.open(player);
                 } else if(event.getMaterial() == Material.REDSTONE_TORCH_ON) {
                     player.sendMessage("forcemap");
                 } else {
