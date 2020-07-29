@@ -9,6 +9,7 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class KitInventory implements InventoryProvider {
@@ -39,7 +40,11 @@ public class KitInventory implements InventoryProvider {
                         .setLore(iKit.getKitDescription()).toItemStack(),
                         event -> {
                     gamePlayer.setSelectedKit(kit);
+
+                    player.playSound(player.getLocation(), Sound.ORB_PICKUP, 5, 0.5f);
+                    player.sendMessage(MlgWars.getInstance().getPrefix() + "§7Du nutzt nun das §e[" + iKit.getKitName() + "] §7Kit!");
                     player.closeInventory();
+
                         }));
 
                 column++;

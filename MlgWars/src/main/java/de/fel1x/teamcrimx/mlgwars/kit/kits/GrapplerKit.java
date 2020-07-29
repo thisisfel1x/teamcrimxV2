@@ -3,6 +3,7 @@ package de.fel1x.teamcrimx.mlgwars.kit.kits;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class GrapplerKit implements IKit {
@@ -21,7 +22,7 @@ public class GrapplerKit implements IKit {
 
     @Override
     public int getKitCost() {
-        return 2000;
+        return 3000;
     }
 
     @Override
@@ -30,9 +31,7 @@ public class GrapplerKit implements IKit {
     }
 
     @Override
-    public ItemStack[] getInventoryContents() {
-        return new ItemStack[] {
-                new ItemBuilder(Material.FISHING_ROD).setName("§8● §bEnterhaken").toItemStack()
-        };
+    public void setKitInventory(Player player) {
+        player.getInventory().setItem(0, new ItemBuilder(Material.FISHING_ROD).setName("§8● §bEnterhaken").toItemStack());
     }
 }

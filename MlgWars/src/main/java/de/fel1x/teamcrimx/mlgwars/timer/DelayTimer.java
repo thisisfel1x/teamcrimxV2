@@ -33,7 +33,7 @@ public class DelayTimer implements ITimer {
                 GamePlayer gamePlayer = new GamePlayer(player);
                 try {
                     IKit iKit = gamePlayer.getSelectedKit().getClazz().newInstance();
-                    player.getInventory().addItem(iKit.getInventoryContents());
+                    iKit.setKitInventory(player);
                 } catch (InstantiationException | IllegalAccessException ignored) {
                     player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten! Du erhälst keine Kit-Items");
                 }

@@ -3,7 +3,7 @@ package de.fel1x.teamcrimx.mlgwars.kit.kits;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Player;
 
 public class ExploderKit implements IKit {
 
@@ -19,7 +19,7 @@ public class ExploderKit implements IKit {
 
     @Override
     public int getKitCost() {
-        return 2500;
+        return 3500;
     }
 
     @Override
@@ -28,14 +28,12 @@ public class ExploderKit implements IKit {
     }
 
     @Override
-    public ItemStack[] getInventoryContents() {
-        return new ItemStack[] {
-                new ItemBuilder(Material.LEVER)
+    public void setKitInventory(Player player) {
+        player.getInventory().addItem(new ItemBuilder(Material.LEVER)
                         .setUnbreakable()
                         .setName("§8● §eFernzünder").toItemStack(),
                 new ItemBuilder(Material.TNT, 16)
                         .setName("§8● §bExplosives TNT")
-                        .setLore("§7Explosiver geht es fast gar", "§7nicht mehr! (wirklich explosiv!)").toItemStack()
-        };
+                        .setLore("§7Explosiver geht es fast gar", "§7nicht mehr! (wirklich explosiv!)").toItemStack());
     }
 }

@@ -3,6 +3,7 @@ package de.fel1x.teamcrimx.mlgwars.kit.kits;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class StandardKit implements IKit {
@@ -28,10 +29,8 @@ public class StandardKit implements IKit {
     }
 
     @Override
-    public ItemStack[] getInventoryContents() {
-        return new ItemStack[] {
-                new ItemBuilder(Material.GOLD_SWORD)
-                        .setName("§8● §6Müll §7(umtauschen verboten!)").toItemStack()
-        };
+    public void setKitInventory(Player player) {
+        player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD)
+                .setName("§8● §6Müll §7(umtauschen verboten!)").toItemStack());
     }
 }
