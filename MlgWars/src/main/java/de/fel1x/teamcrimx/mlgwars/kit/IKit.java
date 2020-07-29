@@ -1,15 +1,18 @@
 package de.fel1x.teamcrimx.mlgwars.kit;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 public interface IKit {
 
-    String kitName();
+    String getKitName();
 
-    String[] kitDescription();
+    String[] getKitDescription();
 
-    int kitCost();
+    int getKitCost();
 
-    Material kitMaterial();
+    Material getKitMaterial();
+
+    ItemStack[] getInventoryContents();
 
 }

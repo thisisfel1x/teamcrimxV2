@@ -1,5 +1,6 @@
 package de.fel1x.teamcrimx.mlgwars;
 
+import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.mlgwars.commands.SetupCommand;
 import de.fel1x.teamcrimx.mlgwars.commands.StartCommand;
 import de.fel1x.teamcrimx.mlgwars.gamestate.GamestateHandler;
@@ -20,6 +21,7 @@ public final class MlgWars extends JavaPlugin {
 
     private static MlgWars instance;
     private final String prefix = "§8| §eMlgWars §8» §r";
+    private CrimxAPI crimxAPI;
 
     private boolean inSetup;
     private boolean noMap;
@@ -40,6 +42,8 @@ public final class MlgWars extends JavaPlugin {
 
         this.inSetup = false;
         this.noMap = false;
+
+        this.crimxAPI = new CrimxAPI();
 
         this.date = new Data();
         this.gamestateHandler = new GamestateHandler();
@@ -68,6 +72,8 @@ public final class MlgWars extends JavaPlugin {
         new MoveListener(this);
         new InteractListener(this);
         new DeathListener(this);
+        new FishListener(this);
+        new ChatListener(this);
 
         // ENTITY
         new DamageListener(this);
@@ -160,5 +166,13 @@ public final class MlgWars extends JavaPlugin {
 
     public InventoryManager getInventoryManager() {
         return inventoryManager;
+    }
+
+    public CrimxAPI getCrimxAPI() {
+        return crimxAPI;
+    }
+
+    public WorldLoader getWorldLoader() {
+        return worldLoader;
     }
 }

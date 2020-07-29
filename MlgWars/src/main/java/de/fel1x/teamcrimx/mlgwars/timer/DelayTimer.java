@@ -2,14 +2,11 @@ package de.fel1x.teamcrimx.mlgwars.timer;
 
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import de.fel1x.teamcrimx.mlgwars.kit.IKit;
+import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,6 +28,15 @@ public class DelayTimer implements ITimer {
             this.mlgWars.getData().getPlayers().forEach(player -> {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.getInventory().clear();
+                this.mlgWars.getData().getPlayTime().put(player.getUniqueId(), System.currentTimeMillis());
+
+                GamePlayer gamePlayer = new GamePlayer(player);
+                try {
+                    IKit iKit = gamePlayer.getSelectedKit().getClazz().newInstance();
+                    player.getInventory().addItem(iKit.getInventoryContents());
+                } catch (InstantiationException | IllegalAccessException ignored) {
+                    player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten! Du erhälst keine Kit-Items");
+                }
             });
 
             this.teleportPlayersToSpawns();

@@ -53,7 +53,9 @@ public class DamageListener implements Listener {
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
         if(gamestate != Gamestate.INGAME) {
-            if(gamestate != Gamestate.PREGAME && event.getCause() != EntityDamageEvent.DamageCause.VOID) {
+            if(gamestate == Gamestate.PREGAME && event.getCause() == EntityDamageEvent.DamageCause.VOID) {
+                event.setCancelled(false);
+            } else {
                 event.setCancelled(true);
             }
         }

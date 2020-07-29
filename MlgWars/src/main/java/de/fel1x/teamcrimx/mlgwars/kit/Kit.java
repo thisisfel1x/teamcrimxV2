@@ -1,10 +1,14 @@
 package de.fel1x.teamcrimx.mlgwars.kit;
 
+import de.fel1x.teamcrimx.mlgwars.kit.kits.ExploderKit;
+import de.fel1x.teamcrimx.mlgwars.kit.kits.GrapplerKit;
 import de.fel1x.teamcrimx.mlgwars.kit.kits.StandardKit;
 
 public enum Kit {
 
-    STARTER(StandardKit.class);
+    STARTER(StandardKit.class),
+    GRAPPLER(GrapplerKit.class),
+    EXPLODE(ExploderKit.class);
 
     private Class<? extends IKit> clazz;
 

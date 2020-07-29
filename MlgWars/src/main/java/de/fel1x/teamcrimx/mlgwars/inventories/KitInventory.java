@@ -4,6 +4,7 @@ import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
+import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
@@ -23,6 +24,8 @@ public class KitInventory implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
 
+        GamePlayer gamePlayer = new GamePlayer(player);
+
         int column = 0;
         int row = 0;
 
@@ -31,9 +34,13 @@ public class KitInventory implements InventoryProvider {
             try {
                 IKit iKit = kit.getClazz().newInstance();
 
-                contents.set(row, column, ClickableItem.empty(new ItemBuilder(iKit.kitMaterial())
-                        .setName("§8● §a" + iKit.kitName())
-                        .setLore(iKit.kitDescription()).toItemStack()));
+                contents.set(row, column, ClickableItem.of(new ItemBuilder(iKit.getKitMaterial())
+                        .setName("§8● §a" + iKit.getKitName())
+                        .setLore(iKit.getKitDescription()).toItemStack(),
+                        event -> {
+                    gamePlayer.setSelectedKit(kit);
+                    player.closeInventory();
+                        }));
 
                 column++;
 

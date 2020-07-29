@@ -52,7 +52,7 @@ public class CrimxPlayer {
                 .append("coins", 0)
                 .append("firstJoin", System.currentTimeMillis())
                 .append("lastJoin", System.currentTimeMillis())
-                .append("onlinetime", 0)
+                .append("onlinetime", 0L)
                 .append("skin-texture", skin[0])
                 .append("skin-signature", skin[1]);
 

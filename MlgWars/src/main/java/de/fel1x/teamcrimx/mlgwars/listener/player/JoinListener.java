@@ -1,5 +1,8 @@
 package de.fel1x.teamcrimx.mlgwars.listener.player;
 
+import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
+import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
+import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
@@ -25,10 +28,19 @@ public class JoinListener implements Listener {
 
         Player player = event.getPlayer();
         GamePlayer gamePlayer = new GamePlayer(player);
+        CrimxPlayer crimxPlayer = new CrimxPlayer(gamePlayer.getCloudPlayer());
 
         event.setJoinMessage(null);
 
         gamePlayer.cleanUpOnJoin();
+
+        if (!crimxPlayer.checkIfPlayerExistsInCollection(player.getUniqueId(), MongoDBCollection.MLGWARS)) {
+            gamePlayer.createPlayerData();
+        }
+
+        BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(event.getPlayer());
+
+        gamePlayer.initDatabasePlayer();
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 

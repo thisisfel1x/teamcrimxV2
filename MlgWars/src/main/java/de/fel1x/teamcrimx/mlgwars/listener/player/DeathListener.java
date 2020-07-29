@@ -1,6 +1,7 @@
 package de.fel1x.teamcrimx.mlgwars.listener.player;
 
 import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
+import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
@@ -23,7 +24,7 @@ public class DeathListener implements Listener {
     public void on(PlayerDeathEvent event) {
 
         Player player = event.getEntity();
-        GamePlayer gamePlayer = new GamePlayer(player);
+        GamePlayer gamePlayer = new GamePlayer(player, true);
 
         gamePlayer.activateSpectatorMode();
 
@@ -44,6 +45,10 @@ public class DeathListener implements Listener {
             } else {
                 event.setDeathMessage(this.mlgWars.getPrefix() + player.getDisplayName() + " §7ist gestorben");
             }
+
+            long timePlayed = System.currentTimeMillis() - this.mlgWars.getData().getPlayTime().get(player.getUniqueId());
+            long added = timePlayed + (long) gamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS);
+            gamePlayer.saveObjectInDocument("onlinetime", added, MongoDBCollection.USERS);
 
             new WinDetection();
         }

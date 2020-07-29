@@ -1,9 +1,18 @@
 package de.fel1x.teamcrimx.mlgwars.objects;
 
+import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
+import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
+import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.Data;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
+import de.fel1x.teamcrimx.mlgwars.database.MlgWarsDatabase;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
+import de.fel1x.teamcrimx.mlgwars.kit.IKit;
+import de.fel1x.teamcrimx.mlgwars.kit.Kit;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -14,12 +23,54 @@ import org.bukkit.potion.PotionEffectType;
 public class GamePlayer {
 
     private final MlgWars mlgWars = MlgWars.getInstance();
-    private final Data data = mlgWars.getData();
+    private final Data data;
+
+    private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
     private Player player;
+    private Document networkDocument;
+    private Document mlgWarsDocument;
 
     public GamePlayer(Player player) {
         this.player = player;
+
+        this.data = this.mlgWars.getData();
+
+        this.mlgWarsDocument = this.data.getMlgWarsPlayerDocument().get(this.player.getUniqueId());
+        this.networkDocument = this.data.getNetworkPlayerDocument().get(this.player.getUniqueId());
+    }
+
+    public GamePlayer(Player player, boolean documentUpdate) {
+
+        this.data = this.mlgWars.getData();
+
+        if(documentUpdate) {
+            this.mlgWarsDocument = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().
+                    find(new Document("_id", player.getUniqueId().toString())).first();
+
+            this.networkDocument = this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection().
+                    find(new Document("_id", player.getUniqueId().toString())).first();
+
+            this.data.getMlgWarsPlayerDocument().put(this.player.getUniqueId(), this.mlgWarsDocument);
+            this.data.getNetworkPlayerDocument().put(this.player.getUniqueId(), this.networkDocument);
+        }
+
+        this.mlgWarsDocument = this.data.getMlgWarsPlayerDocument().get(this.player.getUniqueId());
+        this.networkDocument = this.data.getNetworkPlayerDocument().get(this.player.getUniqueId());
+    }
+
+    public void initDatabasePlayer() {
+        this.mlgWarsDocument = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().
+                find(new Document("_id", player.getUniqueId().toString())).first();
+
+        this.networkDocument = this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection().
+                find(new Document("_id", player.getUniqueId().toString())).first();
+
+        this.data.getMlgWarsPlayerDocument().put(this.player.getUniqueId(), this.mlgWarsDocument);
+        this.data.getNetworkPlayerDocument().put(this.player.getUniqueId(), this.networkDocument);
+
+        this.mlgWarsDocument = this.data.getMlgWarsPlayerDocument().get(this.player.getUniqueId());
+        this.networkDocument = this.data.getNetworkPlayerDocument().get(this.player.getUniqueId());
     }
 
     public boolean isPlayer() {
@@ -46,6 +97,10 @@ public class GamePlayer {
         this.data.getSpectators().remove(player);
     }
 
+    public ICloudPlayer getCloudPlayer() {
+        return this.playerManager.getOnlinePlayer(this.player.getUniqueId());
+    }
+
     public void cleanUpOnJoin() {
 
         this.player.getInventory().clear();
@@ -59,6 +114,8 @@ public class GamePlayer {
         this.player.setFlying(false);
         this.player.setAllowFlight(false);
         this.player.setFlying(false);
+
+        this.data.getPlayerGg().put(this.player.getUniqueId(), false);
 
         this.player.getActivePotionEffects().forEach(potionEffect -> this.player.removePotionEffect(potionEffect.getType()));
 
@@ -111,5 +168,52 @@ public class GamePlayer {
 
         this.data.getPlayers().forEach(ingamePlayer -> ingamePlayer.hidePlayer(this.player));
 
+    }
+
+    public void createPlayerData() {
+        MlgWarsDatabase mlgWarsDatabase = new MlgWarsDatabase();
+        mlgWarsDatabase.createPlayerData(this.player);
+    }
+
+    public Object getObjectFromMongoDocument(String key, MongoDBCollection mongoDBCollection) {
+        switch (mongoDBCollection) {
+            case MLGWARS:
+                return this.mlgWarsDocument.get(key);
+            case USERS:
+                return this.networkDocument.get(key);
+            default:
+                return null;
+        }
+    }
+
+    public void saveObjectInDocument(String key, Object value, MongoDBCollection mongoDBCollection) {
+
+        Document document = new Document(key, value);
+        Bson updateOperation = new Document("$set", document);
+
+        switch (mongoDBCollection) {
+            case MLGWARS:
+                this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().updateOne(this.mlgWarsDocument, updateOperation);
+                break;
+            case USERS:
+                this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection().updateOne(this.networkDocument, updateOperation);
+        }
+    }
+
+    public void setSelectedKit(Kit kit) {
+        try {
+            IKit iKit = kit.getClazz().newInstance();
+            this.data.getSelectedKit().put(this.player, kit);
+            this.player.getInventory().setItem(8, new ItemBuilder(iKit.getKitMaterial())
+                    .setName("§8● §a" + iKit.getKitName())
+                    .setLore(iKit.getKitDescription()).toItemStack());
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Kit getSelectedKit() {
+        Kit chosen = this.data.getSelectedKit().get(this.player);
+        return chosen == null ? Kit.STARTER : chosen;
     }
 }
