@@ -20,7 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class MlgWars extends JavaPlugin {
 
     private static MlgWars instance;
-    private final String prefix = "§8| §eMlgWars §8» §r";
+    private final String prefix = "§eMlgWars §8● §r";
     private CrimxAPI crimxAPI;
 
     private boolean inSetup;
@@ -74,6 +74,7 @@ public final class MlgWars extends JavaPlugin {
         new DeathListener(this);
         new FishListener(this);
         new ChatListener(this);
+        new PickUpListener(this);
 
         // ENTITY
         new DamageListener(this);

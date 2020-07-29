@@ -5,32 +5,34 @@ import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class GrapplerKit implements IKit {
+public class SaverKit implements IKit {
 
     @Override
     public String getKitName() {
-        return "Grappler";
+        return "Saver";
     }
 
     @Override
     public String[] getKitDescription() {
         return new String[] {
-                "§7Ziehe dich von einer Insel zur anderen!", "§cAchtung: kann nur 5x verwendet werden!", ""
+                "§7Sichere dich vor dem Tod", "§7mit einer praktischen Rettungsplattform", ""
         };
     }
 
     @Override
     public int getKitCost() {
-        return 3000;
+        return 2000;
     }
 
     @Override
     public Material getKitMaterial() {
-        return Material.FISHING_ROD;
+        return Material.BLAZE_ROD;
     }
 
     @Override
     public void setKitInventory(Player player) {
-        player.getInventory().setItem(0, new ItemBuilder(Material.FISHING_ROD).setName("§8● §bEnterhaken").toItemStack());
+        player.getInventory().setItem(0, new ItemBuilder(Material.BLAZE_ROD, 3)
+                .setName("§8● §eRettungsplattform")
+                .addGlow().toItemStack());
     }
 }

@@ -31,6 +31,8 @@ public class StandardKit implements IKit {
     @Override
     public void setKitInventory(Player player) {
         player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD)
-                .setName("§8● §6Müll §7(umtauschen verboten!)").toItemStack());
+                .setName("§8● §6Müll §7(umtauschen verboten!)")
+                .setLore("", "", "", "", "", "", "", "", "§7§o(kann Gift verursachen)")
+                .toItemStack());
     }
 }

@@ -46,7 +46,7 @@ public class QuitListener implements Listener {
                 break;
 
             case DELAY: case PREGAME: case INGAME:
-                if(Bukkit.getOnlinePlayers().size() == 0) {
+                if(Bukkit.getOnlinePlayers().isEmpty()) {
                     Bukkit.getServer().shutdown();
                 } else {
                     new WinDetection();

@@ -14,7 +14,7 @@ public class ExploderKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] { "", "§7Sprenge platziertes TNT", "§7mit deinem Fernzünder in die Luft!" };
+        return new String[] { "§7Sprenge platziertes TNT", "§7mit deinem Fernzünder in die Luft!", "" };
     }
 
     @Override

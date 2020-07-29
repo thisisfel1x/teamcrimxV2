@@ -253,9 +253,9 @@ public class ItemBuilder {
     public ItemBuilder addGlow() {
 
         ItemMeta im = is.getItemMeta();
-        this.addEnchant(Enchantment.DAMAGE_ARTHROPODS, 1);
         im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         is.setItemMeta(im);
+        this.addEnchant(Enchantment.DAMAGE_ARTHROPODS, 1);
         return this;
 
     }
