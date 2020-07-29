@@ -4,6 +4,7 @@ import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import org.bson.Document;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -29,6 +30,9 @@ public class Data {
     private Cuboid middleRegion;
     private Cuboid mapRegion;
 
+    // KIT-STORAGE
+    private final HashMap<UUID, ArrayList<Block>> placedExploderTnt;
+
     public Data() {
         this.players = new ArrayList<>();
         this.spectators = new ArrayList<>();
@@ -45,6 +49,8 @@ public class Data {
         this.networkPlayerDocument = new HashMap<>();
 
         this.playerGg = new HashMap<>();
+
+        this.placedExploderTnt = new HashMap<>();
     }
 
     public List<Player> getPlayers() {
@@ -97,5 +103,9 @@ public class Data {
 
     public Map<UUID, Boolean> getPlayerGg() {
         return playerGg;
+    }
+
+    public HashMap<UUID, ArrayList<Block>> getPlacedExploderTnt() {
+        return placedExploderTnt;
     }
 }

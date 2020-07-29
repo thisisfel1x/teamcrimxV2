@@ -28,7 +28,11 @@ public class DamageListener implements Listener {
             return;
         }
 
-        if(!(event.getEntity() instanceof Player) && !(event.getDamager() instanceof Player)) {
+        if(!(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        if(!(event.getDamager() instanceof Player)) {
             return;
         }
 
@@ -53,11 +57,8 @@ public class DamageListener implements Listener {
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
         if(gamestate != Gamestate.INGAME) {
-            if(gamestate == Gamestate.PREGAME && event.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                event.setCancelled(false);
-            } else {
-                event.setCancelled(true);
-            }
+            event.setCancelled(gamestate != Gamestate.PREGAME || (event.getCause() != EntityDamageEvent.DamageCause.VOID
+                    && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_EXPLOSION));
         }
 
     }

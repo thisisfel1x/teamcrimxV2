@@ -23,18 +23,16 @@ import org.bukkit.potion.PotionEffectType;
 public class GamePlayer {
 
     private final MlgWars mlgWars = MlgWars.getInstance();
-    private final Data data;
+    private final Data data = this.mlgWars.getData();
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
-    private Player player;
+    private final Player player;
     private Document networkDocument;
     private Document mlgWarsDocument;
 
     public GamePlayer(Player player) {
         this.player = player;
-
-        this.data = this.mlgWars.getData();
 
         this.mlgWarsDocument = this.data.getMlgWarsPlayerDocument().get(this.player.getUniqueId());
         this.networkDocument = this.data.getNetworkPlayerDocument().get(this.player.getUniqueId());
@@ -42,17 +40,17 @@ public class GamePlayer {
 
     public GamePlayer(Player player, boolean documentUpdate) {
 
-        this.data = this.mlgWars.getData();
+        this.player = player;
 
         if(documentUpdate) {
-            this.mlgWarsDocument = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().
+            Document mlgWarsDocument = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().
                     find(new Document("_id", player.getUniqueId().toString())).first();
 
-            this.networkDocument = this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection().
+            Document networkDocument = this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection().
                     find(new Document("_id", player.getUniqueId().toString())).first();
 
-            this.data.getMlgWarsPlayerDocument().put(this.player.getUniqueId(), this.mlgWarsDocument);
-            this.data.getNetworkPlayerDocument().put(this.player.getUniqueId(), this.networkDocument);
+            this.data.getMlgWarsPlayerDocument().put(this.player.getUniqueId(), mlgWarsDocument);
+            this.data.getNetworkPlayerDocument().put(this.player.getUniqueId(), networkDocument);
         }
 
         this.mlgWarsDocument = this.data.getMlgWarsPlayerDocument().get(this.player.getUniqueId());
@@ -60,14 +58,14 @@ public class GamePlayer {
     }
 
     public void initDatabasePlayer() {
-        this.mlgWarsDocument = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().
+        Document mlgWarsDocument = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().
                 find(new Document("_id", player.getUniqueId().toString())).first();
 
-        this.networkDocument = this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection().
+        Document networkDocument = this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection().
                 find(new Document("_id", player.getUniqueId().toString())).first();
 
-        this.data.getMlgWarsPlayerDocument().put(this.player.getUniqueId(), this.mlgWarsDocument);
-        this.data.getNetworkPlayerDocument().put(this.player.getUniqueId(), this.networkDocument);
+        this.data.getMlgWarsPlayerDocument().put(this.player.getUniqueId(), mlgWarsDocument);
+        this.data.getNetworkPlayerDocument().put(this.player.getUniqueId(), networkDocument);
 
         this.mlgWarsDocument = this.data.getMlgWarsPlayerDocument().get(this.player.getUniqueId());
         this.networkDocument = this.data.getNetworkPlayerDocument().get(this.player.getUniqueId());
