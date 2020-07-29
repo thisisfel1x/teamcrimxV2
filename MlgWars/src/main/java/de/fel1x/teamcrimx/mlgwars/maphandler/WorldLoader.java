@@ -8,6 +8,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.WorldCreator;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 
 import java.io.File;
 import java.util.Random;
@@ -32,6 +34,8 @@ public class WorldLoader {
             lobby = spawnHandler.loadLocation("lobby");
             Spawns.LOBBY.setLocation(lobby);
         }
+
+        Spawns.LOBBY.getLocation().getWorld().getEntities().forEach(Entity::remove);
 
         File[] files = new File("plugins/MlgWars/maps").listFiles();
         Random rand = new Random();
@@ -63,6 +67,12 @@ public class WorldLoader {
             spectator = this.mapHandler.loadLocation(mapName, "spectator");
             Spawns.SPECTATOR.setLocation(spectator);
         }
+
+        Spawns.SPECTATOR.getLocation().getWorld().getEntities().forEach(entity -> {
+            if(!(entity instanceof ArmorStand)) {
+                entity.remove();
+            }
+        });
 
         Size size;
 
