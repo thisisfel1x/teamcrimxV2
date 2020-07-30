@@ -9,9 +9,7 @@ public enum Kit {
     EXPLODER(ExploderKit.class),
     MINER(MinerKit.class),
     ASTRONAUT(AstronautKit.class),
-    SAVER(SaverKit.class),
-    GHOST(GhostKit.class),
-    THROWER(ThrowerKit.class);
+    SAVER(SaverKit.class);
 
     private Class<? extends IKit> clazz;
 
