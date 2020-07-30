@@ -54,7 +54,7 @@ public class LobbyScoreboard {
 
             int coinsInt = (int) lobbyPlayer.getObjectFromMongoDocument("coins", MongoDBCollection.USERS);
             this.updateBoard(player, String.format("§8● §e%s Coins", coinsInt), "coins", "§e");
-            this.updateBoard(player, "§8● §6Keine Daten", "playtime", "§6");
+            this.updateBoard(player, "§8● §6" + lobbyPlayer.getOnlineTimeForScoreboard(), "playtime", "§6");
 
         }
 

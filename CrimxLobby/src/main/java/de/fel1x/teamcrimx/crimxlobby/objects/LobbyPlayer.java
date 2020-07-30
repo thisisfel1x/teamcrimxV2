@@ -6,6 +6,7 @@ import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
+import de.fel1x.teamcrimx.crimxapi.utils.TimeUtils;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.Data;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.Cosmetic;
@@ -73,6 +74,7 @@ public class LobbyPlayer {
 
         int coins = (int) this.getObjectFromMongoDocument("coins", MongoDBCollection.USERS);
         this.crimxLobby.getLobbyScoreboard().updateBoard(player, String.format("§8● §e%s Coins", coins), "coins", "§e");
+        this.crimxLobby.getLobbyScoreboard().updateBoard(player, "§8● §6" + this.getOnlineTimeForScoreboard(), "playtime", "§6");
     }
 
     public ICloudPlayer getCloudPlayer() {
@@ -202,6 +204,21 @@ public class LobbyPlayer {
         Bson updateOperation = new Document("$set", toUpdate);
         this.crimxLobby.getCrimxAPI().getMongoDB().getLobbyCollection().updateOne(this.lobbyDocument, updateOperation);
 
+    }
+
+    public String getOnlineTimeForScoreboard() {
+
+        long onlineTimeInMillis = (long) this.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS);
+
+        if(onlineTimeInMillis < 1000 * 60) {
+            return "Keine Daten";
+        } else if(onlineTimeInMillis > 1000 * 60 && onlineTimeInMillis < 1000 * 60 * 60) {
+            long minutes = TimeUtils.splitTime(onlineTimeInMillis)[2];
+            return  minutes == 1 ? minutes + " Minute" : minutes + " Minuten";
+        } else {
+            long hours = TimeUtils.splitTime(onlineTimeInMillis)[1];
+            return  hours == 1 ? hours + " Stunde" : hours + " Stunden";
+        }
     }
 
     public int getPlayerHiderItemData() {
