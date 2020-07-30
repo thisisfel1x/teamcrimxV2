@@ -58,7 +58,13 @@ public class DamageListener implements Listener {
 
         if(gamestate != Gamestate.INGAME) {
             event.setCancelled(gamestate != Gamestate.PREGAME || (event.getCause() != EntityDamageEvent.DamageCause.VOID
-                    && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_EXPLOSION));
+                    && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
+                    || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION));
+        }
+
+        if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
+                || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
+            event.setDamage(0.1D);
         }
 
     }
