@@ -7,10 +7,7 @@ import de.fel1x.teamcrimx.mlgwars.inventories.KitInventory;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -104,9 +101,6 @@ public class InteractListener implements Listener {
 
                         this.removeItem(player);
 
-                        player.sendMessage(this.mlgWars.getPrefix() + "§7Die Rettungsplattform §cverschwindet " +
-                                "§7in §e30 Sekunden");
-
                         int delay = 0;
 
                         if(player.getLocation().getY() < 0) {
@@ -119,6 +113,8 @@ public class InteractListener implements Listener {
                             public void run() {
                                 placeCylinder(player.getLocation().clone().subtract(0, 10, 0),
                                         Material.SLIME_BLOCK, 2);
+                                player.sendMessage(mlgWars.getPrefix() + "§7Die Rettungsplattform §cverschwindet " +
+                                        "§7in §e30 Sekunden");
                             }
                         }.runTaskLater(this.mlgWars, delay);
 
@@ -131,6 +127,25 @@ public class InteractListener implements Listener {
                         }.runTaskLater(this.mlgWars, delay + (20 * 30));
 
                         break;
+                    case THROWER:
+                        if(gamestate == Gamestate.INGAME) {
+                            switch (interactedMaterial) {
+                                case TNT:
+                                    this.removeItem(player);
+                                    TNTPrimed tnt = player.getWorld().spawn(player.getEyeLocation(), TNTPrimed.class);
+                                    tnt.setVelocity(player.getEyeLocation().getDirection().multiply(1.75).setY(0.25D));
+                                    tnt.setFuseTicks(50);
+                                    break;
+                                case SKULL_ITEM:
+                                    this.removeItem(player);
+                                    player.launchProjectile(WitherSkull.class);
+                                    break;
+                                case FIREBALL:
+                                    this.removeItem(player);
+                                    player.launchProjectile(Fireball.class);
+                                    break;
+                            }
+                        }
                 }
             }
 

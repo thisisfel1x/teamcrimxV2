@@ -48,7 +48,7 @@ public class ForcemapInventory implements InventoryProvider {
             String mapName = config.getString("name");
             Size size = this.mapHandler.getSize(mapName);
 
-            contents.set(row, column, ClickableItem.of(new ItemBuilder(Material.PAPER).setName("§8● §7" + mapName).setLore("", "§7Größe §8●  §b" + size.getName(), "").toItemStack(), event -> {
+            contents.set(row, column, ClickableItem.of(new ItemBuilder(Material.PAPER).setName("§8● §7" + mapName).setLore("", "§7Größe §8● §b" + size.getName(), "").toItemStack(), event -> {
                 player.closeInventory();
                 if(mapName.equalsIgnoreCase(this.mlgWars.getMapName())) {
                     player.sendMessage(this.mlgWars.getPrefix() + "§cDiese Map ist bereits ausgewählt");
