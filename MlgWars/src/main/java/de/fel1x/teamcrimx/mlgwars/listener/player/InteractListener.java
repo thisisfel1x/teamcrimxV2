@@ -2,6 +2,7 @@ package de.fel1x.teamcrimx.mlgwars.listener.player;
 
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
+import de.fel1x.teamcrimx.mlgwars.inventories.ForcemapInventory;
 import de.fel1x.teamcrimx.mlgwars.inventories.KitInventory;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.*;
@@ -47,7 +48,7 @@ public class InteractListener implements Listener {
                         player.playSound(player.getLocation(), Sound.CHEST_OPEN, 2f, 0.75f);
                         KitInventory.KIT_OVERVIEW_INVENTORY.open(player);
                     } else if(event.getMaterial() == Material.REDSTONE_TORCH_ON) {
-                        player.sendMessage("forcemap");
+                        ForcemapInventory.FORCEMAP_INVENTORY.open(player);
                     } else {
                         event.setCancelled(true);
                     }

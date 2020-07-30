@@ -26,6 +26,8 @@ public final class MlgWars extends JavaPlugin {
     private boolean inSetup;
     private boolean noMap;
 
+    private String mapName;
+
     private Data date;
     private GamestateHandler gamestateHandler;
     private PluginManager pluginManager;
@@ -175,5 +177,13 @@ public final class MlgWars extends JavaPlugin {
 
     public WorldLoader getWorldLoader() {
         return worldLoader;
+    }
+
+    public String getMapName() {
+        return mapName;
+    }
+
+    public void setMapName(String mapName) {
+        this.mapName = mapName;
     }
 }

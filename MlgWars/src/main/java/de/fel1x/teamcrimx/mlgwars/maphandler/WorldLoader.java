@@ -55,7 +55,7 @@ public class WorldLoader {
 
     }
 
-    private void forceMap(String mapName) {
+    public void forceMap(String mapName) {
 
         Location spectator = this.mapHandler.loadLocation(mapName, "spectator");
         if(spectator == null) {
@@ -119,6 +119,8 @@ public class WorldLoader {
 
         Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§aDie Map " + mapName +
                 " wurde erfolgreich geladen");
+
+        this.mlgWars.setMapName(mapName);
 
     }
 

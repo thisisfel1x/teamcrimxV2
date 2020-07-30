@@ -18,7 +18,7 @@ public class KitInventory implements InventoryProvider {
             .id("customInventory")
             .provider(new KitInventory())
             .size(5, 9)
-            .title("§a§lKits")
+            .title("§8● §e§lKits")
             .manager(MlgWars.getInstance().getInventoryManager())
             .build();
 
