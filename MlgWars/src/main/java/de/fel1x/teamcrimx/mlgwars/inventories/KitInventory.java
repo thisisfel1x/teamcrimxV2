@@ -49,7 +49,7 @@ public class KitInventory implements InventoryProvider {
 
                 column++;
 
-                if(column == 8) {
+                if(column == 9) {
                     column = 0;
                     row++;
                 }
