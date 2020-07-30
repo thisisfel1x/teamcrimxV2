@@ -24,6 +24,7 @@ public class DeathListener implements Listener {
     public void on(PlayerDeathEvent event) {
 
         Player player = event.getEntity();
+        Player killer;
         GamePlayer gamePlayer = new GamePlayer(player, true);
 
         gamePlayer.activateSpectatorMode();
@@ -32,9 +33,16 @@ public class DeathListener implements Listener {
 
         if(gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
 
-            if(this.mlgWars.getData().getLastHit().get(player) != null) {
+            if(player.getKiller() != null) {
+                killer = player.getKiller();
+            } else if(this.mlgWars.getData().getLastHit().get(player) != null) {
+                killer = this.mlgWars.getData().getLastHit().get(player);
+            } else {
+                killer = null;
+            }
 
-                Player killer = this.mlgWars.getData().getLastHit().get(player);
+            if(killer != null) {
+
                 CoinsAPI coinsAPI = new CoinsAPI(killer.getUniqueId());
                 coinsAPI.addCoins(100);
 
