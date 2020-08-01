@@ -144,7 +144,9 @@ public class GamePlayer {
 
     public void teleport(Spawns spawns) {
         try {
-            this.player.teleport(spawns.getLocation());
+            Bukkit.getScheduler().runTaskLater(this.mlgWars, () -> {
+                this.player.teleport(spawns.getLocation());
+            }, 3L);
         } catch (NullPointerException exception) {
             this.player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten!");
             exception.printStackTrace();
