@@ -49,11 +49,11 @@ public class InGameTimer implements ITimer {
                             Player player1 = (Player) nearbyEntity;
                             GamePlayer gamePlayer1 = new GamePlayer(player1);
 
-                            if(gamePlayer1.isSpectator() || player.equals(player1)) continue;
+                            if(gamePlayer1.isSpectator() || player.getUniqueId().equals(player1.getUniqueId())) continue;
 
                             if(gamePlayer1.getSelectedKit() != Kit.STINKER) {
-                                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 3, 0, true, true), true);
-                                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 3, 0, true, true), true);
+                                player1.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 3, 0, true, true), true);
+                                player1.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 3, 0, true, true), true);
                             }
                         }
                     }

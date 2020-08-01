@@ -86,10 +86,12 @@ public class WinDetection {
 
             FireworkMeta fireworkMeta = firework.getFireworkMeta();
 
-            Random r = new Random();
+            Random random = new Random();
 
             fireworkMeta.setPower(2);
-            fireworkMeta.addEffect(FireworkEffect.builder().withColor(Color.fromBGR(r.nextInt(255), r.nextInt(255), r.nextInt(255))).flicker(true).build());
+            fireworkMeta.addEffect(FireworkEffect.builder()
+                    .with(FireworkEffect.Type.values()[random.nextInt(FireworkEffect.Type.values().length)])
+                    .withColor(Color.fromBGR(random.nextInt(255), random.nextInt(255), random.nextInt(255))).flicker(true).build());
             firework.setFireworkMeta(fireworkMeta);
 
         }
