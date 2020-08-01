@@ -1,5 +1,6 @@
 package de.fel1x.teamcrimx.mlgwars.timer;
 
+import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
@@ -56,6 +57,9 @@ public class DelayTimer implements ITimer {
                         this.mlgWars.startTimerByClass(PreGameTimer.class);
                         break;
                 }
+
+                Bukkit.getOnlinePlayers().forEach(player -> Actionbar.sendTitle(player, (countdown == 3) ? "§a§l3"
+                        : (countdown == 2) ? "§e§l2" : (countdown == 1) ? "§c§l1" : "§a§lGO!", 0, 40, 10));
 
                 countdown--;
 
