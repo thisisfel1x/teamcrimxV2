@@ -5,16 +5,18 @@ import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class StandardKit implements IKit {
+public class SouperKit implements IKit {
 
     @Override
     public String getKitName() {
-        return "Starter";
+        return "Souper";
     }
 
     @Override
     public String[] getKitDescription() {
-        return new String[] { "", "§7Jeder fängt mal klein an...", "§7Aber hiermit will keiner anfangen!"};
+        return new String[] {
+                "§7Spawne Brünhilde die Kuh", "§7und hole ihre leckeren Suppen ab!"
+        };
     }
 
     @Override
@@ -24,14 +26,17 @@ public class StandardKit implements IKit {
 
     @Override
     public Material getKitMaterial() {
-        return Material.IRON_PICKAXE;
+        return Material.MUSHROOM_SOUP;
     }
 
     @Override
     public void setKitInventory(Player player) {
-        player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD)
-                .setName("§8● §6Müll §7(umtauschen verboten!)")
-                .setLore("", "", "", "", "", "", "", "", "§7§o(kann Gift verursachen)")
+        player.getInventory().setItem(0, new ItemBuilder(Material.MONSTER_EGG)
+                .setName("§8● §cPilzkuh")
+                .setColor(96)
+                .addGlow()
                 .toItemStack());
+
+        player.getInventory().setItem(1, new ItemBuilder(Material.BOWL, 16).toItemStack());
     }
 }

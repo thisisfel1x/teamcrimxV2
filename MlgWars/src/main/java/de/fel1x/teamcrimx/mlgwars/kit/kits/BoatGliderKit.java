@@ -5,33 +5,35 @@ import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class StandardKit implements IKit {
+public class BoatGliderKit implements IKit {
 
     @Override
     public String getKitName() {
-        return "Starter";
+        return "Boatglider";
     }
 
     @Override
     public String[] getKitDescription() {
-        return new String[] { "", "§7Jeder fängt mal klein an...", "§7Aber hiermit will keiner anfangen!"};
+        return new String[] {
+                "§7Katapultiere dich mit", "§7 einem Stoß in die Luft", ""
+        };
     }
 
     @Override
     public int getKitCost() {
-        return 0;
+        return 3000;
     }
 
     @Override
     public Material getKitMaterial() {
-        return Material.IRON_PICKAXE;
+        return Material.BOAT;
     }
 
     @Override
     public void setKitInventory(Player player) {
-        player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD)
-                .setName("§8● §6Müll §7(umtauschen verboten!)")
-                .setLore("", "", "", "", "", "", "", "", "§7§o(kann Gift verursachen)")
+        player.getInventory().setItem(0, new ItemBuilder(Material.BOAT, 3)
+                .setName("§8● §7MLG-Boot")
+                .addGlow()
                 .toItemStack());
     }
 }

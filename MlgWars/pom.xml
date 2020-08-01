@@ -129,5 +129,20 @@
             <version>3.3.0-RELEASE</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>LibsDisguises</groupId>
+            <artifactId>LibsDisguises</artifactId>
+            <version>8.6.7</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/Felix/Downloads/LibsDisguises 8.6.7.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>4.5.0</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/Felix/Downloads/ProtocolLib(2).jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

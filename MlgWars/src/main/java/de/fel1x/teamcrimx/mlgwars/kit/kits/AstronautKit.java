@@ -5,6 +5,8 @@ import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class AstronautKit implements IKit {
 
@@ -42,5 +44,7 @@ public class AstronautKit implements IKit {
                 .setName("§8● §fAstronautenhelm")
                 .addGlow()
                 .toItemStack());
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1, true, true));
     }
 }

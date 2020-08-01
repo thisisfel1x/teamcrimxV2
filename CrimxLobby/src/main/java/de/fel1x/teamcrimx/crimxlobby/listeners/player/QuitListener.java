@@ -26,6 +26,10 @@ public class QuitListener implements Listener {
 
         lobbyPlayer.saveNewLocation();
 
+        if(lobbyPlayer.isInBuild()) {
+            lobbyPlayer.removeFromBuild();
+        }
+
         if(lobbyPlayer.isInJumpAndRun()) {
             lobbyPlayer.endJumpAndRun();
         }

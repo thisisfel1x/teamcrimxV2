@@ -4,6 +4,7 @@ import de.fel1x.teamcrimx.mlgwars.kit.kits.*;
 
 public enum Kit {
 
+    // NORMAL KIT's
     STARTER(StandardKit.class),
     GRAPPLER(GrapplerKit.class),
     EXPLODER(ExploderKit.class),
@@ -11,7 +12,20 @@ public enum Kit {
     ASTRONAUT(AstronautKit.class),
     SAVER(SaverKit.class),
     GHOST(GhostKit.class),
-    THROWER(ThrowerKit.class);
+    THROWER(ThrowerKit.class),
+    THOR(ThorKit.class),
+    KANGAROO(KangarooKit.class),
+    PULLER(PullerKit.class),
+    BOAT_GLIDER(BoatGliderKit.class),
+    CHICKEN_BRIDGE(ChickenBridgeKit.class),
+    WEB_TRAPPER(WebTrapperKit.class),
+    BOT_PVP(NpcKit.class),
+    SOUPER(SouperKit.class),
+
+    // USER-SPECIFIC KIT's
+    TORNADO(TornadoKit.class),
+    STINKER(StinkerKit.class),
+    TANK(TankKit.class);
 
     private Class<? extends IKit> clazz;
 

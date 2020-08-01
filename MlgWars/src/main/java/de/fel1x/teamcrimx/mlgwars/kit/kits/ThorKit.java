@@ -5,33 +5,34 @@ import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class StandardKit implements IKit {
+public class ThorKit implements IKit {
 
     @Override
     public String getKitName() {
-        return "Starter";
+        return "Thor";
     }
 
     @Override
     public String[] getKitDescription() {
-        return new String[] { "", "§7Jeder fängt mal klein an...", "§7Aber hiermit will keiner anfangen!"};
+        return new String[] {
+                "§7Blitz hier, Blitz da...", "§7...Thor ist da!", ""
+        };
     }
 
     @Override
     public int getKitCost() {
-        return 0;
+        return 2500;
     }
 
     @Override
     public Material getKitMaterial() {
-        return Material.IRON_PICKAXE;
+        return Material.GOLD_AXE;
     }
 
     @Override
     public void setKitInventory(Player player) {
-        player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD)
-                .setName("§8● §6Müll §7(umtauschen verboten!)")
-                .setLore("", "", "", "", "", "", "", "", "§7§o(kann Gift verursachen)")
+        player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_AXE)
+                .setName("§8● §eThors Axt")
                 .toItemStack());
     }
 }

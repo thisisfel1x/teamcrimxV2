@@ -7,6 +7,8 @@ import de.fel1x.teamcrimx.mlgwars.gamestate.GamestateHandler;
 import de.fel1x.teamcrimx.mlgwars.listener.block.BlockBreakListener;
 import de.fel1x.teamcrimx.mlgwars.listener.block.BlockPlaceListener;
 import de.fel1x.teamcrimx.mlgwars.listener.entity.DamageListener;
+import de.fel1x.teamcrimx.mlgwars.listener.entity.EntityInteractListener;
+import de.fel1x.teamcrimx.mlgwars.listener.entity.EntityTargetListener;
 import de.fel1x.teamcrimx.mlgwars.listener.player.*;
 import de.fel1x.teamcrimx.mlgwars.listener.world.WeatherChangeListener;
 import de.fel1x.teamcrimx.mlgwars.maphandler.WorldLoader;
@@ -77,9 +79,12 @@ public final class MlgWars extends JavaPlugin {
         new FishListener(this);
         new ChatListener(this);
         new PickUpListener(this);
+        new ToggleFlyListener(this);
 
         // ENTITY
         new DamageListener(this);
+        new EntityTargetListener(this);
+        new EntityInteractListener(this);
 
         // BLOCK
         new BlockBreakListener(this);

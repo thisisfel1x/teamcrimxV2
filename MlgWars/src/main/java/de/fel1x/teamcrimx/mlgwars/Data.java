@@ -6,6 +6,7 @@ import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -31,7 +32,12 @@ public class Data {
     private Cuboid mapRegion;
 
     // KIT-STORAGE
-    private final HashMap<UUID, ArrayList<Block>> placedExploderTnt;
+    private final Map<UUID, ArrayList<Block>> placedExploderTnt;
+    private final Map<UUID, BukkitRunnable> thorTask;
+    private final Map<UUID, BukkitRunnable> kangarooTask;
+    private final Map<UUID, ArrayList<BukkitRunnable>> eggTask;
+    private final Map<UUID, ArrayList<BukkitRunnable>> webTrap;
+    private final Map<UUID, ArrayList<BukkitRunnable>> botTask;
 
     public Data() {
         this.players = new ArrayList<>();
@@ -51,6 +57,11 @@ public class Data {
         this.playerGg = new HashMap<>();
 
         this.placedExploderTnt = new HashMap<>();
+        this.thorTask = new HashMap<>();
+        this.kangarooTask = new HashMap<>();
+        this.eggTask = new HashMap<>();
+        this.webTrap = new HashMap<>();
+        this.botTask = new HashMap<>();
     }
 
     public List<Player> getPlayers() {
@@ -105,7 +116,27 @@ public class Data {
         return playerGg;
     }
 
-    public HashMap<UUID, ArrayList<Block>> getPlacedExploderTnt() {
+    public Map<UUID, ArrayList<Block>> getPlacedExploderTnt() {
         return placedExploderTnt;
+    }
+
+    public Map<UUID, BukkitRunnable> getThorTask() {
+        return thorTask;
+    }
+
+    public Map<UUID, BukkitRunnable> getKangarooTask() {
+        return kangarooTask;
+    }
+
+    public Map<UUID, ArrayList<BukkitRunnable>> getEggTask() {
+        return eggTask;
+    }
+
+    public Map<UUID, ArrayList<BukkitRunnable>> getWebTrap() {
+        return webTrap;
+    }
+
+    public Map<UUID, ArrayList<BukkitRunnable>> getBotTask() {
+        return botTask;
     }
 }

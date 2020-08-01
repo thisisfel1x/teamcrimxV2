@@ -2,36 +2,40 @@ package de.fel1x.teamcrimx.mlgwars.kit.kits;
 
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class StandardKit implements IKit {
+public class KangarooKit implements IKit {
 
     @Override
     public String getKitName() {
-        return "Starter";
+        return "Känguru";
     }
 
     @Override
     public String[] getKitDescription() {
-        return new String[] { "", "§7Jeder fängt mal klein an...", "§7Aber hiermit will keiner anfangen!"};
+        return new String[] {
+                "§7Springe höher als die höchsten,", "§7und weiter als die weitesten!", ""
+        };
     }
 
     @Override
     public int getKitCost() {
-        return 0;
+        return 3500;
     }
 
     @Override
     public Material getKitMaterial() {
-        return Material.IRON_PICKAXE;
+        return Material.SLIME_BALL;
     }
 
     @Override
     public void setKitInventory(Player player) {
-        player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD)
-                .setName("§8● §6Müll §7(umtauschen verboten!)")
-                .setLore("", "", "", "", "", "", "", "", "§7§o(kann Gift verursachen)")
+        player.getInventory().setChestplate(new ItemBuilder(Material.LEATHER_CHESTPLATE)
+                .setLeatherArmorColor(Color.ORANGE)
                 .toItemStack());
+
+        player.setAllowFlight(true);
     }
 }

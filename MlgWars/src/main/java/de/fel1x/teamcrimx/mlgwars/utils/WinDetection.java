@@ -26,16 +26,15 @@ public class WinDetection {
             if(this.mlgWars.getData().getPlayers().size() == 1) {
 
                 Player winner = this.mlgWars.getData().getPlayers().get(0);
+                CoinsAPI coinsAPI = new CoinsAPI(winner.getUniqueId());
+                coinsAPI.addCoins(100);
+                winner.sendMessage(this.mlgWars.getPrefix() + "§7Du hast das Spiel gewonnen! §a(+100 Coins)");
 
                 Bukkit.getOnlinePlayers().forEach(player -> {
                     GamePlayer gamePlayer = new GamePlayer(player);
                     gamePlayer.cleanUpOnJoin();
                     gamePlayer.teleport(Spawns.LOBBY);
                     player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 0.5f);
-
-                    CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
-                    coinsAPI.addCoins(100);
-                    player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast das Spiel gewonnen! §a(+100 Coins)");
 
                     Actionbar.sendTitle(player, winner.getDisplayName(), 10, 50, 10);
                     Actionbar.sendSubTitle(player, "§7hat das Spiel gewonnen!", 10, 50, 10);

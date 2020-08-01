@@ -36,7 +36,7 @@ public class FishListener implements Listener {
 
         if(gamestate != Gamestate.PREGAME && gamestate != Gamestate.INGAME) return;
 
-        if (kit.equals(Kit.GRAPPLER)) {
+        if (kit == Kit.GRAPPLER) {
             if ((event.getState().equals(PlayerFishEvent.State.IN_GROUND)) ||
                     (event.getState().equals(PlayerFishEvent.State.CAUGHT_ENTITY)) ||
                     (event.getState().equals(PlayerFishEvent.State.FAILED_ATTEMPT))) {
@@ -63,6 +63,14 @@ public class FishListener implements Listener {
                         player.playSound(player.getLocation(), Sound.ENDERDRAGON_WINGS, 3.0F, 2.0F);
                     }
                 }
+            }
+        } else if(kit == Kit.PULLER) {
+            if (event.getCaught() instanceof Player) {
+                Player caughtPlayer = (Player) event.getCaught();
+
+                Vector direction = player.getLocation().toVector().subtract(caughtPlayer.getLocation().toVector()).normalize();
+                direction.multiply(1.5D).setY(1);
+                caughtPlayer.setVelocity(direction);
             }
         }
     }
