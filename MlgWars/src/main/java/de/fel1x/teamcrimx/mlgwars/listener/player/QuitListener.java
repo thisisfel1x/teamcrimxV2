@@ -27,6 +27,12 @@ public class QuitListener implements Listener {
         Player player = event.getPlayer();
         GamePlayer gamePlayer = new GamePlayer(player);
 
+        String message = null;
+        if(gamePlayer.isPlayer()) {
+            message = "§8« " + player.getDisplayName() + " §7hat das Spiel verlassen";
+        }
+        event.setQuitMessage(message);
+
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
         gamePlayer.cleanUpOnQuit();

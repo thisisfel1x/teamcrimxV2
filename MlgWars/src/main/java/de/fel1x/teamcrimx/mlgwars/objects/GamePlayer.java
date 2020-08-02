@@ -11,6 +11,7 @@ import de.fel1x.teamcrimx.mlgwars.database.MlgWarsDatabase;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
+import me.libraryaddict.disguise.DisguiseAPI;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
@@ -146,7 +147,7 @@ public class GamePlayer {
         try {
             Bukkit.getScheduler().runTaskLater(this.mlgWars, () -> {
                 this.player.teleport(spawns.getLocation());
-            }, 3L);
+            }, 1L);
         } catch (NullPointerException exception) {
             this.player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten!");
             exception.printStackTrace();
@@ -165,6 +166,12 @@ public class GamePlayer {
 
         this.player.setAllowFlight(true);
         this.player.setFlying(true);
+
+        this.player.setPlayerListName("§o§8[§4✖§8] §7" + this.player.getName());
+
+        this.player.getInventory().setItem(0, new ItemBuilder(Material.COMPASS)
+                .setName("§8● §aSpieler beobachten")
+                .toItemStack());
 
         this.data.getPlayers().forEach(ingamePlayer -> ingamePlayer.hidePlayer(this.player));
 

@@ -5,34 +5,35 @@ import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class ThorKit implements IKit {
+public class FarmerKit implements IKit {
 
     @Override
     public String getKitName() {
-        return "Thor";
+        return "Farmer";
     }
 
     @Override
     public String[] getKitDescription() {
         return new String[] {
-                "§7Blitz hier, Blitz da...", "§7...Thor ist da!"
+                "§7Willkommen auf deiner Farm!", "§7Züchte Tiere und werde selbst zum Tier!", "", "§cAchtung: Du hast weniger Leben bei einer Verwandlung", "",
         };
     }
 
     @Override
     public int getKitCost() {
-        return 2500;
+        return 4500;
     }
 
     @Override
     public Material getKitMaterial() {
-        return Material.GOLD_AXE;
+        return Material.HAY_BLOCK;
     }
 
     @Override
     public void setKitInventory(Player player) {
-        player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_AXE)
-                .setName("§8● §eThors Axt")
+        player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_NUGGET)
+                .setName("§8● §dVerwandler")
+                .addGlow()
                 .toItemStack());
     }
 }

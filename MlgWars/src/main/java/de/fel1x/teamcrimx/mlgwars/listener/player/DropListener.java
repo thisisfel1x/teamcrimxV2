@@ -8,19 +8,20 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
-public class PickUpListener implements Listener {
+public class DropListener implements Listener {
 
     private MlgWars mlgWars;
 
-    public PickUpListener(MlgWars mlgWars) {
+    public DropListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
         this.mlgWars.getPluginManager().registerEvents(this, this.mlgWars);
     }
 
     @EventHandler
-    public void on(PlayerPickupItemEvent event) {
+    public void on(PlayerDropItemEvent event) {
 
         Player player = event.getPlayer();
         GamePlayer gamePlayer = new GamePlayer(player);
@@ -36,16 +37,9 @@ public class PickUpListener implements Listener {
             case PREGAME: case INGAME:
                 if(gamePlayer.isSpectator()) {
                     event.setCancelled(true);
-                    return;
-                }
-
-                switch (gamePlayer.getSelectedKit()) {
-                    case EXPLODER:
-                        event.getItem().setItemStack(new ItemBuilder(Material.TNT, 16)
-                                .setName("§8● §bExplosives TNT")
-                                .setLore("§7Explosiver geht es fast gar", "§7nicht mehr! (wirklich explosiv!)").toItemStack());
-                        break;
                 }
         }
+
     }
+
 }

@@ -21,11 +21,14 @@ public enum Kit {
     WEB_TRAPPER(WebTrapperKit.class),
     BOT_PVP(NpcKit.class),
     SOUPER(SouperKit.class),
+    FARMER(FarmerKit.class),
+    ENDER_MAN(EnderPearlKit.class),
 
     // USER-SPECIFIC KIT's
     TORNADO(TornadoKit.class),
     STINKER(StinkerKit.class),
-    TANK(TankKit.class);
+    TANK(TankKit.class),
+    TURTLE(TurtleKit.class);
 
     private Class<? extends IKit> clazz;
 

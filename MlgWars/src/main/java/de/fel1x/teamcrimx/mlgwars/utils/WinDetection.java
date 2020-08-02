@@ -1,12 +1,15 @@
 package de.fel1x.teamcrimx.mlgwars.utils;
 
+import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
 import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
+import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.timer.EndingTimer;
+import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -26,18 +29,31 @@ public class WinDetection {
             if(this.mlgWars.getData().getPlayers().size() == 1) {
 
                 Player winner = this.mlgWars.getData().getPlayers().get(0);
+                GamePlayer winnerGamePlayer = new GamePlayer(winner);
                 CoinsAPI coinsAPI = new CoinsAPI(winner.getUniqueId());
                 coinsAPI.addCoins(100);
                 winner.sendMessage(this.mlgWars.getPrefix() + "§7Du hast das Spiel gewonnen! §a(+100 Coins)");
+
+                int gamesWon = (int) winnerGamePlayer.getObjectFromMongoDocument("games-won", MongoDBCollection.MLGWARS);
+                winnerGamePlayer.saveObjectInDocument("games-won", gamesWon + 1, MongoDBCollection.MLGWARS);
+
+                stopTasks(winner);
 
                 Bukkit.getOnlinePlayers().forEach(player -> {
                     GamePlayer gamePlayer = new GamePlayer(player);
                     gamePlayer.cleanUpOnJoin();
                     gamePlayer.teleport(Spawns.LOBBY);
                     player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 0.5f);
+                    if(DisguiseAPI.isDisguised(player)) {
+                        DisguiseAPI.undisguiseToAll(player);
+                    }
 
                     Actionbar.sendTitle(player, winner.getDisplayName(), 10, 50, 10);
                     Actionbar.sendSubTitle(player, "§7hat das Spiel gewonnen!", 10, 50, 10);
+
+                    player.setPlayerListName(player.getName());
+                    player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                    BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
                 });
 
                 timer = 5;
@@ -59,9 +75,17 @@ public class WinDetection {
                     GamePlayer gamePlayer = new GamePlayer(player);
                     gamePlayer.cleanUpOnJoin();
                     gamePlayer.teleport(Spawns.LOBBY);
+                    if(DisguiseAPI.isDisguised(player)) {
+                        DisguiseAPI.undisguiseToAll(player);
+                    }
 
                     Actionbar.sendTitle(player, "§cNiemand", 10, 50, 10);
                     Actionbar.sendSubTitle(player, "§7hat das Spiel gewonnen!", 10, 50, 10);
+
+                    player.setPlayerListName(player.getName());
+                    player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                    BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
+
                 });
 
                 this.mlgWars.startTimerByClass(EndingTimer.class);
@@ -95,6 +119,39 @@ public class WinDetection {
             firework.setFireworkMeta(fireworkMeta);
 
         }
+    }
+
+    public static void stopTasks(Player player) {
+
+        GamePlayer gamePlayer = new GamePlayer(player);
+
+        switch (gamePlayer.getSelectedKit()) {
+
+            case THOR:
+                if(MlgWars.getInstance().getData().getThorTask().containsKey(player.getUniqueId())) {
+                    MlgWars.getInstance().getData().getThorTask().get(player.getUniqueId()).cancel();
+                }
+                break;
+
+            case FARMER:
+                if(MlgWars.getInstance().getData().getFarmerTask().containsKey(player.getUniqueId())) {
+                    MlgWars.getInstance().getData().getFarmerTask().get(player.getUniqueId()).cancel();
+                }
+                break;
+
+            case CHICKEN_BRIDGE:
+                if(MlgWars.getInstance().getData().getEggTask().containsKey(player.getUniqueId())) {
+                    MlgWars.getInstance().getData().getEggTask().get(player.getUniqueId()).forEach(BukkitRunnable::cancel);
+                }
+                break;
+
+            case TURTLE:
+                if(MlgWars.getInstance().getData().getTurtleTask().containsKey(player.getUniqueId())) {
+                    MlgWars.getInstance().getData().getTurtleTask().get(player.getUniqueId()).forEach(BukkitRunnable::cancel);
+                }
+                break;
+        }
+
     }
 
 }

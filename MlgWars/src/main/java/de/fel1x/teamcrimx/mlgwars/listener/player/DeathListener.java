@@ -6,6 +6,8 @@ import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.utils.WinDetection;
+import me.libraryaddict.disguise.DisguiseAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,7 +29,11 @@ public class DeathListener implements Listener {
         Player killer;
         GamePlayer gamePlayer = new GamePlayer(player, true);
 
+        int deaths = (int) gamePlayer.getObjectFromMongoDocument("deaths", MongoDBCollection.MLGWARS);
+        gamePlayer.saveObjectInDocument("deaths", deaths + 1, MongoDBCollection.MLGWARS);
+
         gamePlayer.activateSpectatorMode();
+        WinDetection.stopTasks(player);
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
@@ -46,6 +52,11 @@ public class DeathListener implements Listener {
                 CoinsAPI coinsAPI = new CoinsAPI(killer.getUniqueId());
                 coinsAPI.addCoins(100);
 
+                GamePlayer killerGamePlayer = new GamePlayer(killer);
+
+                int kills = (int) killerGamePlayer.getObjectFromMongoDocument("kills", MongoDBCollection.MLGWARS);
+                killerGamePlayer.saveObjectInDocument("kills", kills + 1, MongoDBCollection.MLGWARS);
+
                 killer.sendMessage(this.mlgWars.getPrefix() + "§7Du hast " + player.getDisplayName() + " §7getötet §a(+100 Coins)");
                 event.setDeathMessage(String.format("%s %s §7wurde von %s §7getötet", this.mlgWars.getPrefix(),
                         player.getDisplayName(), killer.getDisplayName()));
@@ -54,9 +65,19 @@ public class DeathListener implements Listener {
                 event.setDeathMessage(this.mlgWars.getPrefix() + player.getDisplayName() + " §7ist gestorben");
             }
 
+            if(DisguiseAPI.isDisguised(player)) {
+                DisguiseAPI.undisguiseToAll(player);
+            }
+
             long timePlayed = System.currentTimeMillis() - this.mlgWars.getData().getPlayTime().get(player.getUniqueId());
             long added = timePlayed + (long) gamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS);
             gamePlayer.saveObjectInDocument("onlinetime", added, MongoDBCollection.USERS);
+
+            int playersLeft = this.mlgWars.getData().getPlayers().size();
+
+            if(playersLeft > 1) {
+                Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§a" + playersLeft + " Spieler verbleiben");
+            }
 
             new WinDetection();
         }

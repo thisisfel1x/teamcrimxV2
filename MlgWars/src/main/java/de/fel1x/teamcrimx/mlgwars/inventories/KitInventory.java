@@ -17,7 +17,7 @@ public class KitInventory implements InventoryProvider {
     public static final SmartInventory KIT_OVERVIEW_INVENTORY = SmartInventory.builder()
             .id("customInventory")
             .provider(new KitInventory())
-            .size(5, 9)
+            .size(3, 9)
             .title("§8● §e§lKits")
             .manager(MlgWars.getInstance().getInventoryManager())
             .build();
@@ -31,7 +31,6 @@ public class KitInventory implements InventoryProvider {
         int row = 0;
 
         for (Kit kit : Kit.values()) {
-
             try {
                 IKit iKit = kit.getClazz().newInstance();
 
@@ -57,9 +56,7 @@ public class KitInventory implements InventoryProvider {
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
 
     @Override

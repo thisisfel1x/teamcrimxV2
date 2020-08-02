@@ -35,9 +35,10 @@ public class Data {
     private final Map<UUID, ArrayList<Block>> placedExploderTnt;
     private final Map<UUID, BukkitRunnable> thorTask;
     private final Map<UUID, BukkitRunnable> kangarooTask;
+    private final Map<UUID, BukkitRunnable> farmerTask;
+    private final Map<UUID, BukkitRunnable> teleporterTask;
     private final Map<UUID, ArrayList<BukkitRunnable>> eggTask;
-    private final Map<UUID, ArrayList<BukkitRunnable>> webTrap;
-    private final Map<UUID, ArrayList<BukkitRunnable>> botTask;
+    private final Map<UUID, ArrayList<BukkitRunnable>> turtleTask;
 
     public Data() {
         this.players = new ArrayList<>();
@@ -59,9 +60,10 @@ public class Data {
         this.placedExploderTnt = new HashMap<>();
         this.thorTask = new HashMap<>();
         this.kangarooTask = new HashMap<>();
+        this.farmerTask = new HashMap<>();
+        this.teleporterTask = new HashMap<>();
         this.eggTask = new HashMap<>();
-        this.webTrap = new HashMap<>();
-        this.botTask = new HashMap<>();
+        this.turtleTask = new HashMap<>();
     }
 
     public List<Player> getPlayers() {
@@ -132,11 +134,15 @@ public class Data {
         return eggTask;
     }
 
-    public Map<UUID, ArrayList<BukkitRunnable>> getWebTrap() {
-        return webTrap;
+    public Map<UUID, BukkitRunnable> getFarmerTask() {
+        return farmerTask;
     }
 
-    public Map<UUID, ArrayList<BukkitRunnable>> getBotTask() {
-        return botTask;
+    public Map<UUID, ArrayList<BukkitRunnable>> getTurtleTask() {
+        return turtleTask;
+    }
+
+    public Map<UUID, BukkitRunnable> getTeleporterTask() {
+        return teleporterTask;
     }
 }

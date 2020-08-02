@@ -195,6 +195,7 @@ public class ChestFiller {
 
             items.add(new ItemBuilder(Material.STICK, 3 + r.nextInt(8)).toItemStack());
             items.add(new ItemBuilder(Material.LAVA_BUCKET).toItemStack());
+            items.add(new ItemBuilder(Material.COMPASS).toItemStack());
 
         }
 
@@ -353,6 +354,7 @@ public class ChestFiller {
 
             items.add(new ItemBuilder(Material.STICK, 3 + r.nextInt(8)).toItemStack());
             items.add(new ItemBuilder(Material.LAVA_BUCKET).toItemStack());
+            items.add(new ItemBuilder(Material.COMPASS).toItemStack());
 
         }
 

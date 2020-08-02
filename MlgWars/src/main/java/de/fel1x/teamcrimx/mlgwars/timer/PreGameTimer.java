@@ -3,7 +3,10 @@ package de.fel1x.teamcrimx.mlgwars.timer;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 public class PreGameTimer implements ITimer {
 
@@ -36,6 +39,15 @@ public class PreGameTimer implements ITimer {
                         break;
                 }
 
+                this.mlgWars.getData().getPlayers().forEach(player -> {
+                    if(this.mlgWars.getData().getPlayers().size() > 1) {
+                        Player nearest = this.getClosestEntity(player, player.getLocation());
+                        if(nearest != null) {
+                            player.setCompassTarget(nearest.getLocation());
+                        }
+                    }
+                });
+
                 this.countdown--;
 
             }, 0L, 20L);
@@ -50,5 +62,22 @@ public class PreGameTimer implements ITimer {
             this.running = false;
             this.countdown = 60;
         }
+    }
+
+    private Player getClosestEntity(Player owner, Location center){
+        Player closestEntity = null;
+        double closestDistance = 0.0;
+
+        for(Entity entity : center.getWorld().getNearbyEntities(center, 200, 200, 200)){
+            if(!(entity instanceof Player)) continue;
+            if(entity.getUniqueId().equals(owner.getUniqueId())) continue;
+
+            double distance = entity.getLocation().distanceSquared(center);
+            if(closestEntity == null || distance < closestDistance){
+                closestDistance = distance;
+                closestEntity = (Player) entity;
+            }
+        }
+        return closestEntity;
     }
 }

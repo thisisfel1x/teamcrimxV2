@@ -1,5 +1,6 @@
 package de.fel1x.teamcrimx.mlgwars.timer;
 
+import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
@@ -38,6 +39,10 @@ public class DelayTimer implements ITimer {
                 } catch (InstantiationException | IllegalAccessException ignored) {
                     player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten! Du erhälst keine Kit-Items");
                 }
+
+                int gamesPlayed = (int) gamePlayer.getObjectFromMongoDocument("games-played", MongoDBCollection.MLGWARS);
+                gamePlayer.saveObjectInDocument("games-played", gamesPlayed + 1, MongoDBCollection.MLGWARS);
+
             });
 
             this.teleportPlayersToSpawns();

@@ -1,20 +1,23 @@
 package de.fel1x.teamcrimx.mlgwars.listener.player;
 
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
-import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
+import de.fel1x.teamcrimx.crimxapi.utils.ParticleUtils;
+import de.fel1x.teamcrimx.crimxapi.utils.Particles;
 import de.fel1x.teamcrimx.crimxapi.utils.ProgressBar;
 import de.fel1x.teamcrimx.mlgwars.Data;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
+import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.inventories.ForcemapInventory;
 import de.fel1x.teamcrimx.mlgwars.inventories.KitInventory;
+import de.fel1x.teamcrimx.mlgwars.inventories.SpectatorInventory;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.utils.Tornado;
-import de.fel1x.teamcrimx.mlgwars.utils.entites.CustomZombie;
 import de.fel1x.teamcrimx.mlgwars.utils.entites.ZombieEquipment;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
-import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
+import me.libraryaddict.disguise.disguisetypes.DisguiseType;
+import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -33,19 +36,16 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class InteractListener implements Listener {
 
     private final MlgWars mlgWars;
     private final Data data;
     private final Set<Material> transparent = new HashSet<>();
-
-    private int count;
-
     private final Random random = new Random();
     private final ZombieEquipment zombieEquipment = new ZombieEquipment();
-    
+    private int count;
+
     public InteractListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
         this.data = this.mlgWars.getData();
@@ -83,15 +83,18 @@ public class InteractListener implements Listener {
             } else {
                 if (gamePlayer.isSpectator()) {
                     event.setCancelled(true);
+                    if (event.hasItem() && event.getMaterial() == Material.COMPASS) {
+                        SpectatorInventory.INVENTORY.open(player);
+                    }
                     return;
                 }
                 if (event.hasItem()) {
-                    if(event.getMaterial() == Material.MUSHROOM_SOUP) {
-                        if(player.getHealth() < 19) {
+                    if (event.getMaterial() == Material.MUSHROOM_SOUP) {
+                        if (player.getHealth() < 19) {
                             event.getItem().setType(Material.BOWL);
 
                             double health;
-                            if(player.getHealth() + 3.5 >= 20) {
+                            if (player.getHealth() + 3.5 >= 20) {
                                 health = 20;
                             } else {
                                 health = player.getHealth() + 3.5;
@@ -285,7 +288,7 @@ public class InteractListener implements Listener {
                                 return;
                             }
 
-                            if(!event.getItem().getItemMeta().hasDisplayName()) {
+                            if (!event.getItem().getItemMeta().hasDisplayName()) {
                                 return;
                             }
 
@@ -349,7 +352,7 @@ public class InteractListener implements Listener {
                                 return;
                             }
 
-                            if(!event.getItem().getItemMeta().hasDisplayName()) {
+                            if (!event.getItem().getItemMeta().hasDisplayName()) {
                                 return;
                             }
 
@@ -360,36 +363,7 @@ public class InteractListener implements Listener {
                             event.setCancelled(true);
                             this.removeItem(player);
                             Egg webTrap = player.launchProjectile(Egg.class);
-
-                            this.data.getEggTask().computeIfAbsent(player.getUniqueId(), k -> new ArrayList<>());
-
-                            BukkitRunnable trapperTask = new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (webTrap.isDead()) {
-                                        Location location = webTrap.getLocation();
-                                        if (location.getY() < 0) return;
-                                        Cuboid cuboid = new Cuboid(location.clone().add(1, 3, 1),
-                                                location.clone().subtract(1, 1, 1));
-
-                                        cuboid.getBlocks().forEach(block -> {
-                                            if (block.getType() != Material.AIR) return;
-                                            boolean shouldPlace = ThreadLocalRandom.current().nextBoolean();
-                                            if (shouldPlace) {
-                                                block.setType(Material.WEB);
-                                            }
-                                        });
-                                    }
-
-                                    if (webTrap.isDead() || webTrap.isOnGround() || webTrap.getLocation().getY() < 0) {
-                                        this.cancel();
-                                        data.getWebTrap().get(player.getUniqueId()).remove(this);
-                                    }
-                                }
-                            };
-
-                            trapperTask.runTaskTimer(this.mlgWars, 0L, 5L);
-                            this.data.getEggTask().get(player.getUniqueId()).add(trapperTask);
+                            webTrap.setMetadata("webTrap", new FixedMetadataValue(this.mlgWars, true));
                             break;
 
                         case BOT_PVP:
@@ -397,7 +371,7 @@ public class InteractListener implements Listener {
                                 return;
                             }
 
-                            if(!event.getItem().getItemMeta().hasDisplayName()) {
+                            if (!event.getItem().getItemMeta().hasDisplayName()) {
                                 return;
                             }
 
@@ -408,50 +382,275 @@ public class InteractListener implements Listener {
                             event.setCancelled(true);
                             this.removeItem(player);
                             Egg botDecoy = player.launchProjectile(Egg.class);
+                            botDecoy.setMetadata("botDecoy", new FixedMetadataValue(this.mlgWars, true));
+                            break;
 
-                            this.data.getBotTask().computeIfAbsent(player.getUniqueId(), k -> new ArrayList<>());
+                        case FARMER:
+                            if (interactedMaterial != Material.GOLD_NUGGET) {
+                                return;
+                            }
 
-                            BukkitRunnable botTask = new BukkitRunnable() {
+                            if (!event.getItem().getItemMeta().hasDisplayName()) {
+                                return;
+                            }
+
+                            if (!event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §dVerwandler")) {
+                                return;
+                            }
+
+                            if (this.data.getFarmerTask().containsKey(player.getUniqueId())) {
+                                return;
+                            }
+
+                            this.removeItem(player);
+
+                            DisguiseType[] disguiseType = {
+                                    DisguiseType.CHICKEN,
+                                    DisguiseType.COW,
+                                    DisguiseType.SHEEP,
+                                    DisguiseType.PIG
+                            };
+
+                            for (int i = 0; i < 3; i++) {
+
+                                player.getWorld().spawnEntity(player.getLocation(), EntityType.SHEEP);
+                                player.getWorld().spawnEntity(player.getLocation(), EntityType.PIG);
+                                player.getWorld().spawnEntity(player.getLocation(), EntityType.CHICKEN);
+                                player.getWorld().spawnEntity(player.getLocation(), EntityType.COW);
+
+                            }
+
+                            DisguiseType toDisguise = disguiseType[random.nextInt(disguiseType.length)];
+                            player.sendMessage(this.mlgWars.getPrefix() + "§7Du bist nun als §a" + toDisguise.name()
+                                    + " §7versteckt!");
+
+                            Disguise disguise = new MobDisguise(toDisguise);
+                            disguise.setShowName(false);
+                            disguise.setVelocitySent(false);
+                            disguise.setViewSelfDisguise(false);
+                            disguise.setReplaceSounds(true);
+                            DisguiseAPI.disguiseEntity(player, disguise);
+
+                            player.setMetadata("farmer", new FixedMetadataValue(this.mlgWars, 60));
+
+                            this.data.getFarmerTask().put(player.getUniqueId(), new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    if (botDecoy.isDead()) {
-                                        LivingEntity entity = CustomZombie.EntityTypes.spawnEntity(new CustomZombie(botDecoy.getWorld()),
-                                                botDecoy.getLocation().clone().add(0, 1.5, 0));
 
-                                        entity.setCustomName(player.getDisplayName());
-                                        entity.setCustomNameVisible(true);
-                                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 3, true, false));
+                                    count = player.getMetadata("farmer").get(0).asInt();
 
-                                        entity.setCustomName(player.getDisplayName());
-                                        entity.setMaxHealth(10D);
-                                        entity.getEquipment().setItemInHand(zombieEquipment.getSwords()[random.nextInt(zombieEquipment.getSwords().length)]);
+                                    Actionbar.sendActiobar(player, "§6Farmer (versteckt) §8● " + ProgressBar.getProgressBar(count, 60, 15,
+                                            '█', ChatColor.GREEN, ChatColor.DARK_GRAY));
 
-                                        entity.getEquipment().setHelmet(zombieEquipment.getHelmets()[random.nextInt(zombieEquipment.getHelmets().length)]);
-                                        entity.getEquipment().setChestplate(zombieEquipment.getChestplates()[random.nextInt(zombieEquipment.getChestplates().length)]);
-                                        entity.getEquipment().setLeggings(zombieEquipment.getLeggins()[random.nextInt(zombieEquipment.getLeggins().length)]);
-                                        entity.getEquipment().setBoots(zombieEquipment.getShoes()[random.nextInt(zombieEquipment.getShoes().length)]);
+                                    if (count == 0) {
+                                        data.getFarmerTask().get(player.getUniqueId()).cancel();
+                                        data.getFarmerTask().remove(player.getUniqueId());
+                                        if (DisguiseAPI.isDisguised(player)) {
+                                            DisguiseAPI.undisguiseToAll(player);
+                                        }
+                                        Actionbar.sendActiobar(player, "§6Farmer §8● §7Du bist nun wieder §asichtbar");
+                                        player.playSound(player.getLocation(), Sound.NOTE_PLING, 2.5f, 0.5f);
 
-                                        entity.setMetadata("owner", new FixedMetadataValue(mlgWars, player.getName()));
+                                        Actionbar.sendTitle(player, " ", 5, 20, 5);
+                                        Actionbar.sendSubTitle(player, "§aWieder sichtbar!", 5, 20, 5);
+                                    } else {
+                                        player.setMetadata("farmer", new FixedMetadataValue(mlgWars, count - 1));
+                                    }
+                                }
+                            });
 
-                                        Disguise disguise = new PlayerDisguise(player.getName(), player.getName());
-                                        disguise.setShowName(true);
-                                        disguise.setReplaceSounds(true);
-                                        DisguiseAPI.disguiseEntity(entity, disguise);
+                            this.data.getFarmerTask().get(player.getUniqueId()).runTaskTimer(this.mlgWars, 0L, 20L);
+
+                            break;
+
+                        case TURTLE:
+                            if (interactedMaterial != Material.EGG) {
+                                return;
+                            }
+
+                            if (!event.getItem().getItemMeta().hasDisplayName()) {
+                                return;
+                            }
+
+                            if (!event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §aTurtle")) {
+                                return;
+                            }
+
+                            event.setCancelled(true);
+                            this.removeItem(player);
+                            Egg turtleEgg = player.launchProjectile(Egg.class);
+
+                            this.data.getTurtleTask().computeIfAbsent(player.getUniqueId(), k -> new ArrayList<>());
+
+                            if (!turtleEgg.hasMetadata("state")) {
+                                turtleEgg.setMetadata("state", new FixedMetadataValue(this.mlgWars, 0));
+                            }
+
+                            if (!turtleEgg.hasMetadata("height")) {
+                                turtleEgg.setMetadata("height", new FixedMetadataValue(this.mlgWars, -2));
+                            }
+
+                            BukkitRunnable turtleTask = new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    if (turtleEgg.isDead()) {
+
+                                        int turtleBuildState = turtleEgg.getMetadata("state").get(0).asInt();
+                                        int turtleHeight = turtleEgg.getMetadata("height").get(0).asInt();
+
+                                        if (buildTurtle(turtleEgg.getLocation(), player, turtleBuildState, turtleHeight)) {
+                                            this.cancel();
+                                            data.getTurtleTask().get(player.getUniqueId()).remove(this);
+                                        }
+
+                                        turtleEgg.setMetadata("state",
+                                                new FixedMetadataValue(mlgWars, turtleBuildState + 1));
+                                        turtleEgg.setMetadata("height",
+                                                new FixedMetadataValue(mlgWars, turtleHeight + 1));
                                     }
 
-                                    if (botDecoy.isDead() || botDecoy.isOnGround() || botDecoy.getLocation().getY() < 0) {
+                                    if (turtleEgg.getLocation().getY() < 0) {
                                         this.cancel();
-                                        data.getBotTask().get(player.getUniqueId()).remove(this);
+                                        data.getTurtleTask().get(player.getUniqueId()).remove(this);
                                     }
                                 }
                             };
 
-                            botTask.runTaskTimer(this.mlgWars, 0L, 5L);
-                            this.data.getBotTask().get(player.getUniqueId()).add(botTask);
+                            turtleTask.runTaskTimer(this.mlgWars, 0L, 10L);
+                            this.data.getTurtleTask().get(player.getUniqueId()).add(turtleTask);
+                            break;
+
+                        case ENDER_MAN:
+                            if (interactedMaterial != Material.ENDER_PEARL) {
+                                return;
+                            }
+
+                            if (!event.getItem().getItemMeta().hasDisplayName()) {
+                                return;
+                            }
+
+                            if (!event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §5Funkelnde Enderperle")) {
+                                return;
+                            }
+
+                            if (this.data.getTeleporterTask().containsKey(player.getUniqueId())) {
+                                event.setCancelled(true);
+                                player.sendMessage(this.mlgWars.getPrefix() + "§cEs läuft bereits ein Teleportvorgang!");
+                                return;
+                            }
+
+                            Player nearestPlayer = this.getClosestEntity(player, player.getLocation());
+
+                            if (nearestPlayer != null) {
+
+                                event.setCancelled(true);
+                                this.removeItem(player);
+
+                                count = 0;
+                                Location toTeleport = nearestPlayer.getLocation();
+
+                                this.data.getTeleporterTask().put(player.getUniqueId(), new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        if (count < 3) {
+                                            ParticleUtils.drawParticleLine(player.getLocation().clone().add(0, 0.5, 0),
+                                                    nearestPlayer.getLocation().clone().add(0, 0.5, 0), Particles.SPELL_WITCH,
+                                                    500, 0, 0, 0);
+                                            player.getWorld().playSound(player.getLocation(), Sound.NOTE_PLING, 2f, 4.5f);
+                                        } else {
+                                            if (nearestPlayer.isDead() || nearestPlayer.getLocation().getY() < 0) {
+                                                player.sendMessage(mlgWars.getPrefix() + "§cDer angepeilte Spieler ist Tod! " +
+                                                        "Du wirst in die Mitte teleportiert");
+                                                player.teleport(Spawns.SPECTATOR.getLocation());
+                                            } else {
+                                                player.teleport(toTeleport);
+                                                player.getWorld().playSound(toTeleport, Sound.ENDERMAN_TELEPORT, 4f, 1.5f);
+                                                player.getWorld().playEffect(toTeleport, Effect.ENDER_SIGNAL, 1);
+                                            }
+
+                                            data.getTeleporterTask().remove(player.getUniqueId());
+                                            this.cancel();
+                                        }
+                                        count++;
+                                    }
+                                });
+
+                                this.data.getTeleporterTask().get(player.getUniqueId()).runTaskTimer(this.mlgWars, 0L, 20L);
+                            } else {
+                                player.sendMessage(this.mlgWars.getPrefix() + "§cEs konnte kein Gegner gefunden werden... Spielst du alleine?");
+                            }
                             break;
                     }
                 }
             }
+        }
+    }
+
+    private boolean buildTurtle(Location location, Player player, int turtleBuildState, int turtleHeight) {
+        switch (turtleBuildState) {
+            case 1:
+            case 5:
+                for (int x = -2; x < 3; x++) {
+                    for (int y = -2; y < 3; y++) {
+                        location.clone().add(x, turtleHeight, y).getBlock().setType(Material.WOOD);
+                    }
+                }
+                break;
+
+            case 2:
+            case 3:
+            case 4:
+                location.clone().add(-2, turtleHeight, -2).getBlock().setType(Material.WOOD);
+                location.clone().add(-2, turtleHeight, -1).getBlock().setType(Material.WOOD);
+                location.clone().add(-2, turtleHeight, 0).getBlock().setType(Material.WOOD);
+                location.clone().add(-2, turtleHeight, 1).getBlock().setType(Material.WOOD);
+                location.clone().add(-2, turtleHeight, 2).getBlock().setType(Material.WOOD);
+
+                location.clone().add(2, turtleHeight, -2).getBlock().setType(Material.WOOD);
+                location.clone().add(2, turtleHeight, -1).getBlock().setType(Material.WOOD);
+                location.clone().add(2, turtleHeight, 0).getBlock().setType(Material.WOOD);
+                location.clone().add(2, turtleHeight, 1).getBlock().setType(Material.WOOD);
+                location.clone().add(2, turtleHeight, 2).getBlock().setType(Material.WOOD);
+
+                location.clone().add(1, turtleHeight, 2).getBlock().setType(Material.WOOD);
+                location.clone().add(0, turtleHeight, 2).getBlock().setType(Material.WOOD);
+                location.clone().add(-1, turtleHeight, 2).getBlock().setType(Material.WOOD);
+
+                location.clone().add(1, turtleHeight, -2).getBlock().setType(Material.WOOD);
+                location.clone().add(0, turtleHeight, -2).getBlock().setType(Material.WOOD);
+                location.clone().add(-1, turtleHeight, -2).getBlock().setType(Material.WOOD);
+
+                break;
+
+            case 6:
+                for (int x = -1; x < 2; x++) {
+                    for (int y = -1; y < 2; y++) {
+                        location.clone().add(x, turtleHeight, y).getBlock().setType(Material.WOOD);
+                    }
+                }
+                break;
+
+
+            case 7:
+                location.clone().add(0, 5, 0).getBlock().setType(Material.WOOD);
+                location.clone().add(0, 3, 0).getBlock().setType(Material.GLOWSTONE);
+
+                location.clone().add(0, 1, 2).getBlock().setType(Material.AIR);
+                location.clone().add(0, 1, -2).getBlock().setType(Material.AIR);
+                location.clone().add(2, 1, 0).getBlock().setType(Material.AIR);
+                location.clone().add(-2, 1, 0).getBlock().setType(Material.AIR);
+
+                player.playSound(player.getLocation(), Sound.LEVEL_UP, 14, 15);
+                break;
+        }
+
+        if (turtleBuildState != 7) {
+            player.playSound(player.getLocation(), Sound.CLICK, 10, 17);
+            Particles.PORTAL.display(1.5f, 1.5f, 1.5f, 0f, 80,
+                    location.clone().add(0, 1.5, 0), new ArrayList<>(Bukkit.getOnlinePlayers()));
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -477,5 +676,22 @@ public class InteractListener implements Listener {
                 }
             }
         }
+    }
+
+    private Player getClosestEntity(Player owner, Location center) {
+        Player closestEntity = null;
+        double closestDistance = 0.0;
+
+        for (Entity entity : center.getWorld().getNearbyEntities(center, 200, 200, 200)) {
+            if (!(entity instanceof Player)) continue;
+            if (entity.getUniqueId().equals(owner.getUniqueId())) continue;
+
+            double distance = entity.getLocation().distanceSquared(center);
+            if (closestEntity == null || distance < closestDistance) {
+                closestDistance = distance;
+                closestEntity = (Player) entity;
+            }
+        }
+        return closestEntity;
     }
 }

@@ -52,6 +52,8 @@ public class JoinListener implements Listener {
                 gamePlayer.setJoinItems();
                 gamePlayer.teleport(Spawns.LOBBY);
 
+                event.setJoinMessage("§8» " + player.getDisplayName() + " §7hat das Spiel betreten");
+
                 break;
 
 

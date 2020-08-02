@@ -6,6 +6,7 @@ import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -43,9 +44,16 @@ public class InGameTimer implements ITimer {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 40, 0, false, false));
                     }
 
+                    if(this.mlgWars.getData().getPlayers().size() > 1) {
+                        Player nearest = this.getClosestEntity(player, player.getLocation());
+                        if(nearest != null) {
+                            player.setCompassTarget(nearest.getLocation());
+                        }
+                    }
+
                     if(gamePlayer.getSelectedKit() == Kit.STINKER) {
                         for (Entity nearbyEntity : player.getNearbyEntities(5, 2, 5)) {
-                            if(!(nearbyEntity instanceof Player)) return;
+                            if(!(nearbyEntity instanceof Player)) continue;
                             Player player1 = (Player) nearbyEntity;
                             GamePlayer gamePlayer1 = new GamePlayer(player1);
 
@@ -73,4 +81,22 @@ public class InGameTimer implements ITimer {
             this.running = false;
         }
     }
+
+    private Player getClosestEntity(Player owner, Location center){
+        Player closestEntity = null;
+        double closestDistance = 0.0;
+
+        for(Entity entity : center.getWorld().getNearbyEntities(center, 200, 200, 200)){
+            if(!(entity instanceof Player)) continue;
+            if(entity.getUniqueId().equals(owner.getUniqueId())) continue;
+
+            double distance = entity.getLocation().distanceSquared(center);
+            if(closestEntity == null || distance < closestDistance){
+                closestDistance = distance;
+                closestEntity = (Player) entity;
+            }
+        }
+        return closestEntity;
+    }
+
 }
