@@ -1,8 +1,10 @@
 package de.fel1x.teamcrimx.mlgwars;
 
+import com.mongodb.client.model.Sorts;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.mlgwars.commands.SetupCommand;
 import de.fel1x.teamcrimx.mlgwars.commands.StartCommand;
+import de.fel1x.teamcrimx.mlgwars.commands.StatsCommand;
 import de.fel1x.teamcrimx.mlgwars.gamestate.GamestateHandler;
 import de.fel1x.teamcrimx.mlgwars.listener.block.BlockBreakListener;
 import de.fel1x.teamcrimx.mlgwars.listener.block.BlockPlaceListener;
@@ -13,9 +15,14 @@ import de.fel1x.teamcrimx.mlgwars.maphandler.WorldLoader;
 import de.fel1x.teamcrimx.mlgwars.timer.ITimer;
 import de.fel1x.teamcrimx.mlgwars.timer.IdleTimer;
 import fr.minuskube.inv.InventoryManager;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public final class MlgWars extends JavaPlugin {
 
@@ -100,6 +107,7 @@ public final class MlgWars extends JavaPlugin {
 
         new StartCommand(this);
         new SetupCommand(this);
+        new StatsCommand(this);
 
     }
 
@@ -123,6 +131,12 @@ public final class MlgWars extends JavaPlugin {
             e.printStackTrace();
         }
 
+    }
+
+    public List<Document> getTop(int limit) {
+        return StreamSupport.stream(this.crimxAPI.getMongoDB().getMlgWarsCollection().find()
+                .sort(Sorts.descending("games-won")).limit(limit).spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     public static MlgWars getInstance() {

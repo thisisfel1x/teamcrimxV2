@@ -3,11 +3,13 @@ package de.fel1x.teamcrimx.mlgwars.listener.entity;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
+import de.fel1x.teamcrimx.mlgwars.utils.entites.CustomZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class DamageListener implements Listener {
 
@@ -32,12 +34,18 @@ public class DamageListener implements Listener {
             return;
         }
 
+        Player target = (Player) event.getEntity();
+
+        if(event.getDamager() instanceof CustomZombie) {
+            target.setMetadata("lastZombieHit", new FixedMetadataValue(this.mlgWars, event.getEntity().getCustomName()));
+            return;
+        }
+
         if(!(event.getDamager() instanceof Player)) {
             return;
         }
 
         Player damager = (Player) event.getDamager();
-        Player target = (Player) event.getEntity();
 
         GamePlayer gameDamager = new GamePlayer(damager);
         GamePlayer gameTarget = new GamePlayer(target);

@@ -1,6 +1,7 @@
 package de.fel1x.teamcrimx.crimxapi.database.mongodb;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -16,7 +17,13 @@ public class MongoDB {
 
     public MongoDB() {
 
-        this.mongoClient = new MongoClient();
+        this.mongoClient = new MongoClient("localhost", MongoClientOptions.builder()
+                .serverSelectionTimeout(Integer.MAX_VALUE)
+                .maxConnectionIdleTime(Integer.MAX_VALUE)
+                .maxWaitTime(Integer.MAX_VALUE)
+                .maxConnectionLifeTime(Integer.MAX_VALUE)
+                .socketTimeout(0)
+                .socketKeepAlive(true).build());
 
         this.networkDatabase = this.mongoClient.getDatabase("network");
 

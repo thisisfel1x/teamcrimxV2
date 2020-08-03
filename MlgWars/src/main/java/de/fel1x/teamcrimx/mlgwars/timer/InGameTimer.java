@@ -1,5 +1,6 @@
 package de.fel1x.teamcrimx.mlgwars.timer;
 
+import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
@@ -63,6 +64,14 @@ public class InGameTimer implements ITimer {
                                 player1.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 3, 0, true, true), true);
                                 player1.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 3, 0, true, true), true);
                             }
+                        }
+                    } else if(gamePlayer.getSelectedKit() == Kit.KANGAROO) {
+                        if(!this.mlgWars.getData().getKangarooTask().containsKey(player.getUniqueId())) {
+                            int currentEssences = 0;
+                            if(player.hasMetadata("essence")) {
+                                currentEssences = player.getMetadata("essence").get(0).asInt();
+                            }
+                            Actionbar.sendActiobar(player, "§6Känguru §8● §a" + currentEssences + " §7Essenzen übrig");
                         }
                     }
                 });

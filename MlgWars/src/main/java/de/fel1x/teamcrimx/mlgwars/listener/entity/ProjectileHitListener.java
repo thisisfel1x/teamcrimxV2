@@ -9,7 +9,9 @@ import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Egg;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,7 +40,6 @@ public class ProjectileHitListener implements Listener {
     public void on(ProjectileHitEvent event) {
 
         if(event.getEntity() instanceof Egg) {
-
             Egg egg = (Egg) event.getEntity();
 
             if(egg.hasMetadata("webTrap")) {
@@ -83,6 +84,22 @@ public class ProjectileHitListener implements Listener {
                 DisguiseAPI.disguiseEntity(entity, disguise);
             }
 
+        } else if(event.getEntity() instanceof Fireball) {
+            Fireball fireball = (Fireball) event.getEntity();
+
+            if(fireball.hasMetadata("moli")) {
+
+                Location a = fireball.getLocation().clone().add(3, 3,3);
+                Location b = fireball.getLocation().clone().subtract(3, 3,3);
+                Cuboid cuboid = new Cuboid(a, b);
+                for (Block block : cuboid.getBlocks()) {
+                    if(block.getType() != Material.AIR) continue;
+                    boolean replace = ThreadLocalRandom.current().nextBoolean();
+                    if(replace) {
+                        block.setType(Material.FIRE);
+                    }
+                }
+            }
         }
 
     }

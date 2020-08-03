@@ -1,30 +1,43 @@
 package de.fel1x.teamcrimx.mlgwars.objects;
 
+import com.google.common.collect.Lists;
+import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.UpdateOptions;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
+import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.Data;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.database.MlgWarsDatabase;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
+import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
+import de.fel1x.teamcrimx.mlgwars.scoreboard.LobbyScoreboard;
 import me.libraryaddict.disguise.DisguiseAPI;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.List;
+import java.util.UUID;
 
 public class GamePlayer {
 
     private final MlgWars mlgWars = MlgWars.getInstance();
     private final Data data = this.mlgWars.getData();
+
+    private final LobbyScoreboard lobbyScoreboard = new LobbyScoreboard();
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
@@ -70,6 +83,23 @@ public class GamePlayer {
 
         this.mlgWarsDocument = this.data.getMlgWarsPlayerDocument().get(this.player.getUniqueId());
         this.networkDocument = this.data.getNetworkPlayerDocument().get(this.player.getUniqueId());
+
+        if(!((String) this.getObjectFromMongoDocument("name", MongoDBCollection.MLGWARS)).equalsIgnoreCase(this.player.getName())) {
+            this.saveObjectInDocument("name", player.getName(), MongoDBCollection.MLGWARS);
+        }
+
+        String selectedKitName = (String) this.getObjectFromMongoDocument("selectedKit", MongoDBCollection.MLGWARS);
+        Kit selectedKit = Kit.valueOf(selectedKitName);
+
+        int gamesPlayed = (int) this.getObjectFromMongoDocument("gamesPlayed", MongoDBCollection.MLGWARS);
+        this.player.setMetadata("games", new FixedMetadataValue(this.mlgWars, gamesPlayed));
+
+        Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
+
+        if(gamestate == Gamestate.IDLE || gamestate == Gamestate.INGAME) {
+            this.setSelectedKit(selectedKit);
+        }
+
     }
 
     public boolean isPlayer() {
@@ -135,7 +165,6 @@ public class GamePlayer {
     public void setJoinItems() {
 
         this.player.getInventory().setItem(0, new ItemBuilder(Material.STORAGE_MINECART).setName("§8● §aKitauswahl").toItemStack());
-        this.player.getInventory().setItem(8, new ItemBuilder(Material.BARRIER).setName("§8● §cKein Kit ausgewählt").toItemStack());
 
         if(this.player.hasPermission("mlgwars.forcemap") || this.player.isOp()) {
             this.player.getInventory().setItem(1, new ItemBuilder(Material.REDSTONE_TORCH_ON).setName("§8● §cForcemap").toItemStack());
@@ -222,5 +251,57 @@ public class GamePlayer {
     public Kit getSelectedKit() {
         Kit chosen = this.data.getSelectedKit().get(this.player);
         return chosen == null ? Kit.STARTER : chosen;
+    }
+
+    public int getRankingPosition() {
+
+        List<Document> documents = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().find().sort(Sorts.descending("games-won")).into(Lists.newArrayList());
+
+        for (Document document : documents) {
+            if(document.getString("_id").equalsIgnoreCase(this.player.getUniqueId().toString())) {
+                return documents.indexOf(document) + 1;
+            }
+        }
+
+        return -1;
+    }
+
+    public void setLobbyScoreboard() {
+        this.lobbyScoreboard.setLobbyScoreboard(this.player);
+    }
+
+    public void setInGameScoreboard() {
+        this.lobbyScoreboard.setIngameScoreboard(this.player);
+    }
+
+    public void unlockKit(Kit kit) {
+
+        try {
+            IKit iKit = kit.getClazz().newInstance();
+            CoinsAPI coinsAPI = new CoinsAPI(this.player.getUniqueId());
+
+            int coins = coinsAPI.getCoins();
+            int required = kit.getClazz().newInstance().getKitCost();
+
+            if(coins >= required) {
+                player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast erfolgreich §e[" + iKit.getKitName() + "] §7freigeschalten");
+                player.playSound(player.getLocation(), Sound.LEVEL_UP, 2, 0.5f);
+                player.closeInventory();
+
+                coinsAPI.removeCoins(required);
+                this.saveObjectInDocument(kit.name(), true, MongoDBCollection.MLGWARS);
+                this.setSelectedKit(kit);
+
+            } else {
+                player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
+                player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast nicht genügend Coins!");
+                player.closeInventory();
+            }
+
+        } catch (InstantiationException | IllegalAccessException e) {
+            player.closeInventory();
+            player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
+            player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
+        }
     }
 }

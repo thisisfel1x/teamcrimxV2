@@ -28,7 +28,8 @@ public enum Kit {
     TORNADO(TornadoKit.class),
     STINKER(StinkerKit.class),
     TANK(TankKit.class),
-    TURTLE(TurtleKit.class);
+    TURTLE(TurtleKit.class),
+    CSGO(CSGOKit.class);
 
     private Class<? extends IKit> clazz;
 

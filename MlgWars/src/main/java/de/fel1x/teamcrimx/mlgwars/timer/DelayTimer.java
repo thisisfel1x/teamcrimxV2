@@ -8,6 +8,7 @@ import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +33,7 @@ public class DelayTimer implements ITimer {
                 player.getInventory().clear();
                 this.mlgWars.getData().getPlayTime().put(player.getUniqueId(), System.currentTimeMillis());
 
-                GamePlayer gamePlayer = new GamePlayer(player);
+                GamePlayer gamePlayer = new GamePlayer(player, true);
                 try {
                     IKit iKit = gamePlayer.getSelectedKit().getClazz().newInstance();
                     iKit.setKitInventory(player);
@@ -40,8 +41,13 @@ public class DelayTimer implements ITimer {
                     player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten! Du erhälst keine Kit-Items");
                 }
 
-                int gamesPlayed = (int) gamePlayer.getObjectFromMongoDocument("games-played", MongoDBCollection.MLGWARS);
-                gamePlayer.saveObjectInDocument("games-played", gamesPlayed + 1, MongoDBCollection.MLGWARS);
+                gamePlayer.saveObjectInDocument("gamesPlayed",
+                        player.getMetadata("games").get(0).asInt() + 1, MongoDBCollection.MLGWARS);
+                gamePlayer.saveObjectInDocument("selectedKit", gamePlayer.getSelectedKit().name(),
+                        MongoDBCollection.MLGWARS);
+
+                player.setMetadata("kills", new FixedMetadataValue(this.mlgWars, 0));
+                gamePlayer.setInGameScoreboard();
 
             });
 

@@ -368,6 +368,17 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
     }
 
     /**
+     * Return true if the point at (x,y,z) is contained within this Cuboid.
+     *
+     * @param x - The X co-ordinate
+     * @param z - The Z co-ordinate
+     * @return true if the given point is within this Cuboid, false otherwise
+     */
+    public boolean contains(int x, int z) {
+        return x >= this.x1 && x <= this.x2 && z >= this.z1 && z <= this.z2;
+    }
+
+    /**
      * Check if the given Block is contained within this Cuboid.
      *
      * @param b - The Block to check for

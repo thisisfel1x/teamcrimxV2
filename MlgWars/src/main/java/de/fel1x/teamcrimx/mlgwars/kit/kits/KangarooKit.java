@@ -1,10 +1,12 @@
 package de.fel1x.teamcrimx.mlgwars.kit.kits;
 
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
+import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class KangarooKit implements IKit {
 
@@ -37,5 +39,6 @@ public class KangarooKit implements IKit {
                 .toItemStack());
 
         player.setAllowFlight(true);
+        player.setMetadata("essence", new FixedMetadataValue(MlgWars.getInstance(), 10));
     }
 }

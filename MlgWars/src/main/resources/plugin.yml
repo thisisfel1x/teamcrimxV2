@@ -11,3 +11,5 @@ commands:
     description: Start the game
   setup:
     description: Setup a game
+  stats:
+    description: Check your current stats

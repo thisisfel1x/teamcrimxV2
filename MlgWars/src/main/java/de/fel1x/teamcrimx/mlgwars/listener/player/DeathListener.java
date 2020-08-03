@@ -4,7 +4,9 @@ import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
+import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
+import de.fel1x.teamcrimx.mlgwars.scoreboard.LobbyScoreboard;
 import de.fel1x.teamcrimx.mlgwars.utils.WinDetection;
 import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.Bukkit;
@@ -12,10 +14,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class DeathListener implements Listener {
 
     private final MlgWars mlgWars;
+    private final LobbyScoreboard lobbyScoreboard = new LobbyScoreboard();
 
     public DeathListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
@@ -39,10 +43,12 @@ public class DeathListener implements Listener {
 
         if(gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
 
-            if(player.getKiller() != null) {
+            if (player.getKiller() != null) {
                 killer = player.getKiller();
-            } else if(this.mlgWars.getData().getLastHit().get(player) != null) {
+            } else if (this.mlgWars.getData().getLastHit().get(player) != null) {
                 killer = this.mlgWars.getData().getLastHit().get(player);
+            } else if(player.hasMetadata("lastZombieHit")) {
+                killer = Bukkit.getPlayer(player.getMetadata("lastZombieHit").get(0).asString());
             } else {
                 killer = null;
             }
@@ -53,6 +59,25 @@ public class DeathListener implements Listener {
                 coinsAPI.addCoins(100);
 
                 GamePlayer killerGamePlayer = new GamePlayer(killer);
+
+                if(killerGamePlayer.getSelectedKit() == Kit.KANGAROO) {
+                    int currentEssences = 0;
+                    if(killer.hasMetadata("essence")) {
+                        currentEssences = killer.getMetadata("essence").get(0).asInt();
+                    }
+                    killer.setMetadata("essence", new FixedMetadataValue(this.mlgWars, currentEssences + 2));
+                }
+
+                int gameKills;
+
+                if(killer.hasMetadata("kills")) {
+                    gameKills = killer.getMetadata("kills").get(0).asInt() + 1;
+                } else {
+                    gameKills = 1;
+                }
+
+                killer.setMetadata("kills", new FixedMetadataValue(this.mlgWars, gameKills));
+                this.lobbyScoreboard.updateBoard(killer, "§8● §b" + gameKills, "kills", "§b");
 
                 int kills = (int) killerGamePlayer.getObjectFromMongoDocument("kills", MongoDBCollection.MLGWARS);
                 killerGamePlayer.saveObjectInDocument("kills", kills + 1, MongoDBCollection.MLGWARS);
@@ -78,6 +103,9 @@ public class DeathListener implements Listener {
             if(playersLeft > 1) {
                 Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§a" + playersLeft + " Spieler verbleiben");
             }
+
+            Bukkit.getOnlinePlayers().forEach(inGamePlayer ->
+                    this.lobbyScoreboard.updateBoard(inGamePlayer, "§8● §c" + MlgWars.getInstance().getData().getPlayers().size(), "players", "§c"));
 
             new WinDetection();
         }

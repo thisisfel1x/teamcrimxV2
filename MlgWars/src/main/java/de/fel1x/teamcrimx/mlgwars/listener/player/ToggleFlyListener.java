@@ -47,6 +47,21 @@ public class ToggleFlyListener implements Listener {
                 player.setFlying(false);
                 player.setAllowFlight(false);
 
+                if(player.hasMetadata("essence")) {
+                    int essences = player.getMetadata("essence").get(0).asInt();
+                    if(essences <= 0) {
+                        player.sendMessage(this.mlgWars.getPrefix() + "§7Alle Essenzen §aaufgebraucht! §7Töte Gegner um neue zu erhalten!");
+                        player.playSound(player.getLocation(), Sound.BAT_HURT, 3f, 0.75f);
+                        return;
+                    }
+                }
+
+                int currentEssences = 0;
+                if(player.hasMetadata("essence")) {
+                    currentEssences = player.getMetadata("essence").get(0).asInt();
+                }
+                player.setMetadata("essence", new FixedMetadataValue(this.mlgWars, currentEssences - 1));
+
                 if(player.hasMetadata("kangaroo")) {
                     long nextUse = player.getMetadata("kangaroo").get(0).asLong();
                     if (nextUse > System.currentTimeMillis()) {

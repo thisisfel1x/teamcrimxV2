@@ -6,20 +6,32 @@ import de.fel1x.teamcrimx.mlgwars.maphandler.MapHandler;
 import de.fel1x.teamcrimx.mlgwars.maphandler.SpawnHandler;
 import de.fel1x.teamcrimx.mlgwars.timer.IdleTimer;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.material.Directional;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class SetupCommand implements CommandExecutor {
 
     private final MlgWars mlgWars;
     private final MapHandler mapHandler = new MapHandler();
     private final SpawnHandler spawnHandler = new SpawnHandler();
+    private final Set<Material> transparent = new HashSet<>();
 
     public SetupCommand(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
         this.mlgWars.getCommand("setup").setExecutor(this);
+
+        this.transparent.add(Material.AIR);
     }
 
     @Override
@@ -126,6 +138,62 @@ public class SetupCommand implements CommandExecutor {
                             this.mapHandler.saveLocation(player.getLocation(), map, "spectator", player);
                             return true;
                         }
+                    } else if(args[0].toLowerCase().equalsIgnoreCase("setsign")) {
+                        int id;
+
+                        try {
+                            id = Integer.parseInt(args[1]);
+                        } catch (NumberFormatException ignored) {
+                            player.sendMessage(this.mlgWars.getPrefix() + "§cBitte gebe eine Zahl an!");
+                            return false;
+                        }
+
+                        if(id < 1 || id > 5) {
+                            player.sendMessage(this.mlgWars.getPrefix() + "§cBitte gebe eine Zahl zwischen 1 und 5 an!");
+                            return false;
+                        }
+
+                        Block targetBlock = player.getTargetBlock(this.transparent, 10);
+
+                        if(targetBlock.getType() != Material.WALL_SIGN) {
+                            player.sendMessage(this.mlgWars.getPrefix() + "§cBitte schaue ein WALL_SIGN an!");
+                            return false;
+                        }
+
+                        Sign sign = (Sign) targetBlock.getState();
+                        this.spawnHandler.saveLocation(sign.getLocation(), "topSign" + id, player, sign.getBlock().getFace(sign.getBlock()));
+
+                        player.sendMessage(this.mlgWars.getPrefix() + "§aSchild erfolgreich gespeichert!");
+                        return true;
+                    } else if(args[0].toLowerCase().equalsIgnoreCase("sethead")) {
+                        int id;
+
+                        try {
+                            id = Integer.parseInt(args[1]);
+                        } catch (NumberFormatException ignored) {
+                            player.sendMessage(this.mlgWars.getPrefix() + "§cBitte gebe eine Zahl an!");
+                            return false;
+                        }
+
+                        if(id < 1 || id > 5) {
+                            player.sendMessage(this.mlgWars.getPrefix() + "§cBitte gebe eine Zahl zwischen 1 und 5 an!");
+                            return false;
+                        }
+
+                        Block targetBlock = player.getTargetBlock(this.transparent, 10);
+
+                        if(targetBlock.getType() != Material.SKULL) {
+                            player.sendMessage(this.mlgWars.getPrefix() + "§cBitte schaue ein SKULL an!");
+                            return false;
+                        }
+
+                        BlockState block = player.getTargetBlock((Set<Material>) null, 5).getState();
+                        Directional directional = (Directional) block.getData();
+
+                        this.spawnHandler.saveLocation(block.getLocation(), "topHead" + id, player, directional.getFacing());
+
+                        player.sendMessage(this.mlgWars.getPrefix() + "§aKopf erfolgreich gespeichert!");
+                        return true;
                     }
                 } else if(args.length == 1) {
                     if(args[0].toLowerCase().equalsIgnoreCase("setlobby")) {

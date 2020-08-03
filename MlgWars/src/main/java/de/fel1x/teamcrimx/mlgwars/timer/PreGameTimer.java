@@ -1,12 +1,16 @@
 package de.fel1x.teamcrimx.mlgwars.timer;
 
+import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
+import de.fel1x.teamcrimx.mlgwars.kit.Kit;
+import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class PreGameTimer implements ITimer {
 
@@ -40,6 +44,18 @@ public class PreGameTimer implements ITimer {
                 }
 
                 this.mlgWars.getData().getPlayers().forEach(player -> {
+                    GamePlayer gamePlayer = new GamePlayer(player);
+
+                    if(gamePlayer.getSelectedKit() == Kit.KANGAROO) {
+                        if(!this.mlgWars.getData().getKangarooTask().containsKey(player.getUniqueId())) {
+                            int currentEssences = 0;
+                            if(player.hasMetadata("essence")) {
+                                currentEssences = player.getMetadata("essence").get(0).asInt();
+                            }
+                            Actionbar.sendActiobar(player, "§6Känguru §8● §a" + currentEssences + " §7Essenzen übrig");
+                        }
+                    }
+
                     if(this.mlgWars.getData().getPlayers().size() > 1) {
                         Player nearest = this.getClosestEntity(player, player.getLocation());
                         if(nearest != null) {

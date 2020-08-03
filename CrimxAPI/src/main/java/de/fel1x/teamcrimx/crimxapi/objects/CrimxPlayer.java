@@ -92,6 +92,4 @@ public class CrimxPlayer {
         return new String[]{value, signature};
 
     }
-
-
 }

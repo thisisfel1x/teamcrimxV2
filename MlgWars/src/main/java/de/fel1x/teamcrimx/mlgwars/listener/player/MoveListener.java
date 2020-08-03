@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
+import de.fel1x.teamcrimx.mlgwars.utils.WinDetection;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,7 +46,7 @@ public class MoveListener implements Listener {
             Cuboid mapCuboid = this.mlgWars.getData().getMapRegion();
             Location middle = Spawns.SPECTATOR.getLocation();
 
-            if (!mapCuboid.contains(player.getLocation())) {
+            if (!mapCuboid.contains((int) player.getLocation().getX(), (int) player.getLocation().getZ())) {
                 int aX = middle.getBlockX();
                 int aY = middle.getBlockY();
                 int aZ = middle.getBlockZ();

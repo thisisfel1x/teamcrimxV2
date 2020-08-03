@@ -1,9 +1,6 @@
 package de.fel1x.teamcrimx.mlgwars.listener.player;
 
-import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
-import de.fel1x.teamcrimx.crimxapi.utils.ParticleUtils;
-import de.fel1x.teamcrimx.crimxapi.utils.Particles;
-import de.fel1x.teamcrimx.crimxapi.utils.ProgressBar;
+import de.fel1x.teamcrimx.crimxapi.utils.*;
 import de.fel1x.teamcrimx.mlgwars.Data;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
@@ -269,10 +266,7 @@ public class InteractListener implements Listener {
                             location.getWorld().strikeLightning(location.clone().add(0, 0, -1));
 
                             for (Player player1 : MlgWars.getInstance().getData().getPlayers()) {
-                                if (player1.equals(player)) return;
-
-                                GamePlayer gamePlayer1 = new GamePlayer(player1);
-                                if (gamePlayer1.isSpectator()) return;
+                                if (player1.equals(player)) continue;
 
                                 player1.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 5, 1, false, false), true);
                                 player1.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 5, 1, false, false), true);
@@ -516,7 +510,7 @@ public class InteractListener implements Listener {
                                 }
                             };
 
-                            turtleTask.runTaskTimer(this.mlgWars, 0L, 10L);
+                            turtleTask.runTaskTimer(this.mlgWars, 0L, 5L);
                             this.data.getTurtleTask().get(player.getUniqueId()).add(turtleTask);
                             break;
 
@@ -578,6 +572,92 @@ public class InteractListener implements Listener {
                                 this.data.getTeleporterTask().get(player.getUniqueId()).runTaskTimer(this.mlgWars, 0L, 20L);
                             } else {
                                 player.sendMessage(this.mlgWars.getPrefix() + "§cEs konnte kein Gegner gefunden werden... Spielst du alleine?");
+                            }
+                            break;
+
+                        case CSGO:
+                            if(!event.getItem().getItemMeta().hasDisplayName()) {
+                                return;
+                            }
+
+                            this.data.getCsgoTasks().computeIfAbsent(player.getUniqueId(), k -> new ArrayList<>());
+
+                            if(interactedMaterial == Material.GLOWSTONE_DUST
+                                    && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §eFlash")) {
+
+                                event.setCancelled(true);
+                                this.removeItem(player);
+
+                                Item item = player.getWorld().dropItem(player.getEyeLocation(), new ItemStack(Material.GLOWSTONE_DUST));
+                                item.setPickupDelay(Integer.MAX_VALUE);
+                                item.setVelocity(player.getEyeLocation().getDirection().multiply(1.25D).setY(0.25D));
+
+                                BukkitRunnable bukkitRunnable = new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        if(item.isOnGround()) {
+                                            new InstantFirework(FireworkEffect.builder()
+                                                    .withColor(Color.WHITE, Color.YELLOW, Color.GRAY).build(),
+                                                    item.getLocation().clone().add(0, 1, 0));
+
+                                            item.getNearbyEntities(5, 5, 5).forEach(entity -> {
+                                                if(!(entity instanceof LivingEntity)) return;
+                                                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,
+                                                        20 * 5, 4, true, true));
+                                                ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,
+                                                        20 * 5, 1, true, true));
+                                            });
+                                        }
+
+                                        if(item.isOnGround() || item.getLocation().getY() < 0 || item.isDead() || !item.isValid()) {
+                                            this.cancel();
+                                            data.getCsgoTasks().get(player.getUniqueId()).remove(this);
+                                            item.remove();
+                                        }
+                                    }
+                                };
+
+                                bukkitRunnable.runTaskTimer(this.mlgWars, 0L, 1L);
+                                this.data.getCsgoTasks().get(player.getUniqueId()).add(bukkitRunnable);
+
+                            } else if(interactedMaterial == Material.FIREBALL
+                                    && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §cMolotowcocktail")) {
+
+                                event.setCancelled(true);
+                                this.removeItem(player);
+
+                                Fireball fireball = player.launchProjectile(Fireball.class);
+                                fireball.setMetadata("moli", new FixedMetadataValue(this.mlgWars, true));
+
+                            } else if(interactedMaterial == Material.FIREWORK_CHARGE
+                                    && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §7Smoke")) {
+
+                                event.setCancelled(true);
+                                this.removeItem(player);
+
+                                Item item = player.getWorld().dropItem(player.getEyeLocation(), new ItemStack(Material.FIREWORK_CHARGE));
+                                item.setPickupDelay(Integer.MAX_VALUE);
+                                item.setVelocity(player.getEyeLocation().getDirection().multiply(1.25D).setY(0.25D));
+
+                                BukkitRunnable bukkitRunnable = new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        if(item.isOnGround()) {
+                                            new InstantFirework(FireworkEffect.builder()
+                                                    .withColor(Color.WHITE, Color.YELLOW, Color.GRAY).build(),
+                                                    item.getLocation().clone().add(0, 0.5, 0));
+                                            new SmokeGrenade(mlgWars, item.getLocation(), 10, item.getWorld());
+                                        }
+
+                                        if(item.isOnGround() || item.getLocation().getY() < 0 || item.isDead() || !item.isValid()) {
+                                            this.cancel();
+                                            data.getCsgoTasks().get(player.getUniqueId()).remove(this);
+                                            item.remove();
+                                        }
+                                    }
+                                };
+                                bukkitRunnable.runTaskTimer(this.mlgWars, 0L, 1L);
+                                data.getCsgoTasks().get(player.getUniqueId()).add(bukkitRunnable);
                             }
                             break;
                     }

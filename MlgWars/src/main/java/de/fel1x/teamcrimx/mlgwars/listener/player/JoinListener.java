@@ -38,8 +38,6 @@ public class JoinListener implements Listener {
             gamePlayer.createPlayerData();
         }
 
-        BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(event.getPlayer());
-
         gamePlayer.initDatabasePlayer();
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
@@ -52,6 +50,9 @@ public class JoinListener implements Listener {
                 gamePlayer.setJoinItems();
                 gamePlayer.teleport(Spawns.LOBBY);
 
+                gamePlayer.setLobbyScoreboard();
+                BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(event.getPlayer());
+
                 event.setJoinMessage("§8» " + player.getDisplayName() + " §7hat das Spiel betreten");
 
                 break;
@@ -62,6 +63,8 @@ public class JoinListener implements Listener {
                 gamePlayer.addToSpectators();
                 gamePlayer.activateSpectatorMode();
                 gamePlayer.teleport(Spawns.SPECTATOR);
+
+                gamePlayer.setInGameScoreboard();
 
                 break;
 

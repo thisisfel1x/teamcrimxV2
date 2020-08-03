@@ -39,6 +39,7 @@ public class Data {
     private final Map<UUID, BukkitRunnable> teleporterTask;
     private final Map<UUID, ArrayList<BukkitRunnable>> eggTask;
     private final Map<UUID, ArrayList<BukkitRunnable>> turtleTask;
+    private final Map<UUID, ArrayList<BukkitRunnable>> csgoTasks;
 
     public Data() {
         this.players = new ArrayList<>();
@@ -64,6 +65,7 @@ public class Data {
         this.teleporterTask = new HashMap<>();
         this.eggTask = new HashMap<>();
         this.turtleTask = new HashMap<>();
+        this.csgoTasks = new HashMap<>();
     }
 
     public List<Player> getPlayers() {
@@ -144,5 +146,9 @@ public class Data {
 
     public Map<UUID, BukkitRunnable> getTeleporterTask() {
         return teleporterTask;
+    }
+
+    public Map<UUID, ArrayList<BukkitRunnable>> getCsgoTasks() {
+        return csgoTasks;
     }
 }
