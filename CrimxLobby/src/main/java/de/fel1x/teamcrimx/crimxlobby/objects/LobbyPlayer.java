@@ -3,6 +3,7 @@ package de.fel1x.teamcrimx.crimxlobby.objects;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
+import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
@@ -26,6 +27,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -149,8 +151,18 @@ public class LobbyPlayer {
             this.player.getInventory().setItem(4, new ItemBuilder(Material.NAME_TAG).setName("§8● §5Nick").toItemStack());
         }
 
-        this.player.setGameMode(GameMode.SURVIVAL);
+        try {
 
+            Cosmetic selectedCosmetic = Cosmetic.valueOf((String) this.getObjectFromMongoDocument("selectedCosmetic", MongoDBCollection.LOBBY));
+            ICosmetic iCosmetic = selectedCosmetic.getCosmeticClass().newInstance();
+
+            iCosmetic.startTrail(this.player);
+
+        } catch (Exception ignored) {
+            //this.player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten");
+        }
+
+        this.player.setGameMode(GameMode.SURVIVAL);
 
     }
 
@@ -199,10 +211,6 @@ public class LobbyPlayer {
 
         this.data.getPlayerHiderState().put(player.getUniqueId(), state);
         this.setPlayerHiderDisplayName();
-
-        Document toUpdate = new Document("playerhider-state", state);
-        Bson updateOperation = new Document("$set", toUpdate);
-        this.crimxLobby.getCrimxAPI().getMongoDB().getLobbyCollection().updateOne(this.lobbyDocument, updateOperation);
 
     }
 
@@ -272,12 +280,12 @@ public class LobbyPlayer {
         boolean defaultSpawn = this.data.getLobbyDatabasePlayer().get(this.player.getUniqueId()).isSpawnAtLastLocation();
 
         if(defaultSpawn) {
-            String worldName = this.lobbyDocument.getString("last-location-world");
-            double x = this.lobbyDocument.getDouble("last-location-x");
-            double y = this.lobbyDocument.getDouble("last-location-y");
-            double z = this.lobbyDocument.getDouble("last-location-z");
-            double pitch = this.lobbyDocument.getDouble("last-location-pitch");
-            double yaw = this.lobbyDocument.getDouble("last-location-yaw");
+            String worldName = this.lobbyDocument.getString("lastLocationWorld");
+            double x = this.lobbyDocument.getDouble("lastLocationX");
+            double y = this.lobbyDocument.getDouble("lastLocationY");
+            double z = this.lobbyDocument.getDouble("lastLocationZ");
+            double pitch = this.lobbyDocument.getDouble("lastLocationPitch");
+            double yaw = this.lobbyDocument.getDouble("lastLocationYaw");
 
             Location lastLocation = new Location(Bukkit.getWorld(worldName), x, y, z, (float) yaw, (float) pitch);
 
@@ -304,12 +312,12 @@ public class LobbyPlayer {
     public void saveNewLocation() {
 
         Document toUpdate = new Document();
-        toUpdate.append("last-location-world", this.player.getLocation().getWorld().getName())
-                .append("last-location-x", this.player.getLocation().getX())
-                .append("last-location-y", this.player.getLocation().getY())
-                .append("last-location-z", this.player.getLocation().getZ())
-                .append("last-location-pitch", this.player.getLocation().getPitch())
-                .append("last-location-yaw", this.player.getLocation().getYaw());
+        toUpdate.append("lastLocationWorld", this.player.getLocation().getWorld().getName())
+                .append("lastLocationX", this.player.getLocation().getX())
+                .append("lastLocationY", this.player.getLocation().getY())
+                .append("lastLocationZ", this.player.getLocation().getZ())
+                .append("lastLocationPitch", this.player.getLocation().getPitch())
+                .append("lastLocationYaw", this.player.getLocation().getYaw());
 
         Bson updateOperation = new Document("$set", toUpdate);
         this.crimxLobby.getCrimxAPI().getMongoDB().getLobbyCollection().updateOne(this.lobbyDocument, updateOperation);
@@ -318,7 +326,7 @@ public class LobbyPlayer {
 
     public void initPlayerHider() {
 
-        int state = this.lobbyDocument.getInteger("playerhider-state");
+        int state = this.lobbyDocument.getInteger("playerhiderState");
         this.data.getPlayerHiderState().put(player.getUniqueId(), state);
 
     }
@@ -338,7 +346,7 @@ public class LobbyPlayer {
 
         boolean hotbarSoundEnabled = this.lobbyDocument.getBoolean("hotbarSound");
         boolean spawnAtLastLocation = this.lobbyDocument.getBoolean("defaultSpawn");
-        long lastReward = this.lobbyDocument.getLong("last-reward");
+        long lastReward = this.lobbyDocument.getLong("lastReward");
 
         this.data.getLobbyDatabasePlayer().put(this.player.getUniqueId(), new LobbyDatabasePlayer(hotbarSoundEnabled, spawnAtLastLocation, lastReward));
 
@@ -587,17 +595,17 @@ public class LobbyPlayer {
 
         try {
             ICosmetic iCosmetic = cosmetic.getCosmeticClass().newInstance();
+            CoinsAPI coinsAPI = new CoinsAPI(this.player.getUniqueId());
 
-            int coins = (int) this.getObjectFromMongoDocument("coins", MongoDBCollection.USERS);
+            int coins = coinsAPI.getCoins();
             int required = cosmetic.getCosmeticClass().newInstance().getCosmeticCost();
 
             if(coins >= required) {
-                coins -= required;
                 player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast erfolgreich §a" + iCosmetic.getCosmeticName() + " §7freigeschalten");
                 player.playSound(player.getLocation(), Sound.LEVEL_UP, 2, 0.5f);
                 CosmeticInventory.COSMETICS_INVENTORY.open(player);
 
-                this.saveObjectInDocument("coins", coins, MongoDBCollection.USERS);
+                coinsAPI.removeCoins(required);
                 this.saveObjectInDocument(cosmetic.name(), true, MongoDBCollection.LOBBY);
 
             } else {

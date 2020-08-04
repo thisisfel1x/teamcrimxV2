@@ -39,6 +39,8 @@ public class CosmeticInventory implements InventoryProvider {
             CrimxLobby.getInstance().getData().getCosmetic().remove(player.getUniqueId());
             CrimxLobby.getInstance().getData().getHueMap().remove(player.getUniqueId());
             player.getInventory().setArmorContents(null);
+            lobbyPlayer.saveObjectInDocument("selectedCosmetic", null,
+                    MongoDBCollection.LOBBY);
         }));
 
         int row = 1;
@@ -96,6 +98,8 @@ public class CosmeticInventory implements InventoryProvider {
                                     player.getInventory().setArmorContents(null);
                                     player.closeInventory();
                                     iCosmetic.startTrail(player);
+                                    lobbyPlayer.saveObjectInDocument("selectedCosmetic", cosmetic.name(),
+                                            MongoDBCollection.LOBBY);
                                 }));
 
                     }

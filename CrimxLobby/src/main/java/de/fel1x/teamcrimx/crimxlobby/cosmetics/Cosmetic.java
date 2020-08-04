@@ -4,6 +4,8 @@ import de.fel1x.teamcrimx.crimxlobby.cosmetics.armor.RainbowArmor;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.dropTrails.MoneyShoeTrail;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.dropTrails.RolexShoeTrail;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.dropTrails.SnowShoeTrail;
+import de.fel1x.teamcrimx.crimxlobby.cosmetics.gadgets.FireworkGadget;
+import de.fel1x.teamcrimx.crimxlobby.cosmetics.gadgets.FunGunGadget;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.HeartShoeCosmetic;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.NoteShoeCosmetic;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.WitchShoeCosmetic;
@@ -17,7 +19,9 @@ public enum Cosmetic {
     DIAMOND_TRAIL(MoneyShoeTrail.class, CosmeticCategory.TRAILS),
     SNOW_TRAIL(SnowShoeTrail.class, CosmeticCategory.TRAILS),
 
-    RGB_ARMOR(RainbowArmor.class, CosmeticCategory.GADGETS);
+    RGB_ARMOR(RainbowArmor.class, CosmeticCategory.GADGETS),
+    FUNGUN(FunGunGadget.class, CosmeticCategory.GADGETS),
+    FIREWORK(FireworkGadget.class, CosmeticCategory.GADGETS);
 
 
     private Class<? extends ICosmetic> cosmeticClass;

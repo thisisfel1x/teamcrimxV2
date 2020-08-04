@@ -69,6 +69,11 @@ public class HeartShoeCosmetic implements ICosmetic {
     }
 
     @Override
+    public boolean gadget() {
+        return false;
+    }
+
+    @Override
     public Material itemToDrop() {
         return null;
     }

@@ -8,14 +8,18 @@ import de.fel1x.teamcrimx.crimxlobby.cosmetics.armor.RainbowArmor;
 import de.fel1x.teamcrimx.crimxlobby.listeners.block.BlockBreakListener;
 import de.fel1x.teamcrimx.crimxlobby.listeners.block.BlockPlaceListener;
 import de.fel1x.teamcrimx.crimxlobby.listeners.entity.DamageListener;
+import de.fel1x.teamcrimx.crimxlobby.listeners.entity.ProjectileHitListener;
 import de.fel1x.teamcrimx.crimxlobby.listeners.player.*;
 import de.fel1x.teamcrimx.crimxlobby.listeners.world.WeatherChangeListener;
 import de.fel1x.teamcrimx.crimxlobby.manager.SpawnManager;
 import de.fel1x.teamcrimx.crimxlobby.minigames.watermlg.WaterMlgHandler;
+import de.fel1x.teamcrimx.crimxlobby.objects.Spawn;
 import de.fel1x.teamcrimx.crimxlobby.scoreboard.LobbyScoreboard;
 import fr.minuskube.inv.InventoryManager;
 import net.jitse.npclib.NPCLib;
-import org.bukkit.Bukkit;
+import org.bukkit.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,8 +27,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class CrimxLobby extends JavaPlugin {
 
     private static CrimxLobby instance;
-    private String prefix = "§8| " +
-            "§aCrimx§lLobby §8» §r";
+    private String prefix = "§aCrimx§lLobby §8● §r";
 
     private Data data;
 
@@ -70,6 +73,8 @@ public final class CrimxLobby extends JavaPlugin {
         this.registerCommands();
         this.registerListener();
 
+        this.loadWorld();
+
         this.runMainScheduler();
 
     }
@@ -83,6 +88,36 @@ public final class CrimxLobby extends JavaPlugin {
 
         new BuildCommand(this);
         new SetupCommand(this);
+
+    }
+
+    private void loadWorld() {
+
+        Location lobby = Spawn.SPAWN.getPlayerSpawn();
+
+        if (lobby == null) {
+            Bukkit.getConsoleSender().sendMessage("§cKein Spawn gesetzt!");
+            return;
+        } else {
+            Bukkit.createWorld(new WorldCreator(lobby.getWorld().getName()));
+        }
+
+        lobby.getWorld().getEntities().forEach(entity -> {
+            if(!(entity instanceof ArmorStand)) {
+                entity.remove();
+            }
+        });
+
+        World world = lobby.getWorld();
+        world.setSpawnLocation((int) lobby.getX(), (int) lobby.getY(), (int) lobby.getZ());
+        world.setDifficulty(Difficulty.PEACEFUL);
+        world.setGameRuleValue("doMobSpawning", "false");
+        world.setGameRuleValue("doMobLoot", "false");
+        world.setGameRuleValue("doWeatherCycle", "false");
+        world.setStorm(false);
+        world.setThunderDuration(0);
+        world.setThundering(false);
+        world.setTime(1200);
 
     }
 
@@ -107,6 +142,7 @@ public final class CrimxLobby extends JavaPlugin {
 
         // ENTITY
         new DamageListener(this);
+        new ProjectileHitListener(this);
 
         // WORLD
         new WeatherChangeListener(this);

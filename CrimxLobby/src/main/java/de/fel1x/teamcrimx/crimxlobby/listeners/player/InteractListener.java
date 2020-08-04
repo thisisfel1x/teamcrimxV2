@@ -1,6 +1,8 @@
 package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
+import de.fel1x.teamcrimx.crimxlobby.cosmetics.Cosmetic;
+import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import de.fel1x.teamcrimx.crimxlobby.inventories.CosmeticInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.MinigameInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.NavigatorInventory;
@@ -9,11 +11,13 @@ import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class InteractListener implements Listener {
 
@@ -47,6 +51,8 @@ public class InteractListener implements Listener {
                 return;
             }
 
+            ICosmetic iCosmetic = lobbyPlayer.getSelectedCosmetic();
+
             event.setCancelled(true);
 
             if (event.hasItem()) {
@@ -77,8 +83,45 @@ public class InteractListener implements Listener {
                         MinigameInventory.MINIGAME_INVENTORY.open(player);
                         break;
 
-                }
+                    case BLAZE_ROD:
+                        if(player.hasMetadata("gadgetDelay")) {
+                            long delay = player.getMetadata("gadgetDelay").get(0).asLong();
 
+                            if(delay > System.currentTimeMillis()) {
+                                player.sendMessage(this.crimxLobby.getPrefix() + "§7Bitte warte einen Moment");
+                                return;
+                            }
+                        }
+
+                        player.setMetadata("gadgetDelay", new FixedMetadataValue(this.crimxLobby,
+                                System.currentTimeMillis() + (1000 * 4)));
+
+                        if(iCosmetic.getCosmeticMaterial() == Material.BLAZE_ROD) {
+                            Snowball snowball = player.launchProjectile(Snowball.class);
+                            snowball.setMetadata("funGun", new FixedMetadataValue(this.crimxLobby, true));
+                        }
+                        break;
+
+                    case STICK:
+                        if(player.hasMetadata("gadgetDelay")) {
+                            long delay = player.getMetadata("gadgetDelay").get(0).asLong();
+
+                            if(delay > System.currentTimeMillis()) {
+                                player.sendMessage(this.crimxLobby.getPrefix() + "§7Bitte warte einen Moment");
+                                return;
+                            }
+                        }
+
+                        player.setMetadata("gadgetDelay", new FixedMetadataValue(this.crimxLobby,
+                                System.currentTimeMillis() + (1000 * 5)));
+
+                        if(iCosmetic.getCosmeticMaterial() == Material.FIREWORK) {
+                            Snowball snowball = player.launchProjectile(Snowball.class);
+                            snowball.setMetadata("firework", new FixedMetadataValue(this.crimxLobby, true));
+                        }
+                        break;
+
+                }
             }
         }
     }

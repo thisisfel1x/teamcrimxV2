@@ -67,6 +67,11 @@ public class RolexShoeTrail implements ICosmetic {
     }
 
     @Override
+    public boolean gadget() {
+        return false;
+    }
+
+    @Override
     public Material itemToDrop() {
         return Material.WATCH;
     }

@@ -39,11 +39,11 @@ public class MoveListener implements Listener {
         if(lobbyPlayer.getSelectedCosmetic() != null) {
             ICosmetic iCosmetic = lobbyPlayer.getSelectedCosmetic();
 
-            if(!iCosmetic.dropItem() && !iCosmetic.playerBlock() && !iCosmetic.armor()) {
+            if(!iCosmetic.dropItem() && !iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()) {
                 if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
                     player.getWorld().playEffect(player.getLocation(), iCosmetic.getWalkEffect(), 0);
                 }
-            } else if(!iCosmetic.dropItem() && iCosmetic.playerBlock() && !iCosmetic.armor()) {
+            } else if(!iCosmetic.dropItem() && iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()) {
                 if((player.getLocation().clone().subtract(0, 1, 0).getBlock().getType() != Material.AIR
                         || player.getLocation().clone().subtract(0, 1, 0).getBlock().getType() != Material.SNOW)
                         && player.getLocation().getBlock().getType() == Material.AIR
@@ -53,7 +53,7 @@ public class MoveListener implements Listener {
 
                     Bukkit.getScheduler().runTaskLater(this.crimxLobby, () -> old.setType(Material.AIR), 20 * 5L);
                 }
-            } else if(iCosmetic.dropItem() && !iCosmetic.playerBlock() && !iCosmetic.armor()){
+            } else if(iCosmetic.dropItem() && !iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()){
                 Item item = player.getWorld().dropItem(player.getLocation(), new ItemStack(iCosmetic.itemToDrop()));
                 Bukkit.getScheduler().runTaskLater(this.crimxLobby, item::remove, 20 * 5L);
             }

@@ -1,5 +1,6 @@
 package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 
+import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
@@ -50,6 +51,7 @@ public class JoinListener implements Listener {
         lobbyPlayer.teleportToSpawn();
 
         lobbyPlayer.setScoreboard();
+        BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
 
         lobbyPlayer.spawnPersonalNPC();
 

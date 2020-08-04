@@ -20,19 +20,20 @@ public class LobbyDatabase {
 
         Document basicDBObject = new Document("_id", player.getUniqueId().toString())
                 .append("name", player.getName())
-                .append("last-location-world", Spawn.SPAWN.getPlayerSpawn().getWorld().getName())
-                .append("last-location-x", Spawn.SPAWN.getPlayerSpawn().getX())
-                .append("last-location-y", Spawn.SPAWN.getPlayerSpawn().getY())
-                .append("last-location-z", Spawn.SPAWN.getPlayerSpawn().getZ())
-                .append("last-location-pitch", Spawn.SPAWN.getPlayerSpawn().getPitch())
-                .append("last-location-yaw", Spawn.SPAWN.getPlayerSpawn().getYaw())
-                .append("last-reward", 0L)
-                .append("playerhider-state", 0)
+                .append("lastLocationWorld", Spawn.SPAWN.getPlayerSpawn().getWorld().getName())
+                .append("lastLocationX", Spawn.SPAWN.getPlayerSpawn().getX())
+                .append("lastLocationY", Spawn.SPAWN.getPlayerSpawn().getY())
+                .append("lastLocationZ", Spawn.SPAWN.getPlayerSpawn().getZ())
+                .append("lastLocationPitch", Spawn.SPAWN.getPlayerSpawn().getPitch())
+                .append("lastLocationYaw", Spawn.SPAWN.getPlayerSpawn().getYaw())
+                .append("lastReward", 0L)
+                .append("playerhiderState", 0)
                 .append("defaultSpawn", true)
                 .append("hotbarSound", true)
-                .append("discord-tag", "")
+                .append("discordTag", "")
                 .append("twitter", "")
-                .append("instagram", "");
+                .append("instagram", "")
+                .append("selectedCosmetic", null);
 
         for (Cosmetic cosmetic : Cosmetic.values()) {
             basicDBObject.append(cosmetic.name(), false);

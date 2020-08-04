@@ -29,6 +29,8 @@ public interface ICosmetic {
 
     boolean armor();
 
+    boolean gadget();
+
     Material itemToDrop();
 
     void updateInventory(Player player);

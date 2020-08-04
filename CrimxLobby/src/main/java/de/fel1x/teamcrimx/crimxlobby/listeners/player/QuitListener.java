@@ -1,5 +1,6 @@
 package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 
+import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.entity.Player;
@@ -25,6 +26,9 @@ public class QuitListener implements Listener {
         event.setQuitMessage(null);
 
         lobbyPlayer.saveNewLocation();
+        lobbyPlayer.saveObjectInDocument("playerhiderState",
+                this.crimxLobby.getData().getPlayerHiderState().get(player.getUniqueId()),
+                MongoDBCollection.LOBBY);
 
         if(lobbyPlayer.isInBuild()) {
             lobbyPlayer.removeFromBuild();
