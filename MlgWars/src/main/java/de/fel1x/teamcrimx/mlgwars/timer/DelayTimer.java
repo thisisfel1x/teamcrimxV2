@@ -1,5 +1,7 @@
 package de.fel1x.teamcrimx.mlgwars.timer;
 
+import de.dytanic.cloudnet.ext.bridge.BridgeHelper;
+import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
@@ -43,15 +45,15 @@ public class DelayTimer implements ITimer {
 
                 gamePlayer.saveObjectInDocument("gamesPlayed",
                         player.getMetadata("games").get(0).asInt() + 1, MongoDBCollection.MLGWARS);
-                gamePlayer.saveObjectInDocument("selectedKit", gamePlayer.getSelectedKit().name(),
-                        MongoDBCollection.MLGWARS);
-
-                player.setMetadata("kills", new FixedMetadataValue(this.mlgWars, 0));
                 gamePlayer.setInGameScoreboard();
 
             });
 
             this.teleportPlayersToSpawns();
+
+            BukkitCloudNetHelper.changeToIngame();
+            BukkitCloudNetHelper.setMaxPlayers(50);
+            BridgeHelper.updateServiceInfo();
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
 

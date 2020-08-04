@@ -38,13 +38,24 @@ public class LobbyTimer implements ITimer {
 
                     case 0:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§aDie Runde beginnt!");
-                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.LEVEL_UP, 3f, 5f));
+                        Bukkit.getOnlinePlayers().forEach(player -> {
+                            player.playSound(player.getLocation(), Sound.LEVEL_UP, 3f, 5f);
+                            player.setLevel(0);
+                            player.setExp(0);
+                        });
                         this.mlgWars.startTimerByClass(DelayTimer.class);
                         break;
                 }
 
                 if(this.countdown == 5) {
                     new ChestFiller();
+                }
+
+                if(this.countdown >= 1) {
+                    Bukkit.getOnlinePlayers().forEach(current -> {
+                        current.setLevel(countdown);
+                        current.setExp((float) countdown / (float) 60);
+                    });
                 }
 
                 this.countdown--;
@@ -59,7 +70,11 @@ public class LobbyTimer implements ITimer {
         if(this.running) {
             Bukkit.getScheduler().cancelTask(taskId);
             this.running = false;
-            this.countdown = 60;
+            this.setCountdown(60);
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                player.setLevel(0);
+                player.setExp(0);
+            });
         }
     }
 

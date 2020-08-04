@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 public class StartCommand implements CommandExecutor {
 
     private final MlgWars mlgWars;
-    private final LobbyTimer lobbyTimer = new LobbyTimer();
 
     public StartCommand(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
@@ -33,6 +32,8 @@ public class StartCommand implements CommandExecutor {
         if(!player.hasPermission("mlgwars.start")) {
             return false;
         }
+
+        LobbyTimer lobbyTimer = new LobbyTimer();
 
         if(gamestate != Gamestate.IDLE && gamestate != Gamestate.LOBBY) {
             player.sendMessage(this.mlgWars.getPrefix() + "§cDas Spiel läuft bereits");

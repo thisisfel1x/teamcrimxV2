@@ -47,6 +47,7 @@ public class QuitListener implements Listener {
                 int neededPlayers = (this.mlgWars.getTeamSize() * 2);
                 if(this.mlgWars.getData().getPlayers().size() < neededPlayers) {
                     Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§cDer Countdown wurde abgebrochen, da zu wenige Spieler online sind");
+                    Bukkit.getScheduler().cancelTasks(this.mlgWars);
                     this.mlgWars.startTimerByClass(IdleTimer.class);
                 }
                 break;

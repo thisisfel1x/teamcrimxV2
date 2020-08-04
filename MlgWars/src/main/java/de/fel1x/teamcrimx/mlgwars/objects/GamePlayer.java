@@ -96,7 +96,7 @@ public class GamePlayer {
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
-        if(gamestate == Gamestate.IDLE || gamestate == Gamestate.INGAME) {
+        if(gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
             this.setSelectedKit(selectedKit);
         }
 
@@ -132,6 +132,8 @@ public class GamePlayer {
 
     public void cleanUpOnJoin() {
 
+        this.player.setMetadata("kills", new FixedMetadataValue(this.mlgWars, 0));
+
         this.player.getInventory().clear();
         this.player.getInventory().setArmorContents(null);
 
@@ -139,6 +141,9 @@ public class GamePlayer {
 
         this.player.setHealth(20);
         this.player.setFoodLevel(25);
+
+        this.player.setLevel(0);
+        this.player.setExp(0);
 
         this.player.setFlying(false);
         this.player.setAllowFlight(false);
@@ -243,6 +248,8 @@ public class GamePlayer {
             this.player.getInventory().setItem(8, new ItemBuilder(iKit.getKitMaterial())
                     .setName("§8● §a" + iKit.getKitName())
                     .setLore(iKit.getKitDescription()).toItemStack());
+
+            this.saveObjectInDocument("selectedKit", kit.name(), MongoDBCollection.MLGWARS);
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
