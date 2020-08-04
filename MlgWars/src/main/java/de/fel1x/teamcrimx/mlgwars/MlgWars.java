@@ -1,6 +1,7 @@
 package de.fel1x.teamcrimx.mlgwars;
 
 import com.mongodb.client.model.Sorts;
+import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.mlgwars.commands.SetupCommand;
 import de.fel1x.teamcrimx.mlgwars.commands.StartCommand;
@@ -32,8 +33,6 @@ public final class MlgWars extends JavaPlugin {
 
     private boolean inSetup;
     private boolean noMap;
-
-    private String mapName;
 
     private Data date;
     private GamestateHandler gamestateHandler;
@@ -197,13 +196,5 @@ public final class MlgWars extends JavaPlugin {
 
     public WorldLoader getWorldLoader() {
         return worldLoader;
-    }
-
-    public String getMapName() {
-        return mapName;
-    }
-
-    public void setMapName(String mapName) {
-        this.mapName = mapName;
     }
 }

@@ -22,14 +22,16 @@ public class CoinsCommand implements CommandExecutor {
         }
 
         Player player = (Player) commandSender;
-        CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
+        CoinsAPI coinsAPI;
 
         boolean hasPermission = player.hasPermission("crimxapi.coins");
 
         if(!hasPermission) {
+            coinsAPI = new CoinsAPI(player.getUniqueId());
             player.sendMessage(crimxAPI.getPrefix() + "§7Du besitzt momentan stolze §e" + coinsAPI.getCoins() + " Coins");
         } else {
             if(args.length == 0) {
+                coinsAPI = new CoinsAPI(player.getUniqueId());
                 player.sendMessage(crimxAPI.getPrefix() + "§7Du besitzt momentan stolze §e" + coinsAPI.getCoins() + " Coins");
             } else if(args.length == 1) {
                 player.sendMessage(crimxAPI.getPrefix() + "§cUsage: /coins <set|add|remove> <playername>");
@@ -51,7 +53,7 @@ public class CoinsCommand implements CommandExecutor {
                     return false;
                 }
 
-                coinsAPI = new CoinsAPI(player.getUniqueId());
+                coinsAPI = new CoinsAPI(targetPlayer.getUniqueId());
 
                 switch (operation) {
                     case "get":

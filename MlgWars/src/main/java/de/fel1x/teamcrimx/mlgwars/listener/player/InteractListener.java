@@ -9,6 +9,7 @@ import de.fel1x.teamcrimx.mlgwars.inventories.ForcemapInventory;
 import de.fel1x.teamcrimx.mlgwars.inventories.KitInventory;
 import de.fel1x.teamcrimx.mlgwars.inventories.SpectatorInventory;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
+import de.fel1x.teamcrimx.mlgwars.timer.LobbyTimer;
 import de.fel1x.teamcrimx.mlgwars.utils.Tornado;
 import de.fel1x.teamcrimx.mlgwars.utils.entites.ZombieEquipment;
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -69,7 +70,12 @@ public class InteractListener implements Listener {
                         player.playSound(player.getLocation(), Sound.CHEST_OPEN, 2f, 0.75f);
                         KitInventory.KIT_OVERVIEW_INVENTORY.open(player);
                     } else if (event.getMaterial() == Material.REDSTONE_TORCH_ON) {
-                        ForcemapInventory.FORCEMAP_INVENTORY.open(player);
+                        LobbyTimer lobbyTimer = new LobbyTimer();
+                        if(lobbyTimer.getCountdown() <= 10) {
+                            player.sendMessage(this.mlgWars.getPrefix() + "§7Du kannst die Map nicht mehr ändern");
+                        } else {
+                            ForcemapInventory.FORCEMAP_INVENTORY.open(player);
+                        }
                     } else {
                         event.setCancelled(true);
                     }

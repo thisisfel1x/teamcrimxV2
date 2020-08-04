@@ -7,6 +7,7 @@ description: Our Lobby System for navigating in our lobby
 website: teamcrimx.de
 depend:
   - CrimxAPI
+  - CloudNet-Bridge
 
 commands:
   build:

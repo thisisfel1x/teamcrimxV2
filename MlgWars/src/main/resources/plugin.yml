@@ -5,6 +5,9 @@ api-version: 1.16
 authors: [fel1x]
 description: A minigame with too much mlg
 website: teamcrimx.de
+depend:
+  - CrimxAPI
+  - CloudNet-Bridge
 
 commands:
   start:

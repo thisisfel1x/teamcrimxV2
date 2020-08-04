@@ -216,7 +216,13 @@ public class LobbyPlayer {
 
     public String getOnlineTimeForScoreboard() {
 
-        long onlineTimeInMillis = (long) this.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS);
+        long onlineTimeInMillis;
+
+        try {
+            onlineTimeInMillis = (long) this.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS);
+        } catch (Exception ignored) {
+            onlineTimeInMillis = Integer.toUnsignedLong((Integer) this.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS));
+        }
 
         if(onlineTimeInMillis < 1000 * 60) {
             return "Keine Daten";

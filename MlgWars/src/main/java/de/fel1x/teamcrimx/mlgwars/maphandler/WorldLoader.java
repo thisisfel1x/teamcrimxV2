@@ -2,6 +2,8 @@ package de.fel1x.teamcrimx.mlgwars.maphandler;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import de.dytanic.cloudnet.ext.bridge.BridgeHelper;
+import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
@@ -70,8 +72,6 @@ public class WorldLoader {
         world.setThundering(false);
         world.setTime(1200);
 
-        this.setTop5Wall();
-
         File[] files = new File("plugins/MlgWars/maps").listFiles();
         Random rand = new Random();
 
@@ -87,6 +87,7 @@ public class WorldLoader {
         Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§aAusgewählte Map: " + mapName);
 
         this.forceMap(mapName);
+        this.setTop5Wall();
 
     }
 
@@ -206,6 +207,7 @@ public class WorldLoader {
         }
 
         int totalPlayerSpawns = size.getSize();
+        this.mlgWars.getData().getPlayerSpawns().clear();
 
         for(int i = 0; i < totalPlayerSpawns; i++) {
             Location location = this.mapHandler.loadLocation(mapName, String.valueOf(i + 1));
@@ -253,7 +255,12 @@ public class WorldLoader {
         Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§aDie Map " + mapName +
                 " wurde erfolgreich geladen");
 
-        this.mlgWars.setMapName(mapName);
+        this.setMapName(mapName);
+
+        BukkitCloudNetHelper.setApiMotd(this.getMapName());
+        BukkitCloudNetHelper.setMaxPlayers(size.getSize());
+        BridgeHelper.updateServiceInfo();
+
         this.mlgWars.getData().getPlayers().forEach(player ->
                 this.lobbyScoreboard.updateBoard(player, "§8● §e" + this.getMapName(), "map", "§e"));
 
@@ -262,29 +269,6 @@ public class WorldLoader {
     private void sendErrorMessage(String error) {
 
         Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + String.format("§cDer Spawn '%s' existiert nicht!", error));
-
-    }
-
-    private BlockFace switchDirection(BlockFace blockFace) {
-        switch (blockFace) {
-            case NORTH:
-                blockFace = BlockFace.SOUTH;
-                break;
-
-            case WEST:
-                blockFace = BlockFace.EAST;
-                break;
-
-            case EAST:
-                blockFace = BlockFace.WEST;
-                break;
-
-            default:
-                blockFace = BlockFace.NORTH;
-
-        }
-
-        return blockFace;
 
     }
 
