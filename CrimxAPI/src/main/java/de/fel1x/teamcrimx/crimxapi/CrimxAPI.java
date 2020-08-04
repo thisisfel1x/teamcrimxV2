@@ -11,7 +11,7 @@ public final class CrimxAPI {
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
     public static CrimxAPI instance;
-    private String prefix = "§8| §bteamcrimx§lDE §8» §r";
+    private String prefix = "§bteamcrimx§lDE §8● §r";
 
     private Logger logger;
 
