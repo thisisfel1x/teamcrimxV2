@@ -128,7 +128,10 @@ public final class CrimxLobby extends JavaPlugin {
         new JoinListener(this);
         new QuitListener(this);
 
+        new LabyModPlayerJoinListener(this);
+
         new InventoryClickListener(this);
+        new ChatListener(this);
         new InteractListener(this);
         new FishingHookListener(this);
         new ItemHeldListener(this);

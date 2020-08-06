@@ -54,8 +54,7 @@ public class ForcemapInventory implements InventoryProvider {
                 if(mapName.equalsIgnoreCase(this.mlgWars.getWorldLoader().getMapName())) {
                     player.sendMessage(this.mlgWars.getPrefix() + "§cDiese Map ist bereits ausgewählt");
                 } else {
-                    LobbyTimer lobbyTimer = new LobbyTimer();
-                    if(lobbyTimer.getCountdown() <= 10) {
+                    if(this.mlgWars.getLobbyCountdown() <= 10) {
                         player.sendMessage(this.mlgWars.getPrefix() + "§7Du kannst die Map nicht mehr ändern");
                     } else {
                         player.sendMessage(this.mlgWars.getPrefix() + "§7Versuche §a'" + mapName + "' §7zu laden!");

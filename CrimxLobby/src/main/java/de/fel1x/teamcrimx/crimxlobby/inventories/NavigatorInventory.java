@@ -19,7 +19,7 @@ public class NavigatorInventory implements InventoryProvider {
             .id("customInventory")
             .provider(new NavigatorInventory())
             .size(5, 9)
-            .title("§e§lWähle dein Ziel")
+            .title("§8● §eWähle dein Ziel")
             .manager(CrimxLobby.getInstance().getInventoryManager())
             .build();
 

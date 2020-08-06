@@ -6,7 +6,6 @@ import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
-import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

@@ -62,21 +62,21 @@ public class CoinsCommand implements CommandExecutor {
 
                     case "add":
                         coinsAPI.addCoins(coinsOperation);
-                        coinsAPI = new CoinsAPI(player.getUniqueId());
+                        coinsAPI = new CoinsAPI(targetPlayer.getUniqueId());
                         player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins gutgeschrieben! " +
                                 "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coinsAPI.getCoins() + " Coins");
                         break;
 
                     case "remove":
                         coinsAPI.removeCoins(coinsOperation);
-                        coinsAPI = new CoinsAPI(player.getUniqueId());
+                        coinsAPI = new CoinsAPI(targetPlayer.getUniqueId());
                         player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins entfernt! " +
                                 "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coinsAPI.getCoins() + " Coins");
                         break;
 
                     case "set":
                         coinsAPI.setCoins(coinsOperation);
-                        coinsAPI = new CoinsAPI(player.getUniqueId());
+                        coinsAPI = new CoinsAPI(targetPlayer.getUniqueId());
                         player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins gesetzt! " +
                                 "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coinsAPI.getCoins() + " Coins");
                         break;

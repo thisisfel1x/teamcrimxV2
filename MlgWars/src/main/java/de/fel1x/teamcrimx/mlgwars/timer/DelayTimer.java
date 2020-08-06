@@ -30,7 +30,7 @@ public class DelayTimer implements ITimer {
             this.mlgWars.getGamestateHandler().setGamestate(Gamestate.DELAY);
             this.running = true;
 
-            this.mlgWars.getData().getPlayers().forEach(player -> {
+            for (Player player : this.mlgWars.getData().getPlayers()) {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.getInventory().clear();
                 this.mlgWars.getData().getPlayTime().put(player.getUniqueId(), System.currentTimeMillis());
@@ -44,10 +44,9 @@ public class DelayTimer implements ITimer {
                 }
 
                 gamePlayer.saveObjectInDocument("gamesPlayed",
-                        player.getMetadata("games").get(0).asInt() + 1, MongoDBCollection.MLGWARS);
+                        (player.getMetadata("games").get(0).asInt() + 1), MongoDBCollection.MLGWARS);
                 gamePlayer.setInGameScoreboard();
-
-            });
+            }
 
             this.teleportPlayersToSpawns();
 

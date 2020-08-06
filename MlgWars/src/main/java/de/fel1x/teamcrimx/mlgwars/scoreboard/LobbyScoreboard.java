@@ -82,7 +82,7 @@ public class LobbyScoreboard {
             player.setScoreboard(endingScoreboard);
         }
 
-        this.updateBoard(player, "§8● " + winner + farbcode, "map", farbcode);
+        this.updateBoard(player, "§8● " + farbcode + winner, "map", farbcode);
     }
 
     public void setIngameScoreboard(Player player) {

@@ -18,6 +18,7 @@ public class LobbyTimer implements ITimer {
 
     public void start(int countdown) {
         this.countdown = countdown;
+        this.mlgWars.setLobbyCountdown(this.countdown);
         this.start();
     }
 
@@ -43,6 +44,7 @@ public class LobbyTimer implements ITimer {
                             player.setLevel(0);
                             player.setExp(0);
                         });
+                        this.stop();
                         this.mlgWars.startTimerByClass(DelayTimer.class);
                         break;
                 }
@@ -59,6 +61,7 @@ public class LobbyTimer implements ITimer {
                 }
 
                 this.countdown--;
+                this.mlgWars.setLobbyCountdown(this.countdown);
 
             }, 0L, 20L);
         }
@@ -71,6 +74,7 @@ public class LobbyTimer implements ITimer {
             Bukkit.getScheduler().cancelTask(taskId);
             this.running = false;
             this.setCountdown(60);
+            this.mlgWars.setLobbyCountdown(60);
             Bukkit.getOnlinePlayers().forEach(player -> {
                 player.setLevel(0);
                 player.setExp(0);

@@ -1,5 +1,7 @@
 package de.fel1x.teamcrimx.crimxlobby.objects;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
@@ -20,6 +22,7 @@ import de.fel1x.teamcrimx.crimxlobby.minigames.jumpandrun.JumpAndRunPlayer;
 import de.fel1x.teamcrimx.crimxlobby.minigames.watermlg.WaterMlgHandler;
 import net.jitse.npclib.api.NPC;
 import net.jitse.npclib.api.skin.Skin;
+import net.labymod.serverapi.bukkit.LabyModPlugin;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.*;
@@ -32,6 +35,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.util.UUID;
 
 public class LobbyPlayer {
 
@@ -74,9 +78,19 @@ public class LobbyPlayer {
         this.lobbyDocument = this.data.getPlayerMongoDocument().get(player.getUniqueId());
         this.networkDocument = this.data.getPlayerMongoNetworkDocument().get(player.getUniqueId());
 
-        int coins = (int) this.getObjectFromMongoDocument("coins", MongoDBCollection.USERS);
+        CoinsAPI coinsAPI = new CoinsAPI(this.player.getUniqueId());
+        int coins = coinsAPI.getCoins();
+
         this.crimxLobby.getLobbyScoreboard().updateBoard(player, String.format("§8● §e%s Coins", coins), "coins", "§e");
         this.crimxLobby.getLobbyScoreboard().updateBoard(player, "§8● §6" + this.getOnlineTimeForScoreboard(), "playtime", "§6");
+
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            this.setSubtitle(onlinePlayer, this.player.getUniqueId(), "&e" + coins + " Coins");
+
+            coinsAPI = new CoinsAPI(onlinePlayer.getUniqueId());
+            this.setSubtitle(this.player, onlinePlayer.getUniqueId(), "&e" + coinsAPI.getCoins() + " Coins");
+
+        }
     }
 
     public ICloudPlayer getCloudPlayer() {
@@ -136,7 +150,7 @@ public class LobbyPlayer {
 
     public void setLobbyInventory() {
 
-        boolean hasPermission = this.player.hasPermission("crimxlobby.admin");
+        boolean hasPermission = this.player.hasPermission("crimxlobby.vip");
 
         this.player.getInventory().setItem(0, new ItemBuilder(Material.GREEN_RECORD).setName("§8● §aTeleporter").toItemStack());
         this.player.getInventory().setItem(1, new ItemBuilder(Material.INK_SACK, 1)
@@ -355,6 +369,19 @@ public class LobbyPlayer {
         long lastReward = this.lobbyDocument.getLong("lastReward");
 
         this.data.getLobbyDatabasePlayer().put(this.player.getUniqueId(), new LobbyDatabasePlayer(hotbarSoundEnabled, spawnAtLastLocation, lastReward));
+
+        CoinsAPI coinsAPI = new CoinsAPI(this.player.getUniqueId());
+        int coins = coinsAPI.getCoins();
+
+        Bukkit.getOnlinePlayers().forEach(loopPlayer -> {
+            if(loopPlayer.hasMetadata("labymod")) {
+                boolean labyMod = loopPlayer.getMetadata("labymod").get(0).asBoolean();
+                if(labyMod) {
+                    this.setSubtitle(loopPlayer, this.player.getUniqueId(), "&e" + coins + " Coins");
+                }
+            }
+
+        });
 
     }
 
@@ -625,6 +652,28 @@ public class LobbyPlayer {
             player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
             player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
         }
+    }
+
+    public void setSubtitle(Player receiver, UUID subtitlePlayer, String value) {
+        // List of all subtitles
+        JsonArray array = new JsonArray();
+
+        // Add subtitle
+        JsonObject subtitle = new JsonObject();
+        subtitle.addProperty( "uuid", subtitlePlayer.toString() );
+
+        // Optional: Size of the subtitle
+        subtitle.addProperty( "size", 1.1d); // Range is 0.8 - 1.6 (1.6 is Minecraft default)
+
+        // no value = remove the subtitle
+        if(value != null)
+            subtitle.addProperty( "value", value );
+
+        // You can set multiple subtitles in one packet
+        array.add(subtitle);
+
+        // Send to LabyMod using the API
+        LabyModPlugin.getInstance().sendServerMessage(receiver, "account_subtitle", array);
     }
 
     public void setScoreboard() {

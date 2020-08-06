@@ -34,7 +34,7 @@ public class DeathListener implements Listener {
         GamePlayer gamePlayer = new GamePlayer(player, true);
 
         int deaths = (int) gamePlayer.getObjectFromMongoDocument("deaths", MongoDBCollection.MLGWARS);
-        gamePlayer.saveObjectInDocument("deaths", deaths + 1, MongoDBCollection.MLGWARS);
+        gamePlayer.saveObjectInDocument("deaths", (deaths + 1), MongoDBCollection.MLGWARS);
 
         gamePlayer.activateSpectatorMode();
         WinDetection.stopTasks(player);
@@ -58,7 +58,7 @@ public class DeathListener implements Listener {
                 CoinsAPI coinsAPI = new CoinsAPI(killer.getUniqueId());
                 coinsAPI.addCoins(100);
 
-                GamePlayer killerGamePlayer = new GamePlayer(killer);
+                GamePlayer killerGamePlayer = new GamePlayer(killer, true);
 
                 if(killerGamePlayer.getSelectedKit() == Kit.KANGAROO) {
                     int currentEssences = 0;
@@ -80,7 +80,8 @@ public class DeathListener implements Listener {
                 this.lobbyScoreboard.updateBoard(killer, "§8● §b" + gameKills, "kills", "§b");
 
                 int kills = (int) killerGamePlayer.getObjectFromMongoDocument("kills", MongoDBCollection.MLGWARS);
-                killerGamePlayer.saveObjectInDocument("kills", kills + 1, MongoDBCollection.MLGWARS);
+                int toInsert = kills + 1;
+                killerGamePlayer.saveObjectInDocument("kills", toInsert, MongoDBCollection.MLGWARS);
 
                 killer.sendMessage(this.mlgWars.getPrefix() + "§7Du hast " + player.getDisplayName() + " §7getötet §a(+100 Coins)");
                 event.setDeathMessage(String.format("%s %s §7wurde von %s §7getötet", this.mlgWars.getPrefix(),
@@ -94,8 +95,16 @@ public class DeathListener implements Listener {
                 DisguiseAPI.undisguiseToAll(player);
             }
 
+            long onlineTimeInMillis;
+
+            try {
+                onlineTimeInMillis = (long) gamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS);
+            } catch (Exception ignored) {
+                onlineTimeInMillis = Integer.toUnsignedLong((Integer) gamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS));
+            }
+
             long timePlayed = System.currentTimeMillis() - this.mlgWars.getData().getPlayTime().get(player.getUniqueId());
-            long added = timePlayed + (long) gamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS);
+            long added = timePlayed + onlineTimeInMillis;
             gamePlayer.saveObjectInDocument("onlinetime", added, MongoDBCollection.USERS);
 
             int playersLeft = this.mlgWars.getData().getPlayers().size();

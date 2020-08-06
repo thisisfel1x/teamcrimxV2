@@ -8,6 +8,7 @@ website: teamcrimx.de
 depend:
   - CrimxAPI
   - CloudNet-Bridge
+  - LabyModAPI
 
 commands:
   build:

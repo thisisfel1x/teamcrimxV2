@@ -34,6 +34,8 @@ public final class MlgWars extends JavaPlugin {
     private boolean inSetup;
     private boolean noMap;
 
+    private int lobbyCountdown = 60;
+
     private Data date;
     private GamestateHandler gamestateHandler;
     private PluginManager pluginManager;
@@ -85,6 +87,7 @@ public final class MlgWars extends JavaPlugin {
         new PickUpListener(this);
         new DropListener(this);
         new ToggleFlyListener(this);
+        new InventoryClickListener(this);
 
         // ENTITY
         new DamageListener(this);
@@ -134,7 +137,7 @@ public final class MlgWars extends JavaPlugin {
 
     public List<Document> getTop(int limit) {
         return StreamSupport.stream(this.crimxAPI.getMongoDB().getMlgWarsCollection().find()
-                .sort(Sorts.descending("games-won")).limit(limit).spliterator(), false)
+                .sort(Sorts.descending("gamesWon")).limit(limit).spliterator(), false)
                 .collect(Collectors.toList());
     }
 
@@ -196,5 +199,13 @@ public final class MlgWars extends JavaPlugin {
 
     public WorldLoader getWorldLoader() {
         return worldLoader;
+    }
+
+    public int getLobbyCountdown() {
+        return lobbyCountdown;
+    }
+
+    public void setLobbyCountdown(int lobbyCountdown) {
+        this.lobbyCountdown = lobbyCountdown;
     }
 }

@@ -70,8 +70,7 @@ public class InteractListener implements Listener {
                         player.playSound(player.getLocation(), Sound.CHEST_OPEN, 2f, 0.75f);
                         KitInventory.KIT_OVERVIEW_INVENTORY.open(player);
                     } else if (event.getMaterial() == Material.REDSTONE_TORCH_ON) {
-                        LobbyTimer lobbyTimer = new LobbyTimer();
-                        if(lobbyTimer.getCountdown() <= 10) {
+                        if(this.mlgWars.getLobbyCountdown() <= 10) {
                             player.sendMessage(this.mlgWars.getPrefix() + "§7Du kannst die Map nicht mehr ändern");
                         } else {
                             ForcemapInventory.FORCEMAP_INVENTORY.open(player);
@@ -555,7 +554,7 @@ public class InteractListener implements Listener {
                                         if (count < 3) {
                                             ParticleUtils.drawParticleLine(player.getLocation().clone().add(0, 0.5, 0),
                                                     nearestPlayer.getLocation().clone().add(0, 0.5, 0), Particles.SPELL_WITCH,
-                                                    500, 0, 0, 0);
+                                                    750, 0, 0, 0);
                                             player.getWorld().playSound(player.getLocation(), Sound.NOTE_PLING, 2f, 4.5f);
                                         } else {
                                             if (nearestPlayer.isDead() || nearestPlayer.getLocation().getY() < 0) {

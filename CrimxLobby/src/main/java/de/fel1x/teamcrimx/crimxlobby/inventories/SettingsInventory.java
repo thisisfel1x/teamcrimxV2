@@ -17,7 +17,7 @@ public class SettingsInventory implements InventoryProvider {
             .id("customInventory")
             .provider(new SettingsInventory())
             .size(4, 9)
-            .title("§c§lEinstellungen")
+            .title("§8● §cEinstellungen")
             .manager(CrimxLobby.getInstance().getInventoryManager())
             .build();
 
@@ -29,11 +29,8 @@ public class SettingsInventory implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
 
-        LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
         defaultSpawn = this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).isSpawnAtLastLocation();
         hotbarSound =  this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).isHotbarSoundEnabled();
-
-        // 1 10
 
         contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName(" ").toItemStack()));
 

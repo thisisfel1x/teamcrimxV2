@@ -16,7 +16,7 @@ public class MinigameInventory implements InventoryProvider {
             .id("customInventory")
             .provider(new MinigameInventory())
             .size(3, 9)
-            .title("§e§lWähle ein Minispiel")
+            .title("§8● §6Wähle ein Minispiel")
             .manager(CrimxLobby.getInstance().getInventoryManager())
             .build();
 

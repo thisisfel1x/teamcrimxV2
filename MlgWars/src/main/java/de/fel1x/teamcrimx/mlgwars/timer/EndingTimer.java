@@ -2,6 +2,7 @@ package de.fel1x.teamcrimx.mlgwars.timer;
 
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
+import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
@@ -31,9 +32,16 @@ public class EndingTimer implements ITimer {
 
                     case 0:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§cDer Server startet neu");
-                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.CAT_HISS, 3f, 5f));
-                        Bukkit.getServer().shutdown();
+                        Bukkit.getOnlinePlayers().forEach(player -> {
+                            GamePlayer gamePlayer = new GamePlayer(player);
+                            gamePlayer.sendToService("Lobby-1");
+                            player.playSound(player.getLocation(), Sound.CAT_HISS, 3f, 5f);
+                        });
                         break;
+                }
+
+                if(countdown < 0 && Bukkit.getOnlinePlayers().isEmpty()) {
+                    Bukkit.getServer().shutdown();
                 }
 
                 this.countdown--;

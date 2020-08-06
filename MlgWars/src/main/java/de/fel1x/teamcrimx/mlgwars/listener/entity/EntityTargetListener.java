@@ -1,6 +1,7 @@
 package de.fel1x.teamcrimx.mlgwars.listener.entity;
 
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
+import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,6 +23,12 @@ public class EntityTargetListener implements Listener {
 
         if(target instanceof Player) {
             Player player = (Player) target;
+            GamePlayer gamePlayer = new GamePlayer(player);
+
+            if(gamePlayer.isSpectator()) {
+                event.setCancelled(true);
+                return;
+            }
 
             if(entity.getCustomName() != null) {
                 if(entity.getCustomName().equalsIgnoreCase(player.getDisplayName())) {

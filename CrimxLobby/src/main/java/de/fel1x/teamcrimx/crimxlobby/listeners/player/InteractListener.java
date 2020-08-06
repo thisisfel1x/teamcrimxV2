@@ -84,6 +84,10 @@ public class InteractListener implements Listener {
                         break;
 
                     case BLAZE_ROD:
+                        if(iCosmetic.getCosmeticMaterial() == null) {
+                            return;
+                        }
+
                         if(player.hasMetadata("gadgetDelay")) {
                             long delay = player.getMetadata("gadgetDelay").get(0).asLong();
 
@@ -103,6 +107,10 @@ public class InteractListener implements Listener {
                         break;
 
                     case STICK:
+                        if(iCosmetic.getCosmeticMaterial() == null) {
+                            return;
+                        }
+
                         if(player.hasMetadata("gadgetDelay")) {
                             long delay = player.getMetadata("gadgetDelay").get(0).asLong();
 

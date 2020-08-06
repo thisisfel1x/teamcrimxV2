@@ -28,12 +28,10 @@ public class KitInventory implements InventoryProvider {
             .manager(MlgWars.getInstance().getInventoryManager())
             .build();
 
-    private GamePlayer gamePlayer;
-
     @Override
     public void init(Player player, InventoryContents contents) {
 
-        gamePlayer = new GamePlayer(player, true);
+        GamePlayer gamePlayer = new GamePlayer(player, true);
 
         int column = 0;
         int row = 0;

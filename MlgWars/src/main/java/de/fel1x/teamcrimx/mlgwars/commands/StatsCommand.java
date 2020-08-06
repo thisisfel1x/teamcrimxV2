@@ -43,10 +43,12 @@ public class StatsCommand implements CommandExecutor {
                     int gamesPlayed = (int) gamePlayer.getObjectFromMongoDocument("gamesPlayed", MongoDBCollection.MLGWARS);
                     int gamesWon = (int) gamePlayer.getObjectFromMongoDocument("gamesWon", MongoDBCollection.MLGWARS);
 
-                    double kd = 0;
+                    double kd;
                     if(deaths > 0) {
                         double a = ((double) kills / deaths) * 100;
                         kd = Math.round(a);
+                    } else {
+                        kd = kills;
                     }
 
                     double winrate = 0;

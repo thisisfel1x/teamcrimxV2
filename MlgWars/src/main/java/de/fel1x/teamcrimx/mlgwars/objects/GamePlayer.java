@@ -244,6 +244,7 @@ public class GamePlayer {
     public void setSelectedKit(Kit kit) {
         try {
             IKit iKit = kit.getClazz().newInstance();
+            this.data.getSelectedKit().remove(this.player);
             this.data.getSelectedKit().put(this.player, kit);
             this.player.getInventory().setItem(8, new ItemBuilder(iKit.getKitMaterial())
                     .setName("§8● §a" + iKit.getKitName())
@@ -262,7 +263,7 @@ public class GamePlayer {
 
     public int getRankingPosition() {
 
-        List<Document> documents = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().find().sort(Sorts.descending("games-won")).into(Lists.newArrayList());
+        List<Document> documents = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().find().sort(Sorts.descending("gamesWon")).into(Lists.newArrayList());
 
         for (Document document : documents) {
             if(document.getString("_id").equalsIgnoreCase(this.player.getUniqueId().toString())) {
@@ -271,6 +272,10 @@ public class GamePlayer {
         }
 
         return -1;
+    }
+
+    public void sendToService(String serviceName) {
+        this.playerManager.getPlayerExecutor(this.player.getUniqueId()).connect(serviceName);
     }
 
     public void setLobbyScoreboard() {

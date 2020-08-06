@@ -40,7 +40,7 @@ public class StartCommand implements CommandExecutor {
             return false;
         }
 
-        if(lobbyTimer.getCountdown() <= 10) {
+        if(this.mlgWars.getLobbyCountdown() <= 10) {
             player.sendMessage(this.mlgWars.getPrefix() + "§7Der Countdown kann nicht mehr verkürzt werden!");
             return false;
         }

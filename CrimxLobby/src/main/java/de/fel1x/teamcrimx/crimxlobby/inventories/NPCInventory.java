@@ -28,7 +28,7 @@ public class NPCInventory implements InventoryProvider {
             .id("customInventory")
             .provider(new NPCInventory())
             .size(3, 9)
-            .title("§5§lDein Profil")
+            .title("§8● §5Dein Profil")
             .manager(CrimxLobby.getInstance().getInventoryManager())
             .build();
 
@@ -86,7 +86,7 @@ public class NPCInventory implements InventoryProvider {
                 if(canGet) {
                     player.sendMessage(crimxLobby.getPrefix() + "§7Du hast §a100 Coins §7durch die tägliche Belohnung erhalten!");
                     crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setLastReward(System.currentTimeMillis());
-                    lobbyPlayer.get().saveObjectInDocument("last-reward", System.currentTimeMillis(), MongoDBCollection.LOBBY);
+                    lobbyPlayer.get().saveObjectInDocument("lastReward", System.currentTimeMillis(), MongoDBCollection.LOBBY);
                     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 2, 0.75f);
                     CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
                     coinsAPI.addCoins(100);

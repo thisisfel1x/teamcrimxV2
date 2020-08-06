@@ -24,6 +24,7 @@ import org.bukkit.block.Skull;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.File;
@@ -92,7 +93,6 @@ public class WorldLoader {
     }
 
     public void setTop5Wall() {
-        Bukkit.getScheduler().runTaskAsynchronously(this.mlgWars, () -> {
             if (this.spawnHandler.loadLocation("topHead1") == null) {
                 return;
             }
@@ -148,10 +148,12 @@ public class WorldLoader {
                     int deaths = currentDocument.getInteger("deaths");
                     int gamesWon = currentDocument.getInteger("gamesWon");
 
-                    double kd = 0;
+                    double kd;
                     if(deaths > 0) {
                         double a = ((double) kills / deaths) * 100;
                         kd = Math.round(a);
+                    } else {
+                        kd = kills;
                     }
 
                     sign.setLine(0, "#" + current);
@@ -175,7 +177,7 @@ public class WorldLoader {
 
                 skull.update();
             }
-        });
+
     }
 
     public void forceMap(String mapName) {
@@ -208,6 +210,19 @@ public class WorldLoader {
 
         int totalPlayerSpawns = size.getSize();
         this.mlgWars.getData().getPlayerSpawns().clear();
+
+        if(totalPlayerSpawns > Bukkit.getServer().getMaxPlayers()) {
+            if(totalPlayerSpawns < Bukkit.getOnlinePlayers().size()) {
+                int count = 1;
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if(count > totalPlayerSpawns) {
+                        player.kickPlayer(this.mlgWars.getPrefix() + "§7Nach einem Forcemap sind nicht genügen Spawns übrig. " +
+                                "Du wurdest gekickt");
+                    }
+                    count++;
+                }
+            }
+        }
 
         for(int i = 0; i < totalPlayerSpawns; i++) {
             Location location = this.mapHandler.loadLocation(mapName, String.valueOf(i + 1));
