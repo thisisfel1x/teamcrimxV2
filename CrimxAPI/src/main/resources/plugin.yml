@@ -1,11 +1,12 @@
 name: CrimxAPI
 version: ${project.version}
 main: de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI
-api-version: 1.16.1
 authors: [fel1x]
 description: An API to connect our minigames with other stuff
 website: teamcrimx.de
 
 commands:
+  joinme:
+    description: Brodcast a joinme
   coins:
     description: Get and manage your coins

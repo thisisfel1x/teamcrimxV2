@@ -5,11 +5,18 @@ import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
+import de.fel1x.teamcrimx.crimxapi.utils.ColorUtil;
 import de.fel1x.teamcrimx.crimxapi.utils.Skin;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bukkit.ChatColor;
 
 import javax.annotation.Nullable;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -17,7 +24,6 @@ public class CrimxPlayer {
 
     private final CrimxAPI crimxAPI = CrimxAPI.getInstance();
 
-    private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
     ICloudPlayer cloudPlayer;
 
     public CrimxPlayer(ICloudPlayer cloudPlayer) {
@@ -53,8 +59,10 @@ public class CrimxPlayer {
                 .append("firstJoin", System.currentTimeMillis())
                 .append("lastJoin", System.currentTimeMillis())
                 .append("onlinetime", 0L)
-                .append("skin-texture", skin[0])
-                .append("skin-signature", skin[1]);
+                .append("lastJoinMe", 0L)
+                .append("currentClan", null)
+                .append("skinTexture", skin[0])
+                .append("skinSignature", skin[1]);
 
         this.crimxAPI.getMongoDB().getUserCollection().insertOne(basicDBObject);
 
@@ -86,10 +94,33 @@ public class CrimxPlayer {
 
         assert found != null;
 
-        String value = found.getString("skin-texture");
-        String signature = found.getString("skin-signature");
+        String value = found.getString("skinTexture");
+        String signature = found.getString("skinSignature");
 
         return new String[]{value, signature};
 
+    }
+
+    public String[] getPlayerSkinForChat(String user, int scale) {
+
+        String[] toReturn = new String[scale];
+        String urlString = "https://minotar.net/avatar/" + user + "/" + scale + ".png";
+
+        try {
+            URL url = new URL(urlString);
+            BufferedImage image = ImageIO.read(url);
+            for (int i = 0; i < image.getHeight(); i++) {
+                StringBuilder chatHeadString = new StringBuilder();
+                for (int j = 0; j < image.getWidth(); j++) {
+                    Color color = new Color(image.getRGB(j, i));
+                    ChatColor chatColor = ColorUtil.fromRGB(color.getRed(), color.getGreen(), color.getBlue());
+                    chatHeadString.append(chatColor).append("⬛");
+                }
+                toReturn[i] = chatHeadString.toString();
+            }
+        } catch (IOException ignored) {
+            return null;
+        }
+        return toReturn;
     }
 }

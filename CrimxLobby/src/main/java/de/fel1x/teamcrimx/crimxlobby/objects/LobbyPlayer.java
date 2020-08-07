@@ -192,12 +192,15 @@ public class LobbyPlayer {
 
         NPC playerNPC = this.crimxLobby.getNpcLib().createNPC(Collections.singletonList("§a§lDein Profil"));
         playerNPC.setSkin(new Skin(values[0], values[1]));
-        playerNPC.setLocation(new Location(Bukkit.getWorlds().get(0), -154, 64, 132));
+        playerNPC.setLocation(new Location(Bukkit.getWorlds().get(0), -151.5, 64, 134.5, 47.4f, 0.2f));
 
         playerNPC.create();
         playerNPC.show(this.player);
 
         this.crimxLobby.getData().getPlayerNPCs().put(this.player.getUniqueId(), playerNPC);
+
+        Bukkit.getScheduler().runTaskLater(this.crimxLobby, () -> this.crimxLobby.forceEmote(this.player, playerNPC.getUniqueId(), 4), 100L);
+
     }
 
     public void updatePlayerHiderState() {

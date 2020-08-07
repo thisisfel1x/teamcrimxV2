@@ -1,8 +1,10 @@
 package de.fel1x.teamcrimx.crimxlobby;
 
 import com.github.juliarn.npc.NPCPool;
-import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
+import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.crimxlobby.commands.BuildCommand;
 import de.fel1x.teamcrimx.crimxlobby.commands.SetupCommand;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.armor.RainbowArmor;
@@ -18,17 +20,22 @@ import de.fel1x.teamcrimx.crimxlobby.objects.Spawn;
 import de.fel1x.teamcrimx.crimxlobby.scoreboard.LobbyScoreboard;
 import fr.minuskube.inv.InventoryManager;
 import net.jitse.npclib.NPCLib;
+import net.labymod.serverapi.bukkit.LabyModPlugin;
 import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
+import java.util.UUID;
 
 public final class CrimxLobby extends JavaPlugin {
 
     private static CrimxLobby instance;
     private String prefix = "§aCrimx§lLobby §8● §r";
+
+    private int actionbarTimer = 0;
 
     private Data data;
 
@@ -55,6 +62,9 @@ public final class CrimxLobby extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("§aTrying to start CrimxLobby by fel1x");
 
         instance = this;
+        if(!this.getConfig().contains("actionbar")) {
+            this.saveDefaultConfig();
+        }
 
         this.crimxAPI = CrimxAPI.getInstance();
 
@@ -153,7 +163,12 @@ public final class CrimxLobby extends JavaPlugin {
 
     }
 
+    int actionBarCount;
+
     private void runMainScheduler() {
+
+        actionBarCount = 0;
+        List<String> actionBarMessages = this.getConfig().getStringList("actionbar");
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> this.getData().getHueMap().forEach(((uuid, hue) -> {
 
@@ -166,8 +181,35 @@ public final class CrimxLobby extends JavaPlugin {
                 this.getData().getHueMap().put(uuid, hue);
             }
 
-        })), 0L, 1L);
+        })), 0L, 3L);
 
+        Bukkit.getScheduler().runTaskTimer(this, () -> {
+            Bukkit.getOnlinePlayers().forEach(player -> Actionbar.sendActiobar(player, actionBarMessages.get(actionBarCount).replace('&', '§')));
+
+            this.actionbarTimer++;
+            if(this.actionbarTimer % 10 == 0) {
+                if(actionBarCount + 1 < actionBarMessages.size()) {
+                    actionBarCount++;
+                } else {
+                    actionBarCount = 0;
+                }
+            }
+        }, 0L, 20L);
+
+    }
+
+    public void forceEmote(Player receiver, UUID npcUUID, int emoteId) {
+        // List of all forced emotes
+        JsonArray array = new JsonArray();
+
+        // Emote and target NPC
+        JsonObject forcedEmote = new JsonObject();
+        forcedEmote.addProperty("uuid", npcUUID.toString());
+        forcedEmote.addProperty("emote_id", emoteId);
+        array.add(forcedEmote);
+
+        // Send to LabyMod using the API
+        LabyModPlugin.getInstance().sendServerMessage(receiver, "emote_api", array);
     }
 
     public String getPrefix() {

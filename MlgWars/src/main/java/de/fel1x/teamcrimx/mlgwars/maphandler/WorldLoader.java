@@ -159,7 +159,7 @@ public class WorldLoader {
                     sign.setLine(0, "#" + current);
                     sign.setLine(1, currentDocument.getString("name"));
                     sign.setLine(2, gamesWon + " Wins");
-                    sign.setLine(3, "K/D: " + kd);
+                    sign.setLine(3, "K/D: " + (kd / 100));
 
                     sign.update();
                 }
@@ -170,7 +170,7 @@ public class WorldLoader {
                 TileEntitySkull skullTile = (TileEntitySkull)((CraftWorld)skull.getWorld()).getHandle().getTileEntity(new BlockPosition(skull.getX(), skull.getY(), skull.getZ()));
                 GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
                 String textures = Objects.requireNonNull(this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection()
-                        .find(new Document("_id", currentDocument.getString("_id"))).first()).getString("skin-texture");
+                        .find(new Document("_id", currentDocument.getString("_id"))).first()).getString("skinTexture");
                 gameProfile.getProperties().put("textures", new Property("textures",
                         Base64Coder.encodeString(textures)));
                 skullTile.setGameProfile(gameProfile);

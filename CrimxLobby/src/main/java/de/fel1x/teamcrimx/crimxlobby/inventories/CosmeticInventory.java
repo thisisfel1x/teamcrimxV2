@@ -12,6 +12,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class CosmeticInventory implements InventoryProvider {
@@ -79,6 +80,8 @@ public class CosmeticInventory implements InventoryProvider {
                                 event -> {
                                     CrimxLobby.getInstance().getData().getHueMap().remove(player.getUniqueId());
                                     player.getInventory().setArmorContents(null);
+                                    int slotToRemove = (player.hasPermission("crimxlobby.vip") ? 2 : 4);
+                                    player.getInventory().setItem(slotToRemove, new ItemStack(Material.AIR));
                                     player.closeInventory();
                                     iCosmetic.startTrail(player);
                                     lobbyPlayer.saveObjectInDocument("selectedCosmetic", cosmetic.name(),

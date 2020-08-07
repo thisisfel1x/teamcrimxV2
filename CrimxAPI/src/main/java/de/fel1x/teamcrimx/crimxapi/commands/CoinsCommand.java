@@ -10,12 +10,10 @@ import org.bukkit.entity.Player;
 
 public class CoinsCommand implements CommandExecutor {
 
-    CrimxAPI crimxAPI;
+    private final CrimxAPI crimxAPI = CrimxAPI.getInstance();
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String string, String[] args) {
-
-        crimxAPI = CrimxAPI.getInstance();
 
         if(!(commandSender instanceof Player)) {
             return false;
