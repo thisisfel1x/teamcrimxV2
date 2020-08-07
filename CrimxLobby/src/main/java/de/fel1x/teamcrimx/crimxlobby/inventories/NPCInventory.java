@@ -37,7 +37,7 @@ public class NPCInventory implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
 
-        AtomicReference<LobbyPlayer> lobbyPlayer = new AtomicReference<>(new LobbyPlayer(player, true));
+        AtomicReference<LobbyPlayer> lobbyPlayer = new AtomicReference<>(new LobbyPlayer(player));
         CrimxPlayer crimxPlayer = new CrimxPlayer(lobbyPlayer.get().getCloudPlayer());
 
         contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName(" ").toItemStack()));
