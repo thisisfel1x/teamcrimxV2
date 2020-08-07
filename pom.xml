@@ -15,6 +15,7 @@
         <module>CrimxLobby</module>
         <module>CrimxBungee</module>
         <module>MlgWars</module>
+        <module>CaptureTheFlag</module>
     </modules>
 
 </project>
