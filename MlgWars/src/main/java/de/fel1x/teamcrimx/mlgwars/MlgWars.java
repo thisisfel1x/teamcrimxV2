@@ -22,10 +22,13 @@ import fr.minuskube.inv.InventoryManager;
 import org.apache.commons.io.FilenameUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -49,6 +52,8 @@ public final class MlgWars extends JavaPlugin {
     private InventoryManager inventoryManager;
 
     private WorldLoader worldLoader;
+
+    private ArrayList<Material> allMaterials;
 
     private ITimer iTimer;
 
@@ -80,6 +85,8 @@ public final class MlgWars extends JavaPlugin {
             this.iTimer = new IdleTimer();
             this.iTimer.start();
         }
+
+        this.allMaterials = new ArrayList<>(Arrays.asList(Material.values()));
 
     }
 
@@ -253,5 +260,9 @@ public final class MlgWars extends JavaPlugin {
 
     public void setTeamSize(int teamSize) {
         this.teamSize = teamSize;
+    }
+
+    public ArrayList<Material> getAllMaterials() {
+        return allMaterials;
     }
 }

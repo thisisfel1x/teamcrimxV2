@@ -80,8 +80,9 @@ public class InteractListener implements Listener {
                     } else {
                         event.setCancelled(true);
                     }
+                } else {
+                    event.setCancelled(true);
                 }
-
             } else if (gamestate == Gamestate.DELAY || gamestate == Gamestate.ENDING) {
                 event.setCancelled(true);
             } else {

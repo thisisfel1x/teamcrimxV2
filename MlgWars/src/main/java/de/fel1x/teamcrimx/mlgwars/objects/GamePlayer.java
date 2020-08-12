@@ -69,33 +69,45 @@ public class GamePlayer {
     }
 
     public void initDatabasePlayer() {
-        Document mlgWarsDocument = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().
-                find(new Document("_id", player.getUniqueId().toString())).first();
+        Bukkit.getScheduler().runTaskAsynchronously(this.mlgWars, () -> {
+            Document mlgWarsDocument = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().
+                    find(new Document("_id", player.getUniqueId().toString())).first();
 
-        Document networkDocument = this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection().
-                find(new Document("_id", player.getUniqueId().toString())).first();
+            Document networkDocument = this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection().
+                    find(new Document("_id", player.getUniqueId().toString())).first();
 
-        this.data.getMlgWarsPlayerDocument().put(this.player.getUniqueId(), mlgWarsDocument);
-        this.data.getNetworkPlayerDocument().put(this.player.getUniqueId(), networkDocument);
+            this.data.getMlgWarsPlayerDocument().put(this.player.getUniqueId(), mlgWarsDocument);
+            this.data.getNetworkPlayerDocument().put(this.player.getUniqueId(), networkDocument);
 
-        this.mlgWarsDocument = this.data.getMlgWarsPlayerDocument().get(this.player.getUniqueId());
-        this.networkDocument = this.data.getNetworkPlayerDocument().get(this.player.getUniqueId());
+            this.mlgWarsDocument = this.data.getMlgWarsPlayerDocument().get(this.player.getUniqueId());
+            this.networkDocument = this.data.getNetworkPlayerDocument().get(this.player.getUniqueId());
 
-        if(!((String) this.getObjectFromMongoDocument("name", MongoDBCollection.MLGWARS)).equalsIgnoreCase(this.player.getName())) {
-            this.saveObjectInDocument("name", player.getName(), MongoDBCollection.MLGWARS);
-        }
+            if(!((String) this.getObjectFromMongoDocument("name", MongoDBCollection.MLGWARS)).equalsIgnoreCase(this.player.getName())) {
+                this.saveObjectInDocument("name", player.getName(), MongoDBCollection.MLGWARS);
+            }
 
-        String selectedKitName = (String) this.getObjectFromMongoDocument("selectedKit", MongoDBCollection.MLGWARS);
-        Kit selectedKit = Kit.valueOf(selectedKitName);
+            for (Kit kit : Kit.values()) {
+                if(this.getObjectFromMongoDocument(kit.name(), MongoDBCollection.MLGWARS) == null) {
+                    if(this.player.hasPermission("mlgwars.kits")) {
+                        this.saveObjectInDocument(kit.name(), true, MongoDBCollection.MLGWARS);
+                    } else {
+                        this.saveObjectInDocument(kit.name(), false, MongoDBCollection.MLGWARS);
+                    }
+                }
+            }
 
-        int gamesPlayed = (int) this.getObjectFromMongoDocument("gamesPlayed", MongoDBCollection.MLGWARS);
-        this.player.setMetadata("games", new FixedMetadataValue(this.mlgWars, gamesPlayed));
+            String selectedKitName = (String) this.getObjectFromMongoDocument("selectedKit", MongoDBCollection.MLGWARS);
+            Kit selectedKit = Kit.valueOf(selectedKitName);
 
-        Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
+            int gamesPlayed = (int) this.getObjectFromMongoDocument("gamesPlayed", MongoDBCollection.MLGWARS);
+            this.player.setMetadata("games", new FixedMetadataValue(this.mlgWars, gamesPlayed));
 
-        if(gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
-            this.setSelectedKit(selectedKit);
-        }
+            Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
+
+            if(gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
+                this.setSelectedKit(selectedKit);
+            }
+        });
 
     }
 

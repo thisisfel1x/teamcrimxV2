@@ -75,6 +75,7 @@ public class LobbyTimer implements ITimer {
             this.running = false;
             this.setCountdown(60);
             this.mlgWars.setLobbyCountdown(60);
+
             Bukkit.getOnlinePlayers().forEach(player -> {
                 player.setLevel(0);
                 player.setExp(0);

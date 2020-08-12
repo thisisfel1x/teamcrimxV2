@@ -77,6 +77,9 @@ public class DelayTimer implements ITimer {
                 }
 
                 Bukkit.getOnlinePlayers().forEach(player -> {
+                    player.setLevel(0);
+                    player.setExp(0f);
+
                     Actionbar.sendTitle(player, (countdown == 3) ? "§a§l3"
                             : (countdown == 2) ? "§e§l2" : (countdown == 1) ? "§c§l1" : "§a§lGO!", 0, 40, 10);
                     if(player.hasMetadata("team")) {
