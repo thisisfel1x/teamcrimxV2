@@ -4,6 +4,7 @@ import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -16,7 +17,7 @@ public class RespawnListener implements Listener {
         this.mlgWars.getPluginManager().registerEvents(this, this.mlgWars);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void on(PlayerRespawnEvent event) {
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
@@ -26,6 +27,5 @@ public class RespawnListener implements Listener {
         } else {
             event.setRespawnLocation(Spawns.LOBBY.getLocation());
         }
-
     }
 }

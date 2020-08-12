@@ -2,7 +2,6 @@ package de.fel1x.teamcrimx.mlgwars.objects;
 
 import com.google.common.collect.Lists;
 import com.mongodb.client.model.Sorts;
-import com.mongodb.client.model.UpdateOptions;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
@@ -16,8 +15,7 @@ import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
-import de.fel1x.teamcrimx.mlgwars.scoreboard.LobbyScoreboard;
-import me.libraryaddict.disguise.DisguiseAPI;
+import de.fel1x.teamcrimx.mlgwars.scoreboard.MlgWarsScoreboard;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
@@ -30,14 +28,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
-import java.util.UUID;
 
 public class GamePlayer {
 
     private final MlgWars mlgWars = MlgWars.getInstance();
     private final Data data = this.mlgWars.getData();
 
-    private final LobbyScoreboard lobbyScoreboard = new LobbyScoreboard();
+    private final MlgWarsScoreboard mlgWarsScoreboard = new MlgWarsScoreboard();
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
@@ -165,6 +162,41 @@ public class GamePlayer {
         this.removeFromPlayers();
         this.removeFromPlayers();
 
+        int playersLeft = this.mlgWars.getData().getPlayers().size();
+
+        Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
+
+        if(gamestate == Gamestate.DELAY || gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
+            String playersLeftMessage = null;
+
+            if(this.mlgWars.getTeamSize() > 1) {
+                if(player.hasMetadata("team")) {
+                    int team = player.getMetadata("team").get(0).asInt();
+                    this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().remove(player);
+                    this.mlgWars.getData().getGameTeams().get(team).getTeamPlayers().remove(player);
+
+                    if(this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().isEmpty()) {
+                        this.mlgWars.getData().getGameTeams().remove(team);
+                    }
+                    playersLeftMessage = "§a" + playersLeft + " Spieler verbleiben §8(§a"
+                            + this.mlgWars.getData().getGameTeams().size() + " Teams§8)";
+                }
+            } else if(this.mlgWars.getTeamSize() == 1) {
+                playersLeftMessage = "§a" + playersLeft + " Spieler verbleiben";
+            }
+
+            if(playersLeftMessage != null && playersLeft > 1) {
+                Bukkit.broadcastMessage(this.mlgWars.getPrefix() + playersLeftMessage);
+            }
+        } else if(gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
+            if(this.mlgWars.getTeamSize() > 1) {
+                if (player.hasMetadata("team")) {
+                    int team = player.getMetadata("team").get(0).asInt();
+                    this.mlgWars.getData().getGameTeams().get(team).getTeamPlayers().remove(player);
+                }
+            }
+        }
+
     }
 
     public void setJoinItems() {
@@ -172,16 +204,19 @@ public class GamePlayer {
         this.player.getInventory().setItem(0, new ItemBuilder(Material.STORAGE_MINECART).setName("§8● §aKitauswahl").toItemStack());
 
         if(this.player.hasPermission("mlgwars.forcemap") || this.player.isOp()) {
-            this.player.getInventory().setItem(1, new ItemBuilder(Material.REDSTONE_TORCH_ON).setName("§8● §cForcemap").toItemStack());
+            int slot = this.mlgWars.getTeamSize() > 1 ? 2 : 1;
+            this.player.getInventory().setItem(slot, new ItemBuilder(Material.REDSTONE_TORCH_ON).setName("§8● §cForcemap").toItemStack());
+        }
+
+        if(this.mlgWars.getTeamSize() > 1) {
+            this.player.getInventory().setItem(1, new ItemBuilder(Material.BED).setName("§8● §eTeamauswahl").toItemStack());
         }
 
     }
 
     public void teleport(Spawns spawns) {
         try {
-            Bukkit.getScheduler().runTaskLater(this.mlgWars, () -> {
-                this.player.teleport(spawns.getLocation());
-            }, 1L);
+            Bukkit.getScheduler().runTaskLater(this.mlgWars, () -> this.player.teleport(spawns.getLocation()), 1L);
         } catch (NullPointerException exception) {
             this.player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten!");
             exception.printStackTrace();
@@ -208,6 +243,7 @@ public class GamePlayer {
                 .toItemStack());
 
         this.data.getPlayers().forEach(ingamePlayer -> ingamePlayer.hidePlayer(this.player));
+        this.data.getSpectators().forEach(this.player::showPlayer);
 
     }
 
@@ -279,11 +315,11 @@ public class GamePlayer {
     }
 
     public void setLobbyScoreboard() {
-        this.lobbyScoreboard.setLobbyScoreboard(this.player);
+        this.mlgWarsScoreboard.setLobbyScoreboard(this.player);
     }
 
     public void setInGameScoreboard() {
-        this.lobbyScoreboard.setIngameScoreboard(this.player);
+        this.mlgWarsScoreboard.setIngameScoreboard(this.player);
     }
 
     public void unlockKit(Kit kit) {
@@ -314,6 +350,33 @@ public class GamePlayer {
             player.closeInventory();
             player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
             player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
+        }
+    }
+
+    public void setTeam(ScoreboardTeam scoreboardTeam) {
+
+        if(this.player.hasMetadata("team")) {
+            int team = this.player.getMetadata("team").get(0).asInt();
+
+            this.data.getGameTeams().get(team).getTeamPlayers().remove(player);
+        }
+
+        this.player.setMetadata("team", new FixedMetadataValue(this.mlgWars, scoreboardTeam.getId()));
+        this.data.getGameTeams().get(scoreboardTeam.getId()).getTeamPlayers().add(player);
+
+        this.player.sendMessage(this.mlgWars.getPrefix() + "§7Du bist nun in §aTeam #" + scoreboardTeam.getTeamId());
+
+    }
+
+    public void checkForTeam() {
+        if(!this.player.hasMetadata("team")) {
+            for (ScoreboardTeam value : this.data.getGameTeams().values()) {
+                if(!value.getTeamPlayers().contains(this.player)
+                        && value.getTeamPlayers().size() != value.getMaxPlayers()) {
+                    this.setTeam(value);
+                    break;
+                }
+            }
         }
     }
 }

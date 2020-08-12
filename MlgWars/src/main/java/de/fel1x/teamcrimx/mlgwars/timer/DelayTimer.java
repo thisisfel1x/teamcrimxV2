@@ -8,10 +8,12 @@ import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
+import de.fel1x.teamcrimx.mlgwars.objects.ScoreboardTeam;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,9 +35,13 @@ public class DelayTimer implements ITimer {
             for (Player player : this.mlgWars.getData().getPlayers()) {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.getInventory().clear();
+
+                player.setLevel(0);
+                player.setExp(0f);
                 this.mlgWars.getData().getPlayTime().put(player.getUniqueId(), System.currentTimeMillis());
 
                 GamePlayer gamePlayer = new GamePlayer(player, true);
+                gamePlayer.checkForTeam();
                 try {
                     IKit iKit = gamePlayer.getSelectedKit().getClazz().newInstance();
                     iKit.setKitInventory(player);
@@ -70,8 +76,14 @@ public class DelayTimer implements ITimer {
                         break;
                 }
 
-                Bukkit.getOnlinePlayers().forEach(player -> Actionbar.sendTitle(player, (countdown == 3) ? "§a§l3"
-                        : (countdown == 2) ? "§e§l2" : (countdown == 1) ? "§c§l1" : "§a§lGO!", 0, 40, 10));
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    Actionbar.sendTitle(player, (countdown == 3) ? "§a§l3"
+                            : (countdown == 2) ? "§e§l2" : (countdown == 1) ? "§c§l1" : "§a§lGO!", 0, 40, 10);
+                    if(player.hasMetadata("team")) {
+                        int team = player.getMetadata("team").get(0).asInt();
+                        Actionbar.sendActiobar(player, "§7Team §a#" + team);
+                    }
+                });
 
                 countdown--;
 
@@ -90,15 +102,33 @@ public class DelayTimer implements ITimer {
     }
 
     private void teleportPlayersToSpawns() {
-
-        List<Player> players = this.mlgWars.getData().getPlayers();
         List<Location> playerSpawns = this.mlgWars.getData().getPlayerSpawns();
-
-        Collections.shuffle(players);
         Collections.shuffle(playerSpawns);
 
-        for (int i = 0; i < players.size(); i++) {
-            players.get(i).teleport(playerSpawns.get(i));
+        if(this.mlgWars.getTeamSize() == 1) {
+            List<Player> players = this.mlgWars.getData().getPlayers();
+
+            Collections.shuffle(players);
+
+            for (int i = 0; i < players.size(); i++) {
+                players.get(i).teleport(playerSpawns.get(i));
+            }
+        } else if(this.mlgWars.getTeamSize() > 1) {
+            List<ScoreboardTeam> teams = new ArrayList<>(this.mlgWars.getData().getGameTeams().values());
+
+            for (int i = 0; i < teams.size(); i++) {
+                ScoreboardTeam currentTeam = teams.get(i);
+                if(currentTeam.getTeamPlayers().isEmpty()) {
+                    this.mlgWars.getData().getGameTeams().remove(i);
+                    continue;
+                }
+                for (Player teamPlayer : currentTeam.getTeamPlayers()) {
+                    teamPlayer.teleport(playerSpawns.get(i));
+                    this.mlgWars.getData().getGameTeams().get(i).getAlivePlayers().add(teamPlayer);
+                    System.out.println(this.mlgWars.getData().getGameTeams().get(i).getAlivePlayers());
+                }
+            }
+            System.out.println(this.mlgWars.getData().getGameTeams());
         }
     }
 }

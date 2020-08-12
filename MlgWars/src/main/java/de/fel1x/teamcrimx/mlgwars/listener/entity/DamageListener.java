@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.utils.entites.CustomZombie;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -41,11 +42,24 @@ public class DamageListener implements Listener {
             return;
         }
 
-        if(!(event.getDamager() instanceof Player)) {
+        if(!(event.getDamager() instanceof Player) && !(event.getDamager() instanceof Projectile)) {
             return;
         }
 
-        Player damager = (Player) event.getDamager();
+        Player damager = null;
+
+        if(event.getDamager() instanceof Player) {
+            damager = (Player) event.getDamager();
+        } else if(event.getDamager() instanceof Projectile) {
+            Projectile projectile = (Projectile) event.getDamager();
+            if(projectile.getShooter() instanceof Player) {
+                damager = (Player) projectile.getShooter();
+            }
+        }
+
+        if(damager == null) {
+            return;
+        }
 
         GamePlayer gameDamager = new GamePlayer(damager);
         GamePlayer gameTarget = new GamePlayer(target);
@@ -53,6 +67,19 @@ public class DamageListener implements Listener {
         if((gameDamager.isSpectator() && gameTarget.isPlayer()) || (gameDamager.isPlayer() && gameTarget.isSpectator())) {
             event.setCancelled(true);
             return;
+        }
+
+        if(this.mlgWars.getTeamSize() > 1) {
+            if(target.hasMetadata("team") && damager.hasMetadata("team")) {
+
+                int targetTeam = target.getMetadata("team").get(0).asInt();
+                int damagerTeam = damager.getMetadata("team").get(0).asInt();
+
+                if (this.mlgWars.getData().getGameTeams().get(targetTeam).getId() == this.mlgWars.getData().getGameTeams().get(damagerTeam).getId()) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
         }
 
         this.mlgWars.getData().getLastHit().put(target, damager);

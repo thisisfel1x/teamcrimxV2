@@ -192,7 +192,7 @@ public class LobbyPlayer {
 
         NPC playerNPC = this.crimxLobby.getNpcLib().createNPC(Collections.singletonList("§a§lDein Profil"));
         playerNPC.setSkin(new Skin(values[0], values[1]));
-        playerNPC.setLocation(new Location(Bukkit.getWorlds().get(0), -151.5, 64, 134.5, 47.4f, 0.2f));
+        playerNPC.setLocation(new Location(Bukkit.getWorlds().get(0), -168.5, 65, 138.5, -90.5f, 10.6f));
 
         playerNPC.create();
         playerNPC.show(this.player);

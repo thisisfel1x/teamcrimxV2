@@ -12,7 +12,7 @@ import org.bukkit.scoreboard.Team;
 
 import java.util.Objects;
 
-public class LobbyScoreboard {
+public class MlgWarsScoreboard {
     
     public void setLobbyScoreboard(Player player) {
         Scoreboard lobbyScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();

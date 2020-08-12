@@ -46,13 +46,21 @@ public class PreGameTimer implements ITimer {
                 this.mlgWars.getData().getPlayers().forEach(player -> {
                     GamePlayer gamePlayer = new GamePlayer(player);
 
-                    if(gamePlayer.getSelectedKit() == Kit.KANGAROO) {
-                        if(!this.mlgWars.getData().getKangarooTask().containsKey(player.getUniqueId())) {
-                            int currentEssences = 0;
-                            if(player.hasMetadata("essence")) {
-                                currentEssences = player.getMetadata("essence").get(0).asInt();
+                    if(gamePlayer.isPlayer()) {
+
+                        if(player.hasMetadata("team")) {
+                            int team = player.getMetadata("team").get(0).asInt();
+                            Actionbar.sendActiobar(player, "§7Team §a#" + team);
+                        }
+
+                        if(gamePlayer.getSelectedKit() == Kit.KANGAROO) {
+                            if(!this.mlgWars.getData().getKangarooTask().containsKey(player.getUniqueId())) {
+                                int currentEssences = 0;
+                                if(player.hasMetadata("essence")) {
+                                    currentEssences = player.getMetadata("essence").get(0).asInt();
+                                }
+                                Actionbar.sendActiobar(player, "§6Känguru §8● §a" + currentEssences + " §7Essenzen übrig");
                             }
-                            Actionbar.sendActiobar(player, "§6Känguru §8● §a" + currentEssences + " §7Essenzen übrig");
                         }
                     }
 

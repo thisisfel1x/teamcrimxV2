@@ -8,6 +8,7 @@ import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.inventories.ForcemapInventory;
 import de.fel1x.teamcrimx.mlgwars.inventories.KitInventory;
 import de.fel1x.teamcrimx.mlgwars.inventories.SpectatorInventory;
+import de.fel1x.teamcrimx.mlgwars.inventories.TeamInventory;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.timer.LobbyTimer;
 import de.fel1x.teamcrimx.mlgwars.utils.Tornado;
@@ -41,7 +42,6 @@ public class InteractListener implements Listener {
     private final Data data;
     private final Set<Material> transparent = new HashSet<>();
     private final Random random = new Random();
-    private final ZombieEquipment zombieEquipment = new ZombieEquipment();
     private int count;
 
     public InteractListener(MlgWars mlgWars) {
@@ -70,11 +70,13 @@ public class InteractListener implements Listener {
                         player.playSound(player.getLocation(), Sound.CHEST_OPEN, 2f, 0.75f);
                         KitInventory.KIT_OVERVIEW_INVENTORY.open(player);
                     } else if (event.getMaterial() == Material.REDSTONE_TORCH_ON) {
-                        if(this.mlgWars.getLobbyCountdown() <= 10) {
+                        if (this.mlgWars.getLobbyCountdown() <= 10) {
                             player.sendMessage(this.mlgWars.getPrefix() + "§7Du kannst die Map nicht mehr ändern");
                         } else {
                             ForcemapInventory.FORCEMAP_INVENTORY.open(player);
                         }
+                    } else if (event.getMaterial() == Material.BED && this.mlgWars.getTeamSize() > 1) {
+                        TeamInventory.TEAM_INVENTORY.open(player);
                     } else {
                         event.setCancelled(true);
                     }

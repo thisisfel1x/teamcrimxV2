@@ -40,38 +40,45 @@ public class InGameTimer implements ITimer {
 
                 this.mlgWars.getData().getPlayers().forEach(player -> {
                     GamePlayer gamePlayer = new GamePlayer(player);
+                    if(gamePlayer.isPlayer()) {
 
-                    if(player.getInventory().contains(this.dumpItem)) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 40, 0, false, false));
-                    }
-
-                    if(this.mlgWars.getData().getPlayers().size() > 1) {
-                        Player nearest = this.getClosestEntity(player, player.getLocation());
-                        if(nearest != null) {
-                            player.setCompassTarget(nearest.getLocation());
+                        if(player.hasMetadata("team")) {
+                            int team = player.getMetadata("team").get(0).asInt();
+                            Actionbar.sendActiobar(player, "§7Team §a#" + team);
                         }
-                    }
 
-                    if(gamePlayer.getSelectedKit() == Kit.STINKER) {
-                        for (Entity nearbyEntity : player.getNearbyEntities(5, 2, 5)) {
-                            if(!(nearbyEntity instanceof Player)) continue;
-                            Player player1 = (Player) nearbyEntity;
-                            GamePlayer gamePlayer1 = new GamePlayer(player1);
+                        if(player.getInventory().contains(this.dumpItem)) {
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 40, 0, false, false));
+                        }
 
-                            if(gamePlayer1.isSpectator() || player.getUniqueId().equals(player1.getUniqueId())) continue;
-
-                            if(gamePlayer1.getSelectedKit() != Kit.STINKER) {
-                                player1.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 3, 0, true, true), true);
-                                player1.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 3, 0, true, true), true);
+                        if(this.mlgWars.getData().getPlayers().size() > 1) {
+                            Player nearest = this.getClosestEntity(player, player.getLocation());
+                            if(nearest != null) {
+                                player.setCompassTarget(nearest.getLocation());
                             }
                         }
-                    } else if(gamePlayer.getSelectedKit() == Kit.KANGAROO) {
-                        if(!this.mlgWars.getData().getKangarooTask().containsKey(player.getUniqueId())) {
-                            int currentEssences = 0;
-                            if(player.hasMetadata("essence")) {
-                                currentEssences = player.getMetadata("essence").get(0).asInt();
+
+                        if(gamePlayer.getSelectedKit() == Kit.STINKER) {
+                            for (Entity nearbyEntity : player.getNearbyEntities(5, 2, 5)) {
+                                if(!(nearbyEntity instanceof Player)) continue;
+                                Player player1 = (Player) nearbyEntity;
+                                GamePlayer gamePlayer1 = new GamePlayer(player1);
+
+                                if(gamePlayer1.isSpectator() || player.getUniqueId().equals(player1.getUniqueId())) continue;
+
+                                if(gamePlayer1.getSelectedKit() != Kit.STINKER) {
+                                    player1.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 3, 0, true, true), true);
+                                    player1.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 3, 0, true, true), true);
+                                }
                             }
-                            Actionbar.sendActiobar(player, "§6Känguru §8● §a" + currentEssences + " §7Essenzen übrig");
+                        } else if(gamePlayer.getSelectedKit() == Kit.KANGAROO) {
+                            if(!this.mlgWars.getData().getKangarooTask().containsKey(player.getUniqueId())) {
+                                int currentEssences = 0;
+                                if(player.hasMetadata("essence")) {
+                                    currentEssences = player.getMetadata("essence").get(0).asInt();
+                                }
+                                Actionbar.sendActiobar(player, "§6Känguru §8● §a" + currentEssences + " §7Essenzen übrig");
+                            }
                         }
                     }
                 });

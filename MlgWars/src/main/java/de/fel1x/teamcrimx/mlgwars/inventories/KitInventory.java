@@ -6,19 +6,18 @@ import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
-import de.fel1x.teamcrimx.mlgwars.scoreboard.LobbyScoreboard;
+import de.fel1x.teamcrimx.mlgwars.scoreboard.MlgWarsScoreboard;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class KitInventory implements InventoryProvider {
 
-    private final LobbyScoreboard lobbyScoreboard = new LobbyScoreboard();
+    private final MlgWarsScoreboard mlgWarsScoreboard = new MlgWarsScoreboard();
 
     public static final SmartInventory KIT_OVERVIEW_INVENTORY = SmartInventory.builder()
             .id("customInventory")
@@ -50,7 +49,7 @@ public class KitInventory implements InventoryProvider {
 
                     if(bought) {
                         gamePlayer.setSelectedKit(kit);
-                        this.lobbyScoreboard.updateBoard(player, "§8● §6" + iKit.getKitName(), "kit", "§6");
+                        this.mlgWarsScoreboard.updateBoard(player, "§8● §6" + iKit.getKitName(), "kit", "§6");
 
                         player.playSound(player.getLocation(), Sound.ORB_PICKUP, 5, 0.5f);
                         player.sendMessage(MlgWars.getInstance().getPrefix() + "§7Du nutzt nun das §e[" + iKit.getKitName() + "] §7Kit!");

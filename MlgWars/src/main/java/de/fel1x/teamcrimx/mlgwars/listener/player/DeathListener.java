@@ -3,10 +3,12 @@ package de.fel1x.teamcrimx.mlgwars.listener.player;
 import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
+import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
-import de.fel1x.teamcrimx.mlgwars.scoreboard.LobbyScoreboard;
+import de.fel1x.teamcrimx.mlgwars.objects.ScoreboardTeam;
+import de.fel1x.teamcrimx.mlgwars.scoreboard.MlgWarsScoreboard;
 import de.fel1x.teamcrimx.mlgwars.utils.WinDetection;
 import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.Bukkit;
@@ -19,7 +21,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class DeathListener implements Listener {
 
     private final MlgWars mlgWars;
-    private final LobbyScoreboard lobbyScoreboard = new LobbyScoreboard();
+    private final MlgWarsScoreboard mlgWarsScoreboard = new MlgWarsScoreboard();
 
     public DeathListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
@@ -77,7 +79,7 @@ public class DeathListener implements Listener {
                 }
 
                 killer.setMetadata("kills", new FixedMetadataValue(this.mlgWars, gameKills));
-                this.lobbyScoreboard.updateBoard(killer, "§8● §b" + gameKills, "kills", "§b");
+                this.mlgWarsScoreboard.updateBoard(killer, "§8● §b" + gameKills, "kills", "§b");
 
                 int kills = (int) killerGamePlayer.getObjectFromMongoDocument("kills", MongoDBCollection.MLGWARS);
                 int toInsert = kills + 1;
@@ -109,12 +111,31 @@ public class DeathListener implements Listener {
 
             int playersLeft = this.mlgWars.getData().getPlayers().size();
 
-            if(playersLeft > 1) {
-                Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§a" + playersLeft + " Spieler verbleiben");
+            String playersLeftMessage = null;
+
+            if(this.mlgWars.getTeamSize() > 1) {
+                if(player.hasMetadata("team")) {
+                    int team = player.getMetadata("team").get(0).asInt();
+                    this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().remove(player);
+
+                    if(this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().isEmpty()) {
+                        this.mlgWars.getData().getGameTeams().remove(team);
+                    }
+                    playersLeftMessage = "§a" + playersLeft + " Spieler verbleiben §8(§a"
+                            + this.mlgWars.getData().getGameTeams().size() + " Teams§8)";
+                }
+            } else if(this.mlgWars.getTeamSize() == 1) {
+                playersLeftMessage = "§a" + playersLeft + " Spieler verbleiben";
+            }
+
+            if(playersLeftMessage != null && playersLeft > 1) {
+                Bukkit.broadcastMessage(this.mlgWars.getPrefix() + playersLeftMessage);
             }
 
             Bukkit.getOnlinePlayers().forEach(inGamePlayer ->
-                    this.lobbyScoreboard.updateBoard(inGamePlayer, "§8● §c" + MlgWars.getInstance().getData().getPlayers().size(), "players", "§c"));
+                    this.mlgWarsScoreboard.updateBoard(inGamePlayer, "§8● §c" + MlgWars.getInstance().getData().getPlayers().size(), "players", "§c"));
+
+            player.teleport(Spawns.SPECTATOR.getLocation());
 
             new WinDetection();
         }

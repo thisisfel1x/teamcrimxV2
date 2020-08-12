@@ -4,15 +4,12 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import de.dytanic.cloudnet.ext.bridge.BridgeHelper;
 import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
-import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
-import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
-import de.fel1x.teamcrimx.crimxapi.utils.Skin;
-import de.fel1x.teamcrimx.crimxapi.utils.SkullCreator;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Size;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
-import de.fel1x.teamcrimx.mlgwars.scoreboard.LobbyScoreboard;
+import de.fel1x.teamcrimx.mlgwars.objects.ScoreboardTeam;
+import de.fel1x.teamcrimx.mlgwars.scoreboard.MlgWarsScoreboard;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.TileEntitySkull;
 import org.apache.commons.io.FilenameUtils;
@@ -35,7 +32,7 @@ public class WorldLoader {
     private final MlgWars mlgWars = MlgWars.getInstance();
     private final MapHandler mapHandler = new MapHandler();
     private final SpawnHandler spawnHandler = new SpawnHandler();
-    private final LobbyScoreboard lobbyScoreboard = new LobbyScoreboard();
+    private final MlgWarsScoreboard mlgWarsScoreboard = new MlgWarsScoreboard();
 
     private final BlockFace[] blockFaces = {
             BlockFace.NORTH,
@@ -46,7 +43,14 @@ public class WorldLoader {
 
     private String mapName;
 
-    public WorldLoader() {
+    public WorldLoader(String mapName) {
+
+        if(mapName == null) {
+            this.mlgWars.setNoMap(true);
+            return;
+        }
+
+        this.mapName = mapName;
 
         SpawnHandler spawnHandler = new SpawnHandler();
 
@@ -73,21 +77,9 @@ public class WorldLoader {
         world.setThundering(false);
         world.setTime(1200);
 
-        File[] files = new File("plugins/MlgWars/maps").listFiles();
-        Random rand = new Random();
+        Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§aAusgewählte Map: " + this.mapName);
 
-        if (files.length == 0) {
-            Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§cKeine Map gefunden! Bitte erstellen!");
-            this.mlgWars.setNoMap(true);
-            return;
-        }
-
-        File file = files[rand.nextInt(files.length)];
-        mapName = FilenameUtils.removeExtension(file.getName());
-
-        Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§aAusgewählte Map: " + mapName);
-
-        this.forceMap(mapName);
+        this.forceMap(this.mapName);
         this.setTop5Wall();
 
     }
@@ -208,7 +200,14 @@ public class WorldLoader {
             return;
         }
 
-        int totalPlayerSpawns = size.getSize();
+        if(this.mlgWars.getTeamSize() != -1) {
+            if(this.mlgWars.getTeamSize() != size.getTeamSize()) {
+                Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§cKann nicht auf eine andere Teamgröße wechseln!");
+                return;
+            }
+        }
+
+        int totalPlayerSpawns = size.getMaxTeams();
         this.mlgWars.getData().getPlayerSpawns().clear();
 
         if(totalPlayerSpawns > Bukkit.getServer().getMaxPlayers()) {
@@ -267,17 +266,23 @@ public class WorldLoader {
         world.setThundering(false);
         world.setTime(1200);
 
+        this.mlgWars.setTeamSize(size.getTeamSize());
+
+        if(this.mlgWars.getTeamSize() > 1) {
+            int teamSize = this.mlgWars.getTeamSize();
+
+            for(int i = 0; i < totalPlayerSpawns; i++) {
+                this.mlgWars.getData().getGameTeams().put(i, new ScoreboardTeam(i, (i + 1), teamSize, new ArrayList<>(), new ArrayList<>()));
+            }
+        }
+
         Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§aDie Map " + mapName +
                 " wurde erfolgreich geladen");
 
         this.setMapName(mapName);
 
-        BukkitCloudNetHelper.setApiMotd(this.getMapName());
-        BukkitCloudNetHelper.setMaxPlayers(size.getSize());
-        BridgeHelper.updateServiceInfo();
-
         this.mlgWars.getData().getPlayers().forEach(player ->
-                this.lobbyScoreboard.updateBoard(player, "§8● §e" + this.getMapName(), "map", "§e"));
+                this.mlgWarsScoreboard.updateBoard(player, "§8● §e" + this.getMapName(), "map", "§e"));
 
     }
 

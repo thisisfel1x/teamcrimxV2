@@ -2,6 +2,7 @@ package de.fel1x.teamcrimx.mlgwars;
 
 import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
+import de.fel1x.teamcrimx.mlgwars.objects.ScoreboardTeam;
 import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -25,6 +26,8 @@ public class Data {
 
     private final Map<UUID, Document> mlgWarsPlayerDocument;
     private final Map<UUID, Document> networkPlayerDocument;
+
+    private final Map<Integer, ScoreboardTeam> gameTeams;
 
     private final Map<UUID, Boolean> playerGg;
 
@@ -55,6 +58,8 @@ public class Data {
 
         this.mlgWarsPlayerDocument = new HashMap<>();
         this.networkPlayerDocument = new HashMap<>();
+
+        this.gameTeams = new HashMap<>();
 
         this.playerGg = new HashMap<>();
 
@@ -150,5 +155,9 @@ public class Data {
 
     public Map<UUID, ArrayList<BukkitRunnable>> getCsgoTasks() {
         return csgoTasks;
+    }
+
+    public Map<Integer, ScoreboardTeam> getGameTeams() {
+        return gameTeams;
     }
 }
