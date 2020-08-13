@@ -25,6 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class CaptureTheFlag extends JavaPlugin {
 
     public static CaptureTheFlag instance;
+    private final String prefix = "§9CaptureTheFlag §8● §r";
     private Data data;
 
     private GamestateHandler gamestateHandler;
@@ -113,6 +114,10 @@ public final class CaptureTheFlag extends JavaPlugin {
 
     public static CaptureTheFlag getInstance() {
         return instance;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 
     public GamestateHandler getGamestateHandler() {

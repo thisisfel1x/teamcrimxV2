@@ -299,6 +299,7 @@ public class GamePlayer {
                     .setLore(iKit.getKitDescription()).toItemStack());
 
             this.saveObjectInDocument("selectedKit", kit.name(), MongoDBCollection.MLGWARS);
+            this.mlgWarsScoreboard.updateBoard(player, "§8● §6" + iKit.getKitName(), "kit", "§6");
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }

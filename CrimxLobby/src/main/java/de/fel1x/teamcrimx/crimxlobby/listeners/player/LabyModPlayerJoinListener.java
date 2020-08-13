@@ -27,14 +27,32 @@ public class LabyModPlayerJoinListener implements Listener {
 
         player.setMetadata("labymod", new FixedMetadataValue(this.crimxLobby, true));
 
-        /* IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(player.getUniqueId());
-        if (iPermissionUser == null) return;
-
-        IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(iPermissionUser);
-
-        String playerPermGroup = permissionGroup.getSortId() + permissionGroup.getName();
-
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if(!onlinePlayer.hasMetadata("labymod")) {
+                continue;
+            }
+
+            IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(onlinePlayer.getUniqueId());
+            if (iPermissionUser == null) return;
+
+            IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(iPermissionUser);
+
+            int sortIdInt = permissionGroup.getSortId();
+
+            String sortId;
+
+            if(sortIdInt < 10) {
+                sortId = String.format("%02d", sortIdInt);
+            } else {
+                sortId = String.valueOf(sortIdInt);
+            }
+
+            String playerPermGroup = sortId + permissionGroup.getName();
+
+            if (playerPermGroup.length() > 16) {
+                playerPermGroup = playerPermGroup.substring(0, 16);
+            }
+
             Team team = onlinePlayer.getScoreboard().getTeam(playerPermGroup);
 
             if(team == null) {
@@ -47,11 +65,12 @@ public class LabyModPlayerJoinListener implements Listener {
 
             team.setPrefix(prefix);
             team.setSuffix(suffix);
-            team.addEntry(player.getName());
+            team.addEntry(onlinePlayer.getName());
 
-            player.setDisplayName(prefix + color + player.getName() + suffix);
-            player.setPlayerListName(prefix + color + player.getName() + suffix);
-        } */
+            onlinePlayer.setDisplayName(prefix + color + onlinePlayer.getName() + suffix);
+            onlinePlayer.setPlayerListName(prefix + color + onlinePlayer.getName() + suffix);
+        }
 
     }
+
 }
