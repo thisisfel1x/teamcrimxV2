@@ -137,6 +137,7 @@ public final class MlgWars extends JavaPlugin {
         new DropListener(this);
         new ToggleFlyListener(this);
         new InventoryClickListener(this);
+        new RespawnListener(this);
 
         // ENTITY
         new DamageListener(this);

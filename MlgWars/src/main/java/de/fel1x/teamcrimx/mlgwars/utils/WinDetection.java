@@ -111,11 +111,7 @@ public class WinDetection {
                         this.mlgWars.startTimerByClass(EndingTimer.class);
                     }
                 } else if(this.mlgWars.getTeamSize() > 1) {
-                    Bukkit.broadcastMessage("b");
-                    Bukkit.broadcastMessage(" " + this.mlgWars.getData().getGameTeams().size());
                     if (this.mlgWars.getData().getGameTeams().size() == 1) {
-
-                        Bukkit.broadcastMessage("a");
 
                         ScoreboardTeam winnerTeam = new ArrayList<>(this.mlgWars.getData().getGameTeams().values()).get(0);
 
@@ -173,7 +169,6 @@ public class WinDetection {
 
                         this.mlgWars.startTimerByClass(EndingTimer.class);
                     } else if (this.mlgWars.getData().getGameTeams().size() == 0) {
-                        Bukkit.broadcastMessage("c");
 
                         this.mlgWars.getWorldLoader().setTop5Wall();
 

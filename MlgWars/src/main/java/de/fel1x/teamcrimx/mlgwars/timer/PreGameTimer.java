@@ -49,7 +49,7 @@ public class PreGameTimer implements ITimer {
                     if(gamePlayer.isPlayer()) {
 
                         if(player.hasMetadata("team")) {
-                            int team = player.getMetadata("team").get(0).asInt();
+                            int team = player.getMetadata("team").get(0).asInt() + 1;
                             Actionbar.sendActiobar(player, "§7Team §a#" + team);
                         }
 

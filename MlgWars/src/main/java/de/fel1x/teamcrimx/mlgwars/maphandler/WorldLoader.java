@@ -208,7 +208,9 @@ public class WorldLoader {
         }
 
         int totalPlayerSpawns = size.getMaxTeams();
+
         this.mlgWars.getData().getPlayerSpawns().clear();
+        this.mlgWars.getData().getGameTeams().clear();
 
         if(totalPlayerSpawns > Bukkit.getServer().getMaxPlayers()) {
             if(totalPlayerSpawns < Bukkit.getOnlinePlayers().size()) {

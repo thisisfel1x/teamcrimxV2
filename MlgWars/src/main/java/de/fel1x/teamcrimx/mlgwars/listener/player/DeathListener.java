@@ -12,10 +12,13 @@ import de.fel1x.teamcrimx.mlgwars.scoreboard.MlgWarsScoreboard;
 import de.fel1x.teamcrimx.mlgwars.utils.WinDetection;
 import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class DeathListener implements Listener {
@@ -28,18 +31,16 @@ public class DeathListener implements Listener {
         this.mlgWars.getPluginManager().registerEvents(this, this.mlgWars);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void on(PlayerDeathEvent event) {
 
         Player player = event.getEntity();
         Player killer;
         GamePlayer gamePlayer = new GamePlayer(player, true);
+        gamePlayer.onDeath();
 
         int deaths = (int) gamePlayer.getObjectFromMongoDocument("deaths", MongoDBCollection.MLGWARS);
         gamePlayer.saveObjectInDocument("deaths", (deaths + 1), MongoDBCollection.MLGWARS);
-
-        gamePlayer.activateSpectatorMode();
-        WinDetection.stopTasks(player);
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
@@ -134,8 +135,6 @@ public class DeathListener implements Listener {
 
             Bukkit.getOnlinePlayers().forEach(inGamePlayer ->
                     this.mlgWarsScoreboard.updateBoard(inGamePlayer, "§8● §c" + MlgWars.getInstance().getData().getPlayers().size(), "players", "§c"));
-
-            player.teleport(Spawns.SPECTATOR.getLocation());
 
             new WinDetection();
         }

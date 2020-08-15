@@ -238,11 +238,18 @@ public class GamePlayer {
 
     public void activateSpectatorMode() {
 
-        this.removeFromPlayers();
-        this.addToSpectators();
-
         this.player.setGameMode(GameMode.ADVENTURE);
 
+        this.player.getInventory().clear();
+        this.player.getInventory().setArmorContents(null);
+
+        this.player.setHealth(20);
+        this.player.setFoodLevel(25);
+
+        this.player.setLevel(0);
+        this.player.setExp(0);
+
+        this.player.getActivePotionEffects().forEach(potionEffect -> this.player.removePotionEffect(potionEffect.getType()));
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false));
 
         this.player.setAllowFlight(true);
@@ -254,9 +261,55 @@ public class GamePlayer {
                 .setName("§8● §aSpieler beobachten")
                 .toItemStack());
 
+        this.player.setFlying(true);
+
+    }
+
+    public void activateSpectatorModeOnJoin() {
+
+        this.player.setGameMode(GameMode.ADVENTURE);
+
+        this.player.getInventory().clear();
+        this.player.getInventory().setArmorContents(null);
+
+        this.player.setHealth(20);
+        this.player.setFoodLevel(25);
+
+        this.player.setLevel(0);
+        this.player.setExp(0);
+
+        this.player.getActivePotionEffects().forEach(potionEffect -> this.player.removePotionEffect(potionEffect.getType()));
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false));
+
+        this.player.setAllowFlight(true);
+        this.player.setFlying(true);
+
+        this.player.setPlayerListName("§o§8[§4✖§8] §7" + this.player.getName());
+
+        this.player.getInventory().setItem(0, new ItemBuilder(Material.COMPASS)
+                .setName("§8● §aSpieler beobachten")
+                .toItemStack());
+
+        this.player.setAllowFlight(true);
+        this.player.setFlying(true);
+
+        this.removeFromPlayers();
+        this.addToSpectators();
+
         this.data.getPlayers().forEach(ingamePlayer -> ingamePlayer.hidePlayer(this.player));
         this.data.getSpectators().forEach(this.player::showPlayer);
 
+    }
+
+    public void onDeath() {
+        this.player.setAllowFlight(true);
+        this.player.setFlying(true);
+
+        this.removeFromPlayers();
+        this.addToSpectators();
+
+        this.data.getPlayers().forEach(ingamePlayer -> ingamePlayer.hidePlayer(this.player));
+        this.data.getSpectators().forEach(this.player::showPlayer);
     }
 
     public void createPlayerData() {

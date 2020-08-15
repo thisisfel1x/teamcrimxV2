@@ -42,7 +42,7 @@ public class DumpKit implements IKit {
         for (int i = 0; i < 40; i++) {
 
             Material selectedMat = mats.get(random.nextInt(mats.size()));
-            int amount = random.nextInt(selectedMat.getMaxStackSize());
+            int amount = (selectedMat.getMaxStackSize() < 0) ? 1 : random.nextInt(selectedMat.getMaxStackSize());
 
             ItemStack toSet = new ItemBuilder(selectedMat, (amount <= 0 ? 1 : amount)).toItemStack();
 

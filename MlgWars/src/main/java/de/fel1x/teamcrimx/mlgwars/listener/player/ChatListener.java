@@ -6,6 +6,7 @@ import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
+import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -26,6 +27,7 @@ public class ChatListener implements Listener {
     public void on(AsyncPlayerChatEvent event) {
 
         Player player = event.getPlayer();
+        GamePlayer gamePlayer = new GamePlayer(player);
         Gamestate currentState = mlgWars.getGamestateHandler().getGamestate();
 
         IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(player.getUniqueId());
@@ -33,6 +35,17 @@ public class ChatListener implements Listener {
         if (iPermissionUser == null) return;
 
         IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(iPermissionUser);
+
+        if(currentState == Gamestate.DELAY || currentState == Gamestate.PREGAME || currentState == Gamestate.INGAME) {
+            if(gamePlayer.isSpectator()) {
+                String format = "§8§o[§4✖§8] " + ChatColor.translateAlternateColorCodes('&', permissionGroup.getDisplay()) + player.getName() + " §8» §f" + event.getMessage();
+                for (Player spectator : this.mlgWars.getData().getPlayers()) {
+                    spectator.sendMessage(format);
+                }
+                return;
+            }
+        }
+
         event.setFormat(ChatColor.translateAlternateColorCodes('&', permissionGroup.getDisplay()) + player.getName() + " §8» §f" + event.getMessage());
 
         if (currentState.equals(Gamestate.ENDING)) {

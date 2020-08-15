@@ -67,9 +67,10 @@ public class SetupCommand implements CommandExecutor {
 
                         if(!size.equalsIgnoreCase("8x1") && !size.equalsIgnoreCase("12x1")
                                 && !size.equalsIgnoreCase("16x1") && !size.equalsIgnoreCase("24x1")
-                                && !size.equalsIgnoreCase("8x2") && !size.equalsIgnoreCase("8x3")) {
+                                && !size.equalsIgnoreCase("8x2") && !size.equalsIgnoreCase("8x3")
+                                && !size.equalsIgnoreCase("12x2")) {
                             player.sendMessage(this.mlgWars.getPrefix() + "§cBitte wähle eine passende Mapgröße aus " +
-                                    "(8x1, 12x1, 16x1, 24x1, 8x2, 8x3)");
+                                    "(8x1, 12x1, 16x1, 24x1, 8x2, 12x2, 8x3)");
                             return false;
                         } else {
                             Size size1 = this.getSizeFromString(size);

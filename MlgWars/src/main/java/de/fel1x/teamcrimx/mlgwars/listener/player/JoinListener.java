@@ -61,7 +61,7 @@ public class JoinListener implements Listener {
             case DELAY: case PREGAME: case INGAME:
 
                 gamePlayer.addToSpectators();
-                gamePlayer.activateSpectatorMode();
+                gamePlayer.activateSpectatorModeOnJoin();
                 gamePlayer.teleport(Spawns.SPECTATOR);
 
                 gamePlayer.setInGameScoreboard();

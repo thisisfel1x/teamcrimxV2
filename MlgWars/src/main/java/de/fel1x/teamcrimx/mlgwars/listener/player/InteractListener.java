@@ -62,6 +62,10 @@ public class InteractListener implements Listener {
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
+        if(this.mlgWars.isInSetup()) {
+            return;
+        }
+
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
             if (gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
@@ -773,6 +777,9 @@ public class InteractListener implements Listener {
         for (Entity entity : center.getWorld().getNearbyEntities(center, 200, 200, 200)) {
             if (!(entity instanceof Player)) continue;
             if (entity.getUniqueId().equals(owner.getUniqueId())) continue;
+            Player player = (Player) entity;
+            GamePlayer gamePlayer = new GamePlayer(player);
+            if(!gamePlayer.isPlayer()) continue;
 
             double distance = entity.getLocation().distanceSquared(center);
             if (closestEntity == null || distance < closestDistance) {
