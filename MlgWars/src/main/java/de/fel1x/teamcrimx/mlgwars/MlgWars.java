@@ -42,6 +42,7 @@ public final class MlgWars extends JavaPlugin {
 
     private boolean inSetup;
     private boolean noMap;
+    private boolean labor;
 
     private int lobbyCountdown = 60;
     private int teamSize = -1;
@@ -61,6 +62,13 @@ public final class MlgWars extends JavaPlugin {
     public void onEnable() {
 
         instance = this;
+
+        File configFile = new File(this.getDataFolder(), "config.yml");
+        if(!configFile.exists()) {
+            this.saveDefaultConfig();
+        }
+
+        this.labor = this.getConfig().getBoolean("labor");
 
         this.inSetup = false;
         this.noMap = false;
@@ -145,6 +153,8 @@ public final class MlgWars extends JavaPlugin {
         new EntityInteractListener(this);
         new ProjectileHitListener(this);
         new EggThrowEvent(this);
+        new EntityExplodeListener(this);
+        new ProjectileShootListener(this);
 
         // BLOCK
         new BlockBreakListener(this);
@@ -265,5 +275,9 @@ public final class MlgWars extends JavaPlugin {
 
     public ArrayList<Material> getAllMaterials() {
         return allMaterials;
+    }
+
+    public boolean isLabor() {
+        return labor;
     }
 }

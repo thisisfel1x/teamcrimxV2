@@ -4,12 +4,14 @@ import de.dytanic.cloudnet.ext.bridge.BridgeHelper;
 import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
+import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.objects.ScoreboardTeam;
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -23,7 +25,7 @@ public class DelayTimer implements ITimer {
 
     private boolean running = false;
     private int taskId;
-    private int countdown = 3;
+    private int countdown = this.mlgWars.isLabor() ? 5 : 3;
 
     @Override
     public void start() {
@@ -35,6 +37,10 @@ public class DelayTimer implements ITimer {
             for (Player player : this.mlgWars.getData().getPlayers()) {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.getInventory().clear();
+
+                if(this.mlgWars.isLabor()) {
+                    this.setArmor(player);
+                }
 
                 player.setLevel(0);
                 player.setExp(0f);
@@ -63,6 +69,13 @@ public class DelayTimer implements ITimer {
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
 
                 switch (countdown) {
+                    case 5:
+                        Bukkit.getOnlinePlayers().forEach(player -> {
+                            player.playSound(player.getLocation(), Sound.NOTE_BASS, 1.5f, 0.75f);
+                            Actionbar.sendTitle(player, "§5teamcrimx Labor", 10, 30, 10);
+                            Actionbar.sendSubTitle(player, "§dTNT-Wahnsinn", 10, 30, 10);
+                        });
+                        break;
                     case 3: case 2: case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Das Spiel startet in §e"
                                 + (countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
@@ -71,7 +84,10 @@ public class DelayTimer implements ITimer {
 
                     case 0:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§aDas Spiel beginnt!");
-                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.FIREWORK_LAUNCH, 1.5f, 2f));
+                        Bukkit.getOnlinePlayers().forEach(player -> {
+                            player.playSound(player.getLocation(), Sound.FIREWORK_LAUNCH, 1.5f, 2f);
+                            Actionbar.sendTitle(player, "§a§lGO!", 0, 20, 10);
+                        });
                         this.mlgWars.startTimerByClass(PreGameTimer.class);
                         break;
                 }
@@ -80,8 +96,10 @@ public class DelayTimer implements ITimer {
                     player.setLevel(0);
                     player.setExp(0f);
 
-                    Actionbar.sendTitle(player, (countdown == 3) ? "§a§l3"
-                            : (countdown == 2) ? "§e§l2" : (countdown == 1) ? "§c§l1" : "§a§lGO!", 0, 40, 10);
+                    if(this.countdown <= 3) {
+                        Actionbar.sendTitle(player, (countdown == 3) ? "§a§l3"
+                                : (countdown == 2) ? "§e§l2" : (countdown == 1) ? "§c§l1" : "§a§lGO!", 0, 40, 10);
+                    }
                     if(player.hasMetadata("team")) {
                         int team = player.getMetadata("team").get(0).asInt() + 1;
                         Actionbar.sendActiobar(player, "§7Team §a#" + team);
@@ -131,7 +149,19 @@ public class DelayTimer implements ITimer {
                     System.out.println(this.mlgWars.getData().getGameTeams().get(i).getAlivePlayers());
                 }
             }
-            System.out.println(this.mlgWars.getData().getGameTeams());
         }
+    }
+
+    private void setArmor(Player player) {
+
+        player.getInventory().setHelmet(new ItemBuilder(Material.SKULL_ITEM, 1)
+                .setColor(4).addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 1).toItemStack());
+        player.getInventory().setChestplate(new ItemBuilder(Material.IRON_CHESTPLATE)
+                .addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 1).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).setUnbreakable().toItemStack());
+        player.getInventory().setLeggings(new ItemBuilder(Material.CHAINMAIL_LEGGINGS)
+                .addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 1).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).setUnbreakable().toItemStack());
+        player.getInventory().setBoots(new ItemBuilder(Material.IRON_BOOTS)
+                .addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 1).addEnchant(Enchantment.PROTECTION_FALL, 2).setUnbreakable().toItemStack());
+
     }
 }

@@ -3,7 +3,10 @@ package de.fel1x.teamcrimx.mlgwars.listener.block;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -34,7 +37,14 @@ public class BlockBreakListener implements Listener {
             case PREGAME: case INGAME:
                 if(gamePlayer.isSpectator()) {
                     event.setCancelled(true);
+                    return;
+                } else {
+                    if(this.mlgWars.isLabor()) {
+                        event.getBlock().setType(Material.AIR);
+                        event.getBlock().getWorld().spawnEntity(event.getBlock().getLocation(), EntityType.PRIMED_TNT);
+                    }
                 }
+
         }
 
     }

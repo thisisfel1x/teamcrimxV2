@@ -103,12 +103,21 @@ public class DamageListener implements Listener {
         if(gamestate != Gamestate.INGAME) {
             event.setCancelled(gamestate != Gamestate.PREGAME || (event.getCause() != EntityDamageEvent.DamageCause.VOID
                     && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
-                    || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION));
+                    && event.getCause() != EntityDamageEvent.DamageCause.BLOCK_EXPLOSION));
         }
 
         if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
                 || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
             event.setDamage(0.1D);
+        }
+
+        if(this.mlgWars.isLabor()) {
+            if(event.getEntity() instanceof Player) {
+                if(event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK
+                        && event.getCause() != EntityDamageEvent.DamageCause.VOID) {
+                    event.setDamage(0.1D);
+                }
+            }
         }
 
     }

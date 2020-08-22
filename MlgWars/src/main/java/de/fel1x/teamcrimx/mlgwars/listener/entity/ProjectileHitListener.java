@@ -10,10 +10,7 @@ import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Egg;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -98,6 +95,12 @@ public class ProjectileHitListener implements Listener {
                     if(replace) {
                         block.setType(Material.FIRE);
                     }
+                }
+            }
+        } else if(event.getEntity() instanceof Arrow) {
+            if(this.mlgWars.isLabor()) {
+                if(event.getEntity().hasMetadata("explode")) {
+                    event.getEntity().getWorld().createExplosion(event.getEntity().getLocation(), 3.5f, true);
                 }
             }
         }

@@ -18,7 +18,7 @@ public class PreGameTimer implements ITimer {
 
     private boolean running = false;
     private int taskId;
-    private int countdown = 40;
+    private int countdown = this.mlgWars.isLabor() ? 10 : 40;
 
     @Override
     public void start() {

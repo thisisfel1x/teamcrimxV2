@@ -16,6 +16,7 @@ import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.scoreboard.MlgWarsScoreboard;
+import de.fel1x.teamcrimx.mlgwars.utils.WinDetection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
@@ -278,6 +279,8 @@ public class GamePlayer {
         this.player.setLevel(0);
         this.player.setExp(0);
 
+        this.player.setFireTicks(0);
+
         this.player.getActivePotionEffects().forEach(potionEffect -> this.player.removePotionEffect(potionEffect.getType()));
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false));
 
@@ -310,6 +313,8 @@ public class GamePlayer {
 
         this.data.getPlayers().forEach(ingamePlayer -> ingamePlayer.hidePlayer(this.player));
         this.data.getSpectators().forEach(this.player::showPlayer);
+
+        WinDetection.stopTasks(this.player);
     }
 
     public void createPlayerData() {

@@ -56,6 +56,10 @@ public class DeathListener implements Listener {
                 killer = null;
             }
 
+            if(killer != null && killer.getName().equalsIgnoreCase(player.getName())) {
+                killer = null;
+            }
+
             if(killer != null) {
 
                 CoinsAPI coinsAPI = new CoinsAPI(killer.getUniqueId());

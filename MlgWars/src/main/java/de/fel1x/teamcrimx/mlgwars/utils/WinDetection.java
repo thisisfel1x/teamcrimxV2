@@ -204,6 +204,12 @@ public class WinDetection {
 
         switch (gamePlayer.getSelectedKit()) {
 
+            case KANGAROO:
+                if (MlgWars.getInstance().getData().getKangarooTask().containsKey(player.getUniqueId())) {
+                    MlgWars.getInstance().getData().getKangarooTask().get(player.getUniqueId()).cancel();
+                }
+                break;
+
             case THOR:
                 if (MlgWars.getInstance().getData().getThorTask().containsKey(player.getUniqueId())) {
                     MlgWars.getInstance().getData().getThorTask().get(player.getUniqueId()).cancel();
