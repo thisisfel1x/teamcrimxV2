@@ -19,7 +19,7 @@ public class DumpKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Wer mit diesem Kit spielt", "§7erhält automatisch Dummheit Stufe 1000", "", "§6[für Pilzkuuh]"
         };
     }

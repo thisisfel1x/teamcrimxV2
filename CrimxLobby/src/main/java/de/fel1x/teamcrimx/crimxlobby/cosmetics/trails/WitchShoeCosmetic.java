@@ -7,7 +7,6 @@ import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class WitchShoeCosmetic implements ICosmetic {
 
@@ -18,7 +17,7 @@ public class WitchShoeCosmetic implements ICosmetic {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] { "", "§5Hex Hex", "" };
+        return new String[]{"", "§5Hex Hex", ""};
     }
 
     @Override

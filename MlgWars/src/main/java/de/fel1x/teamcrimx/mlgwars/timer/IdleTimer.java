@@ -14,7 +14,7 @@ public class IdleTimer implements ITimer {
     @Override
     public void start() {
 
-        if(!this.running) {
+        if (!this.running) {
 
             Bukkit.getScheduler().cancelTasks(this.mlgWars);
 
@@ -33,7 +33,7 @@ public class IdleTimer implements ITimer {
 
     @Override
     public void stop() {
-        if(this.running) {
+        if (this.running) {
             this.running = false;
             Bukkit.getScheduler().cancelTask(taskId);
         }

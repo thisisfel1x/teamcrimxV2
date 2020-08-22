@@ -13,14 +13,14 @@ import org.bukkit.scoreboard.Team;
 import java.util.Objects;
 
 public class MlgWarsScoreboard {
-    
+
     public void setLobbyScoreboard(Player player) {
         Scoreboard lobbyScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         Objective objective = lobbyScoreboard.registerNewObjective("dummy", "test");
 
         GamePlayer gamePlayer = new GamePlayer(player);
         Kit selectedKit = gamePlayer.getSelectedKit();
-        
+
         objective.setDisplayName("§8» §bteamcrimx§lDE §8«");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
@@ -60,7 +60,7 @@ public class MlgWarsScoreboard {
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         int gameKills;
-        if(player.hasMetadata("kills")) {
+        if (player.hasMetadata("kills")) {
             gameKills = player.getMetadata("kills").get(0).asInt();
         } else {
             gameKills = 0;
@@ -159,5 +159,5 @@ public class MlgWarsScoreboard {
         }
 
     }
-    
+
 }

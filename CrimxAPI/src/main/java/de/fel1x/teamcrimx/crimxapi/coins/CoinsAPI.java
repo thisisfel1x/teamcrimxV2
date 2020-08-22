@@ -23,11 +23,22 @@ public class CoinsAPI {
         return this.playerNetworkDocument.getInteger("coins");
     }
 
+    public void setCoins(int coins) {
+
+        if (coins < 0) {
+            coins = 0;
+        }
+
+        Document document = new Document("coins", coins);
+        Bson updateOperation = new Document("$set", document);
+        this.crimxAPI.getMongoDB().getUserCollection().updateOne(this.playerNetworkDocument, updateOperation);
+    }
+
     public void addCoins(int coins) {
 
         coins = this.getCoins() + coins;
 
-        if(coins < 0) {
+        if (coins < 0) {
             coins = 0;
         }
 
@@ -40,18 +51,7 @@ public class CoinsAPI {
 
         coins = this.getCoins() - coins;
 
-        if(coins < 0) {
-            coins = 0;
-        }
-
-        Document document = new Document("coins", coins);
-        Bson updateOperation = new Document("$set", document);
-        this.crimxAPI.getMongoDB().getUserCollection().updateOne(this.playerNetworkDocument, updateOperation);
-    }
-
-    public void setCoins(int coins) {
-
-        if(coins < 0) {
+        if (coins < 0) {
             coins = 0;
         }
 

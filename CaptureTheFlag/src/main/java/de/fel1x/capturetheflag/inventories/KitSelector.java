@@ -25,11 +25,11 @@ public class KitSelector implements InventoryProvider {
 
         int i = 0;
 
-        for(Kit kit : Kit.values()) {
+        for (Kit kit : Kit.values()) {
 
             contents.set(0, i, ClickableItem.of(new ItemBuilder(kit.getMaterial()).setName(kit.getName()).setLore(kit.getDescription()).toItemStack(), event -> {
 
-                if(!(event.getWhoClicked() instanceof Player)) return;
+                if (!(event.getWhoClicked() instanceof Player)) return;
 
                 Player clickedPlayer = (Player) event.getWhoClicked();
                 GamePlayer gamePlayer = new GamePlayer(clickedPlayer);

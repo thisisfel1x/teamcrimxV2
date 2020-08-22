@@ -33,7 +33,7 @@ public class ChestFiller {
         items = new ArrayList<>();
         itemsTier2 = new ArrayList<>();
 
-        if(this.mlgWars.isLabor()) {
+        if (this.mlgWars.isLabor()) {
             this.addLaborItems(items);
             this.addLaborItems(itemsTier2);
         } else {
@@ -129,7 +129,7 @@ public class ChestFiller {
         Random random = new Random();
 
         for (PotionType potionType : PotionType.values()) {
-            if(potionType == PotionType.WATER) continue;
+            if (potionType == PotionType.WATER) continue;
 
             ItemStack potion = new ItemStack(Material.POTION);
             Potion pot = new Potion(potionType, 1);

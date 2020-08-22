@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Team;
 
 import java.util.Random;
 
@@ -119,9 +118,9 @@ public class GamePlayer {
 
     public void addTeam(Teams teams) {
 
-        if(teams.getTeamPlayers().size() <= 4) {
+        if (teams.getTeamPlayers().size() <= 4) {
 
-            if(!teams.getTeamPlayers().contains(player)) {
+            if (!teams.getTeamPlayers().contains(player)) {
                 teams.getTeamPlayers().add(player);
             }
             player.sendMessage("§7Du bist Team " + teams.getTeamName() + " §7beigetreten!");
@@ -146,10 +145,10 @@ public class GamePlayer {
 
     public Teams getTeam() {
 
-        if(Teams.BLUE.getTeamPlayers().contains(player))
-                return Teams.BLUE;
+        if (Teams.BLUE.getTeamPlayers().contains(player))
+            return Teams.BLUE;
 
-        if(Teams.RED.getTeamPlayers().contains(player))
+        if (Teams.RED.getTeamPlayers().contains(player))
             return Teams.RED;
 
         return null;
@@ -164,12 +163,12 @@ public class GamePlayer {
 
     public void teleportToTeamSpawn() {
 
-        if(Teams.BLUE.getTeamPlayers().contains(player)) {
+        if (Teams.BLUE.getTeamPlayers().contains(player)) {
 
             Location blueSpawn = SpawnHandler.loadLocation("blueSpawn");
             player.teleport(blueSpawn);
 
-        } else if(Teams.RED.getTeamPlayers().contains(player)) {
+        } else if (Teams.RED.getTeamPlayers().contains(player)) {
 
             Location redSpawn = SpawnHandler.loadLocation("redSpawn");
             player.teleport(redSpawn);
@@ -185,11 +184,11 @@ public class GamePlayer {
 
     public Location getRespawnLocation() {
 
-        if(Teams.BLUE.getTeamPlayers().contains(player)) {
+        if (Teams.BLUE.getTeamPlayers().contains(player)) {
 
             return SpawnHandler.loadLocation("blueSpawn");
 
-        } else if(Teams.RED.getTeamPlayers().contains(player)) {
+        } else if (Teams.RED.getTeamPlayers().contains(player)) {
 
             return SpawnHandler.loadLocation("redSpawn");
 
@@ -198,16 +197,15 @@ public class GamePlayer {
         return SpawnHandler.loadLocation("spectator");
 
 
-
     }
 
     public void checkForTeam() {
 
-        if(hasTeam()) return;
+        if (hasTeam()) return;
 
         int number = random.nextInt(1);
 
-        if(number == 0) {
+        if (number == 0) {
             addTeam(Teams.RED);
         } else {
             addTeam(Teams.BLUE);
@@ -247,13 +245,13 @@ public class GamePlayer {
 
         Color dyeColor = null;
 
-        if(getTeam().equals(Teams.RED)) {
+        if (getTeam().equals(Teams.RED)) {
             dyeColor = Color.RED;
-        } else if(getTeam().equals(Teams.BLUE)) {
+        } else if (getTeam().equals(Teams.BLUE)) {
             dyeColor = Color.BLUE;
         }
 
-        if(getSelectedKit() == null) {
+        if (getSelectedKit() == null) {
 
             ItemStack helmet = new ItemBuilder(Material.LEATHER_HELMET).setLeatherArmorColor(dyeColor).toItemStack();
             ItemStack chestplate = new ItemBuilder(Material.LEATHER_CHESTPLATE).setLeatherArmorColor(dyeColor).toItemStack();
@@ -366,9 +364,9 @@ public class GamePlayer {
 
         Color dyeColor = null;
 
-        if(getTeam().equals(Teams.RED)) {
+        if (getTeam().equals(Teams.RED)) {
             dyeColor = Color.RED;
-        } else if(getTeam().equals(Teams.BLUE)) {
+        } else if (getTeam().equals(Teams.BLUE)) {
             dyeColor = Color.BLUE;
         }
 

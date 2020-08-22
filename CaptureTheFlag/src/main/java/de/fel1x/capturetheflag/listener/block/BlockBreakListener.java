@@ -4,7 +4,6 @@ import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.Data;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.capturetheflag.gamestate.Gamestate;
-import de.fel1x.capturetheflag.world.Cuboid;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -26,27 +25,27 @@ public class BlockBreakListener implements Listener {
 
         Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
 
-        if(!gamestate.equals(Gamestate.INGAME)) {
+        if (!gamestate.equals(Gamestate.INGAME)) {
             event.setCancelled(true);
             return;
         }
 
-        if(!gamePlayer.isPlayer()) {
+        if (!gamePlayer.isPlayer()) {
             event.setCancelled(true);
             return;
         }
 
-        if(event.getBlock().getState() instanceof Banner) {
+        if (event.getBlock().getState() instanceof Banner) {
             event.setCancelled(true);
         }
 
-        if(data.getBlueSpawnCuboid().contains(block) || data.getRedSpawnCuboid().contains(block)) {
+        if (data.getBlueSpawnCuboid().contains(block) || data.getRedSpawnCuboid().contains(block)) {
             player.sendMessage("§cDu darfst nicht im Spawnbereich abbauen!");
             event.setCancelled(true);
             return;
         }
 
-        if(!CaptureTheFlag.getInstance().getData().getPlacedBlocks().contains(block)) {
+        if (!CaptureTheFlag.getInstance().getData().getPlacedBlocks().contains(block)) {
             event.setCancelled(true);
             return;
         }

@@ -10,9 +10,7 @@ import de.fel1x.teamcrimx.mlgwars.inventories.KitInventory;
 import de.fel1x.teamcrimx.mlgwars.inventories.SpectatorInventory;
 import de.fel1x.teamcrimx.mlgwars.inventories.TeamInventory;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
-import de.fel1x.teamcrimx.mlgwars.timer.LobbyTimer;
 import de.fel1x.teamcrimx.mlgwars.utils.Tornado;
-import de.fel1x.teamcrimx.mlgwars.utils.entites.ZombieEquipment;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -62,7 +60,7 @@ public class InteractListener implements Listener {
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
-        if(this.mlgWars.isInSetup()) {
+        if (this.mlgWars.isInSetup()) {
             return;
         }
 
@@ -588,13 +586,13 @@ public class InteractListener implements Listener {
                             break;
 
                         case CSGO:
-                            if(!event.getItem().getItemMeta().hasDisplayName()) {
+                            if (!event.getItem().getItemMeta().hasDisplayName()) {
                                 return;
                             }
 
                             this.data.getCsgoTasks().computeIfAbsent(player.getUniqueId(), k -> new ArrayList<>());
 
-                            if(interactedMaterial == Material.GLOWSTONE_DUST
+                            if (interactedMaterial == Material.GLOWSTONE_DUST
                                     && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §eFlash")) {
 
                                 event.setCancelled(true);
@@ -607,13 +605,13 @@ public class InteractListener implements Listener {
                                 BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        if(item.isOnGround()) {
+                                        if (item.isOnGround()) {
                                             new InstantFirework(FireworkEffect.builder()
                                                     .withColor(Color.WHITE, Color.YELLOW, Color.GRAY).build(),
                                                     item.getLocation().clone().add(0, 1, 0));
 
                                             item.getNearbyEntities(5, 5, 5).forEach(entity -> {
-                                                if(!(entity instanceof LivingEntity)) return;
+                                                if (!(entity instanceof LivingEntity)) return;
                                                 ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,
                                                         20 * 5, 4, true, true));
                                                 ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,
@@ -621,7 +619,7 @@ public class InteractListener implements Listener {
                                             });
                                         }
 
-                                        if(item.isOnGround() || item.getLocation().getY() < 0 || item.isDead() || !item.isValid()) {
+                                        if (item.isOnGround() || item.getLocation().getY() < 0 || item.isDead() || !item.isValid()) {
                                             this.cancel();
                                             data.getCsgoTasks().get(player.getUniqueId()).remove(this);
                                             item.remove();
@@ -632,7 +630,7 @@ public class InteractListener implements Listener {
                                 bukkitRunnable.runTaskTimer(this.mlgWars, 0L, 1L);
                                 this.data.getCsgoTasks().get(player.getUniqueId()).add(bukkitRunnable);
 
-                            } else if(interactedMaterial == Material.FIREBALL
+                            } else if (interactedMaterial == Material.FIREBALL
                                     && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §cMolotowcocktail")) {
 
                                 event.setCancelled(true);
@@ -641,7 +639,7 @@ public class InteractListener implements Listener {
                                 Fireball fireball = player.launchProjectile(Fireball.class);
                                 fireball.setMetadata("moli", new FixedMetadataValue(this.mlgWars, true));
 
-                            } else if(interactedMaterial == Material.FIREWORK_CHARGE
+                            } else if (interactedMaterial == Material.FIREWORK_CHARGE
                                     && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §7Smoke")) {
 
                                 event.setCancelled(true);
@@ -654,14 +652,14 @@ public class InteractListener implements Listener {
                                 BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        if(item.isOnGround()) {
+                                        if (item.isOnGround()) {
                                             new InstantFirework(FireworkEffect.builder()
                                                     .withColor(Color.WHITE, Color.YELLOW, Color.GRAY).build(),
                                                     item.getLocation().clone().add(0, 0.5, 0));
                                             new SmokeGrenade(mlgWars, item.getLocation(), 10, item.getWorld());
                                         }
 
-                                        if(item.isOnGround() || item.getLocation().getY() < 0 || item.isDead() || !item.isValid()) {
+                                        if (item.isOnGround() || item.getLocation().getY() < 0 || item.isDead() || !item.isValid()) {
                                             this.cancel();
                                             data.getCsgoTasks().get(player.getUniqueId()).remove(this);
                                             item.remove();
@@ -779,7 +777,7 @@ public class InteractListener implements Listener {
             if (entity.getUniqueId().equals(owner.getUniqueId())) continue;
             Player player = (Player) entity;
             GamePlayer gamePlayer = new GamePlayer(player);
-            if(!gamePlayer.isPlayer()) continue;
+            if (!gamePlayer.isPlayer()) continue;
 
             double distance = entity.getLocation().distanceSquared(center);
             if (closestEntity == null || distance < closestDistance) {

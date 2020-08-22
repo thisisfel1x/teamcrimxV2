@@ -11,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Sound;
 import org.bukkit.block.Banner;
-import org.bukkit.entity.Player;
 
 public class InGameTimer {
 
@@ -29,7 +28,7 @@ public class InGameTimer {
             current.setExp(0);
         });
 
-        if(!running) {
+        if (!running) {
 
             running = true;
 
@@ -39,7 +38,7 @@ public class InGameTimer {
 
                     GamePlayer gamePlayer = new GamePlayer(current);
 
-                    if((data.getRedFlagHolder() != null && current.equals(data.getRedFlagHolder()) || (data.getBlueFlagHolder() != null && current.equals(data.getBlueFlagHolder())))) {
+                    if ((data.getRedFlagHolder() != null && current.equals(data.getRedFlagHolder()) || (data.getBlueFlagHolder() != null && current.equals(data.getBlueFlagHolder())))) {
 
                         current.setWalkSpeed(0.05f);
 
@@ -48,7 +47,7 @@ public class InGameTimer {
                         current.setWalkSpeed(0.2f);
                     }
 
-                    if(gamePlayer.isPlayer()) {
+                    if (gamePlayer.isPlayer()) {
                         Actionbar.sendActiobar(current, "§7Team " + gamePlayer.getTeam().getTeamName());
                     } else {
                         Actionbar.sendActiobar(current, "§7Spectator");
@@ -72,7 +71,7 @@ public class InGameTimer {
 
     public void stop() {
 
-        if(running) {
+        if (running) {
 
             running = false;
 
@@ -92,7 +91,7 @@ public class InGameTimer {
 
             Banner banner = (Banner) data.getRedFlagBaseLocation().getBlock().getState();
 
-            if(!banner.getBaseColor().equals(DyeColor.RED)) {
+            if (!banner.getBaseColor().equals(DyeColor.RED)) {
 
                 Teams.RED.getTeamPlayers().forEach(player -> {
                     player.playSound(player.getLocation(), Sound.NOTE_BASS_GUITAR, 7, 12);
@@ -110,7 +109,7 @@ public class InGameTimer {
 
             Banner banner = (Banner) data.getBlueFlagBaseLocation().getBlock().getState();
 
-            if(!banner.getBaseColor().equals(DyeColor.BLUE)) {
+            if (!banner.getBaseColor().equals(DyeColor.BLUE)) {
 
                 Teams.BLUE.getTeamPlayers().forEach(player -> {
                     player.playSound(player.getLocation(), Sound.NOTE_BASS_GUITAR, 7, 12);
@@ -127,7 +126,6 @@ public class InGameTimer {
         }
 
     }
-
 
 
 }

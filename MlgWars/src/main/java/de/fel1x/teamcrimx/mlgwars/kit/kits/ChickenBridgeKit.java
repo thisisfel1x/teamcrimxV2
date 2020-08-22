@@ -14,8 +14,8 @@ public class ChickenBridgeKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
-               "§7Nutze deine §cEier (höhöhö)", "§7um direkt zum Gegner zu gelangen", ""
+        return new String[]{
+                "§7Nutze deine §cEier (höhöhö)", "§7um direkt zum Gegner zu gelangen", ""
         };
     }
 

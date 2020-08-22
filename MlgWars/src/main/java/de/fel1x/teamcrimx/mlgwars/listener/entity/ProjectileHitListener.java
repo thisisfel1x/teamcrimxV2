@@ -36,10 +36,10 @@ public class ProjectileHitListener implements Listener {
     @EventHandler
     public void on(ProjectileHitEvent event) {
 
-        if(event.getEntity() instanceof Egg) {
+        if (event.getEntity() instanceof Egg) {
             Egg egg = (Egg) event.getEntity();
 
-            if(egg.hasMetadata("webTrap")) {
+            if (egg.hasMetadata("webTrap")) {
                 Location location = egg.getLocation();
                 if (location.getY() < 0) return;
                 Cuboid cuboid = new Cuboid(location.clone().add(1, 3, 1),
@@ -52,8 +52,8 @@ public class ProjectileHitListener implements Listener {
                         block.setType(Material.WEB);
                     }
                 });
-            } else if(egg.hasMetadata("botDecoy")) {
-                if(!(egg.getShooter() instanceof Player)) return;
+            } else if (egg.hasMetadata("botDecoy")) {
+                if (!(egg.getShooter() instanceof Player)) return;
 
                 Player player = (Player) egg.getShooter();
 
@@ -81,25 +81,25 @@ public class ProjectileHitListener implements Listener {
                 DisguiseAPI.disguiseEntity(entity, disguise);
             }
 
-        } else if(event.getEntity() instanceof Fireball) {
+        } else if (event.getEntity() instanceof Fireball) {
             Fireball fireball = (Fireball) event.getEntity();
 
-            if(fireball.hasMetadata("moli")) {
+            if (fireball.hasMetadata("moli")) {
 
-                Location a = fireball.getLocation().clone().add(3, 3,3);
-                Location b = fireball.getLocation().clone().subtract(3, 3,3);
+                Location a = fireball.getLocation().clone().add(3, 3, 3);
+                Location b = fireball.getLocation().clone().subtract(3, 3, 3);
                 Cuboid cuboid = new Cuboid(a, b);
                 for (Block block : cuboid.getBlocks()) {
-                    if(block.getType() != Material.AIR) continue;
+                    if (block.getType() != Material.AIR) continue;
                     boolean replace = ThreadLocalRandom.current().nextBoolean();
-                    if(replace) {
+                    if (replace) {
                         block.setType(Material.FIRE);
                     }
                 }
             }
-        } else if(event.getEntity() instanceof Arrow) {
-            if(this.mlgWars.isLabor()) {
-                if(event.getEntity().hasMetadata("explode")) {
+        } else if (event.getEntity() instanceof Arrow) {
+            if (this.mlgWars.isLabor()) {
+                if (event.getEntity().hasMetadata("explode")) {
                     event.getEntity().getWorld().createExplosion(event.getEntity().getLocation(), 3.5f, true);
                 }
             }

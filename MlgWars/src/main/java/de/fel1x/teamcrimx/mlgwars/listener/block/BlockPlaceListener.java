@@ -6,7 +6,6 @@ import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -38,19 +37,23 @@ public class BlockPlaceListener implements Listener {
 
         switch (gamestate) {
 
-            case IDLE: case LOBBY: case DELAY: case ENDING:
+            case IDLE:
+            case LOBBY:
+            case DELAY:
+            case ENDING:
                 event.setCancelled(true);
                 break;
 
-            case PREGAME: case INGAME:
-                if(gamePlayer.isSpectator()) {
+            case PREGAME:
+            case INGAME:
+                if (gamePlayer.isSpectator()) {
                     event.setCancelled(true);
                     return;
                 }
 
-                if(this.mlgWars.isLabor()) {
-                    if(placedBlock.getType() == Material.TNT) {
-                        if(event.getItemInHand().getItemMeta().hasDisplayName()) {
+                if (this.mlgWars.isLabor()) {
+                    if (placedBlock.getType() == Material.TNT) {
+                        if (event.getItemInHand().getItemMeta().hasDisplayName()) {
                             String displayName = event.getItemInHand().getItemMeta().getDisplayName();
 
                             switch (displayName) {

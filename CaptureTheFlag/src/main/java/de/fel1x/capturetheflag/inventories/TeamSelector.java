@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamSelector implements InventoryProvider{
+public class TeamSelector implements InventoryProvider {
 
     public static final SmartInventory TEAM_SELECTOR = SmartInventory.builder()
             .id("customInventory")
@@ -45,12 +45,12 @@ public class TeamSelector implements InventoryProvider{
         contents.set(1, 2, ClickableItem.of(new ItemBuilder(Material.BANNER, 1, (byte) 1).setName("§cTeam Rot §8» §a" + Teams.RED.getTeamPlayers().size() + "§8/§75")
                 .setLore(loreRed).toItemStack(), event -> {
 
-            if(!(event.getWhoClicked() instanceof Player)) return;
+            if (!(event.getWhoClicked() instanceof Player)) return;
 
             Player clickedPlayer = (Player) event.getWhoClicked();
             GamePlayer gamePlayer = new GamePlayer(clickedPlayer);
 
-            if(Teams.RED.getTeamPlayers().size() > 4) {
+            if (Teams.RED.getTeamPlayers().size() > 4) {
                 player.sendMessage("§cDieses Team ist voll!");
                 player.closeInventory();
                 return;
@@ -67,12 +67,12 @@ public class TeamSelector implements InventoryProvider{
         contents.set(1, 6, ClickableItem.of(new ItemBuilder(Material.BANNER, 1, (byte) 4).setName("§9Team Blau §8» §a" + Teams.BLUE.getTeamPlayers().size() + "§8/§75")
                 .setLore(loreBlue).toItemStack(), event -> {
 
-            if(!(event.getWhoClicked() instanceof Player)) return;
+            if (!(event.getWhoClicked() instanceof Player)) return;
 
             Player clickedPlayer = (Player) event.getWhoClicked();
             GamePlayer gamePlayer = new GamePlayer(clickedPlayer);
 
-            if(Teams.BLUE.getTeamPlayers().size() > 4) {
+            if (Teams.BLUE.getTeamPlayers().size() > 4) {
                 player.sendMessage("§cDieses Team ist voll!");
                 player.closeInventory();
                 return;
@@ -109,12 +109,12 @@ public class TeamSelector implements InventoryProvider{
         int state = contents.property("state", 0);
         contents.setProperty("state", state + 1);
 
-        if(state % 5 != 0) return;
+        if (state % 5 != 0) return;
 
         contents.set(1, 2, ClickableItem.of(new ItemBuilder(Material.BANNER, 1, (byte) 1).setName("§cTeam Rot §8» §a" + Teams.RED.getTeamPlayers().size() + "§8/§75")
                 .setLore(loreRed).toItemStack(), event -> {
 
-            if(!(event.getWhoClicked() instanceof Player)) return;
+            if (!(event.getWhoClicked() instanceof Player)) return;
 
             Player clickedPlayer = (Player) event.getWhoClicked();
             GamePlayer gamePlayer = new GamePlayer(clickedPlayer);
@@ -130,7 +130,7 @@ public class TeamSelector implements InventoryProvider{
         contents.set(1, 6, ClickableItem.of(new ItemBuilder(Material.BANNER, 1, (byte) 4).setName("§9Team Blau §8» §a" + Teams.BLUE.getTeamPlayers().size() + "§8/§75")
                 .setLore(loreBlue).toItemStack(), event -> {
 
-            if(!(event.getWhoClicked() instanceof Player)) return;
+            if (!(event.getWhoClicked() instanceof Player)) return;
 
             Player clickedPlayer = (Player) event.getWhoClicked();
             GamePlayer gamePlayer = new GamePlayer(clickedPlayer);

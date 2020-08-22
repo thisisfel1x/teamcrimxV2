@@ -25,15 +25,15 @@ public class MlgWarsDatabase {
                 .append("gamesWon", 0)
                 .append("selectedKit", Kit.STARTER.name());
 
-       if(player.hasPermission("mlgwars.kits")) {
-           for (Kit kit : Kit.values()) {
-               basicDBObject.append(kit.name(), true);
-           }
-       } else {
-           for (Kit kit : Kit.values()) {
-               basicDBObject.append(kit.name(), (kit == Kit.STARTER));
-           }
-       }
+        if (player.hasPermission("mlgwars.kits")) {
+            for (Kit kit : Kit.values()) {
+                basicDBObject.append(kit.name(), true);
+            }
+        } else {
+            for (Kit kit : Kit.values()) {
+                basicDBObject.append(kit.name(), (kit == Kit.STARTER));
+            }
+        }
 
         this.mongoDB.getMlgWarsCollection().insertOne(basicDBObject);
 

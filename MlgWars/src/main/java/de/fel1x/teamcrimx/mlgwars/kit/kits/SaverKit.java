@@ -14,7 +14,7 @@ public class SaverKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Sichere dich vor dem Tod", "§7mit einer praktischen Rettungsplattform", ""
         };
     }

@@ -54,7 +54,7 @@ public class GamePlayer {
 
         this.player = player;
 
-        if(documentUpdate) {
+        if (documentUpdate) {
             Document mlgWarsDocument = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().
                     find(new Document("_id", player.getUniqueId().toString())).first();
 
@@ -83,13 +83,13 @@ public class GamePlayer {
             this.mlgWarsDocument = this.data.getMlgWarsPlayerDocument().get(this.player.getUniqueId());
             this.networkDocument = this.data.getNetworkPlayerDocument().get(this.player.getUniqueId());
 
-            if(!((String) this.getObjectFromMongoDocument("name", MongoDBCollection.MLGWARS)).equalsIgnoreCase(this.player.getName())) {
+            if (!((String) this.getObjectFromMongoDocument("name", MongoDBCollection.MLGWARS)).equalsIgnoreCase(this.player.getName())) {
                 this.saveObjectInDocument("name", player.getName(), MongoDBCollection.MLGWARS);
             }
 
             for (Kit kit : Kit.values()) {
-                if(this.getObjectFromMongoDocument(kit.name(), MongoDBCollection.MLGWARS) == null) {
-                    if(this.player.hasPermission("mlgwars.kits")) {
+                if (this.getObjectFromMongoDocument(kit.name(), MongoDBCollection.MLGWARS) == null) {
+                    if (this.player.hasPermission("mlgwars.kits")) {
                         this.saveObjectInDocument(kit.name(), true, MongoDBCollection.MLGWARS);
                     } else {
                         this.saveObjectInDocument(kit.name(), false, MongoDBCollection.MLGWARS);
@@ -105,7 +105,7 @@ public class GamePlayer {
 
             Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
-            if(gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
+            if (gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
                 this.setSelectedKit(selectedKit);
             }
         });
@@ -179,30 +179,30 @@ public class GamePlayer {
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
-        if(gamestate == Gamestate.DELAY || gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
+        if (gamestate == Gamestate.DELAY || gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
             String playersLeftMessage = null;
 
-            if(this.mlgWars.getTeamSize() > 1) {
-                if(player.hasMetadata("team")) {
+            if (this.mlgWars.getTeamSize() > 1) {
+                if (player.hasMetadata("team")) {
                     int team = player.getMetadata("team").get(0).asInt();
                     this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().remove(player);
                     this.mlgWars.getData().getGameTeams().get(team).getTeamPlayers().remove(player);
 
-                    if(this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().isEmpty()) {
+                    if (this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().isEmpty()) {
                         this.mlgWars.getData().getGameTeams().remove(team);
                     }
                     playersLeftMessage = "§a" + playersLeft + " Spieler verbleiben §8(§a"
                             + this.mlgWars.getData().getGameTeams().size() + " Teams§8)";
                 }
-            } else if(this.mlgWars.getTeamSize() == 1) {
+            } else if (this.mlgWars.getTeamSize() == 1) {
                 playersLeftMessage = "§a" + playersLeft + " Spieler verbleiben";
             }
 
-            if(playersLeftMessage != null && playersLeft > 1) {
+            if (playersLeftMessage != null && playersLeft > 1) {
                 Bukkit.broadcastMessage(this.mlgWars.getPrefix() + playersLeftMessage);
             }
-        } else if(gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
-            if(this.mlgWars.getTeamSize() > 1) {
+        } else if (gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
+            if (this.mlgWars.getTeamSize() > 1) {
                 if (player.hasMetadata("team")) {
                     int team = player.getMetadata("team").get(0).asInt();
                     this.mlgWars.getData().getGameTeams().get(team).getTeamPlayers().remove(player);
@@ -216,12 +216,12 @@ public class GamePlayer {
 
         this.player.getInventory().setItem(0, new ItemBuilder(Material.STORAGE_MINECART).setName("§8● §aKitauswahl").toItemStack());
 
-        if(this.player.hasPermission("mlgwars.forcemap") || this.player.isOp()) {
+        if (this.player.hasPermission("mlgwars.forcemap") || this.player.isOp()) {
             int slot = this.mlgWars.getTeamSize() > 1 ? 2 : 1;
             this.player.getInventory().setItem(slot, new ItemBuilder(Material.REDSTONE_TORCH_ON).setName("§8● §cForcemap").toItemStack());
         }
 
-        if(this.mlgWars.getTeamSize() > 1) {
+        if (this.mlgWars.getTeamSize() > 1) {
             this.player.getInventory().setItem(1, new ItemBuilder(Material.BED).setName("§8● §eTeamauswahl").toItemStack());
         }
 
@@ -347,6 +347,11 @@ public class GamePlayer {
         }
     }
 
+    public Kit getSelectedKit() {
+        Kit chosen = this.data.getSelectedKit().get(this.player);
+        return chosen == null ? Kit.STARTER : chosen;
+    }
+
     public void setSelectedKit(Kit kit) {
         try {
             IKit iKit = kit.getClazz().newInstance();
@@ -363,17 +368,12 @@ public class GamePlayer {
         }
     }
 
-    public Kit getSelectedKit() {
-        Kit chosen = this.data.getSelectedKit().get(this.player);
-        return chosen == null ? Kit.STARTER : chosen;
-    }
-
     public int getRankingPosition() {
 
         List<Document> documents = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().find().sort(Sorts.descending("gamesWon")).into(Lists.newArrayList());
 
         for (Document document : documents) {
-            if(document.getString("_id").equalsIgnoreCase(this.player.getUniqueId().toString())) {
+            if (document.getString("_id").equalsIgnoreCase(this.player.getUniqueId().toString())) {
                 return documents.indexOf(document) + 1;
             }
         }
@@ -402,7 +402,7 @@ public class GamePlayer {
             int coins = coinsAPI.getCoins();
             int required = kit.getClazz().newInstance().getKitCost();
 
-            if(coins >= required) {
+            if (coins >= required) {
                 player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast erfolgreich §e[" + iKit.getKitName() + "] §7freigeschalten");
                 player.playSound(player.getLocation(), Sound.LEVEL_UP, 2, 0.5f);
                 player.closeInventory();
@@ -426,7 +426,7 @@ public class GamePlayer {
 
     public void setTeam(ScoreboardTeam scoreboardTeam) {
 
-        if(this.player.hasMetadata("team")) {
+        if (this.player.hasMetadata("team")) {
             int team = this.player.getMetadata("team").get(0).asInt();
 
             this.data.getGameTeams().get(team).getTeamPlayers().remove(player);
@@ -440,9 +440,9 @@ public class GamePlayer {
     }
 
     public void checkForTeam() {
-        if(!this.player.hasMetadata("team")) {
+        if (!this.player.hasMetadata("team")) {
             for (ScoreboardTeam value : this.data.getGameTeams().values()) {
-                if(!value.getTeamPlayers().contains(this.player)
+                if (!value.getTeamPlayers().contains(this.player)
                         && value.getTeamPlayers().size() != value.getMaxPlayers()) {
                     this.setTeam(value);
                     break;

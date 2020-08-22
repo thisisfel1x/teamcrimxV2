@@ -17,8 +17,6 @@ import org.bukkit.event.inventory.InventoryType;
 
 public class BuyInventory implements InventoryProvider {
 
-    private final MlgWars mlgWars = MlgWars.getInstance();
-
     public static final SmartInventory INVENTORY = SmartInventory.builder()
             .id("d")
             .provider(new BuyInventory())
@@ -27,13 +25,14 @@ public class BuyInventory implements InventoryProvider {
             .closeable(true)
             .manager(MlgWars.getInstance().getInventoryManager())
             .build();
+    private final MlgWars mlgWars = MlgWars.getInstance();
 
     @Override
     public void init(Player player, InventoryContents contents) {
 
         GamePlayer gamePlayer = new GamePlayer(player);
 
-        if(player.hasMetadata("toBuy")) {
+        if (player.hasMetadata("toBuy")) {
             Kit kit = (Kit) player.getMetadata("toBuy").get(0).value();
 
             try {

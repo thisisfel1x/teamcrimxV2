@@ -14,7 +14,7 @@ public class EnderPearlKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Werfe deine §5magische Perle", "§7und komme direkt beim Gegner an!", ""
         };
     }

@@ -14,7 +14,7 @@ public class BoatGliderKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Katapultiere dich mit", "§7 einem Stoß in die Luft", ""
         };
     }

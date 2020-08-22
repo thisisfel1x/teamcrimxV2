@@ -3,8 +3,6 @@ package de.fel1x.capturetheflag.timers;
 import de.dytanic.cloudnet.ext.bridge.BridgePlayerManager;
 import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.filehandler.SpawnHandler;
-import de.fel1x.capturetheflag.gameplayer.GamePlayer;
-import de.fel1x.capturetheflag.gamestate.Gamestate;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
@@ -17,7 +15,7 @@ public class EndingTimer {
 
     public void start() {
 
-        if(!running) {
+        if (!running) {
 
             running = true;
 
@@ -37,7 +35,12 @@ public class EndingTimer {
 
                 switch (countdown) {
 
-                    case 20: case 10: case 5: case 4: case 3: case 2:
+                    case 20:
+                    case 10:
+                    case 5:
+                    case 4:
+                    case 3:
+                    case 2:
 
                         Bukkit.broadcastMessage("§7Der Server §c§lstoppt §7in §c§l" + countdown + " Sekunden");
 
@@ -74,7 +77,7 @@ public class EndingTimer {
 
                 }
 
-                if(countdown > 0) {
+                if (countdown > 0) {
                     Bukkit.getOnlinePlayers().forEach(current -> {
 
                         current.setLevel(countdown);
@@ -93,7 +96,7 @@ public class EndingTimer {
 
     public void stop() {
 
-        if(running) {
+        if (running) {
 
             running = false;
             countdown = 60;

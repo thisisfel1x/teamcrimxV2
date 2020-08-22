@@ -16,7 +16,7 @@ public class LobbyTimer {
 
     public void start() {
 
-        if(!running) {
+        if (!running) {
 
             CaptureTheFlag.getInstance().getGamestateHandler().setGamestate(Gamestate.LOBBY);
 
@@ -26,7 +26,16 @@ public class LobbyTimer {
 
                 switch (countdown) {
 
-                    case 60: case 50: case 40: case 30: case 20: case 10: case 5: case 4: case 3: case 2:
+                    case 60:
+                    case 50:
+                    case 40:
+                    case 30:
+                    case 20:
+                    case 10:
+                    case 5:
+                    case 4:
+                    case 3:
+                    case 2:
 
                         Bukkit.broadcastMessage("§7Das Spiel startet in §e§l" + countdown + " Sekunden");
 
@@ -80,7 +89,7 @@ public class LobbyTimer {
 
                 }
 
-                if(countdown >= 1) {
+                if (countdown >= 1) {
                     Bukkit.getOnlinePlayers().forEach(current -> {
 
                         current.setLevel(countdown);
@@ -99,7 +108,7 @@ public class LobbyTimer {
 
     public void stop() {
 
-        if(running) {
+        if (running) {
 
             running = false;
             countdown = 60;
@@ -119,7 +128,7 @@ public class LobbyTimer {
 
     private void stopFinally() {
 
-        if(running) {
+        if (running) {
 
             running = false;
             countdown = 0;

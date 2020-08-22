@@ -1,7 +1,6 @@
 package de.fel1x.capturetheflag.listener.entity;
 
 import de.fel1x.capturetheflag.CaptureTheFlag;
-import de.fel1x.capturetheflag.Data;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.capturetheflag.gamestate.Gamestate;
 import org.bukkit.entity.Arrow;
@@ -18,16 +17,16 @@ public class DamageListener implements Listener {
 
         Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
 
-        if(!gamestate.equals(Gamestate.INGAME)) {
+        if (!gamestate.equals(Gamestate.INGAME)) {
             event.setCancelled(true);
             return;
         }
 
-        if(event.getDamager() instanceof Arrow) {
-            if(event.getEntity() instanceof Player) {
+        if (event.getDamager() instanceof Arrow) {
+            if (event.getEntity() instanceof Player) {
                 Arrow arrow = (Arrow) event.getDamager();
 
-                if(arrow.getShooter() instanceof Player) {
+                if (arrow.getShooter() instanceof Player) {
 
                     Player damager = (Player) arrow.getShooter();
                     Player victim = (Player) event.getEntity();
@@ -45,7 +44,7 @@ public class DamageListener implements Listener {
                         return;
                     }
 
-                    if(damageGamePlayer.getTeam().equals(victimGamePlayer.getTeam())) {
+                    if (damageGamePlayer.getTeam().equals(victimGamePlayer.getTeam())) {
                         event.setCancelled(true);
                         return;
                     }
@@ -56,8 +55,8 @@ public class DamageListener implements Listener {
             }
         }
 
-        if(!(event.getDamager() instanceof Player)) return;
-        if(!(event.getEntity() instanceof Player)) return;
+        if (!(event.getDamager() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)) return;
 
         Player damager = (Player) event.getDamager();
         Player victim = (Player) event.getEntity();
@@ -75,7 +74,7 @@ public class DamageListener implements Listener {
             return;
         }
 
-        if(damageGamePlayer.getTeam().equals(victimGamePlayer.getTeam())) {
+        if (damageGamePlayer.getTeam().equals(victimGamePlayer.getTeam())) {
             event.setCancelled(true);
             return;
         }
@@ -89,12 +88,11 @@ public class DamageListener implements Listener {
 
         Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
 
-        if(!gamestate.equals(Gamestate.INGAME)) {
+        if (!gamestate.equals(Gamestate.INGAME)) {
             event.setCancelled(true);
         }
 
     }
-
 
 
 }

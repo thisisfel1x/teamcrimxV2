@@ -23,7 +23,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -110,7 +109,7 @@ public class WinDetection {
 
                         this.mlgWars.startTimerByClass(EndingTimer.class);
                     }
-                } else if(this.mlgWars.getTeamSize() > 1) {
+                } else if (this.mlgWars.getTeamSize() > 1) {
                     if (this.mlgWars.getData().getGameTeams().size() == 1) {
 
                         ScoreboardTeam winnerTeam = new ArrayList<>(this.mlgWars.getData().getGameTeams().values()).get(0);

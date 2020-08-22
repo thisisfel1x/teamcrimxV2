@@ -5,8 +5,10 @@ import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
-import de.fel1x.teamcrimx.mlgwars.utils.WinDetection;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.EntityEffect;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,7 +43,7 @@ public class MoveListener implements Listener {
             if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
                 player.teleport(location.setDirection(event.getTo().getDirection()));
             }
-        } else if(gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
+        } else if (gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
 
             Cuboid mapCuboid = this.mlgWars.getData().getMapRegion();
             Location middle = Spawns.SPECTATOR.getLocation();

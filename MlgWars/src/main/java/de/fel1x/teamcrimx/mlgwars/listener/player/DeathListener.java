@@ -3,22 +3,18 @@ package de.fel1x.teamcrimx.mlgwars.listener.player;
 import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
-import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
-import de.fel1x.teamcrimx.mlgwars.objects.ScoreboardTeam;
 import de.fel1x.teamcrimx.mlgwars.scoreboard.MlgWarsScoreboard;
 import de.fel1x.teamcrimx.mlgwars.utils.WinDetection;
 import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class DeathListener implements Listener {
@@ -44,32 +40,32 @@ public class DeathListener implements Listener {
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
-        if(gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
+        if (gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
 
             if (player.getKiller() != null) {
                 killer = player.getKiller();
             } else if (this.mlgWars.getData().getLastHit().get(player) != null) {
                 killer = this.mlgWars.getData().getLastHit().get(player);
-            } else if(player.hasMetadata("lastZombieHit")) {
+            } else if (player.hasMetadata("lastZombieHit")) {
                 killer = Bukkit.getPlayer(player.getMetadata("lastZombieHit").get(0).asString());
             } else {
                 killer = null;
             }
 
-            if(killer != null && killer.getName().equalsIgnoreCase(player.getName())) {
+            if (killer != null && killer.getName().equalsIgnoreCase(player.getName())) {
                 killer = null;
             }
 
-            if(killer != null) {
+            if (killer != null) {
 
                 CoinsAPI coinsAPI = new CoinsAPI(killer.getUniqueId());
                 coinsAPI.addCoins(100);
 
                 GamePlayer killerGamePlayer = new GamePlayer(killer, true);
 
-                if(killerGamePlayer.getSelectedKit() == Kit.KANGAROO) {
+                if (killerGamePlayer.getSelectedKit() == Kit.KANGAROO) {
                     int currentEssences = 0;
-                    if(killer.hasMetadata("essence")) {
+                    if (killer.hasMetadata("essence")) {
                         currentEssences = killer.getMetadata("essence").get(0).asInt();
                     }
                     killer.setMetadata("essence", new FixedMetadataValue(this.mlgWars, currentEssences + 2));
@@ -77,7 +73,7 @@ public class DeathListener implements Listener {
 
                 int gameKills;
 
-                if(killer.hasMetadata("kills")) {
+                if (killer.hasMetadata("kills")) {
                     gameKills = killer.getMetadata("kills").get(0).asInt() + 1;
                 } else {
                     gameKills = 1;
@@ -98,7 +94,7 @@ public class DeathListener implements Listener {
                 event.setDeathMessage(this.mlgWars.getPrefix() + player.getDisplayName() + " §7ist gestorben");
             }
 
-            if(DisguiseAPI.isDisguised(player)) {
+            if (DisguiseAPI.isDisguised(player)) {
                 DisguiseAPI.undisguiseToAll(player);
             }
 
@@ -118,22 +114,22 @@ public class DeathListener implements Listener {
 
             String playersLeftMessage = null;
 
-            if(this.mlgWars.getTeamSize() > 1) {
-                if(player.hasMetadata("team")) {
+            if (this.mlgWars.getTeamSize() > 1) {
+                if (player.hasMetadata("team")) {
                     int team = player.getMetadata("team").get(0).asInt();
                     this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().remove(player);
 
-                    if(this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().isEmpty()) {
+                    if (this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().isEmpty()) {
                         this.mlgWars.getData().getGameTeams().remove(team);
                     }
                     playersLeftMessage = "§a" + playersLeft + " Spieler verbleiben §8(§a"
                             + this.mlgWars.getData().getGameTeams().size() + " Teams§8)";
                 }
-            } else if(this.mlgWars.getTeamSize() == 1) {
+            } else if (this.mlgWars.getTeamSize() == 1) {
                 playersLeftMessage = "§a" + playersLeft + " Spieler verbleiben";
             }
 
-            if(playersLeftMessage != null && playersLeft > 1) {
+            if (playersLeftMessage != null && playersLeft > 1) {
                 Bukkit.broadcastMessage(this.mlgWars.getPrefix() + playersLeftMessage);
             }
 

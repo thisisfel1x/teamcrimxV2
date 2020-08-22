@@ -18,7 +18,7 @@ public class FireworkGadget implements ICosmetic {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§d§lFROHES NEUES", ""
         };
     }
@@ -85,7 +85,7 @@ public class FireworkGadget implements ICosmetic {
         int slot = (player.hasPermission("crimxlobby.vip") ? 2 : 4);
 
         player.getInventory().setItem(slot, new ItemBuilder(Material.STICK)
-                .setName("§8● "+ this.getCosmeticName())
+                .setName("§8● " + this.getCosmeticName())
                 .setLore(this.getCosmeticDescription())
                 .addGlow()
                 .toItemStack());

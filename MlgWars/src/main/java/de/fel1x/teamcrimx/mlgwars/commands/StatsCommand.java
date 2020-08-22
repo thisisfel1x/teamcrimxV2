@@ -23,20 +23,21 @@ public class StatsCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String string, String[] args) {
 
-        if(!(commandSender instanceof Player)) return false;
+        if (!(commandSender instanceof Player)) return false;
 
         Player player = (Player) commandSender;
         GamePlayer gamePlayer;
 
         try {
-            if(args.length == 1) {
+            if (args.length == 1) {
                 player.sendMessage(this.mlgWars.getPrefix() + "§7Statistiken von anderen Spielern können momentan " +
                         "§cnoch nicht §7eingesehen werden!");
                 return false;
             } else {
                 gamePlayer = new GamePlayer(player, true);
                 Bukkit.getScheduler().runTaskAsynchronously(this.mlgWars, () -> {
-                    String ranking = String.format(Locale.GERMANY, "%d", gamePlayer.getRankingPosition());;
+                    String ranking = String.format(Locale.GERMANY, "%d", gamePlayer.getRankingPosition());
+                    ;
 
                     int kills = (int) gamePlayer.getObjectFromMongoDocument("kills", MongoDBCollection.MLGWARS);
                     int deaths = (int) gamePlayer.getObjectFromMongoDocument("deaths", MongoDBCollection.MLGWARS);
@@ -44,7 +45,7 @@ public class StatsCommand implements CommandExecutor {
                     int gamesWon = (int) gamePlayer.getObjectFromMongoDocument("gamesWon", MongoDBCollection.MLGWARS);
 
                     double kd;
-                    if(deaths > 0) {
+                    if (deaths > 0) {
                         double a = ((double) kills / deaths) * 100;
                         kd = Math.round(a);
                     } else {
@@ -52,7 +53,7 @@ public class StatsCommand implements CommandExecutor {
                     }
 
                     double winrate = 0;
-                    if(gamesPlayed > 0) {
+                    if (gamesPlayed > 0) {
                         double a = ((double) gamesWon / gamesPlayed) * 100;
                         winrate = Math.round(a);
                     }

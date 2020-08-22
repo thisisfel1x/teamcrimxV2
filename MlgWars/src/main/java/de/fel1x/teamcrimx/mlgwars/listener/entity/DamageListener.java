@@ -26,51 +26,51 @@ public class DamageListener implements Listener {
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
-        if(gamestate != Gamestate.INGAME) {
+        if (gamestate != Gamestate.INGAME) {
             event.setCancelled(true);
             return;
         }
 
-        if(!(event.getEntity() instanceof Player)) {
+        if (!(event.getEntity() instanceof Player)) {
             return;
         }
 
         Player target = (Player) event.getEntity();
 
-        if(event.getDamager() instanceof CustomZombie) {
+        if (event.getDamager() instanceof CustomZombie) {
             target.setMetadata("lastZombieHit", new FixedMetadataValue(this.mlgWars, event.getEntity().getCustomName()));
             return;
         }
 
-        if(!(event.getDamager() instanceof Player) && !(event.getDamager() instanceof Projectile)) {
+        if (!(event.getDamager() instanceof Player) && !(event.getDamager() instanceof Projectile)) {
             return;
         }
 
         Player damager = null;
 
-        if(event.getDamager() instanceof Player) {
+        if (event.getDamager() instanceof Player) {
             damager = (Player) event.getDamager();
-        } else if(event.getDamager() instanceof Projectile) {
+        } else if (event.getDamager() instanceof Projectile) {
             Projectile projectile = (Projectile) event.getDamager();
-            if(projectile.getShooter() instanceof Player) {
+            if (projectile.getShooter() instanceof Player) {
                 damager = (Player) projectile.getShooter();
             }
         }
 
-        if(damager == null) {
+        if (damager == null) {
             return;
         }
 
         GamePlayer gameDamager = new GamePlayer(damager);
         GamePlayer gameTarget = new GamePlayer(target);
 
-        if((gameDamager.isSpectator() && gameTarget.isPlayer()) || (gameDamager.isPlayer() && gameTarget.isSpectator())) {
+        if ((gameDamager.isSpectator() && gameTarget.isPlayer()) || (gameDamager.isPlayer() && gameTarget.isSpectator())) {
             event.setCancelled(true);
             return;
         }
 
-        if(this.mlgWars.getTeamSize() > 1) {
-            if(target.hasMetadata("team") && damager.hasMetadata("team")) {
+        if (this.mlgWars.getTeamSize() > 1) {
+            if (target.hasMetadata("team") && damager.hasMetadata("team")) {
 
                 int targetTeam = target.getMetadata("team").get(0).asInt();
                 int damagerTeam = damager.getMetadata("team").get(0).asInt();
@@ -91,29 +91,29 @@ public class DamageListener implements Listener {
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
-        if(event.getEntity() instanceof Player) {
+        if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             GamePlayer gamePlayer = new GamePlayer(player);
-            if(gamePlayer.isSpectator()) {
+            if (gamePlayer.isSpectator()) {
                 event.setCancelled(true);
                 return;
             }
         }
 
-        if(gamestate != Gamestate.INGAME) {
+        if (gamestate != Gamestate.INGAME) {
             event.setCancelled(gamestate != Gamestate.PREGAME || (event.getCause() != EntityDamageEvent.DamageCause.VOID
                     && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
                     && event.getCause() != EntityDamageEvent.DamageCause.BLOCK_EXPLOSION));
         }
 
-        if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
+        if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
                 || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
             event.setDamage(0.1D);
         }
 
-        if(this.mlgWars.isLabor()) {
-            if(event.getEntity() instanceof Player) {
-                if(event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK
+        if (this.mlgWars.isLabor()) {
+            if (event.getEntity() instanceof Player) {
+                if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK
                         && event.getCause() != EntityDamageEvent.DamageCause.VOID) {
                     event.setDamage(0.1D);
                 }

@@ -25,21 +25,21 @@ public class BlockPlaceListener implements Listener {
 
         Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
 
-        if(!gamestate.equals(Gamestate.INGAME)) {
+        if (!gamestate.equals(Gamestate.INGAME)) {
             event.setCancelled(true);
             return;
         }
 
-        if(!gamePlayer.isPlayer()) {
+        if (!gamePlayer.isPlayer()) {
             event.setCancelled(true);
             return;
         }
 
-        if(event.getBlock().getState() instanceof Banner) {
+        if (event.getBlock().getState() instanceof Banner) {
             event.setCancelled(true);
         }
 
-        if(data.getBlueSpawnCuboid().contains(block) || data.getRedSpawnCuboid().contains(block)) {
+        if (data.getBlueSpawnCuboid().contains(block) || data.getRedSpawnCuboid().contains(block)) {
             player.sendMessage("§cDu darfst nicht im Spawnbereich bauen!");
             event.setCancelled(true);
             return;

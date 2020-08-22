@@ -4,8 +4,9 @@ import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
-import org.bukkit.*;
-import org.bukkit.entity.Fish;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +35,7 @@ public class FishListener implements Listener {
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
-        if(gamestate != Gamestate.PREGAME && gamestate != Gamestate.INGAME) return;
+        if (gamestate != Gamestate.PREGAME && gamestate != Gamestate.INGAME) return;
 
         if (kit == Kit.GRAPPLER) {
             if ((event.getState().equals(PlayerFishEvent.State.IN_GROUND)) ||
@@ -64,7 +65,7 @@ public class FishListener implements Listener {
                     }
                 }
             }
-        } else if(kit == Kit.PULLER) {
+        } else if (kit == Kit.PULLER) {
             if (event.getCaught() instanceof Player) {
                 Player caughtPlayer = (Player) event.getCaught();
 

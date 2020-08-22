@@ -28,7 +28,7 @@ public class LabyModPlayerJoinListener implements Listener {
         player.setMetadata("labymod", new FixedMetadataValue(this.crimxLobby, true));
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            if(!onlinePlayer.hasMetadata("labymod")) {
+            if (!onlinePlayer.hasMetadata("labymod")) {
                 continue;
             }
 
@@ -41,7 +41,7 @@ public class LabyModPlayerJoinListener implements Listener {
 
             String sortId;
 
-            if(sortIdInt < 10) {
+            if (sortIdInt < 10) {
                 sortId = String.format("%02d", sortIdInt);
             } else {
                 sortId = String.valueOf(sortIdInt);
@@ -55,7 +55,7 @@ public class LabyModPlayerJoinListener implements Listener {
 
             Team team = onlinePlayer.getScoreboard().getTeam(playerPermGroup);
 
-            if(team == null) {
+            if (team == null) {
                 team = onlinePlayer.getScoreboard().registerNewTeam(playerPermGroup);
             }
 

@@ -30,11 +30,11 @@ public class QuitListener implements Listener {
                 this.crimxLobby.getData().getPlayerHiderState().get(player.getUniqueId()),
                 MongoDBCollection.LOBBY);
 
-        if(lobbyPlayer.isInBuild()) {
+        if (lobbyPlayer.isInBuild()) {
             lobbyPlayer.removeFromBuild();
         }
 
-        if(lobbyPlayer.isInJumpAndRun()) {
+        if (lobbyPlayer.isInJumpAndRun()) {
             lobbyPlayer.endJumpAndRun();
         }
 

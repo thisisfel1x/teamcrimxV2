@@ -30,10 +30,6 @@ public class Data {
     private final Map<Integer, ScoreboardTeam> gameTeams;
 
     private final Map<UUID, Boolean> playerGg;
-
-    private Cuboid middleRegion;
-    private Cuboid mapRegion;
-
     // KIT-STORAGE
     private final Map<UUID, ArrayList<Block>> placedExploderTnt;
     private final Map<UUID, BukkitRunnable> thorTask;
@@ -43,6 +39,8 @@ public class Data {
     private final Map<UUID, ArrayList<BukkitRunnable>> eggTask;
     private final Map<UUID, ArrayList<BukkitRunnable>> turtleTask;
     private final Map<UUID, ArrayList<BukkitRunnable>> csgoTasks;
+    private Cuboid middleRegion;
+    private Cuboid mapRegion;
 
     public Data() {
         this.players = new ArrayList<>();

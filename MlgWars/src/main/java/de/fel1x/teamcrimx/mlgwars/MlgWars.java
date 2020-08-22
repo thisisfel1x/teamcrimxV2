@@ -58,13 +58,17 @@ public final class MlgWars extends JavaPlugin {
 
     private ITimer iTimer;
 
+    public static MlgWars getInstance() {
+        return instance;
+    }
+
     @Override
     public void onEnable() {
 
         instance = this;
 
         File configFile = new File(this.getDataFolder(), "config.yml");
-        if(!configFile.exists()) {
+        if (!configFile.exists()) {
             this.saveDefaultConfig();
         }
 
@@ -89,7 +93,7 @@ public final class MlgWars extends JavaPlugin {
         this.registerCommands();
         this.registerListener();
 
-        if(!this.isNoMap() && !this.isInSetup()) {
+        if (!this.isNoMap() && !this.isInSetup()) {
             this.iTimer = new IdleTimer();
             this.iTimer.start();
         }
@@ -112,7 +116,7 @@ public final class MlgWars extends JavaPlugin {
         }
 
         File file = files[rand.nextInt(files.length)];
-        String name =  FilenameUtils.removeExtension(file.getName());
+        String name = FilenameUtils.removeExtension(file.getName());
 
         Size size;
 
@@ -199,10 +203,6 @@ public final class MlgWars extends JavaPlugin {
         return StreamSupport.stream(this.crimxAPI.getMongoDB().getMlgWarsCollection().find()
                 .sort(Sorts.descending("gamesWon")).limit(limit).spliterator(), false)
                 .collect(Collectors.toList());
-    }
-
-    public static MlgWars getInstance() {
-        return instance;
     }
 
     public String getPrefix() {

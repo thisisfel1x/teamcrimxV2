@@ -17,8 +17,6 @@ import java.util.List;
 
 public class TeamInventory implements InventoryProvider {
 
-    private final MlgWars mlgWars = MlgWars.getInstance();
-
     public static final SmartInventory TEAM_INVENTORY = SmartInventory.builder()
             .id("teamInv")
             .provider(new TeamInventory())
@@ -26,6 +24,7 @@ public class TeamInventory implements InventoryProvider {
             .title("§8● §e§lTeams")
             .manager(MlgWars.getInstance().getInventoryManager())
             .build();
+    private final MlgWars mlgWars = MlgWars.getInstance();
 
     @Override
     public void init(Player player, InventoryContents contents) {
@@ -35,7 +34,7 @@ public class TeamInventory implements InventoryProvider {
             lore.add("");
             lore.add("§7Spieler");
 
-            if(scoreboardTeam.getTeamPlayers() != null) {
+            if (scoreboardTeam.getTeamPlayers() != null) {
                 for (Player teamPlayer : scoreboardTeam.getTeamPlayers()) {
                     lore.add(" §8- " + teamPlayer.getDisplayName());
                 }
@@ -48,7 +47,7 @@ public class TeamInventory implements InventoryProvider {
                             .toItemStack(),
                     event -> {
 
-                        if(scoreboardTeam.getTeamPlayers().size() >= scoreboardTeam.getMaxPlayers()) {
+                        if (scoreboardTeam.getTeamPlayers().size() >= scoreboardTeam.getMaxPlayers()) {
                             player.sendMessage(this.mlgWars.getPrefix() + "§cDieses Team ist bereits voll!");
                         } else {
 
@@ -65,7 +64,7 @@ public class TeamInventory implements InventoryProvider {
         int state = contents.property("state", 0);
         contents.setProperty("state", state + 1);
 
-        if(state % 5 != 0) {
+        if (state % 5 != 0) {
             Bukkit.broadcastMessage("ab");
             return;
         }
@@ -87,7 +86,7 @@ public class TeamInventory implements InventoryProvider {
                             .toItemStack(),
                     event -> {
 
-                        if(scoreboardTeam.getTeamPlayers().size() >= scoreboardTeam.getMaxPlayers()) {
+                        if (scoreboardTeam.getTeamPlayers().size() >= scoreboardTeam.getMaxPlayers()) {
                             player.sendMessage(this.mlgWars.getPrefix() + "§cDieses Team ist bereits voll!");
                         } else {
 

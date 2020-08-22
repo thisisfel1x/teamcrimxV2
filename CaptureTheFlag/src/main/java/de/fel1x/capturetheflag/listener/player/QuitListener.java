@@ -46,15 +46,15 @@ public class QuitListener implements Listener {
 
             case INGAME:
 
-                if(gamePlayer.isPlayer()) {
+                if (gamePlayer.isPlayer()) {
                     event.setQuitMessage("§c« " + player.getDisplayName() + " §7hat das Spiel verlassen");
                 }
 
-                if(Teams.RED.getTeamPlayers().size() == 0) {
+                if (Teams.RED.getTeamPlayers().size() == 0) {
 
                     Utils.win(Teams.BLUE);
 
-                } else if(Teams.BLUE.getTeamPlayers().size() == 0) {
+                } else if (Teams.BLUE.getTeamPlayers().size() == 0) {
 
                     Utils.win(Teams.RED);
 
@@ -67,7 +67,7 @@ public class QuitListener implements Listener {
                     return;
                 }
 
-                if(Bukkit.getOnlinePlayers().size() == 0) {
+                if (Bukkit.getOnlinePlayers().size() == 0) {
                     Bukkit.getServer().shutdown();
                     return;
                 }
@@ -76,7 +76,7 @@ public class QuitListener implements Listener {
 
             case ENDING:
 
-                if(Bukkit.getOnlinePlayers().size() == 0) {
+                if (Bukkit.getOnlinePlayers().size() == 0) {
                     Bukkit.getServer().shutdown();
                     return;
                 }

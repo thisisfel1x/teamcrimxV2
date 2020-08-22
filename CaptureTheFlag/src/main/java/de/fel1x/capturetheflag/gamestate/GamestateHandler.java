@@ -10,11 +10,11 @@ public class GamestateHandler {
 
     }
 
-    public void setGamestate(Gamestate gamestate) {
-        this.gamestate = gamestate;
-    }
-
     public Gamestate getGamestate() {
         return gamestate;
+    }
+
+    public void setGamestate(Gamestate gamestate) {
+        this.gamestate = gamestate;
     }
 }

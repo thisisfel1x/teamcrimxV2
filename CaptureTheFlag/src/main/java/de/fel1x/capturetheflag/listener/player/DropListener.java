@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 
 public class DropListener implements Listener {
 
@@ -19,12 +18,12 @@ public class DropListener implements Listener {
 
         Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
 
-        if(!gamePlayer.isPlayer()) {
+        if (!gamePlayer.isPlayer()) {
             event.setCancelled(true);
             return;
         }
 
-        if(!gamestate.equals(Gamestate.INGAME)) {
+        if (!gamestate.equals(Gamestate.INGAME)) {
             event.setCancelled(true);
         }
 

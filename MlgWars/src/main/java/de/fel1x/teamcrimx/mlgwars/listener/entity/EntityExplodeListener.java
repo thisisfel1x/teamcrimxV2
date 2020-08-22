@@ -43,11 +43,11 @@ public class EntityExplodeListener implements Listener {
 
         Entity entity = event.getEntity();
 
-        if(this.mlgWars.isLabor()) {
-            if(entity instanceof TNTPrimed) {
-                if(entity.hasMetadata("velocity")) {
+        if (this.mlgWars.isLabor()) {
+            if (entity instanceof TNTPrimed) {
+                if (entity.hasMetadata("velocity")) {
                     for (Entity nearbyEntity : entity.getNearbyEntities(3, 3, 3)) {
-                        if(nearbyEntity instanceof Player) {
+                        if (nearbyEntity instanceof Player) {
                             Player player = (Player) nearbyEntity;
                             player.setVelocity(player.getLocation().getDirection().multiply(5D).setY(1.5D));
                         } else {

@@ -26,7 +26,7 @@ public class DeathListener implements Listener {
 
         event.setDeathMessage(null);
 
-        if(!gamePlayer.isPlayer()) {
+        if (!gamePlayer.isPlayer()) {
             return;
         }
 
@@ -36,7 +36,7 @@ public class DeathListener implements Listener {
 
         event.getDrops().clear();
 
-        if(gamestate.equals(Gamestate.INGAME)) {
+        if (gamestate.equals(Gamestate.INGAME)) {
 
             if (player.equals(data.getRedFlagHolder())) {
 
@@ -91,7 +91,7 @@ public class DeathListener implements Listener {
 
         Player attacker = null;
 
-        if(data.getLastHit().get(player) != null) {
+        if (data.getLastHit().get(player) != null) {
 
             attacker = data.getLastHit().get(player);
 
@@ -101,7 +101,7 @@ public class DeathListener implements Listener {
 
         }
 
-        if(attacker != null) {
+        if (attacker != null) {
 
             event.setDeathMessage(player.getDisplayName() + " §7wurde von " + attacker.getDisplayName() + " §7getötet");
 

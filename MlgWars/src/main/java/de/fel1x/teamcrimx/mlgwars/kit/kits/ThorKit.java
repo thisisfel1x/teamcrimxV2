@@ -14,7 +14,7 @@ public class ThorKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Blitz hier, Blitz da...", "§7...Thor ist da!"
         };
     }

@@ -64,7 +64,7 @@ public class NPCInventory implements InventoryProvider {
         long lastRewardString = crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).getLastReward();
 
         String nowstring = new SimpleDateFormat("dd.MM.yyyy").format(new Date(System.currentTimeMillis()));
-        String lastReward =  new SimpleDateFormat("dd.MM.yyyy").format(new Date(lastRewardString));
+        String lastReward = new SimpleDateFormat("dd.MM.yyyy").format(new Date(lastRewardString));
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -75,7 +75,7 @@ public class NPCInventory implements InventoryProvider {
             boolean canGet = lastRewardDate.before(nowDate);
 
             ItemBuilder itemBuilder = new ItemBuilder(Material.GOLD_INGOT).setName("§aTägliche Belohnung");
-            if(canGet) {
+            if (canGet) {
                 itemBuilder.addEnchant(Enchantment.ARROW_DAMAGE, 1).addGlow();
                 itemBuilder.setLore(" ", "§7Hole dir deine §etägliche Belohnung §7ab", " ");
             } else {
@@ -83,7 +83,7 @@ public class NPCInventory implements InventoryProvider {
             }
 
             contents.set(1, 5, ClickableItem.of(itemBuilder.toItemStack(), event -> {
-                if(canGet) {
+                if (canGet) {
                     player.sendMessage(crimxLobby.getPrefix() + "§7Du hast §a100 Coins §7durch die tägliche Belohnung erhalten!");
                     crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setLastReward(System.currentTimeMillis());
                     lobbyPlayer.get().saveObjectInDocument("lastReward", System.currentTimeMillis(), MongoDBCollection.LOBBY);

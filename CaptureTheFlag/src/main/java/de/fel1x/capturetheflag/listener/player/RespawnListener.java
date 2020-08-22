@@ -22,9 +22,10 @@ public class RespawnListener implements Listener {
 
         switch (gamestate) {
 
-            case INGAME: case PREGAME:
+            case INGAME:
+            case PREGAME:
 
-                if(gamePlayer.isPlayer()) {
+                if (gamePlayer.isPlayer()) {
 
                     event.setRespawnLocation(gamePlayer.getRespawnLocation());
                     player.playSound(player.getLocation(), Sound.WOLF_HURT, 20, 15);

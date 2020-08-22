@@ -36,8 +36,8 @@ public class ChatListener implements Listener {
 
         IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(iPermissionUser);
 
-        if(currentState == Gamestate.DELAY || currentState == Gamestate.PREGAME || currentState == Gamestate.INGAME) {
-            if(gamePlayer.isSpectator()) {
+        if (currentState == Gamestate.DELAY || currentState == Gamestate.PREGAME || currentState == Gamestate.INGAME) {
+            if (gamePlayer.isSpectator()) {
                 String format = "§8§o[§4✖§8] " + ChatColor.translateAlternateColorCodes('&', permissionGroup.getDisplay()) + player.getName() + " §8» §f" + event.getMessage();
                 for (Player spectator : this.mlgWars.getData().getPlayers()) {
                     spectator.sendMessage(format);
@@ -50,22 +50,22 @@ public class ChatListener implements Listener {
 
         if (currentState.equals(Gamestate.ENDING)) {
             String message = event.getMessage().toLowerCase();
-                if (message.equalsIgnoreCase("gg")
-                        || message.equalsIgnoreCase("bg")) {
+            if (message.equalsIgnoreCase("gg")
+                    || message.equalsIgnoreCase("bg")) {
 
-                    int coins = (message.equalsIgnoreCase("gg") ? 10 : -10);
+                int coins = (message.equalsIgnoreCase("gg") ? 10 : -10);
 
-                    if(!this.mlgWars.getData().getPlayerGg().get(player.getUniqueId())) {
-                        this.mlgWars.getData().getPlayerGg().put(player.getUniqueId(), true);
+                if (!this.mlgWars.getData().getPlayerGg().get(player.getUniqueId())) {
+                    this.mlgWars.getData().getPlayerGg().put(player.getUniqueId(), true);
 
-                        player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast §e" + coins + " Coins §7erhalten!");
-                        player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 1.75f);
+                    player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast §e" + coins + " Coins §7erhalten!");
+                    player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 1.75f);
 
-                        CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
-                        coinsAPI.addCoins(coins);
+                    CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
+                    coinsAPI.addCoins(coins);
 
-                    }
                 }
             }
         }
+    }
 }

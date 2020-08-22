@@ -19,7 +19,7 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler
     public void on(InventoryClickEvent event) {
-        if(!(event.getWhoClicked() instanceof Player)) return;
+        if (!(event.getWhoClicked() instanceof Player)) return;
 
         Player player = (Player) event.getWhoClicked();
         GamePlayer gamePlayer = new GamePlayer(player);
@@ -28,12 +28,16 @@ public class InventoryClickListener implements Listener {
 
         switch (gamestate) {
 
-            case IDLE: case LOBBY: case DELAY: case ENDING:
+            case IDLE:
+            case LOBBY:
+            case DELAY:
+            case ENDING:
                 event.setCancelled(true);
                 break;
 
-            case PREGAME: case INGAME:
-                if(gamePlayer.isSpectator()) {
+            case PREGAME:
+            case INGAME:
+                if (gamePlayer.isSpectator()) {
                     event.setCancelled(true);
                 }
         }

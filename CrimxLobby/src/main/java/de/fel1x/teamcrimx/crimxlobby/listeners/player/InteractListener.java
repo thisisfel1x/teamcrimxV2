@@ -1,7 +1,6 @@
 package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
-import de.fel1x.teamcrimx.crimxlobby.cosmetics.Cosmetic;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import de.fel1x.teamcrimx.crimxlobby.inventories.CosmeticInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.MinigameInventory;
@@ -9,7 +8,6 @@ import de.fel1x.teamcrimx.crimxlobby.inventories.NavigatorInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.SettingsInventory;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
@@ -47,7 +45,7 @@ public class InteractListener implements Listener {
 
         if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
 
-            if(lobbyPlayer.isInWaterMLG() && event.getMaterial().equals(Material.WATER_BUCKET)) {
+            if (lobbyPlayer.isInWaterMLG() && event.getMaterial().equals(Material.WATER_BUCKET)) {
                 return;
             }
 
@@ -62,9 +60,9 @@ public class InteractListener implements Listener {
                         break;
 
                     case INK_SACK:
-                        if(lobbyPlayer.isInJumpAndRun()) {
+                        if (lobbyPlayer.isInJumpAndRun()) {
                             lobbyPlayer.endJumpAndRun();
-                        } else if(lobbyPlayer.isInWaterMLG()) {
+                        } else if (lobbyPlayer.isInWaterMLG()) {
                             lobbyPlayer.endWaterMLG();
                         } else {
                             lobbyPlayer.updatePlayerHiderState();
@@ -84,14 +82,14 @@ public class InteractListener implements Listener {
                         break;
 
                     case BLAZE_ROD:
-                        if(iCosmetic.getCosmeticMaterial() == null) {
+                        if (iCosmetic.getCosmeticMaterial() == null) {
                             return;
                         }
 
-                        if(player.hasMetadata("gadgetDelay")) {
+                        if (player.hasMetadata("gadgetDelay")) {
                             long delay = player.getMetadata("gadgetDelay").get(0).asLong();
 
-                            if(delay > System.currentTimeMillis()) {
+                            if (delay > System.currentTimeMillis()) {
                                 player.sendMessage(this.crimxLobby.getPrefix() + "§7Bitte warte einen Moment");
                                 return;
                             }
@@ -100,21 +98,21 @@ public class InteractListener implements Listener {
                         player.setMetadata("gadgetDelay", new FixedMetadataValue(this.crimxLobby,
                                 System.currentTimeMillis() + (1000 * 4)));
 
-                        if(iCosmetic.getCosmeticMaterial() == Material.BLAZE_ROD) {
+                        if (iCosmetic.getCosmeticMaterial() == Material.BLAZE_ROD) {
                             Snowball snowball = player.launchProjectile(Snowball.class);
                             snowball.setMetadata("funGun", new FixedMetadataValue(this.crimxLobby, true));
                         }
                         break;
 
                     case STICK:
-                        if(iCosmetic.getCosmeticMaterial() == null) {
+                        if (iCosmetic.getCosmeticMaterial() == null) {
                             return;
                         }
 
-                        if(player.hasMetadata("gadgetDelay")) {
+                        if (player.hasMetadata("gadgetDelay")) {
                             long delay = player.getMetadata("gadgetDelay").get(0).asLong();
 
-                            if(delay > System.currentTimeMillis()) {
+                            if (delay > System.currentTimeMillis()) {
                                 player.sendMessage(this.crimxLobby.getPrefix() + "§7Bitte warte einen Moment");
                                 return;
                             }
@@ -123,7 +121,7 @@ public class InteractListener implements Listener {
                         player.setMetadata("gadgetDelay", new FixedMetadataValue(this.crimxLobby,
                                 System.currentTimeMillis() + (1000 * 5)));
 
-                        if(iCosmetic.getCosmeticMaterial() == Material.FIREWORK) {
+                        if (iCosmetic.getCosmeticMaterial() == Material.FIREWORK) {
                             Snowball snowball = player.launchProjectile(Snowball.class);
                             snowball.setMetadata("firework", new FixedMetadataValue(this.crimxLobby, true));
                         }

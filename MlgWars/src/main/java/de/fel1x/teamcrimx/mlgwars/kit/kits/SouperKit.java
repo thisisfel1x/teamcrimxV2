@@ -14,7 +14,7 @@ public class SouperKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Spawne Brünhilde die Kuh", "§7und hole ihre leckeren Suppen ab!"
         };
     }

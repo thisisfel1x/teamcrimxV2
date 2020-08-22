@@ -17,8 +17,6 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class KitInventory implements InventoryProvider {
 
-    private final MlgWarsScoreboard mlgWarsScoreboard = new MlgWarsScoreboard();
-
     public static final SmartInventory KIT_OVERVIEW_INVENTORY = SmartInventory.builder()
             .id("customInventory")
             .provider(new KitInventory())
@@ -26,6 +24,7 @@ public class KitInventory implements InventoryProvider {
             .title("§8● §e§lKits")
             .manager(MlgWars.getInstance().getInventoryManager())
             .build();
+    private final MlgWarsScoreboard mlgWarsScoreboard = new MlgWarsScoreboard();
 
     @Override
     public void init(Player player, InventoryContents contents) {
@@ -43,27 +42,27 @@ public class KitInventory implements InventoryProvider {
                 String boughtString = (bought ? "§aGekauft" : "§cNicht gekauft");
 
                 contents.set(row, column, ClickableItem.of(new ItemBuilder(iKit.getKitMaterial())
-                        .setName("§8● §a" + iKit.getKitName() + " §8» " + boughtString)
-                        .setLore(iKit.getKitDescription()).toItemStack(),
+                                .setName("§8● §a" + iKit.getKitName() + " §8» " + boughtString)
+                                .setLore(iKit.getKitDescription()).toItemStack(),
                         event -> {
 
-                    if(bought) {
-                        gamePlayer.setSelectedKit(kit);
-                        this.mlgWarsScoreboard.updateBoard(player, "§8● §6" + iKit.getKitName(), "kit", "§6");
+                            if (bought) {
+                                gamePlayer.setSelectedKit(kit);
+                                this.mlgWarsScoreboard.updateBoard(player, "§8● §6" + iKit.getKitName(), "kit", "§6");
 
-                        player.playSound(player.getLocation(), Sound.ORB_PICKUP, 5, 0.5f);
-                        player.sendMessage(MlgWars.getInstance().getPrefix() + "§7Du nutzt nun das §e[" + iKit.getKitName() + "] §7Kit!");
-                        player.closeInventory();
-                    } else {
-                        player.setMetadata("toBuy", new FixedMetadataValue(MlgWars.getInstance(), kit));
-                        BuyInventory.INVENTORY.open(player);
-                    }
+                                player.playSound(player.getLocation(), Sound.ORB_PICKUP, 5, 0.5f);
+                                player.sendMessage(MlgWars.getInstance().getPrefix() + "§7Du nutzt nun das §e[" + iKit.getKitName() + "] §7Kit!");
+                                player.closeInventory();
+                            } else {
+                                player.setMetadata("toBuy", new FixedMetadataValue(MlgWars.getInstance(), kit));
+                                BuyInventory.INVENTORY.open(player);
+                            }
 
                         }));
 
                 column++;
 
-                if(column == 9) {
+                if (column == 9) {
                     column = 0;
                     row++;
                 }

@@ -14,26 +14,20 @@ import java.util.Map;
 
 public class Data {
 
+    Location redSpawnLocation;
+    Location blueSpawnLocation;
     private List<Player> players;
     private List<Player> spectators;
-
     private Map<Player, Player> lastHit;
-
     private Player redFlagHolder;
     private Location redFlagLocation;
     private Location redFlagBaseLocation;
-
     private Player blueFlagHolder;
     private Location blueFlagLocation;
     private Location blueFlagBaseLocation;
-
     private List<Block> placedBlocks;
-
     private Cuboid redSpawnCuboid;
     private Cuboid blueSpawnCuboid;
-
-    Location redSpawnLocation;
-    Location blueSpawnLocation;
 
     public Data() {
 
@@ -73,25 +67,29 @@ public class Data {
         return players;
     }
 
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
     public List<Player> getSpectators() {
         return spectators;
+    }
+
+    public void setSpectators(List<Player> spectators) {
+        this.spectators = spectators;
     }
 
     public Player getBlueFlagHolder() {
         return blueFlagHolder;
     }
 
+    public void setBlueFlagHolder(Player blueFlagHolder) {
+        this.blueFlagHolder = blueFlagHolder;
+    }
+
     public Player getRedFlagHolder() {
         return redFlagHolder;
 
-    }
-
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
-
-    public void setSpectators(List<Player> spectators) {
-        this.spectators = spectators;
     }
 
     public void setRedFlagHolder(Player redFlagHolder) {
@@ -104,10 +102,6 @@ public class Data {
 
     public void setRedFlagLocation(Location redFlagLocation) {
         this.redFlagLocation = redFlagLocation;
-    }
-
-    public void setBlueFlagHolder(Player blueFlagHolder) {
-        this.blueFlagHolder = blueFlagHolder;
     }
 
     public Location getBlueFlagLocation() {

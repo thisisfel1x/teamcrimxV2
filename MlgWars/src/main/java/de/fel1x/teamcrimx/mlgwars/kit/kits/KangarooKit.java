@@ -17,7 +17,7 @@ public class KangarooKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Springe höher als die höchsten,", "§7und weiter als die weitesten!", ""
         };
     }

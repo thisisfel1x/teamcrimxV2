@@ -13,7 +13,7 @@ public class FoodListener implements Listener {
 
         Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
 
-        if(!gamestate.equals(Gamestate.INGAME)) {
+        if (!gamestate.equals(Gamestate.INGAME)) {
             event.setCancelled(true);
         }
 

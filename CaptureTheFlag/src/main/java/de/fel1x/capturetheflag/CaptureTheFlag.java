@@ -38,6 +38,10 @@ public final class CaptureTheFlag extends JavaPlugin {
 
     private InventoryManager inventoryManager;
 
+    public static CaptureTheFlag getInstance() {
+        return instance;
+    }
+
     @Override
     public void onLoad() {
         instance = this;
@@ -65,7 +69,7 @@ public final class CaptureTheFlag extends JavaPlugin {
         this.registerListener();
         this.registerCommands();
 
-        for(World world : Bukkit.getWorlds()) {
+        for (World world : Bukkit.getWorlds()) {
 
             world.getEntities().forEach(Entity::remove);
 
@@ -110,10 +114,6 @@ public final class CaptureTheFlag extends JavaPlugin {
         this.getCommand("setup").setExecutor(new SetupCommand());
         this.getCommand("start").setExecutor(new StartCommand());
 
-    }
-
-    public static CaptureTheFlag getInstance() {
-        return instance;
     }
 
     public String getPrefix() {

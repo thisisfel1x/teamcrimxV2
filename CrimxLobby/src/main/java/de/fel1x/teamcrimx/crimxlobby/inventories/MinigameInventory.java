@@ -37,7 +37,7 @@ public class MinigameInventory implements InventoryProvider {
                 .setName("§8» §bJump and Run").toItemStack(), event -> {
 
             LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
-            if(!lobbyPlayer.isInJumpAndRun()) {
+            if (!lobbyPlayer.isInJumpAndRun()) {
                 lobbyPlayer.startJumpAndRun();
             }
 

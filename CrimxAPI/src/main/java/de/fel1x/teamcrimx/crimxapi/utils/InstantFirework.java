@@ -1,13 +1,13 @@
 package de.fel1x.teamcrimx.crimxapi.utils;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class InstantFirework {
     /*

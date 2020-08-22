@@ -41,13 +41,13 @@ public class ScoreboardHandler {
 
         //player.setDisplayName("§f" + player.getName());
 
-        if(player.getScoreboard().equals(gameScoreboard)) {
+        if (player.getScoreboard().equals(gameScoreboard)) {
 
             switch (team) {
 
                 case RED:
 
-                    if(blueTeam.hasEntry(player.getName())) {
+                    if (blueTeam.hasEntry(player.getName())) {
                         blueTeam.removeEntry(player.getName());
                     }
 
@@ -59,7 +59,7 @@ public class ScoreboardHandler {
 
                 case BLUE:
 
-                    if(redTeam.hasEntry(player.getName())) {
+                    if (redTeam.hasEntry(player.getName())) {
                         redTeam.removeEntry(player.getName());
                     }
 
@@ -77,7 +77,7 @@ public class ScoreboardHandler {
 
     public void handleJoin(Player player) {
 
-        if(!player.getScoreboard().equals(gameScoreboard)) {
+        if (!player.getScoreboard().equals(gameScoreboard)) {
             player.setScoreboard(gameScoreboard);
             BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
         }
@@ -87,13 +87,13 @@ public class ScoreboardHandler {
             GamePlayer gamePlayer = new GamePlayer(current);
             Teams team = gamePlayer.getTeam();
 
-            if(team == null) return;
+            if (team == null) return;
 
             switch (team) {
 
                 case RED:
 
-                    if(blueTeam.hasEntry(current.getName())) {
+                    if (blueTeam.hasEntry(current.getName())) {
                         blueTeam.removeEntry(current.getName());
                     }
 
@@ -105,7 +105,7 @@ public class ScoreboardHandler {
 
                 case BLUE:
 
-                    if(redTeam.hasEntry(current.getName())) {
+                    if (redTeam.hasEntry(current.getName())) {
                         redTeam.removeEntry(current.getName());
                     }
 
@@ -124,11 +124,11 @@ public class ScoreboardHandler {
 
     public void handleQuit(Player player) {
 
-        if(blueTeam.hasEntry(player.getName())) {
+        if (blueTeam.hasEntry(player.getName())) {
             blueTeam.removeEntry(player.getName());
         }
 
-        if(redTeam.hasEntry(player.getName())) {
+        if (redTeam.hasEntry(player.getName())) {
             redTeam.removeEntry(player.getName());
         }
 

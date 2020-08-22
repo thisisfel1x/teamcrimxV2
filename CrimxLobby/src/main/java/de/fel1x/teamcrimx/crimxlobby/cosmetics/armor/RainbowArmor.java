@@ -7,9 +7,6 @@ import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Arrays;
 
 public class RainbowArmor implements ICosmetic {
 
@@ -20,7 +17,7 @@ public class RainbowArmor implements ICosmetic {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] { "", "§7Umso mehr RGB", "§7umso mehr FPS & Kills", "" };
+        return new String[]{"", "§7Umso mehr RGB", "§7umso mehr FPS & Kills", ""};
     }
 
     @Override
@@ -90,7 +87,7 @@ public class RainbowArmor implements ICosmetic {
     public float handleColor(float hue, float speed) {
         hue += speed;
 
-        if(hue >= 1.0f) {
+        if (hue >= 1.0f) {
             hue = 0;
         }
 

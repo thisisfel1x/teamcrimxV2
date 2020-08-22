@@ -10,7 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 
 public class PreGameTimer implements ITimer {
 
@@ -22,7 +21,7 @@ public class PreGameTimer implements ITimer {
 
     @Override
     public void start() {
-        if(!this.running) {
+        if (!this.running) {
 
             this.mlgWars.getGamestateHandler().setGamestate(Gamestate.PREGAME);
             this.running = true;
@@ -30,7 +29,14 @@ public class PreGameTimer implements ITimer {
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
 
                 switch (countdown) {
-                    case 30: case 20: case 10: case 5: case 4: case 3: case 2: case 1:
+                    case 30:
+                    case 20:
+                    case 10:
+                    case 5:
+                    case 4:
+                    case 3:
+                    case 2:
+                    case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Die Schutzzeit endet in §e"
                                 + (countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
                         Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.NOTE_BASS, 2f, 3f));
@@ -46,17 +52,17 @@ public class PreGameTimer implements ITimer {
                 this.mlgWars.getData().getPlayers().forEach(player -> {
                     GamePlayer gamePlayer = new GamePlayer(player);
 
-                    if(gamePlayer.isPlayer()) {
+                    if (gamePlayer.isPlayer()) {
 
-                        if(player.hasMetadata("team")) {
+                        if (player.hasMetadata("team")) {
                             int team = player.getMetadata("team").get(0).asInt() + 1;
                             Actionbar.sendActiobar(player, "§7Team §a#" + team);
                         }
 
-                        if(gamePlayer.getSelectedKit() == Kit.KANGAROO) {
-                            if(!this.mlgWars.getData().getKangarooTask().containsKey(player.getUniqueId())) {
+                        if (gamePlayer.getSelectedKit() == Kit.KANGAROO) {
+                            if (!this.mlgWars.getData().getKangarooTask().containsKey(player.getUniqueId())) {
                                 int currentEssences = 0;
-                                if(player.hasMetadata("essence")) {
+                                if (player.hasMetadata("essence")) {
                                     currentEssences = player.getMetadata("essence").get(0).asInt();
                                 }
                                 Actionbar.sendActiobar(player, "§6Känguru §8● §a" + currentEssences + " §7Essenzen übrig");
@@ -64,9 +70,9 @@ public class PreGameTimer implements ITimer {
                         }
                     }
 
-                    if(this.mlgWars.getData().getPlayers().size() > 1) {
+                    if (this.mlgWars.getData().getPlayers().size() > 1) {
                         Player nearest = this.getClosestEntity(player, player.getLocation());
-                        if(nearest != null) {
+                        if (nearest != null) {
                             player.setCompassTarget(nearest.getLocation());
                         }
                     }
@@ -81,23 +87,23 @@ public class PreGameTimer implements ITimer {
 
     @Override
     public void stop() {
-        if(this.running) {
+        if (this.running) {
             Bukkit.getScheduler().cancelTask(taskId);
             this.running = false;
             this.countdown = 60;
         }
     }
 
-    private Player getClosestEntity(Player owner, Location center){
+    private Player getClosestEntity(Player owner, Location center) {
         Player closestEntity = null;
         double closestDistance = 0.0;
 
-        for(Entity entity : center.getWorld().getNearbyEntities(center, 200, 200, 200)){
-            if(!(entity instanceof Player)) continue;
-            if(entity.getUniqueId().equals(owner.getUniqueId())) continue;
+        for (Entity entity : center.getWorld().getNearbyEntities(center, 200, 200, 200)) {
+            if (!(entity instanceof Player)) continue;
+            if (entity.getUniqueId().equals(owner.getUniqueId())) continue;
 
             double distance = entity.getLocation().distanceSquared(center);
-            if(closestEntity == null || distance < closestDistance){
+            if (closestEntity == null || distance < closestDistance) {
                 closestDistance = distance;
                 closestEntity = (Player) entity;
             }

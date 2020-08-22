@@ -14,7 +14,7 @@ public class ThrowerKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Werfe mit TNT um dich", "§7und verwirre deine Gegner", ""
         };
     }

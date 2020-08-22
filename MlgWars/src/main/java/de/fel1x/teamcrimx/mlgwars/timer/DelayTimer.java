@@ -13,7 +13,6 @@ import de.fel1x.teamcrimx.mlgwars.objects.ScoreboardTeam;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +28,7 @@ public class DelayTimer implements ITimer {
 
     @Override
     public void start() {
-        if(!this.running) {
+        if (!this.running) {
 
             this.mlgWars.getGamestateHandler().setGamestate(Gamestate.DELAY);
             this.running = true;
@@ -38,7 +37,7 @@ public class DelayTimer implements ITimer {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.getInventory().clear();
 
-                if(this.mlgWars.isLabor()) {
+                if (this.mlgWars.isLabor()) {
                     this.setArmor(player);
                 }
 
@@ -76,7 +75,9 @@ public class DelayTimer implements ITimer {
                             Actionbar.sendSubTitle(player, "§dTNT-Wahnsinn", 10, 30, 10);
                         });
                         break;
-                    case 3: case 2: case 1:
+                    case 3:
+                    case 2:
+                    case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Das Spiel startet in §e"
                                 + (countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
                         Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.NOTE_BASS, 1.5f, 0.75f));
@@ -96,11 +97,11 @@ public class DelayTimer implements ITimer {
                     player.setLevel(0);
                     player.setExp(0f);
 
-                    if(this.countdown <= 3) {
+                    if (this.countdown <= 3) {
                         Actionbar.sendTitle(player, (countdown == 3) ? "§a§l3"
                                 : (countdown == 2) ? "§e§l2" : (countdown == 1) ? "§c§l1" : "§a§lGO!", 0, 40, 10);
                     }
-                    if(player.hasMetadata("team")) {
+                    if (player.hasMetadata("team")) {
                         int team = player.getMetadata("team").get(0).asInt() + 1;
                         Actionbar.sendActiobar(player, "§7Team §a#" + team);
                     }
@@ -115,7 +116,7 @@ public class DelayTimer implements ITimer {
 
     @Override
     public void stop() {
-        if(this.running) {
+        if (this.running) {
             Bukkit.getScheduler().cancelTask(taskId);
             this.running = false;
             this.countdown = 60;
@@ -126,7 +127,7 @@ public class DelayTimer implements ITimer {
         List<Location> playerSpawns = this.mlgWars.getData().getPlayerSpawns();
         Collections.shuffle(playerSpawns);
 
-        if(this.mlgWars.getTeamSize() == 1) {
+        if (this.mlgWars.getTeamSize() == 1) {
             List<Player> players = this.mlgWars.getData().getPlayers();
 
             Collections.shuffle(players);
@@ -134,12 +135,12 @@ public class DelayTimer implements ITimer {
             for (int i = 0; i < players.size(); i++) {
                 players.get(i).teleport(playerSpawns.get(i));
             }
-        } else if(this.mlgWars.getTeamSize() > 1) {
+        } else if (this.mlgWars.getTeamSize() > 1) {
             List<ScoreboardTeam> teams = new ArrayList<>(this.mlgWars.getData().getGameTeams().values());
 
             for (int i = 0; i < teams.size(); i++) {
                 ScoreboardTeam currentTeam = teams.get(i);
-                if(currentTeam.getTeamPlayers().isEmpty()) {
+                if (currentTeam.getTeamPlayers().isEmpty()) {
                     this.mlgWars.getData().getGameTeams().remove(i);
                     continue;
                 }

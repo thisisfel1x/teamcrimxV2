@@ -29,7 +29,7 @@ public class RespawnListener implements Listener {
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
-        if(gamestate == Gamestate.DELAY || gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
+        if (gamestate == Gamestate.DELAY || gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
             event.setRespawnLocation(Spawns.SPECTATOR.getLocation());
             Bukkit.getScheduler().runTaskLater(this.mlgWars, () -> {
                 gamePlayer.activateSpectatorMode();

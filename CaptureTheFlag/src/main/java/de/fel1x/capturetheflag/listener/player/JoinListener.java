@@ -1,6 +1,5 @@
 package de.fel1x.capturetheflag.listener.player;
 
-import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
 import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.Data;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
@@ -41,7 +40,7 @@ public class JoinListener implements Listener {
 
                 event.setJoinMessage("§a» " + player.getDisplayName() + " §7hat das Spiel betreten!");
 
-                if(data.getPlayers().size() >= 2) {
+                if (data.getPlayers().size() >= 2) {
                     CaptureTheFlag.getInstance().getLobbyTimer().start();
                 }
 
@@ -50,7 +49,8 @@ public class JoinListener implements Listener {
 
                 break;
 
-            case PREGAME: case INGAME:
+            case PREGAME:
+            case INGAME:
 
                 gamePlayer.setSpectator();
                 player.sendMessage("§7Du bist nun Spectator");
@@ -64,7 +64,6 @@ public class JoinListener implements Listener {
                 break;
 
         }
-
 
 
     }

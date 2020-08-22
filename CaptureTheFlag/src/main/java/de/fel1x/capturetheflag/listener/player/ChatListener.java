@@ -56,13 +56,13 @@ public class ChatListener implements Listener {
                     String message = event.getMessage();
                     String[] split = null;
 
-                    if(message.startsWith("@a ")) {
+                    if (message.startsWith("@a ")) {
                         split = message.split("@a ");
-                    } else if(message.startsWith("@all ")) {
+                    } else if (message.startsWith("@all ")) {
                         split = message.split("@all ");
                     }
 
-                    if(split != null) event.setFormat("§7[@all] " + player.getDisplayName() + " §8» §f" + split[1]);
+                    if (split != null) event.setFormat("§7[@all] " + player.getDisplayName() + " §8» §f" + split[1]);
                 }
 
             }

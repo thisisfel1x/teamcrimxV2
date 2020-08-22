@@ -17,7 +17,7 @@ public class SnowShoeTrail implements ICosmetic {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] { "", "§fBrrrr... kalt!", "" };
+        return new String[]{"", "§fBrrrr... kalt!", ""};
     }
 
     @Override

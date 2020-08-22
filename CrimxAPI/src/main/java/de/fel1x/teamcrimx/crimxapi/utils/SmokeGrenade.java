@@ -29,7 +29,7 @@ public class SmokeGrenade extends BukkitRunnable {
         for (double i = 0; i <= Math.PI; i += Math.PI / 35) {
             double radius = Math.sin(i);
             double y = Math.cos(i);
-            for (double a = 0; a < Math.PI * 2; a+= Math.PI / 25) {
+            for (double a = 0; a < Math.PI * 2; a += Math.PI / 25) {
                 double x = Math.cos(a) * radius;
                 double z = Math.sin(a) * radius;
                 this.locations.add(this.location.clone().add(x, y, z));

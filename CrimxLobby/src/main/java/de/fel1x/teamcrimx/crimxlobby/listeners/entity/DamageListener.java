@@ -21,14 +21,14 @@ public class DamageListener implements Listener {
     @EventHandler
     public void on(EntityDamageEvent event) {
 
-        if(!(event.getEntity() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)) return;
 
         Player player = (Player) event.getEntity();
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
-        if(!event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
+        if (!event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
             event.setCancelled(true);
-        } else if(lobbyPlayer.isInWaterMLG()) {
+        } else if (lobbyPlayer.isInWaterMLG()) {
             event.setDamage(0D);
 
             Actionbar.sendTitle(player, "§c§l✘", 2, 5, 3);

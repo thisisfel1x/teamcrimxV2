@@ -14,7 +14,7 @@ public class PullerKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Ziehe Gegner an dich heran", "§7Auf #nohomo-Basis natürlich :P", ""
         };
     }

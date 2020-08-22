@@ -20,7 +20,7 @@ public class FoodChangeListener implements Listener {
     @EventHandler
     public void on(FoodLevelChangeEvent event) {
 
-        if(!(event.getEntity() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)) return;
 
         Player player = (Player) event.getEntity();
         GamePlayer gamePlayer = new GamePlayer(player);
@@ -29,12 +29,16 @@ public class FoodChangeListener implements Listener {
 
         switch (gamestate) {
 
-            case IDLE: case LOBBY: case DELAY: case ENDING:
+            case IDLE:
+            case LOBBY:
+            case DELAY:
+            case ENDING:
                 event.setCancelled(true);
                 break;
 
-            case PREGAME: case INGAME:
-                if(gamePlayer.isSpectator()) {
+            case PREGAME:
+            case INGAME:
+                if (gamePlayer.isSpectator()) {
                     event.setCancelled(true);
                 }
         }

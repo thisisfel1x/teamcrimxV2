@@ -1,9 +1,6 @@
 package de.fel1x.capturetheflag.utils;
 
-import de.dytanic.cloudnet.ext.bridge.node.CloudNetBridgeModule;
-import de.dytanic.cloudnet.ext.cloudperms.CloudPermissionsManagement;
 import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
-import de.dytanic.cloudnet.ext.cloudperms.node.CloudNetCloudPermissionsModule;
 import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.filehandler.SpawnHandler;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;

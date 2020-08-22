@@ -5,7 +5,6 @@ import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class MinerKit implements IKit {
 
@@ -16,7 +15,7 @@ public class MinerKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Ab in den Stollen mit dir", "", "§d§lGLÜCK AUF!"
         };
     }
@@ -34,10 +33,10 @@ public class MinerKit implements IKit {
     @Override
     public void setKitInventory(Player player) {
         player.getInventory().addItem(new ItemBuilder(Material.DIAMOND_PICKAXE)
-                .setName("§8● §dSpitzhacke des Untergangs")
-                .addEnchant(Enchantment.DIG_SPEED, 10)
-                .setUnbreakable()
-                .toItemStack(),
+                        .setName("§8● §dSpitzhacke des Untergangs")
+                        .addEnchant(Enchantment.DIG_SPEED, 10)
+                        .setUnbreakable()
+                        .toItemStack(),
 
                 new ItemBuilder(Material.DIAMOND_AXE)
                         .setName("§8● §aAxt des Untergangs")

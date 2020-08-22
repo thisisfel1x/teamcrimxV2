@@ -20,7 +20,7 @@ public class GhostKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Es wird gruselig!", "§7Laufe unsichtbar mit deiner Sense durch die Gegend!", ""
         };
     }

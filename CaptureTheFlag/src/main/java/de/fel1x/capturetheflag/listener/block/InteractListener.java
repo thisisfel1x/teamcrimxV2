@@ -88,7 +88,7 @@ public class InteractListener implements Listener {
 
                             if (teams.equals(Teams.BLUE)) {
 
-                                if (!banner.getLocation().equals(data.getBlueFlagBaseLocation())  && !player.equals(data.getRedFlagHolder())) {
+                                if (!banner.getLocation().equals(data.getBlueFlagBaseLocation()) && !player.equals(data.getRedFlagHolder())) {
                                     player.sendMessage("§bDu hast die Flagge deines Teams - sichere sie!");
                                     data.setBlueFlagHolder(player);
 
@@ -107,7 +107,7 @@ public class InteractListener implements Listener {
 
                                 }
 
-                                if(player.equals(data.getBlueFlagHolder()) && banner.getLocation().equals(data.getBlueFlagBaseLocation())) {
+                                if (player.equals(data.getBlueFlagHolder()) && banner.getLocation().equals(data.getBlueFlagBaseLocation())) {
 
                                     player.sendMessage("§aDu hast erfolgreich deine Flagge gesichert!");
 
@@ -131,7 +131,7 @@ public class InteractListener implements Listener {
                                 if (!player.equals(data.getRedFlagHolder()) && banner.getLocation().equals(data.getBlueFlagBaseLocation())) {
                                     player.sendMessage("§cDu kannst deine eigene Flagge nicht aufheben!");
                                     return;
-                                } else if(player.equals(data.getRedFlagHolder()) && banner.getLocation().equals(data.getBlueFlagBaseLocation())){
+                                } else if (player.equals(data.getRedFlagHolder()) && banner.getLocation().equals(data.getBlueFlagBaseLocation())) {
 
                                     player.getInventory().setHelmet(null);
                                     player.sendMessage("§7Du hast die Flagge gesichert. GG");
@@ -153,7 +153,7 @@ public class InteractListener implements Listener {
 
                             } else if (teams.equals(Teams.RED)) {
 
-                                if(player.equals(data.getRedFlagHolder())) {
+                                if (player.equals(data.getRedFlagHolder())) {
                                     return;
                                 }
 
@@ -209,7 +209,7 @@ public class InteractListener implements Listener {
 
                                 }
 
-                                if(player.equals(data.getRedFlagHolder()) && banner.getLocation().equals(data.getRedFlagBaseLocation())) {
+                                if (player.equals(data.getRedFlagHolder()) && banner.getLocation().equals(data.getRedFlagBaseLocation())) {
 
                                     player.sendMessage("§aDu hast erfolgreich deine Flagge gesichert!");
 
@@ -233,7 +233,7 @@ public class InteractListener implements Listener {
                                 if (!player.equals(data.getBlueFlagHolder()) && banner.getLocation().equals(data.getRedFlagBaseLocation())) {
                                     player.sendMessage("§cDu kannst deine eigene Flagge nicht aufheben!");
                                     return;
-                                } else if(player.equals(data.getBlueFlagHolder()) && banner.getLocation().equals(data.getRedFlagBaseLocation())){
+                                } else if (player.equals(data.getBlueFlagHolder()) && banner.getLocation().equals(data.getRedFlagBaseLocation())) {
 
                                     player.getInventory().setHelmet(null);
                                     player.sendMessage("§7Du hast die Flagge gesichert. GG");
@@ -255,7 +255,7 @@ public class InteractListener implements Listener {
 
                             } else if (teams.equals(Teams.BLUE)) {
 
-                                if(player.equals(data.getBlueFlagHolder())) {
+                                if (player.equals(data.getBlueFlagHolder())) {
                                     return;
                                 }
 

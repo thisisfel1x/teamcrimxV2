@@ -6,7 +6,6 @@ import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -30,16 +29,20 @@ public class BlockBreakListener implements Listener {
 
         switch (gamestate) {
 
-            case IDLE: case LOBBY: case DELAY: case ENDING:
+            case IDLE:
+            case LOBBY:
+            case DELAY:
+            case ENDING:
                 event.setCancelled(true);
                 break;
 
-            case PREGAME: case INGAME:
-                if(gamePlayer.isSpectator()) {
+            case PREGAME:
+            case INGAME:
+                if (gamePlayer.isSpectator()) {
                     event.setCancelled(true);
                     return;
                 } else {
-                    if(this.mlgWars.isLabor()) {
+                    if (this.mlgWars.isLabor()) {
                         event.getBlock().setType(Material.AIR);
                         event.getBlock().getWorld().spawnEntity(event.getBlock().getLocation(), EntityType.PRIMED_TNT);
                     }

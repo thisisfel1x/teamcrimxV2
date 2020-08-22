@@ -13,7 +13,7 @@ public class ParticleEffects {
         World world = center.getWorld();
         double increment = (2 * Math.PI) / amount;
 
-        for(int i = 0; i < amount; i++) {
+        for (int i = 0; i < amount; i++) {
 
             double angle = i * increment;
             double x = center.getX() + (radius * Math.cos(angle));
@@ -32,7 +32,7 @@ public class ParticleEffects {
 
         ArrayList<Location> locations = new ArrayList<>();
 
-        for(int i = 0; i < amount; i++) {
+        for (int i = 0; i < amount; i++) {
 
             double angle = i * increment;
             double x = center.getX() + (radius * Math.cos(angle));

@@ -1,13 +1,11 @@
 package de.fel1x.teamcrimx.mlgwars.listener.entity;
 
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -26,23 +24,23 @@ public class EntityInteractListener implements Listener {
 
         Player player = event.getPlayer();
 
-        if(event.getRightClicked() instanceof MushroomCow) {
+        if (event.getRightClicked() instanceof MushroomCow) {
 
             MushroomCow mushroomCow = (MushroomCow) event.getRightClicked();
 
-            if(player.getInventory().getItemInHand().getType() != Material.BOWL) {
+            if (player.getInventory().getItemInHand().getType() != Material.BOWL) {
                 return;
             }
 
-            if(!mushroomCow.hasMetadata("usesLeft")) {
+            if (!mushroomCow.hasMetadata("usesLeft")) {
                 mushroomCow.setMetadata("usesLeft", new FixedMetadataValue(this.mlgWars, 20));
             }
 
-            int usesLeft = mushroomCow.getMetadata("usesLeft").get(0).asInt() -1;
+            int usesLeft = mushroomCow.getMetadata("usesLeft").get(0).asInt() - 1;
             mushroomCow.setMetadata("usesLeft", new FixedMetadataValue(this.mlgWars, usesLeft));
             mushroomCow.setCustomName("§a" + usesLeft + " §7Nutzungen übrig");
 
-            if(mushroomCow.getMetadata("usesLeft").get(0).asInt() <= 0) {
+            if (mushroomCow.getMetadata("usesLeft").get(0).asInt() <= 0) {
                 mushroomCow.remove();
             }
 
