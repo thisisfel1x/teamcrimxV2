@@ -17,7 +17,7 @@ public class AstronautKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Einmal ins All - der Traum...", "§7...der mit diesem Kit erreicht werden kann!", ""
         };
     }

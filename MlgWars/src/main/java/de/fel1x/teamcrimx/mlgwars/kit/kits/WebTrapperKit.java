@@ -14,7 +14,7 @@ public class WebTrapperKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Trappe Spieler in deinem gesponnenen Netz", ""
         };
     }

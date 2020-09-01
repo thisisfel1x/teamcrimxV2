@@ -14,7 +14,7 @@ public class TurtleKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Sei ein Kenner", "§7und baue dich fix ein!", "", "§6[für dxxniz]"
         };
     }

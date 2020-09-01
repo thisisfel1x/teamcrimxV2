@@ -2,20 +2,14 @@ package de.fel1x.teamcrimx.mlgwars.maphandler;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import de.dytanic.cloudnet.ext.bridge.BridgeHelper;
-import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
-import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
-import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
-import de.fel1x.teamcrimx.crimxapi.utils.Skin;
-import de.fel1x.teamcrimx.crimxapi.utils.SkullCreator;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Size;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
-import de.fel1x.teamcrimx.mlgwars.scoreboard.LobbyScoreboard;
+import de.fel1x.teamcrimx.mlgwars.objects.ScoreboardTeam;
+import de.fel1x.teamcrimx.mlgwars.scoreboard.MlgWarsScoreboard;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.TileEntitySkull;
-import org.apache.commons.io.FilenameUtils;
 import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
@@ -27,15 +21,17 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public class WorldLoader {
 
     private final MlgWars mlgWars = MlgWars.getInstance();
     private final MapHandler mapHandler = new MapHandler();
     private final SpawnHandler spawnHandler = new SpawnHandler();
-    private final LobbyScoreboard lobbyScoreboard = new LobbyScoreboard();
+    private final MlgWarsScoreboard mlgWarsScoreboard = new MlgWarsScoreboard();
 
     private final BlockFace[] blockFaces = {
             BlockFace.NORTH,
@@ -46,7 +42,14 @@ public class WorldLoader {
 
     private String mapName;
 
-    public WorldLoader() {
+    public WorldLoader(String mapName) {
+
+        if (mapName == null) {
+            this.mlgWars.setNoMap(true);
+            return;
+        }
+
+        this.mapName = mapName;
 
         SpawnHandler spawnHandler = new SpawnHandler();
 
@@ -73,117 +76,105 @@ public class WorldLoader {
         world.setThundering(false);
         world.setTime(1200);
 
-        File[] files = new File("plugins/MlgWars/maps").listFiles();
-        Random rand = new Random();
+        Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§aAusgewählte Map: " + this.mapName);
 
-        if (files.length == 0) {
-            Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§cKeine Map gefunden! Bitte erstellen!");
-            this.mlgWars.setNoMap(true);
-            return;
-        }
-
-        File file = files[rand.nextInt(files.length)];
-        mapName = FilenameUtils.removeExtension(file.getName());
-
-        Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§aAusgewählte Map: " + mapName);
-
-        this.forceMap(mapName);
+        this.forceMap(this.mapName);
         this.setTop5Wall();
 
     }
 
     public void setTop5Wall() {
-            if (this.spawnHandler.loadLocation("topHead1") == null) {
-                return;
-            }
+        if (this.spawnHandler.loadLocation("topHead1") == null) {
+            return;
+        }
 
-            List<Document> documents = this.mlgWars.getTop(5);
-            for (int i = 0; i < 5; i++) {
+        List<Document> documents = this.mlgWars.getTop(5);
+        for (int i = 0; i < 5; i++) {
 
-                int current = i + 1;
+            int current = i + 1;
 
-                Location locHead = this.spawnHandler.loadLocation("topHead" + current);
-                Location locSign = this.spawnHandler.loadLocation("topSign" + current);
+            Location locHead = this.spawnHandler.loadLocation("topHead" + current);
+            Location locSign = this.spawnHandler.loadLocation("topSign" + current);
 
-                Skull skull = (Skull) locHead.getBlock().getState();
+            Skull skull = (Skull) locHead.getBlock().getState();
 
-                // AVOIDING WEIRD MISPLACEMENT BUG
-                for (BlockFace blockFace : this.blockFaces) {
-                    skull.setRotation(blockFace);
-                    skull.update();
-                }
-
-                if (locSign.getBlock().getState() instanceof Sign) {
-                    Sign sign = (Sign) locSign.getBlock().getState();
-
-                    sign.setLine(0, "§7---------------");
-                    sign.setLine(1, "§cNicht");
-                    sign.setLine(2, "§cbesetzt");
-                    sign.setLine(3, "§7---------------");
-
-                    sign.update();
-                }
-
-                skull.setRotation(this.spawnHandler.getSignFace("topHead" + current));
-                skull.setOwner("MHF_Question");
-                skull.update();
-
-            }
-
-            int i = 1;
-
-            for(Document currentDocument : documents) {
-                int current = i;
-                i++;
-
-                Location locHead = this.spawnHandler.loadLocation("topHead" + current);
-                Location locSign = this.spawnHandler.loadLocation("topSign" + current);
-
-                Skull skull = (Skull) locHead.getBlock().getState();
-
-                if (locSign.getBlock().getState() instanceof Sign) {
-                    Sign sign = (Sign) locSign.getBlock().getState();
-
-                    int kills = currentDocument.getInteger("kills");
-                    int deaths = currentDocument.getInteger("deaths");
-                    int gamesWon = currentDocument.getInteger("gamesWon");
-
-                    double kd;
-                    if(deaths > 0) {
-                        double a = ((double) kills / deaths) * 100;
-                        kd = Math.round(a);
-                    } else {
-                        kd = kills;
-                    }
-
-                    sign.setLine(0, "#" + current);
-                    sign.setLine(1, currentDocument.getString("name"));
-                    sign.setLine(2, gamesWon + " Wins");
-                    sign.setLine(3, "K/D: " + (kd / 100));
-
-                    sign.update();
-                }
-
-                skull.setRotation(this.spawnHandler.getSignFace("topHead" + current));
-                skull.setOwner(currentDocument.getString("name"));
-
-                TileEntitySkull skullTile = (TileEntitySkull)((CraftWorld)skull.getWorld()).getHandle().getTileEntity(new BlockPosition(skull.getX(), skull.getY(), skull.getZ()));
-                GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
-                String textures = Objects.requireNonNull(this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection()
-                        .find(new Document("_id", currentDocument.getString("_id"))).first()).getString("skinTexture");
-                gameProfile.getProperties().put("textures", new Property("textures",
-                        Base64Coder.encodeString(textures)));
-                skullTile.setGameProfile(gameProfile);
-
+            // AVOIDING WEIRD MISPLACEMENT BUG
+            for (BlockFace blockFace : this.blockFaces) {
+                skull.setRotation(blockFace);
                 skull.update();
             }
+
+            if (locSign.getBlock().getState() instanceof Sign) {
+                Sign sign = (Sign) locSign.getBlock().getState();
+
+                sign.setLine(0, "§7---------------");
+                sign.setLine(1, "§cNicht");
+                sign.setLine(2, "§cbesetzt");
+                sign.setLine(3, "§7---------------");
+
+                sign.update();
+            }
+
+            skull.setRotation(this.spawnHandler.getSignFace("topHead" + current));
+            skull.setOwner("MHF_Question");
+            skull.update();
+
+        }
+
+        int i = 1;
+
+        for (Document currentDocument : documents) {
+            int current = i;
+            i++;
+
+            Location locHead = this.spawnHandler.loadLocation("topHead" + current);
+            Location locSign = this.spawnHandler.loadLocation("topSign" + current);
+
+            Skull skull = (Skull) locHead.getBlock().getState();
+
+            if (locSign.getBlock().getState() instanceof Sign) {
+                Sign sign = (Sign) locSign.getBlock().getState();
+
+                int kills = currentDocument.getInteger("kills");
+                int deaths = currentDocument.getInteger("deaths");
+                int gamesWon = currentDocument.getInteger("gamesWon");
+
+                double kd;
+                if (deaths > 0) {
+                    double a = ((double) kills / deaths) * 100;
+                    kd = Math.round(a);
+                } else {
+                    kd = kills;
+                }
+
+                sign.setLine(0, "#" + current);
+                sign.setLine(1, currentDocument.getString("name"));
+                sign.setLine(2, gamesWon + " Wins");
+                sign.setLine(3, "K/D: " + (kd / 100));
+
+                sign.update();
+            }
+
+            skull.setRotation(this.spawnHandler.getSignFace("topHead" + current));
+            skull.setOwner(currentDocument.getString("name"));
+
+            TileEntitySkull skullTile = (TileEntitySkull) ((CraftWorld) skull.getWorld()).getHandle().getTileEntity(new BlockPosition(skull.getX(), skull.getY(), skull.getZ()));
+            GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
+            String textures = Objects.requireNonNull(this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection()
+                    .find(new Document("_id", currentDocument.getString("_id"))).first()).getString("skinTexture");
+            gameProfile.getProperties().put("textures", new Property("textures",
+                    Base64Coder.encodeString(textures)));
+            skullTile.setGameProfile(gameProfile);
+
+            skull.update();
+        }
 
     }
 
     public void forceMap(String mapName) {
 
         Location spectator = this.mapHandler.loadLocation(mapName, "spectator");
-        if(spectator == null) {
+        if (spectator == null) {
             this.sendErrorMessage("spectator");
             this.mlgWars.setNoMap(true);
             return;
@@ -194,7 +185,7 @@ public class WorldLoader {
         }
 
         Spawns.SPECTATOR.getLocation().getWorld().getEntities().forEach(entity -> {
-            if(!(entity instanceof ArmorStand)) {
+            if (!(entity instanceof ArmorStand)) {
                 entity.remove();
             }
         });
@@ -208,14 +199,23 @@ public class WorldLoader {
             return;
         }
 
-        int totalPlayerSpawns = size.getSize();
-        this.mlgWars.getData().getPlayerSpawns().clear();
+        if (this.mlgWars.getTeamSize() != -1) {
+            if (this.mlgWars.getTeamSize() != size.getTeamSize()) {
+                Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§cKann nicht auf eine andere Teamgröße wechseln!");
+                return;
+            }
+        }
 
-        if(totalPlayerSpawns > Bukkit.getServer().getMaxPlayers()) {
-            if(totalPlayerSpawns < Bukkit.getOnlinePlayers().size()) {
+        int totalPlayerSpawns = size.getMaxTeams();
+
+        this.mlgWars.getData().getPlayerSpawns().clear();
+        this.mlgWars.getData().getGameTeams().clear();
+
+        if (totalPlayerSpawns > Bukkit.getServer().getMaxPlayers()) {
+            if (totalPlayerSpawns < Bukkit.getOnlinePlayers().size()) {
                 int count = 1;
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    if(count > totalPlayerSpawns) {
+                    if (count > totalPlayerSpawns) {
                         player.kickPlayer(this.mlgWars.getPrefix() + "§7Nach einem Forcemap sind nicht genügen Spawns übrig. " +
                                 "Du wurdest gekickt");
                     }
@@ -224,9 +224,9 @@ public class WorldLoader {
             }
         }
 
-        for(int i = 0; i < totalPlayerSpawns; i++) {
+        for (int i = 0; i < totalPlayerSpawns; i++) {
             Location location = this.mapHandler.loadLocation(mapName, String.valueOf(i + 1));
-            if(location == null) {
+            if (location == null) {
                 this.sendErrorMessage("spawn " + (i + 1));
                 this.mlgWars.setNoMap(true);
                 return;
@@ -240,7 +240,7 @@ public class WorldLoader {
         Location middle1 = this.mapHandler.loadLocation(mapName, "middle1");
         Location middle2 = this.mapHandler.loadLocation(mapName, "middle2");
 
-        if(loc1 == null || loc2 == null || middle1 == null || middle2 == null) {
+        if (loc1 == null || loc2 == null || middle1 == null || middle2 == null) {
             this.sendErrorMessage("map_region/middle_region");
             this.mlgWars.setNoMap(true);
             return;
@@ -267,17 +267,23 @@ public class WorldLoader {
         world.setThundering(false);
         world.setTime(1200);
 
+        this.mlgWars.setTeamSize(size.getTeamSize());
+
+        if (this.mlgWars.getTeamSize() > 1) {
+            int teamSize = this.mlgWars.getTeamSize();
+
+            for (int i = 0; i < totalPlayerSpawns; i++) {
+                this.mlgWars.getData().getGameTeams().put(i, new ScoreboardTeam(i, (i + 1), teamSize, new ArrayList<>(), new ArrayList<>()));
+            }
+        }
+
         Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§aDie Map " + mapName +
                 " wurde erfolgreich geladen");
 
         this.setMapName(mapName);
 
-        BukkitCloudNetHelper.setApiMotd(this.getMapName());
-        BukkitCloudNetHelper.setMaxPlayers(size.getSize());
-        BridgeHelper.updateServiceInfo();
-
         this.mlgWars.getData().getPlayers().forEach(player ->
-                this.lobbyScoreboard.updateBoard(player, "§8● §e" + this.getMapName(), "map", "§e"));
+                this.mlgWarsScoreboard.updateBoard(player, "§8● §e" + this.getMapName(), "map", "§e"));
 
     }
 

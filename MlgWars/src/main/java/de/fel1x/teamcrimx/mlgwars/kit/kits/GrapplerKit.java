@@ -14,7 +14,7 @@ public class GrapplerKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Ziehe dich von einer Insel zur anderen!", "§cAchtung: kann nur 5x verwendet werden!", ""
         };
     }

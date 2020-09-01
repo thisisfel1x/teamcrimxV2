@@ -15,7 +15,7 @@ public class CoinsCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String string, String[] args) {
 
-        if(!(commandSender instanceof Player)) {
+        if (!(commandSender instanceof Player)) {
             return false;
         }
 
@@ -24,16 +24,16 @@ public class CoinsCommand implements CommandExecutor {
 
         boolean hasPermission = player.hasPermission("crimxapi.coins");
 
-        if(!hasPermission) {
+        if (!hasPermission) {
             coinsAPI = new CoinsAPI(player.getUniqueId());
             player.sendMessage(crimxAPI.getPrefix() + "§7Du besitzt momentan stolze §e" + coinsAPI.getCoins() + " Coins");
         } else {
-            if(args.length == 0) {
+            if (args.length == 0) {
                 coinsAPI = new CoinsAPI(player.getUniqueId());
                 player.sendMessage(crimxAPI.getPrefix() + "§7Du besitzt momentan stolze §e" + coinsAPI.getCoins() + " Coins");
-            } else if(args.length == 1) {
+            } else if (args.length == 1) {
                 player.sendMessage(crimxAPI.getPrefix() + "§cUsage: /coins <set|add|remove> <playername>");
-            } else if(args.length == 3) {
+            } else if (args.length == 3) {
 
                 String operation = args[0];
                 Player targetPlayer = Bukkit.getPlayer(args[1]);
@@ -46,7 +46,7 @@ public class CoinsCommand implements CommandExecutor {
                     return false;
                 }
 
-                if(targetPlayer == null || !targetPlayer.isOnline()) {
+                if (targetPlayer == null || !targetPlayer.isOnline()) {
                     player.sendMessage(crimxAPI.getPrefix() + "§cDieser Spieler ist nicht online");
                     return false;
                 }

@@ -6,10 +6,13 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 public final class CrimxBungee extends Plugin {
 
-    private String prefix = "§eCrimx§lBungee §8» §r";
-
     private static CrimxBungee instance;
+    private String prefix = "§eCrimx§lBungee §8» §r";
     private CrimxAPI crimxAPI;
+
+    public static CrimxBungee getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
@@ -26,10 +29,6 @@ public final class CrimxBungee extends Plugin {
     public void onDisable() {
 
 
-    }
-
-    public static CrimxBungee getInstance() {
-        return instance;
     }
 
     public CrimxAPI getCrimxAPI() {

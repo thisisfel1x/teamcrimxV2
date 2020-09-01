@@ -18,7 +18,7 @@ public class FunGunGadget implements ICosmetic {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§eFun!", "§6Gun!", ""
         };
     }
@@ -86,7 +86,7 @@ public class FunGunGadget implements ICosmetic {
         int slot = (player.hasPermission("crimxlobby.vip") ? 2 : 4);
 
         player.getInventory().setItem(slot, new ItemBuilder(Material.BLAZE_ROD)
-                .setName("§8● "+ this.getCosmeticName())
+                .setName("§8● " + this.getCosmeticName())
                 .setLore(this.getCosmeticDescription())
                 .addGlow()
                 .toItemStack());

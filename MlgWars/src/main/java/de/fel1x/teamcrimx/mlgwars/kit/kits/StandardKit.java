@@ -14,7 +14,7 @@ public class StandardKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] { "", "§7Jeder fängt mal klein an...", "§7Aber hiermit will keiner anfangen!"};
+        return new String[]{"", "§7Jeder fängt mal klein an...", "§7Aber hiermit will keiner anfangen!"};
     }
 
     @Override

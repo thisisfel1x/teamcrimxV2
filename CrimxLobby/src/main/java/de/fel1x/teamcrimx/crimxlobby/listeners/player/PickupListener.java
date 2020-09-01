@@ -23,7 +23,7 @@ public class PickupListener implements Listener {
         Player player = event.getPlayer();
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
-        if(!lobbyPlayer.isInBuild()) {
+        if (!lobbyPlayer.isInBuild()) {
             event.setCancelled(true);
         }
     }
@@ -34,7 +34,7 @@ public class PickupListener implements Listener {
         Player player = event.getPlayer();
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
-        if(!lobbyPlayer.isInBuild()) {
+        if (!lobbyPlayer.isInBuild()) {
             event.setCancelled(true);
         }
 

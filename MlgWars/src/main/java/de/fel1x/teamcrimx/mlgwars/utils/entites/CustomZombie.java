@@ -1,29 +1,27 @@
 package de.fel1x.teamcrimx.mlgwars.utils.entites;
 
-import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Zombie;
-import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class CustomZombie extends EntityZombie {
 
     public CustomZombie(org.bukkit.World world) {
         super(((CraftWorld) world).getHandle());
 
-        List goalB = (List) getPrivateField("b", PathfinderGoalSelector.class, goalSelector); goalB.clear();
-        List goalC = (List)getPrivateField("c", PathfinderGoalSelector.class, goalSelector); goalC.clear();
-        List targetB = (List)getPrivateField("b", PathfinderGoalSelector.class, targetSelector); targetB.clear();
-        List targetC = (List)getPrivateField("c", PathfinderGoalSelector.class, targetSelector); targetC.clear();
+        List goalB = (List) getPrivateField("b", PathfinderGoalSelector.class, goalSelector);
+        goalB.clear();
+        List goalC = (List) getPrivateField("c", PathfinderGoalSelector.class, goalSelector);
+        goalC.clear();
+        List targetB = (List) getPrivateField("b", PathfinderGoalSelector.class, targetSelector);
+        targetB.clear();
+        List targetC = (List) getPrivateField("c", PathfinderGoalSelector.class, targetSelector);
+        targetC.clear();
 
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, EntityHuman.class, 1.0D, false));
@@ -47,8 +45,7 @@ public class CustomZombie extends EntityZombie {
             field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
             o = field.get(object);
-        }
-        catch(NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return o;
@@ -64,7 +61,7 @@ public class CustomZombie extends EntityZombie {
 
         public static LivingEntity spawnEntity(Entity entity, Location loc) {
             entity.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-            ((CraftWorld)loc.getWorld()).getHandle().addEntity(entity);
+            ((CraftWorld) loc.getWorld()).getHandle().addEntity(entity);
             return ((LivingEntity) entity.getBukkitEntity());
         }
 

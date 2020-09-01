@@ -13,7 +13,7 @@ public class StinkerKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Scheisse, der Deo hat versagt!", "§7Betäube deine Mitspieler mit deinem Geruch",
                 "§c(andere Stinker sind immun!)", "", "§6[für Boerek_Obama]"
         };

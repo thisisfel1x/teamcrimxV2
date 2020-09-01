@@ -17,7 +17,7 @@ public class NoteShoeCosmetic implements ICosmetic {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] { "", "Lasse deinen musikalischen Traum leben!", "" };
+        return new String[]{"", "Lasse deinen musikalischen Traum leben!", ""};
     }
 
     @Override

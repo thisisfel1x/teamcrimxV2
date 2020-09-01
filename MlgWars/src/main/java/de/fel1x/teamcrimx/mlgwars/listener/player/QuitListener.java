@@ -3,7 +3,6 @@ package de.fel1x.teamcrimx.mlgwars.listener.player;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
-import de.fel1x.teamcrimx.mlgwars.timer.EndingTimer;
 import de.fel1x.teamcrimx.mlgwars.timer.IdleTimer;
 import de.fel1x.teamcrimx.mlgwars.utils.WinDetection;
 import org.bukkit.Bukkit;
@@ -28,7 +27,7 @@ public class QuitListener implements Listener {
         GamePlayer gamePlayer = new GamePlayer(player);
 
         String message = null;
-        if(gamePlayer.isPlayer()) {
+        if (gamePlayer.isPlayer()) {
             message = "§8« " + player.getDisplayName() + " §7hat das Spiel verlassen";
         }
         event.setQuitMessage(message);
@@ -45,15 +44,18 @@ public class QuitListener implements Listener {
         switch (gamestate) {
             case LOBBY:
                 int neededPlayers = (this.mlgWars.getTeamSize() * 2);
-                if(this.mlgWars.getData().getPlayers().size() < neededPlayers) {
+                if (this.mlgWars.getData().getPlayers().size() < neededPlayers) {
                     Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§cDer Countdown wurde abgebrochen, da zu wenige Spieler online sind");
                     Bukkit.getScheduler().cancelTasks(this.mlgWars);
+                    this.mlgWars.setLobbyCountdown(60);
                     this.mlgWars.startTimerByClass(IdleTimer.class);
                 }
                 break;
 
-            case DELAY: case PREGAME: case INGAME:
-                if(Bukkit.getOnlinePlayers().isEmpty()) {
+            case DELAY:
+            case PREGAME:
+            case INGAME:
+                if (Bukkit.getOnlinePlayers().isEmpty()) {
                     Bukkit.getServer().shutdown();
                 } else {
                     new WinDetection();

@@ -29,12 +29,16 @@ public class PickUpListener implements Listener {
 
         switch (gamestate) {
 
-            case IDLE: case LOBBY: case DELAY: case ENDING:
+            case IDLE:
+            case LOBBY:
+            case DELAY:
+            case ENDING:
                 event.setCancelled(true);
                 break;
 
-            case PREGAME: case INGAME:
-                if(gamePlayer.isSpectator()) {
+            case PREGAME:
+            case INGAME:
+                if (gamePlayer.isSpectator()) {
                     event.setCancelled(true);
                     return;
                 }

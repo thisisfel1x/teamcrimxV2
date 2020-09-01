@@ -32,8 +32,14 @@ public class ChestFiller {
 
         items = new ArrayList<>();
         itemsTier2 = new ArrayList<>();
-        this.addItems(items);
-        this.addItemsTier2(itemsTier2);
+
+        if (this.mlgWars.isLabor()) {
+            this.addLaborItems(items);
+            this.addLaborItems(itemsTier2);
+        } else {
+            this.addItems(items);
+            this.addItemsTier2(itemsTier2);
+        }
 
         Cuboid cuboid = new Cuboid(Spawns.LOC_1.getLocation(), Spawns.LOC_2.getLocation());
         Cuboid middleCube = new Cuboid(Spawns.MIDDLE_1.getLocation(), Spawns.MIDDLE_2.getLocation());
@@ -107,7 +113,7 @@ public class ChestFiller {
                         Material current = is.getType();
 
                         while (chest.getBlockInventory().contains(current)) {
-                            is = itemsTier2.get(random.nextInt(itemsTier2.size()));
+                            is = items.get(random.nextInt(items.size()));
                             current = is.getType();
                         }
 
@@ -116,6 +122,82 @@ public class ChestFiller {
                 }
             }
         }
+    }
+
+    private void addLaborItems(ArrayList<ItemStack> items) {
+
+        Random random = new Random();
+
+        for (PotionType potionType : PotionType.values()) {
+            if (potionType == PotionType.WATER) continue;
+
+            ItemStack potion = new ItemStack(Material.POTION);
+            Potion pot = new Potion(potionType, 1);
+            pot.setSplash(true);
+            pot.apply(potion);
+
+            potion.setAmount(1);
+
+            items.add(potion);
+            items.add(potion);
+        }
+
+
+        for (int i = 0; i < 20; i++) {
+            items.add(new ItemBuilder(Material.TNT, 5 + random.nextInt(20))
+                    .setName("§cInstant TNT").setLore("§7Dieses TNT explodiert sofort")
+                    .toItemStack());
+
+            items.add(new ItemBuilder(Material.STONE, 20 + random.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.WOOD, 20 + random.nextInt(44)).toItemStack());
+
+            items.add(new ItemBuilder(Material.TNT, random.nextInt(5) + 1)
+                    .setName("§cVelocity TNT").addGlow().setLore("§7Dieses TNT boostet dich weit")
+                    .toItemStack());
+            items.add(new ItemBuilder(Material.TNT, 1 + random.nextInt(2))
+                    .setName("§cInstant TNT Boost").setLore("§7Dieses TNT baut einen TNT Boost auf").addGlow()
+                    .toItemStack());
+            items.add(new ItemBuilder(Material.ARROW, 3 + random.nextInt(6)).toItemStack());
+        }
+
+        for (int i = 0; i < 5; i++) {
+            items.add(new ItemBuilder(Material.WOOD_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
+            items.add(new ItemBuilder(Material.STONE_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).toItemStack());
+            items.add(new ItemBuilder(Material.GOLD_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).toItemStack());
+
+            items.add(new ItemBuilder(Material.MONSTER_EGG).setColor(50).toItemStack());
+            items.add(new ItemBuilder(Material.MONSTER_EGG).setColor(61).toItemStack());
+            items.add(new ItemBuilder(Material.MONSTER_EGG).setColor(60).toItemStack());
+
+            items.add(new ItemBuilder(Material.BOW).addGlow().setName("Explosionsbogen").toItemStack());
+            items.add(new ItemBuilder(Material.BOW).addGlow().setName("TNT-Bogen").toItemStack());
+
+            items.add(new ItemBuilder(Material.COOKED_CHICKEN, 3 + random.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.RAW_BEEF, 3 + random.nextInt(8)).toItemStack());
+
+        }
+
+        for (int i = 0; i < 8; i++) {
+
+            items.add(new ItemBuilder(Material.STICK, 3 + random.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.LAVA_BUCKET).toItemStack());
+            items.add(new ItemBuilder(Material.WATER_BUCKET).toItemStack());
+            items.add(new ItemBuilder(Material.WEB).toItemStack());
+            items.add(new ItemBuilder(Material.SNOW_BALL, 1 + random.nextInt(4))
+                    .setName("§cWerfbares TNT")
+                    .addGlow()
+                    .setLore("§7Werfe mit TNT")
+                    .toItemStack());
+            items.add(new ItemBuilder(Material.EGG, 3 + random.nextInt(4))
+                    .toItemStack());
+            items.add(new ItemBuilder(Material.ENDER_PEARL).toItemStack());
+            items.add(new ItemBuilder(Material.COMPASS).toItemStack());
+            items.add(new ItemBuilder(Material.GOLDEN_APPLE, 1 + random.nextInt(2)).toItemStack());
+
+        }
+
+        Collections.shuffle(items);
+
     }
 
     private void addItems(ArrayList<ItemStack> items) {
@@ -156,6 +238,7 @@ public class ChestFiller {
             items.add(new ItemBuilder(Material.WOOD, 20 + r.nextInt(44)).toItemStack());
 
         }
+
         for (int i = 0; i < 3; i++) {
 
             items.add(new ItemBuilder(Material.EXP_BOTTLE, 5 + r.nextInt(10)).toItemStack());
@@ -218,7 +301,7 @@ public class ChestFiller {
 
 
         for (int i = 0; i < 5; i++) {
-            items.add(new ItemBuilder(Material.FLINT, 2 + r.nextInt(2)).toItemStack());
+            items.add(new ItemBuilder(Material.FLINT, 1).toItemStack());
             items.add(new ItemBuilder(Material.FLINT_AND_STEEL).setDurability((short) 50).toItemStack());
 
         }

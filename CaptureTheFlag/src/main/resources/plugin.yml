@@ -1,0 +1,8 @@
+name: CaptureTheFlag
+version: ${project.version}
+main: de.fel1x.capturetheflag.CaptureTheFlag
+api-version: 1.16
+depend: [CrimxAPI]
+authors: [fel1x]
+description: A CTF minigame
+website: teamcrimx.de

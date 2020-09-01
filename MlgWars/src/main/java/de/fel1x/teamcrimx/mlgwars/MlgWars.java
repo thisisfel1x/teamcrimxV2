@@ -1,27 +1,36 @@
 package de.fel1x.teamcrimx.mlgwars;
 
 import com.mongodb.client.model.Sorts;
+import de.dytanic.cloudnet.ext.bridge.BridgeHelper;
 import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.mlgwars.commands.SetupCommand;
 import de.fel1x.teamcrimx.mlgwars.commands.StartCommand;
 import de.fel1x.teamcrimx.mlgwars.commands.StatsCommand;
+import de.fel1x.teamcrimx.mlgwars.enums.Size;
 import de.fel1x.teamcrimx.mlgwars.gamestate.GamestateHandler;
 import de.fel1x.teamcrimx.mlgwars.listener.block.BlockBreakListener;
 import de.fel1x.teamcrimx.mlgwars.listener.block.BlockPlaceListener;
 import de.fel1x.teamcrimx.mlgwars.listener.entity.*;
 import de.fel1x.teamcrimx.mlgwars.listener.player.*;
 import de.fel1x.teamcrimx.mlgwars.listener.world.WeatherChangeListener;
+import de.fel1x.teamcrimx.mlgwars.maphandler.MapHandler;
 import de.fel1x.teamcrimx.mlgwars.maphandler.WorldLoader;
 import de.fel1x.teamcrimx.mlgwars.timer.ITimer;
 import de.fel1x.teamcrimx.mlgwars.timer.IdleTimer;
 import fr.minuskube.inv.InventoryManager;
+import org.apache.commons.io.FilenameUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -33,8 +42,10 @@ public final class MlgWars extends JavaPlugin {
 
     private boolean inSetup;
     private boolean noMap;
+    private boolean labor;
 
     private int lobbyCountdown = 60;
+    private int teamSize = -1;
 
     private Data date;
     private GamestateHandler gamestateHandler;
@@ -43,34 +54,84 @@ public final class MlgWars extends JavaPlugin {
 
     private WorldLoader worldLoader;
 
+    private ArrayList<Material> allMaterials;
+
     private ITimer iTimer;
+
+    public static MlgWars getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
 
         instance = this;
 
+        File configFile = new File(this.getDataFolder(), "config.yml");
+        if (!configFile.exists()) {
+            this.saveDefaultConfig();
+        }
+
+        this.labor = this.getConfig().getBoolean("labor");
+
         this.inSetup = false;
         this.noMap = false;
+
+        String mapName = this.selectMap();
 
         this.crimxAPI = new CrimxAPI();
 
         this.date = new Data();
+        this.worldLoader = new WorldLoader(mapName);
+
         this.gamestateHandler = new GamestateHandler();
         this.pluginManager = Bukkit.getPluginManager();
 
         this.inventoryManager = new InventoryManager(this);
         this.inventoryManager.init();
 
-        this.worldLoader = new WorldLoader();
-
         this.registerCommands();
         this.registerListener();
 
-        if(!this.isNoMap() && !this.isInSetup()) {
+        if (!this.isNoMap() && !this.isInSetup()) {
             this.iTimer = new IdleTimer();
             this.iTimer.start();
         }
+
+        this.allMaterials = new ArrayList<>(Arrays.asList(Material.values()));
+
+    }
+
+    private String selectMap() {
+
+        MapHandler mapHandler = new MapHandler();
+
+        File[] files = new File("plugins/MlgWars/maps").listFiles();
+        Random rand = new Random();
+
+        if (files.length == 0) {
+            Bukkit.getConsoleSender().sendMessage(this.getPrefix() + "§cKeine Map gefunden! Bitte erstellen!");
+            this.setNoMap(true);
+            return null;
+        }
+
+        File file = files[rand.nextInt(files.length)];
+        String name = FilenameUtils.removeExtension(file.getName());
+
+        Size size;
+
+        try {
+            size = mapHandler.getSize(name);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        BukkitCloudNetHelper.setApiMotd(name + " " + size.getName());
+        BukkitCloudNetHelper.setMaxPlayers(size.getSize());
+        BridgeHelper.updateServiceInfo();
+
+        return name;
 
     }
 
@@ -88,6 +149,7 @@ public final class MlgWars extends JavaPlugin {
         new DropListener(this);
         new ToggleFlyListener(this);
         new InventoryClickListener(this);
+        new RespawnListener(this);
 
         // ENTITY
         new DamageListener(this);
@@ -95,6 +157,8 @@ public final class MlgWars extends JavaPlugin {
         new EntityInteractListener(this);
         new ProjectileHitListener(this);
         new EggThrowEvent(this);
+        new EntityExplodeListener(this);
+        new ProjectileShootListener(this);
 
         // BLOCK
         new BlockBreakListener(this);
@@ -141,10 +205,6 @@ public final class MlgWars extends JavaPlugin {
                 .collect(Collectors.toList());
     }
 
-    public static MlgWars getInstance() {
-        return instance;
-    }
-
     public String getPrefix() {
         return prefix;
     }
@@ -159,10 +219,6 @@ public final class MlgWars extends JavaPlugin {
 
     public GamestateHandler getGamestateHandler() {
         return gamestateHandler;
-    }
-
-    public int getTeamSize() {
-        return 1;
     }
 
     public ITimer getiTimer() {
@@ -207,5 +263,21 @@ public final class MlgWars extends JavaPlugin {
 
     public void setLobbyCountdown(int lobbyCountdown) {
         this.lobbyCountdown = lobbyCountdown;
+    }
+
+    public int getTeamSize() {
+        return teamSize;
+    }
+
+    public void setTeamSize(int teamSize) {
+        this.teamSize = teamSize;
+    }
+
+    public ArrayList<Material> getAllMaterials() {
+        return allMaterials;
+    }
+
+    public boolean isLabor() {
+        return labor;
     }
 }

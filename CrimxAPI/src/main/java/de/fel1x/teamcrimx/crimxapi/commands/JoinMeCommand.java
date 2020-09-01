@@ -6,7 +6,6 @@ import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.driver.service.ServiceInfoSnapshot;
 import de.dytanic.cloudnet.ext.bridge.BaseComponentMessenger;
 import de.dytanic.cloudnet.ext.bridge.BridgeServiceProperty;
-import de.dytanic.cloudnet.ext.bridge.player.CloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.NetworkServiceInfo;
 import de.dytanic.cloudnet.wrapper.Wrapper;
@@ -26,7 +25,7 @@ public class JoinMeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String string, String[] args) {
 
-        if(!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) {
             return false;
         }
 
@@ -35,13 +34,13 @@ public class JoinMeCommand implements CommandExecutor {
         CrimxPlayer crimxPlayer = new CrimxPlayer(cloudPlayer);
         IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(player.getUniqueId());
 
-        if(permissionUser == null || cloudPlayer == null) {
+        if (permissionUser == null || cloudPlayer == null) {
             return false;
         }
 
-        if(args.length == 0) {
+        if (args.length == 0) {
 
-            if(cloudPlayer.getConnectedService().getTaskName().equalsIgnoreCase("Lobby")) {
+            if (cloudPlayer.getConnectedService().getTaskName().equalsIgnoreCase("Lobby")) {
                 player.sendMessage(this.crimxAPI.getPrefix() + "§7Du kannst auf der Lobby kein JoinMe erstellen");
                 return false;
             }
@@ -51,7 +50,7 @@ public class JoinMeCommand implements CommandExecutor {
 
             ServiceInfoSnapshot serviceInfoSnapshot = Wrapper.getInstance().getCloudServiceProvider().getCloudService(networkServiceInfo.getUniqueId());
 
-            if(serviceInfoSnapshot == null) {
+            if (serviceInfoSnapshot == null) {
                 return false;
             }
 
@@ -67,13 +66,13 @@ public class JoinMeCommand implements CommandExecutor {
             BaseComponent[] message = new BaseComponent[8];
 
             for (int i = 0; i < toSend.length; i++) {
-                if(i == 0 || i == 7) {
+                if (i == 0 || i == 7) {
                     message[i] = new TextComponent(TextComponent.fromLegacyText(toSend[i] + "\n"));
-                } else if(i == 2) {
+                } else if (i == 2) {
                     message[i] = new TextComponent(TextComponent.fromLegacyText(toSend[i] + " " +
                             permissionGroup.getDisplay().replace('&', '§') + player.getName() +
                             " §7spielt nun auf §a" + cloudPlayer.getConnectedService().getServerName() + " \n"));
-                } else if(i == 3) {
+                } else if (i == 3) {
                     BaseComponent baseComponents = new TextComponent(new ComponentBuilder(toSend[i] + " §7Klicke ")
                             .append("§e§l*hier*")
                             .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/joinme ?server=" + cloudPlayer.getConnectedService().getServerName()))
@@ -82,7 +81,7 @@ public class JoinMeCommand implements CommandExecutor {
                             .append(" \n")
                             .create());
                     message[i] = baseComponents;
-                } else if(i == 5) {
+                } else if (i == 5) {
                     message[i] = new TextComponent(TextComponent.fromLegacyText(toSend[i] +
                             String.format(" §7Spieler online: §a%s§8/§c%s §8● §7Map: §e%s\n", onlinePlayers, maxPlayers, map)));
                 } else {
@@ -92,15 +91,15 @@ public class JoinMeCommand implements CommandExecutor {
 
             BaseComponentMessenger.broadcastMessage(message);
 
-        } else if(args.length == 1) {
+        } else if (args.length == 1) {
             String givenServer = args[0];
 
-            if(!givenServer.startsWith("?server=")) {
+            if (!givenServer.startsWith("?server=")) {
                 player.sendMessage(this.crimxAPI.getPrefix() + "§7Du hast einen ungültigen JoinMe Command ausgeführt");
                 return false;
             } else {
                 String serverToConnect = givenServer.split("=")[1];
-                if(!serverToConnect.equalsIgnoreCase(cloudPlayer.getConnectedService().getServerName())){
+                if (!serverToConnect.equalsIgnoreCase(cloudPlayer.getConnectedService().getServerName())) {
                     cloudPlayer.getPlayerExecutor().connect(serverToConnect);
                     return true;
                 } else {

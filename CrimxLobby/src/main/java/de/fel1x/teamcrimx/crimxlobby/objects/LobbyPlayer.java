@@ -30,7 +30,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,14 +43,12 @@ public class LobbyPlayer {
     Player player;
 
     CrimxLobby crimxLobby = CrimxLobby.getInstance();
+    private final WaterMlgHandler waterMlgHandler = this.crimxLobby.getWaterMlgHandler();
     Data data = this.crimxLobby.getData();
-
     SpawnManager spawnManager = this.crimxLobby.getSpawnManager();
     LobbyDatabase lobbyDatabase = new LobbyDatabase();
-
     Document lobbyDocument;
     Document networkDocument;
-    private final WaterMlgHandler waterMlgHandler = this.crimxLobby.getWaterMlgHandler();
 
     public LobbyPlayer(Player player) {
         this.player = player;
@@ -64,7 +61,7 @@ public class LobbyPlayer {
     public LobbyPlayer(Player player, boolean updateDocument) {
         this.player = player;
 
-        if(updateDocument) {
+        if (updateDocument) {
             Document found = this.crimxLobby.getCrimxAPI().getMongoDB().getLobbyCollection().
                     find(new Document("_id", player.getUniqueId().toString())).first();
 
@@ -192,7 +189,7 @@ public class LobbyPlayer {
 
         NPC playerNPC = this.crimxLobby.getNpcLib().createNPC(Collections.singletonList("§a§lDein Profil"));
         playerNPC.setSkin(new Skin(values[0], values[1]));
-        playerNPC.setLocation(new Location(Bukkit.getWorlds().get(0), -151.5, 64, 134.5, 47.4f, 0.2f));
+        playerNPC.setLocation(new Location(Bukkit.getWorlds().get(0), -168.5, 65, 138.5, -90.5f, 10.6f));
 
         playerNPC.create();
         playerNPC.show(this.player);
@@ -213,7 +210,7 @@ public class LobbyPlayer {
         if (state == 1) {
             this.player.getInventory().getItem(1).setDurability((short) 5);
             Bukkit.getOnlinePlayers().forEach(loop -> {
-                if(!loop.hasPermission("crimxlobby.vip")) {
+                if (!loop.hasPermission("crimxlobby.vip")) {
                     this.player.hidePlayer(loop);
                 }
             });
@@ -241,14 +238,14 @@ public class LobbyPlayer {
             onlineTimeInMillis = Integer.toUnsignedLong((Integer) this.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS));
         }
 
-        if(onlineTimeInMillis < 1000 * 60) {
+        if (onlineTimeInMillis < 1000 * 60) {
             return "Keine Daten";
-        } else if(onlineTimeInMillis > 1000 * 60 && onlineTimeInMillis < 1000 * 60 * 60) {
+        } else if (onlineTimeInMillis > 1000 * 60 && onlineTimeInMillis < 1000 * 60 * 60) {
             long minutes = TimeUtils.splitTime(onlineTimeInMillis)[2];
-            return  minutes == 1 ? minutes + " Minute" : minutes + " Minuten";
+            return minutes == 1 ? minutes + " Minute" : minutes + " Minuten";
         } else {
             long hours = TimeUtils.splitTime(onlineTimeInMillis)[1];
-            return  hours == 1 ? hours + " Stunde" : hours + " Stunden";
+            return hours == 1 ? hours + " Stunde" : hours + " Stunden";
         }
     }
 
@@ -302,7 +299,7 @@ public class LobbyPlayer {
 
         boolean defaultSpawn = this.data.getLobbyDatabasePlayer().get(this.player.getUniqueId()).isSpawnAtLastLocation();
 
-        if(defaultSpawn) {
+        if (defaultSpawn) {
             String worldName = this.lobbyDocument.getString("lastLocationWorld");
             double x = this.lobbyDocument.getDouble("lastLocationX");
             double y = this.lobbyDocument.getDouble("lastLocationY");
@@ -377,9 +374,9 @@ public class LobbyPlayer {
         int coins = coinsAPI.getCoins();
 
         Bukkit.getOnlinePlayers().forEach(loopPlayer -> {
-            if(loopPlayer.hasMetadata("labymod")) {
+            if (loopPlayer.hasMetadata("labymod")) {
                 boolean labyMod = loopPlayer.getMetadata("labymod").get(0).asBoolean();
-                if(labyMod) {
+                if (labyMod) {
                     this.setSubtitle(loopPlayer, this.player.getUniqueId(), "&e" + coins + " Coins");
                 }
             }
@@ -413,7 +410,6 @@ public class LobbyPlayer {
         }
 
 
-
     }
 
     public void startJumpAndRun() {
@@ -426,8 +422,8 @@ public class LobbyPlayer {
 
         ArrayList<Location> possibleJumps = new ArrayList<>();
 
-        for(int x = 2; x < 4; x++) {
-            for(int z = 2; z < 4; z++) {
+        for (int x = 2; x < 4; x++) {
+            for (int z = 2; z < 4; z++) {
 
                 x = random.nextBoolean() ? x : -1 * x;
                 z = random.nextBoolean() ? z : -1 * z;
@@ -510,8 +506,8 @@ public class LobbyPlayer {
 
         ArrayList<Location> possibleJumps = new ArrayList<>();
 
-        for(int x = 2; x < 4; x++) {
-            for(int z = 2; z < 4; z++) {
+        for (int x = 2; x < 4; x++) {
+            for (int z = 2; z < 4; z++) {
 
                 x = random.nextBoolean() ? x : -1 * x;
                 z = random.nextBoolean() ? z : -1 * z;
@@ -636,7 +632,7 @@ public class LobbyPlayer {
             int coins = coinsAPI.getCoins();
             int required = cosmetic.getCosmeticClass().newInstance().getCosmeticCost();
 
-            if(coins >= required) {
+            if (coins >= required) {
                 player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast erfolgreich §a" + iCosmetic.getCosmeticName() + " §7freigeschalten");
                 player.playSound(player.getLocation(), Sound.LEVEL_UP, 2, 0.5f);
                 CosmeticInventory.COSMETICS_INVENTORY.open(player);
@@ -663,14 +659,14 @@ public class LobbyPlayer {
 
         // Add subtitle
         JsonObject subtitle = new JsonObject();
-        subtitle.addProperty( "uuid", subtitlePlayer.toString() );
+        subtitle.addProperty("uuid", subtitlePlayer.toString());
 
         // Optional: Size of the subtitle
-        subtitle.addProperty( "size", 1.1d); // Range is 0.8 - 1.6 (1.6 is Minecraft default)
+        subtitle.addProperty("size", 1.1d); // Range is 0.8 - 1.6 (1.6 is Minecraft default)
 
         // no value = remove the subtitle
-        if(value != null)
-            subtitle.addProperty( "value", value );
+        if (value != null)
+            subtitle.addProperty("value", value);
 
         // You can set multiple subtitles in one packet
         array.add(subtitle);

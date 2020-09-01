@@ -1,10 +1,8 @@
 package de.fel1x.teamcrimx.mlgwars.timer;
 
-import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.maphandler.ChestFiller;
-import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
@@ -24,14 +22,24 @@ public class LobbyTimer implements ITimer {
 
     @Override
     public void start() {
-        if(!this.running) {
+        if (!this.running) {
 
             this.mlgWars.getGamestateHandler().setGamestate(Gamestate.LOBBY);
             this.running = true;
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
                 switch (countdown) {
-                    case 60: case 50: case 40: case 30: case 20: case 10: case 5: case 4: case 3: case 2: case 1:
+                    case 60:
+                    case 50:
+                    case 40:
+                    case 30:
+                    case 20:
+                    case 10:
+                    case 5:
+                    case 4:
+                    case 3:
+                    case 2:
+                    case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Die Runde startet in §e"
                                 + (countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
                         Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.NOTE_BASS, 2f, 3f));
@@ -49,11 +57,11 @@ public class LobbyTimer implements ITimer {
                         break;
                 }
 
-                if(this.countdown == 5) {
+                if (this.countdown == 5) {
                     new ChestFiller();
                 }
 
-                if(this.countdown >= 1) {
+                if (this.countdown >= 1) {
                     Bukkit.getOnlinePlayers().forEach(current -> {
                         current.setLevel(countdown);
                         current.setExp((float) countdown / (float) 60);
@@ -70,11 +78,12 @@ public class LobbyTimer implements ITimer {
 
     @Override
     public void stop() {
-        if(this.running) {
+        if (this.running) {
             Bukkit.getScheduler().cancelTask(taskId);
             this.running = false;
             this.setCountdown(60);
             this.mlgWars.setLobbyCountdown(60);
+
             Bukkit.getOnlinePlayers().forEach(player -> {
                 player.setLevel(0);
                 player.setExp(0);

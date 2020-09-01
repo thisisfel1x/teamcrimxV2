@@ -62,7 +62,6 @@ public class MapHandler {
 
         player.sendMessage("§7You have successfully set the §b§a" + root + " §7position!");
 
-
     }
 
     public Location loadLocation(String mapName, String id) {

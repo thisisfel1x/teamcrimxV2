@@ -38,18 +38,18 @@ public class ToggleFlyListener implements Listener {
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
         Kit selectedKit = gamePlayer.getSelectedKit();
 
-        if(gamePlayer.isSpectator()) return;
+        if (gamePlayer.isSpectator()) return;
 
-        if(gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
-            if(selectedKit == Kit.KANGAROO) {
+        if (gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
+            if (selectedKit == Kit.KANGAROO) {
 
                 event.setCancelled(true);
                 player.setFlying(false);
                 player.setAllowFlight(false);
 
-                if(player.hasMetadata("essence")) {
+                if (player.hasMetadata("essence")) {
                     int essences = player.getMetadata("essence").get(0).asInt();
-                    if(essences <= 0) {
+                    if (essences <= 0) {
                         player.sendMessage(this.mlgWars.getPrefix() + "§7Alle Essenzen §aaufgebraucht! §7Töte Gegner um neue zu erhalten!");
                         player.playSound(player.getLocation(), Sound.BAT_HURT, 3f, 0.75f);
                         return;
@@ -57,12 +57,12 @@ public class ToggleFlyListener implements Listener {
                 }
 
                 int currentEssences = 0;
-                if(player.hasMetadata("essence")) {
+                if (player.hasMetadata("essence")) {
                     currentEssences = player.getMetadata("essence").get(0).asInt();
                 }
                 player.setMetadata("essence", new FixedMetadataValue(this.mlgWars, currentEssences - 1));
 
-                if(player.hasMetadata("kangaroo")) {
+                if (player.hasMetadata("kangaroo")) {
                     long nextUse = player.getMetadata("kangaroo").get(0).asLong();
                     if (nextUse > System.currentTimeMillis()) {
                         player.sendMessage(this.mlgWars.getPrefix() + "§7Bitte warte einen Moment bis du den Sprung wieder nutzen kannst!");
@@ -85,13 +85,13 @@ public class ToggleFlyListener implements Listener {
                         Actionbar.sendActiobar(player, "§6Känguru §8● " + ProgressBar.getProgressBar(count, 10, 10,
                                 '█', ChatColor.GREEN, ChatColor.DARK_GRAY));
 
-                        if(count == 10) {
+                        if (count == 10) {
                             data.getKangarooTask().get(player.getUniqueId()).cancel();
                             data.getKangarooTask().remove(player.getUniqueId());
                             Actionbar.sendActiobar(player, "§6Känguru §8● §7Sprung wieder §abereit!");
                             player.setAllowFlight(true);
                         } else {
-                            player.setMetadata("kangaroocount", new FixedMetadataValue(mlgWars, count  + 1));
+                            player.setMetadata("kangaroocount", new FixedMetadataValue(mlgWars, count + 1));
                         }
                     }
                 });

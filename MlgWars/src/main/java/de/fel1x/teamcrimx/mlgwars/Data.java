@@ -2,6 +2,7 @@ package de.fel1x.teamcrimx.mlgwars;
 
 import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
+import de.fel1x.teamcrimx.mlgwars.objects.ScoreboardTeam;
 import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -26,11 +27,9 @@ public class Data {
     private final Map<UUID, Document> mlgWarsPlayerDocument;
     private final Map<UUID, Document> networkPlayerDocument;
 
+    private final Map<Integer, ScoreboardTeam> gameTeams;
+
     private final Map<UUID, Boolean> playerGg;
-
-    private Cuboid middleRegion;
-    private Cuboid mapRegion;
-
     // KIT-STORAGE
     private final Map<UUID, ArrayList<Block>> placedExploderTnt;
     private final Map<UUID, BukkitRunnable> thorTask;
@@ -40,6 +39,8 @@ public class Data {
     private final Map<UUID, ArrayList<BukkitRunnable>> eggTask;
     private final Map<UUID, ArrayList<BukkitRunnable>> turtleTask;
     private final Map<UUID, ArrayList<BukkitRunnable>> csgoTasks;
+    private Cuboid middleRegion;
+    private Cuboid mapRegion;
 
     public Data() {
         this.players = new ArrayList<>();
@@ -55,6 +56,8 @@ public class Data {
 
         this.mlgWarsPlayerDocument = new HashMap<>();
         this.networkPlayerDocument = new HashMap<>();
+
+        this.gameTeams = new HashMap<>();
 
         this.playerGg = new HashMap<>();
 
@@ -150,5 +153,9 @@ public class Data {
 
     public Map<UUID, ArrayList<BukkitRunnable>> getCsgoTasks() {
         return csgoTasks;
+    }
+
+    public Map<Integer, ScoreboardTeam> getGameTeams() {
+        return gameTeams;
     }
 }

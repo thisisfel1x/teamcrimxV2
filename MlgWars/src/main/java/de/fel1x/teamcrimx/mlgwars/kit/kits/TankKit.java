@@ -15,7 +15,7 @@ public class TankKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Stärke & Langsamkeit", "§7Das sind deine Fähigkeiten", "", "§6[für Xx_LP_KottPvP_xX]"
         };
     }

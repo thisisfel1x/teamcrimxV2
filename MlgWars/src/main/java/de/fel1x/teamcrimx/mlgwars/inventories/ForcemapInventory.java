@@ -4,7 +4,6 @@ import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Size;
 import de.fel1x.teamcrimx.mlgwars.maphandler.MapHandler;
-import de.fel1x.teamcrimx.mlgwars.timer.LobbyTimer;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
@@ -51,10 +50,10 @@ public class ForcemapInventory implements InventoryProvider {
 
             contents.set(row, column, ClickableItem.of(new ItemBuilder(Material.PAPER).setName("§8● §7" + mapName).setLore("", "§7Größe §8● §b" + size.getName(), "").toItemStack(), event -> {
                 player.closeInventory();
-                if(mapName.equalsIgnoreCase(this.mlgWars.getWorldLoader().getMapName())) {
+                if (mapName.equalsIgnoreCase(this.mlgWars.getWorldLoader().getMapName())) {
                     player.sendMessage(this.mlgWars.getPrefix() + "§cDiese Map ist bereits ausgewählt");
                 } else {
-                    if(this.mlgWars.getLobbyCountdown() <= 10) {
+                    if (this.mlgWars.getLobbyCountdown() <= 10) {
                         player.sendMessage(this.mlgWars.getPrefix() + "§7Du kannst die Map nicht mehr ändern");
                     } else {
                         player.sendMessage(this.mlgWars.getPrefix() + "§7Versuche §a'" + mapName + "' §7zu laden!");
@@ -67,7 +66,7 @@ public class ForcemapInventory implements InventoryProvider {
 
             column++;
 
-            if(column == 9) {
+            if (column == 9) {
                 column = 0;
                 row++;
             }

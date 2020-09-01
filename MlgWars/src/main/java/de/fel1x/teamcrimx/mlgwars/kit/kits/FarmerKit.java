@@ -14,7 +14,7 @@ public class FarmerKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Willkommen auf deiner Farm!", "§7Züchte Tiere und werde selbst zum Tier!", "", "§cAchtung: Du hast weniger Leben bei einer Verwandlung", "",
         };
     }

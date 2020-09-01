@@ -17,7 +17,7 @@ public class MoneyShoeTrail implements ICosmetic {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] { "", "§a§l€€€ HERE COMES THE MONEY €€€"};
+        return new String[]{"", "§a§l€€€ HERE COMES THE MONEY €€€"};
     }
 
     @Override

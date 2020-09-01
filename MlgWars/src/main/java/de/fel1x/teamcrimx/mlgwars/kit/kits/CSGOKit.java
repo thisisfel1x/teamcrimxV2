@@ -14,7 +14,7 @@ public class CSGOKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Heute ruhiger Stream,", "§7denn hier wirst du nicht gesniped!", "", "§6[für TurbomikLP]"
         };
     }

@@ -29,6 +29,17 @@ public class ColorUtil {
         colorMap.put(ChatColor.WHITE, new ColorSet<>(255, 255, 255));
     }
 
+    public static ChatColor fromRGB(int r, int g, int b) {
+        TreeMap<Integer, ChatColor> closest = new TreeMap<>();
+        colorMap.forEach((color, set) -> {
+            int red = Math.abs(r - set.getRed());
+            int green = Math.abs(g - set.getGreen());
+            int blue = Math.abs(b - set.getBlue());
+            closest.put(red + green + blue, color);
+        });
+        return closest.firstEntry().getValue();
+    }
+
     private static class ColorSet<R, G, B> {
         R red = null;
         G green = null;
@@ -52,17 +63,6 @@ public class ColorUtil {
             return blue;
         }
 
-    }
-
-    public static ChatColor fromRGB(int r, int g, int b) {
-        TreeMap<Integer, ChatColor> closest = new TreeMap<>();
-        colorMap.forEach((color, set) -> {
-            int red = Math.abs(r - set.getRed());
-            int green = Math.abs(g - set.getGreen());
-            int blue = Math.abs(b - set.getBlue());
-            closest.put(red + green + blue, color);
-        });
-        return closest.firstEntry().getValue();
     }
 
 }

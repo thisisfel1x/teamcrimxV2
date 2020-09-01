@@ -14,7 +14,7 @@ public class NpcKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Die Alternative für alle,", "§7die kein Aim haben!", ""
         };
     }

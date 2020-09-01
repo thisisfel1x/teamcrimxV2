@@ -16,7 +16,7 @@ public class EndingTimer implements ITimer {
 
     @Override
     public void start() {
-        if(!this.running) {
+        if (!this.running) {
 
             this.mlgWars.getGamestateHandler().setGamestate(Gamestate.ENDING);
             this.running = true;
@@ -24,7 +24,13 @@ public class EndingTimer implements ITimer {
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
 
                 switch (countdown) {
-                    case 20: case 10: case 5: case 4: case 3: case 2: case 1:
+                    case 20:
+                    case 10:
+                    case 5:
+                    case 4:
+                    case 3:
+                    case 2:
+                    case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§cDer Server startet in "
                                 + (countdown == 1 ? "einer Sekunde" : this.countdown + " Sekunden") + " neu");
                         Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.NOTE_BASS, 2f, 3f));
@@ -40,7 +46,7 @@ public class EndingTimer implements ITimer {
                         break;
                 }
 
-                if(countdown < 0 && Bukkit.getOnlinePlayers().isEmpty()) {
+                if (countdown < 0 && Bukkit.getOnlinePlayers().isEmpty()) {
                     Bukkit.getServer().shutdown();
                 }
 
@@ -53,7 +59,7 @@ public class EndingTimer implements ITimer {
 
     @Override
     public void stop() {
-        if(this.running) {
+        if (this.running) {
             Bukkit.getScheduler().cancelTask(taskId);
             this.running = false;
             this.countdown = 60;

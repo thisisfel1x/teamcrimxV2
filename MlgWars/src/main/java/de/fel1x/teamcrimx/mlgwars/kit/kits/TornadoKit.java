@@ -14,7 +14,7 @@ public class TornadoKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Mit diesem Kit eskalierst du komplett!", "§7Lass deinen Frust raus!", "", "§6[für feyju]"
         };
     }

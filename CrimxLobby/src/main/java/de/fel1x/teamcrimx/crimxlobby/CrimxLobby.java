@@ -33,23 +33,17 @@ import java.util.UUID;
 public final class CrimxLobby extends JavaPlugin {
 
     private static CrimxLobby instance;
+    int actionBarCount;
     private String prefix = "§aCrimx§lLobby §8● §r";
-
     private int actionbarTimer = 0;
-
     private Data data;
-
     private CrimxAPI crimxAPI;
     private PluginManager pluginManager;
-
     private NPCPool npcPool;
     private NPCLib npcLib;
-
     private InventoryManager inventoryManager;
-
     private SpawnManager spawnManager = new SpawnManager();
     private WaterMlgHandler waterMlgHandler;
-
     private LobbyScoreboard lobbyScoreboard;
 
     public static CrimxLobby getInstance() {
@@ -62,7 +56,7 @@ public final class CrimxLobby extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("§aTrying to start CrimxLobby by fel1x");
 
         instance = this;
-        if(!this.getConfig().contains("actionbar")) {
+        if (!this.getConfig().contains("actionbar")) {
             this.saveDefaultConfig();
         }
 
@@ -114,7 +108,7 @@ public final class CrimxLobby extends JavaPlugin {
         }
 
         lobby.getWorld().getEntities().forEach(entity -> {
-            if(!(entity instanceof ArmorStand)) {
+            if (!(entity instanceof ArmorStand)) {
                 entity.remove();
             }
         });
@@ -163,8 +157,6 @@ public final class CrimxLobby extends JavaPlugin {
 
     }
 
-    int actionBarCount;
-
     private void runMainScheduler() {
 
         actionBarCount = 0;
@@ -175,7 +167,7 @@ public final class CrimxLobby extends JavaPlugin {
             Player player = Bukkit.getPlayer(uuid);
             RainbowArmor rainbowArmor = new RainbowArmor();
 
-            if(player != null && player.isOnline()) {
+            if (player != null && player.isOnline()) {
                 hue = rainbowArmor.handleColor(hue, 0.005f);
                 rainbowArmor.setArmor(player, hue, 0.02f);
                 this.getData().getHueMap().put(uuid, hue);
@@ -187,8 +179,8 @@ public final class CrimxLobby extends JavaPlugin {
             Bukkit.getOnlinePlayers().forEach(player -> Actionbar.sendActiobar(player, actionBarMessages.get(actionBarCount).replace('&', '§')));
 
             this.actionbarTimer++;
-            if(this.actionbarTimer % 10 == 0) {
-                if(actionBarCount + 1 < actionBarMessages.size()) {
+            if (this.actionbarTimer % 10 == 0) {
+                if (actionBarCount + 1 < actionBarMessages.size()) {
                     actionBarCount++;
                 } else {
                     actionBarCount = 0;

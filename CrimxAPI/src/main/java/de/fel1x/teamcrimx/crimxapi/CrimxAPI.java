@@ -8,9 +8,8 @@ import java.util.logging.Logger;
 
 public final class CrimxAPI {
 
-    private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
-
     public static CrimxAPI instance;
+    private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
     private String prefix = "§bteamcrimx§lDE §8● §r";
 
     private Logger logger;

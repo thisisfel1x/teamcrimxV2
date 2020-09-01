@@ -29,13 +29,13 @@ public class ProjectileHitListener implements Listener {
         Entity entity = event.getEntity();
         Location location = entity.getLocation().clone().add(0, 0.5, 0);
 
-        if(entity instanceof Snowball) {
-            if(entity.hasMetadata("funGun")) {
+        if (entity instanceof Snowball) {
+            if (entity.hasMetadata("funGun")) {
                 ParticleUtils.display(Particles.LAVA, 1.3f, 1f, 1.3f, location, 16);
                 ParticleUtils.display(Particles.CLOUD, 1.3f, 1f, 1.3f, location, 16);
                 ParticleUtils.display(Particles.HEART, 0.8f, 0.8f, 0.8f, location, 20);
                 location.getWorld().playSound(location, Sound.CAT_PURREOW, 3f, 0.75f);
-            } else if(entity.hasMetadata("firework")) {
+            } else if (entity.hasMetadata("firework")) {
                 new InstantFirework(FireworkEffect.builder().withColor(Color.GREEN, Color.RED, Color.BLUE, Color.YELLOW,
                         Color.AQUA, Color.ORANGE, Color.PURPLE, Color.MAROON, Color.FUCHSIA)
                         .trail(true).withFade(Color.GREEN, Color.RED, Color.BLUE, Color.YELLOW,

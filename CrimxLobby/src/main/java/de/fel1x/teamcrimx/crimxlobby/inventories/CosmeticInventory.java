@@ -50,53 +50,53 @@ public class CosmeticInventory implements InventoryProvider {
 
             boolean bought = (boolean) lobbyPlayer.getObjectFromMongoDocument(cosmetic.name(), MongoDBCollection.LOBBY);
 
-                try {
-                    ICosmetic iCosmetic = cosmetic.getCosmeticClass().newInstance();
+            try {
+                ICosmetic iCosmetic = cosmetic.getCosmeticClass().newInstance();
 
-                    if(!bought) {
+                if (!bought) {
 
-                        contents.set(row, slot, ClickableItem.of(new ItemBuilder(Material.INK_SACK, 1, (byte) 8)
-                                        .setName("§8● " + iCosmetic.getCosmeticName() + " §8» §e" + iCosmetic.getCosmeticCost() + " Coins")
-                                        .setLore("§7§kaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                                                "§7§kaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").toItemStack(),
-                                event -> {
+                    contents.set(row, slot, ClickableItem.of(new ItemBuilder(Material.INK_SACK, 1, (byte) 8)
+                                    .setName("§8● " + iCosmetic.getCosmeticName() + " §8» §e" + iCosmetic.getCosmeticCost() + " Coins")
+                                    .setLore("§7§kaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                                            "§7§kaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").toItemStack(),
+                            event -> {
 
                                 player.setMetadata("toBuy", new FixedMetadataValue(CrimxLobby.getInstance(), cosmetic.name()));
                                 BuyInventory.BUY_INVENTORY.open(player);
 
-                                }));
+                            }));
 
-                    } else {
+                } else {
 
-                        ItemBuilder itemBuilder = new ItemBuilder(iCosmetic.getCosmeticMaterial())
-                                .setName("§8● " + iCosmetic.getCosmeticName())
-                                .setLore(iCosmetic.getCosmeticDescription());
+                    ItemBuilder itemBuilder = new ItemBuilder(iCosmetic.getCosmeticMaterial())
+                            .setName("§8● " + iCosmetic.getCosmeticName())
+                            .setLore(iCosmetic.getCosmeticDescription());
 
-                        if (iCosmetic.getCosmeticMaterial() == Material.LEATHER_BOOTS && iCosmetic.getLeatherShoeColor() != null) {
-                            itemBuilder.setLeatherArmorColor(iCosmetic.getLeatherShoeColor());
-                        }
-
-                        contents.set(row, slot, ClickableItem.of(itemBuilder.toItemStack(),
-                                event -> {
-                                    CrimxLobby.getInstance().getData().getHueMap().remove(player.getUniqueId());
-                                    player.getInventory().setArmorContents(null);
-                                    int slotToRemove = (player.hasPermission("crimxlobby.vip") ? 2 : 4);
-                                    player.getInventory().setItem(slotToRemove, new ItemStack(Material.AIR));
-                                    player.closeInventory();
-                                    iCosmetic.startTrail(player);
-                                    lobbyPlayer.saveObjectInDocument("selectedCosmetic", cosmetic.name(),
-                                            MongoDBCollection.LOBBY);
-                                }));
-
+                    if (iCosmetic.getCosmeticMaterial() == Material.LEATHER_BOOTS && iCosmetic.getLeatherShoeColor() != null) {
+                        itemBuilder.setLeatherArmorColor(iCosmetic.getLeatherShoeColor());
                     }
 
-                } catch (InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
+                    contents.set(row, slot, ClickableItem.of(itemBuilder.toItemStack(),
+                            event -> {
+                                CrimxLobby.getInstance().getData().getHueMap().remove(player.getUniqueId());
+                                player.getInventory().setArmorContents(null);
+                                int slotToRemove = (player.hasPermission("crimxlobby.vip") ? 2 : 4);
+                                player.getInventory().setItem(slotToRemove, new ItemStack(Material.AIR));
+                                player.closeInventory();
+                                iCosmetic.startTrail(player);
+                                lobbyPlayer.saveObjectInDocument("selectedCosmetic", cosmetic.name(),
+                                        MongoDBCollection.LOBBY);
+                            }));
+
                 }
+
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
 
             slot++;
 
-            if(slot == 8) {
+            if (slot == 8) {
                 slot = 1;
                 row++;
             }

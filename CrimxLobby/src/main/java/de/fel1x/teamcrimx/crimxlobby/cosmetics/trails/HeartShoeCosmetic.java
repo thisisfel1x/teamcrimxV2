@@ -17,7 +17,7 @@ public class HeartShoeCosmetic implements ICosmetic {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§7Zeige deine §5Liebe, §7und sei glücklich (#nohomo)", ""
         };
     }

@@ -8,7 +8,6 @@ import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.timer.LobbyTimer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -44,7 +43,8 @@ public class JoinListener implements Listener {
 
         switch (gamestate) {
 
-            case IDLE: case LOBBY:
+            case IDLE:
+            case LOBBY:
 
                 gamePlayer.addToPlayers();
                 gamePlayer.setJoinItems();
@@ -58,10 +58,12 @@ public class JoinListener implements Listener {
                 break;
 
 
-            case DELAY: case PREGAME: case INGAME:
+            case DELAY:
+            case PREGAME:
+            case INGAME:
 
                 gamePlayer.addToSpectators();
-                gamePlayer.activateSpectatorMode();
+                gamePlayer.activateSpectatorModeOnJoin();
                 gamePlayer.teleport(Spawns.SPECTATOR);
 
                 gamePlayer.setInGameScoreboard();
@@ -77,13 +79,13 @@ public class JoinListener implements Listener {
 
         }
 
-        if(gamestate == Gamestate.IDLE) {
-           if(!this.mlgWars.isInSetup() && !this.mlgWars.isNoMap()) {
-               int neededPlayers = (this.mlgWars.getTeamSize() * 2);
-               if(this.mlgWars.getData().getPlayers().size() >= neededPlayers) {
-                   this.mlgWars.startTimerByClass(LobbyTimer.class);
-               }
-           }
+        if (gamestate == Gamestate.IDLE) {
+            if (!this.mlgWars.isInSetup() && !this.mlgWars.isNoMap()) {
+                int neededPlayers = (this.mlgWars.getTeamSize() * 2);
+                if (this.mlgWars.getData().getPlayers().size() >= neededPlayers) {
+                    this.mlgWars.startTimerByClass(LobbyTimer.class);
+                }
+            }
         }
 
     }
