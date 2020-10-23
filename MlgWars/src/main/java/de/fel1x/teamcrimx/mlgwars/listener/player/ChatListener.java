@@ -59,7 +59,7 @@ public class ChatListener implements Listener {
                     this.mlgWars.getData().getPlayerGg().put(player.getUniqueId(), true);
 
                     player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast §e" + coins + " Coins §7erhalten!");
-                    player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 1.75f);
+                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 1.75f);
 
                     CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
                     coinsAPI.addCoins(coins);

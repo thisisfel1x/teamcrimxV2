@@ -40,7 +40,7 @@ public class TeamInventory implements InventoryProvider {
                 }
             }
 
-            contents.set(0, i, ClickableItem.of(new ItemBuilder(Material.BED)
+            contents.set(0, i, ClickableItem.of(new ItemBuilder(Material.RED_BED)
                             .setName("§8● §7Team §a" + scoreboardTeam.getTeamId() + " §8(§a" + scoreboardTeam.getTeamPlayers().size()
                                     + "§8/§c" + scoreboardTeam.getMaxPlayers() + "§8)")
                             .setLore(lore)
@@ -79,7 +79,7 @@ public class TeamInventory implements InventoryProvider {
                 lore.add(" §8- " + teamPlayer.getDisplayName());
             }
 
-            contents.set(0, i, ClickableItem.of(new ItemBuilder(Material.BED)
+            contents.set(0, i, ClickableItem.of(new ItemBuilder(Material.RED_BED)
                             .setName("§8● §7Team §a" + scoreboardTeam.getTeamId() + " §8(§a" + scoreboardTeam.getTeamPlayers().size()
                                     + "§8/§c" + scoreboardTeam.getMaxPlayers() + "§8)")
                             .setLore(lore)

@@ -50,7 +50,7 @@ public class KitInventory implements InventoryProvider {
                                 gamePlayer.setSelectedKit(kit);
                                 this.mlgWarsScoreboard.updateBoard(player, "§8● §6" + iKit.getKitName(), "kit", "§6");
 
-                                player.playSound(player.getLocation(), Sound.ORB_PICKUP, 5, 0.5f);
+                                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 5, 0.5f);
                                 player.sendMessage(MlgWars.getInstance().getPrefix() + "§7Du nutzt nun das §e[" + iKit.getKitName() + "] §7Kit!");
                                 player.closeInventory();
                             } else {

@@ -214,15 +214,15 @@ public class GamePlayer {
 
     public void setJoinItems() {
 
-        this.player.getInventory().setItem(0, new ItemBuilder(Material.STORAGE_MINECART).setName("§8● §aKitauswahl").toItemStack());
+        this.player.getInventory().setItem(0, new ItemBuilder(Material.CHEST_MINECART).setName("§8● §aKitauswahl").toItemStack());
 
         if (this.player.hasPermission("mlgwars.forcemap") || this.player.isOp()) {
             int slot = this.mlgWars.getTeamSize() > 1 ? 2 : 1;
-            this.player.getInventory().setItem(slot, new ItemBuilder(Material.REDSTONE_TORCH_ON).setName("§8● §cForcemap").toItemStack());
+            this.player.getInventory().setItem(slot, new ItemBuilder(Material.REDSTONE_TORCH).setName("§8● §cForcemap").toItemStack());
         }
 
         if (this.mlgWars.getTeamSize() > 1) {
-            this.player.getInventory().setItem(1, new ItemBuilder(Material.BED).setName("§8● §eTeamauswahl").toItemStack());
+            this.player.getInventory().setItem(1, new ItemBuilder(Material.RED_BED).setName("§8● §eTeamauswahl").toItemStack());
         }
 
     }
@@ -404,7 +404,7 @@ public class GamePlayer {
 
             if (coins >= required) {
                 player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast erfolgreich §e[" + iKit.getKitName() + "] §7freigeschalten");
-                player.playSound(player.getLocation(), Sound.LEVEL_UP, 2, 0.5f);
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2, 0.5f);
                 player.closeInventory();
 
                 coinsAPI.removeCoins(required);
@@ -412,14 +412,14 @@ public class GamePlayer {
                 this.setSelectedKit(kit);
 
             } else {
-                player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
                 player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast nicht genügend Coins!");
                 player.closeInventory();
             }
 
         } catch (InstantiationException | IllegalAccessException e) {
             player.closeInventory();
-            player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
             player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
         }
     }

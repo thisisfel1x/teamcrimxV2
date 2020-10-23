@@ -61,7 +61,7 @@ public class FishListener implements Listener {
                         v.setZ(v_z);
                         player.setVelocity(v);
 
-                        player.playSound(player.getLocation(), Sound.ENDERDRAGON_WINGS, 3.0F, 2.0F);
+                        player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 3.0F, 2.0F);
                     }
                 }
             }

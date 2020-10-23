@@ -29,12 +29,12 @@ public class AstronautKit implements IKit {
 
     @Override
     public Material getKitMaterial() {
-        return Material.FIREWORK;
+        return Material.FIREWORK_ROCKET;
     }
 
     @Override
     public void setKitInventory(Player player) {
-        player.getInventory().setItem(0, new ItemBuilder(Material.FIREWORK, 3)
+        player.getInventory().setItem(0, new ItemBuilder(Material.FIREWORK_ROCKET, 3)
                 .setName("§8● §cRakete")
                 .addEnchant(Enchantment.DAMAGE_ARTHROPODS, 0)
                 .addGlow()

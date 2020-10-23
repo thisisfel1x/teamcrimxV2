@@ -156,7 +156,7 @@ public class SetupCommand implements CommandExecutor {
 
                         Block targetBlock = player.getTargetBlock(this.transparent, 10);
 
-                        if (targetBlock.getType() != Material.WALL_SIGN) {
+                        if (targetBlock.getType() != Material.OAK_WALL_SIGN) {
                             player.sendMessage(this.mlgWars.getPrefix() + "§cBitte schaue ein WALL_SIGN an!");
                             return false;
                         }
@@ -183,7 +183,7 @@ public class SetupCommand implements CommandExecutor {
 
                         Block targetBlock = player.getTargetBlock(this.transparent, 10);
 
-                        if (targetBlock.getType() != Material.SKULL) {
+                        if (targetBlock.getType() != Material.PLAYER_WALL_HEAD) {
                             player.sendMessage(this.mlgWars.getPrefix() + "§cBitte schaue ein SKULL an!");
                             return false;
                         }

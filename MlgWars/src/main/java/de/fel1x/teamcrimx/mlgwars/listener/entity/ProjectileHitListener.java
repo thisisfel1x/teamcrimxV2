@@ -9,6 +9,8 @@ import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attributable;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -18,6 +20,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -49,7 +52,7 @@ public class ProjectileHitListener implements Listener {
                     if (block.getType() != Material.AIR) return;
                     boolean shouldPlace = ThreadLocalRandom.current().nextBoolean();
                     if (shouldPlace) {
-                        block.setType(Material.WEB);
+                        block.setType(Material.COBWEB);
                     }
                 });
             } else if (egg.hasMetadata("botDecoy")) {
@@ -60,13 +63,15 @@ public class ProjectileHitListener implements Listener {
                 LivingEntity entity = CustomZombie.EntityTypes.spawnEntity(new CustomZombie(egg.getWorld()),
                         egg.getLocation().clone().add(0, 1.5, 0));
 
+                if (entity == null) return;
+
                 entity.setCustomName(player.getDisplayName());
                 entity.setCustomNameVisible(true);
                 entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 3, true, false));
 
                 entity.setCustomName(player.getDisplayName());
-                entity.setMaxHealth(10D);
-                entity.getEquipment().setItemInHand(this.zombieEquipment.getSwords()[this.random.nextInt(this.zombieEquipment.getSwords().length)]);
+                entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
+                entity.getEquipment().setItemInMainHand(this.zombieEquipment.getSwords()[this.random.nextInt(this.zombieEquipment.getSwords().length)]);
 
                 entity.getEquipment().setHelmet(this.zombieEquipment.getHelmets()[this.random.nextInt(this.zombieEquipment.getHelmets().length)]);
                 entity.getEquipment().setChestplate(this.zombieEquipment.getChestplates()[this.random.nextInt(this.zombieEquipment.getChestplates().length)]);
@@ -76,7 +81,6 @@ public class ProjectileHitListener implements Listener {
                 entity.setMetadata("owner", new FixedMetadataValue(mlgWars, player.getName()));
 
                 Disguise disguise = new PlayerDisguise(player.getName(), player.getName());
-                disguise.setShowName(true);
                 disguise.setReplaceSounds(true);
                 DisguiseAPI.disguiseEntity(entity, disguise);
             }

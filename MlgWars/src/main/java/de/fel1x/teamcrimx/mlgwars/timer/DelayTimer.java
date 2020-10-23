@@ -70,7 +70,7 @@ public class DelayTimer implements ITimer {
                 switch (countdown) {
                     case 5:
                         Bukkit.getOnlinePlayers().forEach(player -> {
-                            player.playSound(player.getLocation(), Sound.NOTE_BASS, 1.5f, 0.75f);
+                            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.5f, 0.75f);
                             Actionbar.sendTitle(player, "§5teamcrimx Labor", 10, 30, 10);
                             Actionbar.sendSubTitle(player, "§dTNT-Wahnsinn", 10, 30, 10);
                         });
@@ -80,13 +80,13 @@ public class DelayTimer implements ITimer {
                     case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Das Spiel startet in §e"
                                 + (countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
-                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.NOTE_BASS, 1.5f, 0.75f));
+                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.5f, 0.75f));
                         break;
 
                     case 0:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§aDas Spiel beginnt!");
                         Bukkit.getOnlinePlayers().forEach(player -> {
-                            player.playSound(player.getLocation(), Sound.FIREWORK_LAUNCH, 1.5f, 2f);
+                            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.5f, 2f);
                             Actionbar.sendTitle(player, "§a§lGO!", 0, 20, 10);
                         });
                         this.mlgWars.startTimerByClass(PreGameTimer.class);
@@ -155,7 +155,7 @@ public class DelayTimer implements ITimer {
 
     private void setArmor(Player player) {
 
-        player.getInventory().setHelmet(new ItemBuilder(Material.SKULL_ITEM, 1)
+        player.getInventory().setHelmet(new ItemBuilder(Material.CREEPER_HEAD, 1)
                 .setColor(4).addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 1).toItemStack());
         player.getInventory().setChestplate(new ItemBuilder(Material.IRON_CHESTPLATE)
                 .addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 1).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).setUnbreakable().toItemStack());

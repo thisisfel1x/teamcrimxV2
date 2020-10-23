@@ -16,7 +16,7 @@ public class MlgWarsScoreboard {
 
     public void setLobbyScoreboard(Player player) {
         Scoreboard lobbyScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        Objective objective = lobbyScoreboard.registerNewObjective("dummy", "test");
+        Objective objective = lobbyScoreboard.registerNewObjective("dummy", "test", "test");
 
         GamePlayer gamePlayer = new GamePlayer(player);
         Kit selectedKit = gamePlayer.getSelectedKit();

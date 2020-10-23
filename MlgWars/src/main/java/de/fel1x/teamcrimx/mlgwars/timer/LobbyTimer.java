@@ -42,13 +42,13 @@ public class LobbyTimer implements ITimer {
                     case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Die Runde startet in §e"
                                 + (countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
-                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.NOTE_BASS, 2f, 3f));
+                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2f, 3f));
                         break;
 
                     case 0:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§aDie Runde beginnt!");
                         Bukkit.getOnlinePlayers().forEach(player -> {
-                            player.playSound(player.getLocation(), Sound.LEVEL_UP, 3f, 5f);
+                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 3f, 5f);
                             player.setLevel(0);
                             player.setExp(0);
                         });

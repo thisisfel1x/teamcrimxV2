@@ -149,7 +149,7 @@ public class ChestFiller {
                     .toItemStack());
 
             items.add(new ItemBuilder(Material.STONE, 20 + random.nextInt(44)).toItemStack());
-            items.add(new ItemBuilder(Material.WOOD, 20 + random.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.OAK_WOOD, 20 + random.nextInt(44)).toItemStack());
 
             items.add(new ItemBuilder(Material.TNT, random.nextInt(5) + 1)
                     .setName("§cVelocity TNT").addGlow().setLore("§7Dieses TNT boostet dich weit")
@@ -161,19 +161,19 @@ public class ChestFiller {
         }
 
         for (int i = 0; i < 5; i++) {
-            items.add(new ItemBuilder(Material.WOOD_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
+            items.add(new ItemBuilder(Material.WOODEN_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
             items.add(new ItemBuilder(Material.STONE_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).toItemStack());
-            items.add(new ItemBuilder(Material.GOLD_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).toItemStack());
+            items.add(new ItemBuilder(Material.GOLDEN_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).toItemStack());
 
-            items.add(new ItemBuilder(Material.MONSTER_EGG).setColor(50).toItemStack());
-            items.add(new ItemBuilder(Material.MONSTER_EGG).setColor(61).toItemStack());
-            items.add(new ItemBuilder(Material.MONSTER_EGG).setColor(60).toItemStack());
+            items.add(new ItemBuilder(Material.CREEPER_SPAWN_EGG).setColor(50).toItemStack());
+            items.add(new ItemBuilder(Material.SKELETON_SPAWN_EGG).setColor(61).toItemStack());
+            items.add(new ItemBuilder(Material.ZOMBIE_SPAWN_EGG).setColor(60).toItemStack());
 
             items.add(new ItemBuilder(Material.BOW).addGlow().setName("Explosionsbogen").toItemStack());
             items.add(new ItemBuilder(Material.BOW).addGlow().setName("TNT-Bogen").toItemStack());
 
             items.add(new ItemBuilder(Material.COOKED_CHICKEN, 3 + random.nextInt(8)).toItemStack());
-            items.add(new ItemBuilder(Material.RAW_BEEF, 3 + random.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.COOKED_BEEF, 3 + random.nextInt(8)).toItemStack());
 
         }
 
@@ -182,8 +182,8 @@ public class ChestFiller {
             items.add(new ItemBuilder(Material.STICK, 3 + random.nextInt(8)).toItemStack());
             items.add(new ItemBuilder(Material.LAVA_BUCKET).toItemStack());
             items.add(new ItemBuilder(Material.WATER_BUCKET).toItemStack());
-            items.add(new ItemBuilder(Material.WEB).toItemStack());
-            items.add(new ItemBuilder(Material.SNOW_BALL, 1 + random.nextInt(4))
+            items.add(new ItemBuilder(Material.COBWEB).toItemStack());
+            items.add(new ItemBuilder(Material.SNOWBALL, 1 + random.nextInt(4))
                     .setName("§cWerfbares TNT")
                     .addGlow()
                     .setLore("§7Werfe mit TNT")
@@ -235,14 +235,14 @@ public class ChestFiller {
             items.add(new ItemBuilder(Material.STONE, 20 + r.nextInt(44)).toItemStack());
             items.add(new ItemBuilder(Material.BRICK, 20 + r.nextInt(44)).toItemStack());
             items.add(new ItemBuilder(Material.TNT, 5 + r.nextInt(4)).toItemStack());
-            items.add(new ItemBuilder(Material.WOOD, 20 + r.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.OAK_WOOD, 20 + r.nextInt(44)).toItemStack());
 
         }
 
         for (int i = 0; i < 3; i++) {
 
-            items.add(new ItemBuilder(Material.EXP_BOTTLE, 5 + r.nextInt(10)).toItemStack());
-            items.add(new ItemBuilder(Material.INK_SACK, 2 + r.nextInt(5), (byte) 4).toItemStack());
+            items.add(new ItemBuilder(Material.EXPERIENCE_BOTTLE, 5 + r.nextInt(10)).toItemStack());
+            items.add(new ItemBuilder(Material.LAPIS_LAZULI, 2 + r.nextInt(5)).toItemStack());
 
         }
 
@@ -268,7 +268,7 @@ public class ChestFiller {
         for (int i = 0; i < 5; i++) {
 
             items.add(new ItemBuilder(Material.COOKED_CHICKEN, 3 + r.nextInt(8)).toItemStack());
-            items.add(new ItemBuilder(Material.RAW_BEEF, 3 + r.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.BEEF, 3 + r.nextInt(8)).toItemStack());
             items.add(new ItemBuilder(Material.COOKED_BEEF, 3 + r.nextInt(8)).toItemStack());
             items.add(new ItemBuilder(Material.PUMPKIN_PIE, 3 + r.nextInt(8)).toItemStack());
 
@@ -290,13 +290,13 @@ public class ChestFiller {
         }
 
         for (int i = 0; i < 25; i++) {
-            items.add(new ItemBuilder(Material.WEB, r.nextInt(5) + 3).toItemStack());
+            items.add(new ItemBuilder(Material.COBWEB, r.nextInt(5) + 3).toItemStack());
         }
 
         for (int i = 0; i < 5; i++) {
-            items.add(new ItemBuilder(Material.WOOD_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
+            items.add(new ItemBuilder(Material.WOODEN_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
             items.add(new ItemBuilder(Material.STONE_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).toItemStack());
-            items.add(new ItemBuilder(Material.GOLD_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).toItemStack());
+            items.add(new ItemBuilder(Material.GOLDEN_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).toItemStack());
         }
 
 
@@ -308,7 +308,7 @@ public class ChestFiller {
 
         items.add(new ItemBuilder(Material.IRON_PICKAXE).addEnchant(Enchantment.DIG_SPEED, 1).toItemStack());
         items.add(new ItemBuilder(Material.IRON_AXE).addEnchant(Enchantment.DIG_SPEED, 1).toItemStack());
-        items.add(new ItemBuilder(Material.GOLD_PICKAXE).addEnchant(Enchantment.DIG_SPEED, 1).toItemStack());
+        items.add(new ItemBuilder(Material.GOLDEN_PICKAXE).addEnchant(Enchantment.DIG_SPEED, 1).toItemStack());
         items.add(new ItemBuilder(Material.DIAMOND_AXE).addEnchant(Enchantment.DIG_SPEED, 1).toItemStack());
         items.add(new ItemBuilder(Material.DIAMOND_PICKAXE).addEnchant(Enchantment.DIG_SPEED, 1).toItemStack());
 
@@ -322,10 +322,10 @@ public class ChestFiller {
         }
 
         for (int i = 0; i < 4; i++) {
-            items.add(new ItemBuilder(Material.GOLD_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
-            items.add(new ItemBuilder(Material.GOLD_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
-            items.add(new ItemBuilder(Material.GOLD_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
-            items.add(new ItemBuilder(Material.GOLD_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+            items.add(new ItemBuilder(Material.GOLDEN_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+            items.add(new ItemBuilder(Material.GOLDEN_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+            items.add(new ItemBuilder(Material.GOLDEN_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+            items.add(new ItemBuilder(Material.GOLDEN_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
         }
 
         for (int i = 0; i < 2; i++) {
@@ -396,15 +396,15 @@ public class ChestFiller {
             items.add(new ItemBuilder(Material.STONE, 20 + r.nextInt(44)).toItemStack());
             items.add(new ItemBuilder(Material.BRICK, 20 + r.nextInt(44)).toItemStack());
             items.add(new ItemBuilder(Material.TNT, 5 + r.nextInt(4)).toItemStack());
-            items.add(new ItemBuilder(Material.WOOD, 20 + r.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.OAK_LOG, 20 + r.nextInt(44)).toItemStack());
 
         }
         for (int i = 0; i < 5; i++) {
 
-            items.add(new ItemBuilder(Material.EXP_BOTTLE, 5 + r.nextInt(10)).toItemStack());
-            items.add(new ItemBuilder(Material.EXP_BOTTLE, 5 + r.nextInt(10)).toItemStack());
+            items.add(new ItemBuilder(Material.EXPERIENCE_BOTTLE, 5 + r.nextInt(10)).toItemStack());
+            items.add(new ItemBuilder(Material.EXPERIENCE_BOTTLE, 5 + r.nextInt(10)).toItemStack());
             items.add(new ItemBuilder(Material.GOLDEN_APPLE).toItemStack());
-            items.add(new ItemBuilder(Material.INK_SACK, 2 + r.nextInt(5), (byte) 4).toItemStack());
+            items.add(new ItemBuilder(Material.LAPIS_LAZULI, 2 + r.nextInt(5), (byte) 4).toItemStack());
 
         }
 
@@ -427,7 +427,7 @@ public class ChestFiller {
         for (int i = 0; i < 3; i++) {
 
             items.add(new ItemBuilder(Material.COOKED_CHICKEN, 3 + r.nextInt(8)).toItemStack());
-            items.add(new ItemBuilder(Material.RAW_BEEF, 3 + r.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.BEEF, 3 + r.nextInt(8)).toItemStack());
             items.add(new ItemBuilder(Material.COOKED_BEEF, 3 + r.nextInt(8)).toItemStack());
             items.add(new ItemBuilder(Material.PUMPKIN_PIE, 3 + r.nextInt(8)).toItemStack());
 
@@ -449,11 +449,11 @@ public class ChestFiller {
         }
 
         for (int i = 0; i < 20; i++) {
-            items.add(new ItemBuilder(Material.WEB, r.nextInt(5) + 3).toItemStack());
+            items.add(new ItemBuilder(Material.COBWEB, r.nextInt(5) + 3).toItemStack());
         }
 
         for (int i = 0; i < 5; i++) {
-            items.add(new ItemBuilder(Material.WOOD_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
+            items.add(new ItemBuilder(Material.WOODEN_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
         }
 
 
@@ -465,15 +465,15 @@ public class ChestFiller {
 
         items.add(new ItemBuilder(Material.IRON_PICKAXE).addEnchant(Enchantment.DIG_SPEED, 1).toItemStack());
         items.add(new ItemBuilder(Material.IRON_AXE).addEnchant(Enchantment.DIG_SPEED, 1).toItemStack());
-        items.add(new ItemBuilder(Material.GOLD_PICKAXE).addEnchant(Enchantment.DIG_SPEED, 1).toItemStack());
+        items.add(new ItemBuilder(Material.GOLDEN_PICKAXE).addEnchant(Enchantment.DIG_SPEED, 1).toItemStack());
         items.add(new ItemBuilder(Material.DIAMOND_AXE).addEnchant(Enchantment.DIG_SPEED, 1).toItemStack());
         items.add(new ItemBuilder(Material.DIAMOND_PICKAXE).addEnchant(Enchantment.DIG_SPEED, 1).toItemStack());
 
         for (int i = 0; i < 2; i++) {
-            items.add(new ItemBuilder(Material.GOLD_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
-            items.add(new ItemBuilder(Material.GOLD_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
-            items.add(new ItemBuilder(Material.GOLD_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
-            items.add(new ItemBuilder(Material.GOLD_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+            items.add(new ItemBuilder(Material.GOLDEN_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+            items.add(new ItemBuilder(Material.GOLDEN_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+            items.add(new ItemBuilder(Material.GOLDEN_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+            items.add(new ItemBuilder(Material.GOLDEN_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
         }
 
         for (int i = 0; i < 3; i++) {
@@ -493,7 +493,7 @@ public class ChestFiller {
             items.add(new ItemBuilder(Material.DIAMOND_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
             items.add(new ItemBuilder(Material.DIAMOND_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
 
-            items.add(new ItemBuilder(Material.SNOW_BALL, 10 + r.nextInt(6)).toItemStack());
+            items.add(new ItemBuilder(Material.SNOWBALL, 10 + r.nextInt(6)).toItemStack());
             items.add(new ItemBuilder(Material.EGG, 10 + r.nextInt(6)).toItemStack());
 
         }

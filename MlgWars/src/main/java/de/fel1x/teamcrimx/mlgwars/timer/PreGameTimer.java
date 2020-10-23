@@ -39,12 +39,14 @@ public class PreGameTimer implements ITimer {
                     case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Die Schutzzeit endet in §e"
                                 + (countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
-                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.NOTE_BASS, 2f, 3f));
+                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(),
+                                Sound.BLOCK_NOTE_BLOCK_BASS, 2f, 3f));
                         break;
 
                     case 0:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§cDie Schutzzeit ist vorbei! Kämpft!");
-                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.LEVEL_UP, 3f, 5f));
+                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(),
+                                Sound.BLOCK_NOTE_BLOCK_BASS, 3f, 5f));
                         this.mlgWars.startTimerByClass(InGameTimer.class);
                         break;
                 }

@@ -41,20 +41,19 @@ public class BuyInventory implements InventoryProvider {
                         .setName("§8● §a" + iKit.getKitName())
                         .setLore(iKit.getKitDescription()).toItemStack()));
 
-                contents.set(0, 0, ClickableItem.of(new ItemBuilder(Material.INK_SACK)
+                contents.set(0, 0, ClickableItem.of(new ItemBuilder(Material.RED_DYE)
                         .setName("§8● §cAbbrechen")
-                        .setColor(1)
                         .toItemStack(), event -> {
 
                     KitInventory.KIT_OVERVIEW_INVENTORY.open(player);
-                    player.playSound(player.getLocation(), Sound.NOTE_BASS, 3f, 1.75f);
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 3f, 1.75f);
 
                 }));
 
                 CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
                 int coins = coinsAPI.getCoins();
 
-                contents.set(0, 2, ClickableItem.of(new ItemBuilder(Material.INK_SACK)
+                contents.set(0, 2, ClickableItem.of(new ItemBuilder(Material.GREEN_DYE)
                         .setName("§8● §aKaufen")
                         .setColor(10)
                         .toItemStack(), event -> gamePlayer.unlockKit(kit)));

@@ -72,7 +72,7 @@ public class MoveListener implements Listener {
                         borderPlayers.add(player);
 
                         player.setVelocity(vector);
-                        player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 5, 3);
+                        player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, 5, 3);
                         player.playEffect(EntityEffect.HURT);
 
                         if (player.getHealth() - 5 >= 0) {

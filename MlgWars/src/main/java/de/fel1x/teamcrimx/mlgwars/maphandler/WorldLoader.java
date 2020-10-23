@@ -1,30 +1,22 @@
 package de.fel1x.teamcrimx.mlgwars.maphandler;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Size;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.objects.ScoreboardTeam;
 import de.fel1x.teamcrimx.mlgwars.scoreboard.MlgWarsScoreboard;
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.TileEntitySkull;
 import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.Skull;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 public class WorldLoader {
 
@@ -157,14 +149,6 @@ public class WorldLoader {
 
             skull.setRotation(this.spawnHandler.getSignFace("topHead" + current));
             skull.setOwner(currentDocument.getString("name"));
-
-            TileEntitySkull skullTile = (TileEntitySkull) ((CraftWorld) skull.getWorld()).getHandle().getTileEntity(new BlockPosition(skull.getX(), skull.getY(), skull.getZ()));
-            GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
-            String textures = Objects.requireNonNull(this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection()
-                    .find(new Document("_id", currentDocument.getString("_id"))).first()).getString("skinTexture");
-            gameProfile.getProperties().put("textures", new Property("textures",
-                    Base64Coder.encodeString(textures)));
-            skullTile.setGameProfile(gameProfile);
 
             skull.update();
         }

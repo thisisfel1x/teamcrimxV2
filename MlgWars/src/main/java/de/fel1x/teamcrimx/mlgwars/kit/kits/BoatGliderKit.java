@@ -26,12 +26,12 @@ public class BoatGliderKit implements IKit {
 
     @Override
     public Material getKitMaterial() {
-        return Material.BOAT;
+        return Material.OAK_BOAT;
     }
 
     @Override
     public void setKitInventory(Player player) {
-        player.getInventory().setItem(0, new ItemBuilder(Material.BOAT, 3)
+        player.getInventory().setItem(0, new ItemBuilder(Material.OAK_BOAT, 3)
                 .setName("§8● §7MLG-Boot")
                 .addGlow()
                 .toItemStack());

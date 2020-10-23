@@ -26,7 +26,7 @@ public class PullerKit implements IKit {
 
     @Override
     public Material getKitMaterial() {
-        return Material.CARROT_STICK;
+        return Material.CARROT_ON_A_STICK;
     }
 
     @Override

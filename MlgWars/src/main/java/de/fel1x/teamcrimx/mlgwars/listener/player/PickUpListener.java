@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
 public class PickUpListener implements Listener {
@@ -20,9 +21,11 @@ public class PickUpListener implements Listener {
     }
 
     @EventHandler
-    public void on(PlayerPickupItemEvent event) {
+    public void on(EntityPickupItemEvent event) {
 
-        Player player = event.getPlayer();
+        if(!(event.getEntity() instanceof Player)) return;
+
+        Player player = (Player) event.getEntity();
         GamePlayer gamePlayer = new GamePlayer(player);
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();

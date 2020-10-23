@@ -1,8 +1,8 @@
 package de.fel1x.teamcrimx.mlgwars.utils.entites;
 
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_16_R2.*;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
 import org.bukkit.entity.LivingEntity;
 
 import java.lang.reflect.Field;
@@ -24,15 +24,15 @@ public class CustomZombie extends EntityZombie {
         targetC.clear();
 
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
-        this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, EntityHuman.class, 1.0D, false));
-        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, EntityZombie.class, 1.0D, false));
+        this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, 1.0D, false));
+        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.goalSelector.a(5, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
-        this.goalSelector.a(6, new PathfinderGoalMoveThroughVillage(this, 1.0D, false));
+        this.goalSelector.a(6, new PathfinderGoalMoveThroughVillage(this, 0, false, 0, () -> false));
         this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityZombie.class, 8.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
-        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true));
+        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, Entity.class));
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityZombie.class, true));
     }
@@ -66,9 +66,9 @@ public class CustomZombie extends EntityZombie {
         }
 
         private static void addToMaps(Class clazz, String name, int id) {
-            ((Map) getPrivateField("c", net.minecraft.server.v1_8_R3.EntityTypes.class, null)).put(name, clazz);
-            ((Map) getPrivateField("d", net.minecraft.server.v1_8_R3.EntityTypes.class, null)).put(clazz, name);
-            ((Map) getPrivateField("f", net.minecraft.server.v1_8_R3.EntityTypes.class, null)).put(clazz, id);
+            ((Map) getPrivateField("c", net.minecraft.server.v1_16_R2.EntityTypes.class, null)).put(name, clazz);
+            ((Map) getPrivateField("d", net.minecraft.server.v1_16_R2.EntityTypes.class, null)).put(clazz, name);
+            ((Map) getPrivateField("f", net.minecraft.server.v1_16_R2.EntityTypes.class, null)).put(clazz, id);
         }
     }
 

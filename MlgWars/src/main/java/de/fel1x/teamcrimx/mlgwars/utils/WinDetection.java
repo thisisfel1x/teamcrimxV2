@@ -56,7 +56,7 @@ public class WinDetection {
                             GamePlayer gamePlayer = new GamePlayer(player);
                             gamePlayer.cleanUpOnJoin();
                             gamePlayer.teleport(Spawns.LOBBY);
-                            player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 0.5f);
+                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 0.5f);
                             if (DisguiseAPI.isDisguised(player)) {
                                 DisguiseAPI.undisguiseToAll(player);
                             }
@@ -118,7 +118,7 @@ public class WinDetection {
                             GamePlayer gamePlayer = new GamePlayer(player);
                             gamePlayer.cleanUpOnJoin();
                             gamePlayer.teleport(Spawns.LOBBY);
-                            player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 0.5f);
+                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 0.5f);
                             if (DisguiseAPI.isDisguised(player)) {
                                 DisguiseAPI.undisguiseToAll(player);
                             }

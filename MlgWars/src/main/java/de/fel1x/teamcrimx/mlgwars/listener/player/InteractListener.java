@@ -1,5 +1,7 @@
 package de.fel1x.teamcrimx.mlgwars.listener.player;
 
+import com.destroystokyo.paper.entity.ai.MobGoalHelper;
+import com.destroystokyo.paper.entity.ai.MobGoals;
 import de.fel1x.teamcrimx.crimxapi.utils.*;
 import de.fel1x.teamcrimx.mlgwars.Data;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
@@ -29,10 +31,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class InteractListener implements Listener {
 
@@ -41,6 +40,12 @@ public class InteractListener implements Listener {
     private final Set<Material> transparent = new HashSet<>();
     private final Random random = new Random();
     private int count;
+
+    private Material[] woolTypes = {
+            Material.WHITE_WOOL, Material.ORANGE_WOOL, Material.MAGENTA_WOOL, Material.LIGHT_BLUE_WOOL, Material.YELLOW_WOOL,
+            Material.LIME_WOOL, Material.PINK_WOOL, Material.GRAY_WOOL, Material.LIGHT_GRAY_WOOL, Material.CYAN_WOOL,
+            Material.PURPLE_WOOL, Material.BLUE_WOOL, Material.GREEN_WOOL, Material.RED_WOOL
+    };
 
     public InteractListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
@@ -65,19 +70,18 @@ public class InteractListener implements Listener {
         }
 
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-
             if (gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
                 if (event.hasItem()) {
-                    if (event.getMaterial() == Material.STORAGE_MINECART) {
-                        player.playSound(player.getLocation(), Sound.CHEST_OPEN, 2f, 0.75f);
+                    if (event.getMaterial() == Material.CHEST_MINECART) {
+                        player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 2f, 0.75f);
                         KitInventory.KIT_OVERVIEW_INVENTORY.open(player);
-                    } else if (event.getMaterial() == Material.REDSTONE_TORCH_ON) {
+                    } else if (event.getMaterial() == Material.REDSTONE_TORCH) {
                         if (this.mlgWars.getLobbyCountdown() <= 10) {
                             player.sendMessage(this.mlgWars.getPrefix() + "§7Du kannst die Map nicht mehr ändern");
                         } else {
                             ForcemapInventory.FORCEMAP_INVENTORY.open(player);
                         }
-                    } else if (event.getMaterial() == Material.BED && this.mlgWars.getTeamSize() > 1) {
+                    } else if (event.getMaterial() == Material.RED_BED && this.mlgWars.getTeamSize() > 1) {
                         TeamInventory.TEAM_INVENTORY.open(player);
                     } else {
                         event.setCancelled(true);
@@ -96,7 +100,7 @@ public class InteractListener implements Listener {
                     return;
                 }
                 if (event.hasItem()) {
-                    if (event.getMaterial() == Material.MUSHROOM_SOUP) {
+                    if (event.getMaterial() == Material.MUSHROOM_STEW) {
                         if (player.getHealth() < 19) {
                             event.getItem().setType(Material.BOWL);
 
@@ -130,7 +134,7 @@ public class InteractListener implements Listener {
                             }
                             break;
                         case ASTRONAUT:
-                            if (interactedMaterial != Material.FIREWORK) {
+                            if (interactedMaterial != Material.FIREWORK_ROCKET) {
                                 return;
                             }
 
@@ -143,7 +147,7 @@ public class InteractListener implements Listener {
                             fireworkMeta.addEffect(FireworkEffect.builder().withColor(Color.fromBGR(random.nextInt(255),
                                     random.nextInt(255), random.nextInt(255))).flicker(true).trail(true).build());
                             firework.setFireworkMeta(fireworkMeta);
-                            firework.setPassenger(player);
+                            firework.addPassenger(player);
                             break;
                         case SAVER:
                             if (interactedMaterial != Material.BLAZE_ROD) {
@@ -187,11 +191,11 @@ public class InteractListener implements Listener {
                                         tnt.setVelocity(player.getEyeLocation().getDirection().multiply(1.75).setY(0.25D));
                                         tnt.setFuseTicks(50);
                                         break;
-                                    case SKULL_ITEM:
+                                    case WITHER_SKELETON_SKULL:
                                         this.removeItem(player);
                                         player.launchProjectile(WitherSkull.class);
                                         break;
-                                    case FIREBALL:
+                                    case FIRE_CHARGE:
                                         this.removeItem(player);
                                         player.launchProjectile(Fireball.class);
                                         break;
@@ -199,7 +203,7 @@ public class InteractListener implements Listener {
                             }
                             break;
                         case THOR:
-                            if (interactedMaterial != Material.GOLD_AXE) {
+                            if (interactedMaterial != Material.GOLDEN_AXE) {
                                 return;
                             }
 
@@ -246,14 +250,14 @@ public class InteractListener implements Listener {
 
                             break;
                         case BOAT_GLIDER:
-                            if (interactedMaterial != Material.BOAT) {
+                            if (interactedMaterial != Material.OAK_BOAT) {
                                 return;
                             }
 
                             this.removeItem(player);
 
                             Boat boat = (Boat) player.getWorld().spawnEntity(player.getLocation(), EntityType.BOAT);
-                            boat.setPassenger(player);
+                            boat.addPassenger(player);
                             boat.setVelocity(boat.getVelocity().setY(7.5D));
                             break;
 
@@ -278,8 +282,8 @@ public class InteractListener implements Listener {
                             for (Player player1 : MlgWars.getInstance().getData().getPlayers()) {
                                 if (player1.equals(player)) continue;
 
-                                player1.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 5, 1, false, false), true);
-                                player1.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 5, 1, false, false), true);
+                                player1.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 5, 1, false, false));
+                                player1.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 5, 1, false, false));
 
                                 Actionbar.sendTitle(player1, "§4" + player.getDisplayName(), 5, 20, 5);
                                 Actionbar.sendSubTitle(player1, "§7eskaliert komplett!", 5, 20, 5);
@@ -310,33 +314,22 @@ public class InteractListener implements Listener {
                                 @Override
                                 public void run() {
                                     Block block = egg.getWorld().getBlockAt(egg.getLocation().clone().add(0, -2, 0));
+                                    Block finalBlock = block;
 
-                                    if (block.getType() != Material.WOOL && block.getType() == Material.AIR) {
-
-                                        block.setType(Material.WOOL);
-                                        block.setData((byte) new Random().nextInt(15));
-                                        block.getState().update();
-
+                                    if (Arrays.stream(woolTypes).noneMatch(material -> material == finalBlock.getType()) && block.getType() == Material.AIR) {
+                                        block.setType(Arrays.asList(woolTypes).get(random.nextInt(woolTypes.length)), true);
                                     }
 
                                     block = egg.getWorld().getBlockAt(egg.getLocation().clone().add(1, -2, 0));
 
-                                    if (block.getType() != Material.WOOL && block.getType() == Material.AIR) {
-
-                                        block.setType(Material.WOOL);
-                                        block.setData((byte) new Random().nextInt(15));
-                                        block.getState().update();
-
+                                    if (Arrays.stream(woolTypes).noneMatch(material -> material == finalBlock.getType()) && block.getType() == Material.AIR) {
+                                        block.setType(Arrays.asList(woolTypes).get(random.nextInt(woolTypes.length)), true);
                                     }
 
                                     block = egg.getWorld().getBlockAt(egg.getLocation().clone().add(0, -2, 1));
 
-                                    if (block.getType() != Material.WOOL && block.getType() == Material.AIR) {
-
-                                        block.setType(Material.WOOL);
-                                        block.setData((byte) new Random().nextInt(15));
-                                        block.getState().update();
-
+                                    if (Arrays.stream(woolTypes).noneMatch(material -> material == finalBlock.getType()) && block.getType() == Material.AIR) {
+                                        block.setType(Arrays.asList(woolTypes).get(random.nextInt(woolTypes.length)), true);
                                     }
 
                                     if (egg.isDead() || egg.isOnGround() || egg.getLocation().getY() < 0) {
@@ -428,8 +421,7 @@ public class InteractListener implements Listener {
                             player.sendMessage(this.mlgWars.getPrefix() + "§7Du bist nun als §a" + toDisguise.name()
                                     + " §7versteckt!");
 
-                            Disguise disguise = new MobDisguise(toDisguise);
-                            disguise.setShowName(false);
+                            MobDisguise disguise = new MobDisguise(toDisguise);
                             disguise.setVelocitySent(false);
                             disguise.setViewSelfDisguise(false);
                             disguise.setReplaceSounds(true);
@@ -453,7 +445,7 @@ public class InteractListener implements Listener {
                                             DisguiseAPI.undisguiseToAll(player);
                                         }
                                         Actionbar.sendActiobar(player, "§6Farmer §8● §7Du bist nun wieder §asichtbar");
-                                        player.playSound(player.getLocation(), Sound.NOTE_PLING, 2.5f, 0.5f);
+                                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 2.5f, 0.5f);
 
                                         Actionbar.sendTitle(player, " ", 5, 20, 5);
                                         Actionbar.sendSubTitle(player, "§aWieder sichtbar!", 5, 20, 5);
@@ -546,7 +538,6 @@ public class InteractListener implements Listener {
                             Player nearestPlayer = this.getClosestEntity(player, player.getLocation());
 
                             if (nearestPlayer != null) {
-
                                 event.setCancelled(true);
                                 this.removeItem(player);
 
@@ -560,7 +551,7 @@ public class InteractListener implements Listener {
                                             ParticleUtils.drawParticleLine(player.getLocation().clone().add(0, 0.5, 0),
                                                     nearestPlayer.getLocation().clone().add(0, 0.5, 0), Particles.SPELL_WITCH,
                                                     750, 0, 0, 0);
-                                            player.getWorld().playSound(player.getLocation(), Sound.NOTE_PLING, 2f, 4.5f);
+                                            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 2f, 4.5f);
                                         } else {
                                             if (nearestPlayer.isDead() || nearestPlayer.getLocation().getY() < 0) {
                                                 player.sendMessage(mlgWars.getPrefix() + "§cDer angepeilte Spieler ist Tod! " +
@@ -568,7 +559,7 @@ public class InteractListener implements Listener {
                                                 player.teleport(Spawns.SPECTATOR.getLocation());
                                             } else {
                                                 player.teleport(toTeleport);
-                                                player.getWorld().playSound(toTeleport, Sound.ENDERMAN_TELEPORT, 4f, 1.5f);
+                                                player.getWorld().playSound(toTeleport, Sound.ENTITY_ENDERMAN_TELEPORT, 4f, 1.5f);
                                                 player.getWorld().playEffect(toTeleport, Effect.ENDER_SIGNAL, 1);
                                             }
 
@@ -630,7 +621,7 @@ public class InteractListener implements Listener {
                                 bukkitRunnable.runTaskTimer(this.mlgWars, 0L, 1L);
                                 this.data.getCsgoTasks().get(player.getUniqueId()).add(bukkitRunnable);
 
-                            } else if (interactedMaterial == Material.FIREBALL
+                            } else if (interactedMaterial == Material.FIRE_CHARGE
                                     && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §cMolotowcocktail")) {
 
                                 event.setCancelled(true);
@@ -639,13 +630,13 @@ public class InteractListener implements Listener {
                                 Fireball fireball = player.launchProjectile(Fireball.class);
                                 fireball.setMetadata("moli", new FixedMetadataValue(this.mlgWars, true));
 
-                            } else if (interactedMaterial == Material.FIREWORK_CHARGE
+                            } else if (interactedMaterial == Material.FIREWORK_STAR
                                     && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §7Smoke")) {
 
                                 event.setCancelled(true);
                                 this.removeItem(player);
 
-                                Item item = player.getWorld().dropItem(player.getEyeLocation(), new ItemStack(Material.FIREWORK_CHARGE));
+                                Item item = player.getWorld().dropItem(player.getEyeLocation(), new ItemStack(Material.FIREWORK_ROCKET));
                                 item.setPickupDelay(Integer.MAX_VALUE);
                                 item.setVelocity(player.getEyeLocation().getDirection().multiply(1.25D).setY(0.25D));
 
@@ -682,7 +673,7 @@ public class InteractListener implements Listener {
             case 5:
                 for (int x = -2; x < 3; x++) {
                     for (int y = -2; y < 3; y++) {
-                        location.clone().add(x, turtleHeight, y).getBlock().setType(Material.WOOD);
+                        location.clone().add(x, turtleHeight, y).getBlock().setType(Material.OAK_LOG);
                     }
                 }
                 break;
@@ -690,39 +681,39 @@ public class InteractListener implements Listener {
             case 2:
             case 3:
             case 4:
-                location.clone().add(-2, turtleHeight, -2).getBlock().setType(Material.WOOD);
-                location.clone().add(-2, turtleHeight, -1).getBlock().setType(Material.WOOD);
-                location.clone().add(-2, turtleHeight, 0).getBlock().setType(Material.WOOD);
-                location.clone().add(-2, turtleHeight, 1).getBlock().setType(Material.WOOD);
-                location.clone().add(-2, turtleHeight, 2).getBlock().setType(Material.WOOD);
+                location.clone().add(-2, turtleHeight, -2).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(-2, turtleHeight, -1).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(-2, turtleHeight, 0).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(-2, turtleHeight, 1).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(-2, turtleHeight, 2).getBlock().setType(Material.OAK_LOG);
 
-                location.clone().add(2, turtleHeight, -2).getBlock().setType(Material.WOOD);
-                location.clone().add(2, turtleHeight, -1).getBlock().setType(Material.WOOD);
-                location.clone().add(2, turtleHeight, 0).getBlock().setType(Material.WOOD);
-                location.clone().add(2, turtleHeight, 1).getBlock().setType(Material.WOOD);
-                location.clone().add(2, turtleHeight, 2).getBlock().setType(Material.WOOD);
+                location.clone().add(2, turtleHeight, -2).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(2, turtleHeight, -1).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(2, turtleHeight, 0).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(2, turtleHeight, 1).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(2, turtleHeight, 2).getBlock().setType(Material.OAK_LOG);
 
-                location.clone().add(1, turtleHeight, 2).getBlock().setType(Material.WOOD);
-                location.clone().add(0, turtleHeight, 2).getBlock().setType(Material.WOOD);
-                location.clone().add(-1, turtleHeight, 2).getBlock().setType(Material.WOOD);
+                location.clone().add(1, turtleHeight, 2).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(0, turtleHeight, 2).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(-1, turtleHeight, 2).getBlock().setType(Material.OAK_LOG);
 
-                location.clone().add(1, turtleHeight, -2).getBlock().setType(Material.WOOD);
-                location.clone().add(0, turtleHeight, -2).getBlock().setType(Material.WOOD);
-                location.clone().add(-1, turtleHeight, -2).getBlock().setType(Material.WOOD);
+                location.clone().add(1, turtleHeight, -2).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(0, turtleHeight, -2).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(-1, turtleHeight, -2).getBlock().setType(Material.OAK_LOG);
 
                 break;
 
             case 6:
                 for (int x = -1; x < 2; x++) {
                     for (int y = -1; y < 2; y++) {
-                        location.clone().add(x, turtleHeight, y).getBlock().setType(Material.WOOD);
+                        location.clone().add(x, turtleHeight, y).getBlock().setType(Material.OAK_LOG);
                     }
                 }
                 break;
 
 
             case 7:
-                location.clone().add(0, 5, 0).getBlock().setType(Material.WOOD);
+                location.clone().add(0, 5, 0).getBlock().setType(Material.OAK_LOG);
                 location.clone().add(0, 3, 0).getBlock().setType(Material.GLOWSTONE);
 
                 location.clone().add(0, 1, 2).getBlock().setType(Material.AIR);
@@ -730,12 +721,12 @@ public class InteractListener implements Listener {
                 location.clone().add(2, 1, 0).getBlock().setType(Material.AIR);
                 location.clone().add(-2, 1, 0).getBlock().setType(Material.AIR);
 
-                player.playSound(player.getLocation(), Sound.LEVEL_UP, 14, 15);
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 14, 15);
                 break;
         }
 
         if (turtleBuildState != 7) {
-            player.playSound(player.getLocation(), Sound.CLICK, 10, 17);
+            player.playSound(player.getLocation(), Sound.BLOCK_COMPARATOR_CLICK, 10, 17);
             Particles.PORTAL.display(1.5f, 1.5f, 1.5f, 0f, 80,
                     location.clone().add(0, 1.5, 0), new ArrayList<>(Bukkit.getOnlinePlayers()));
             return false;
@@ -745,7 +736,7 @@ public class InteractListener implements Listener {
     }
 
     private void removeItem(Player player) {
-        ItemStack inHand = player.getInventory().getItemInHand();
+        ItemStack inHand = player.getInventory().getItemInMainHand();
         if (inHand.getAmount() > 1) {
             inHand.setAmount(inHand.getAmount() - 1);
         } else {

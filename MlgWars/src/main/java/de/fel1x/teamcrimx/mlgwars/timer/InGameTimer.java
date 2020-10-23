@@ -25,7 +25,7 @@ public class InGameTimer implements ITimer {
 
     private final MlgWars mlgWars = MlgWars.getInstance();
     private final Random random = new Random();
-    private final ItemStack dumpItem = new ItemBuilder(Material.GOLD_SWORD)
+    private final ItemStack dumpItem = new ItemBuilder(Material.GOLDEN_SWORD)
             .setName("§8● §6Müll §7(umtauschen verboten!)")
             .setLore("", "", "", "", "", "", "", "", "§7§o(kann Gift verursachen)")
             .toItemStack();
