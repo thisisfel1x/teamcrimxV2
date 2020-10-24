@@ -31,16 +31,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class LobbyPlayer {
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
     Player player;
+
+    private Material[] woolTypes = {
+            Material.WHITE_WOOL, Material.ORANGE_WOOL, Material.MAGENTA_WOOL, Material.LIGHT_BLUE_WOOL, Material.YELLOW_WOOL,
+            Material.LIME_WOOL, Material.PINK_WOOL, Material.GRAY_WOOL, Material.LIGHT_GRAY_WOOL, Material.CYAN_WOOL,
+            Material.PURPLE_WOOL, Material.BLUE_WOOL, Material.GREEN_WOOL, Material.RED_WOOL
+    };
+
+    private Material[] concreteTypes = {
+            Material.WHITE_CONCRETE, Material.ORANGE_CONCRETE, Material.MAGENTA_CONCRETE, Material.LIGHT_BLUE_CONCRETE, Material.YELLOW_CONCRETE,
+            Material.LIME_CONCRETE, Material.PINK_CONCRETE, Material.GRAY_CONCRETE, Material.LIGHT_GRAY_CONCRETE, Material.CYAN_CONCRETE,
+            Material.PURPLE_CONCRETE, Material.BLUE_CONCRETE, Material.GREEN_CONCRETE, Material.RED_CONCRETE
+    };
 
     CrimxLobby crimxLobby = CrimxLobby.getInstance();
     private final WaterMlgHandler waterMlgHandler = this.crimxLobby.getWaterMlgHandler();
@@ -149,13 +158,12 @@ public class LobbyPlayer {
 
         boolean hasPermission = this.player.hasPermission("crimxlobby.vip");
 
-        this.player.getInventory().setItem(0, new ItemBuilder(Material.GREEN_RECORD).setName("§8● §aTeleporter").toItemStack());
-        this.player.getInventory().setItem(1, new ItemBuilder(Material.INK_SACK, 1)
-                .setColor(this.getPlayerHiderItemData())
+        this.player.getInventory().setItem(0, new ItemBuilder(Material.MUSIC_DISC_CAT).setName("§8● §aTeleporter").toItemStack());
+        this.player.getInventory().setItem(1, new ItemBuilder(this.getPlayerHiderItemData(), 1)
                 .setName(this.getPlayerHiderDisplayName()).toItemStack());
         this.player.getInventory().setItem(3, new ItemBuilder(Material.FISHING_ROD).setName("§8● §bEnterhaken").setUnbreakable().toItemStack());
-        this.player.getInventory().setItem(5, new ItemBuilder(Material.STORAGE_MINECART).setName("§8● §eCosmetics").toItemStack());
-        this.player.getInventory().setItem(7, new ItemBuilder(Material.DIODE).setName("§8● §cEinstellungen").toItemStack());
+        this.player.getInventory().setItem(5, new ItemBuilder(Material.CHEST_MINECART).setName("§8● §eCosmetics").toItemStack());
+        this.player.getInventory().setItem(7, new ItemBuilder(Material.REPEATER).setName("§8● §cEinstellungen").toItemStack());
         this.player.getInventory().setItem(8, new ItemBuilder(Material.NETHER_STAR).addGlow().setName("§8● §6Lobby Minispiele").toItemStack());
 
         if (hasPermission) {
@@ -208,19 +216,19 @@ public class LobbyPlayer {
         state++;
 
         if (state == 1) {
-            this.player.getInventory().getItem(1).setDurability((short) 5);
+            this.player.getInventory().getItem(1).setType(this.getPlayerHiderItemData());
             Bukkit.getOnlinePlayers().forEach(loop -> {
                 if (!loop.hasPermission("crimxlobby.vip")) {
-                    this.player.hidePlayer(loop);
+                    this.player.hidePlayer(this.crimxLobby, loop);
                 }
             });
         } else if (state == 2) {
-            this.player.getInventory().getItem(1).setDurability((short) 1);
-            Bukkit.getOnlinePlayers().forEach(loop -> this.player.hidePlayer(loop));
+            this.player.getInventory().getItem(1).setType(this.getPlayerHiderItemData());
+            Bukkit.getOnlinePlayers().forEach(loop -> this.player.hidePlayer(this.crimxLobby, loop));
         } else {
             state = 0;
-            this.player.getInventory().getItem(1).setDurability((short) 10);
-            Bukkit.getOnlinePlayers().forEach(loop -> this.player.showPlayer(loop));
+            this.player.getInventory().getItem(1).setType(this.getPlayerHiderItemData());
+            Bukkit.getOnlinePlayers().forEach(loop -> this.player.showPlayer(this.crimxLobby, loop));
         }
 
         this.data.getPlayerHiderState().put(player.getUniqueId(), state);
@@ -249,16 +257,16 @@ public class LobbyPlayer {
         }
     }
 
-    public int getPlayerHiderItemData() {
+    public Material getPlayerHiderItemData() {
 
         int state = this.data.getPlayerHiderState().get(player.getUniqueId());
 
         if (state == 1) {
-            return 5;
+            return Material.PURPLE_DYE;
         } else if (state == 2) {
-            return 1;
+            return Material.RED_DYE;
         } else {
-            return 10;
+            return Material.LIME_DYE;
         }
 
     }
@@ -408,8 +416,6 @@ public class LobbyPlayer {
             case USERS:
                 this.crimxLobby.getCrimxAPI().getMongoDB().getUserCollection().updateOne(this.networkDocument, updateOperation);
         }
-
-
     }
 
     public void startJumpAndRun() {
@@ -418,7 +424,6 @@ public class LobbyPlayer {
         Random random = new Random();
 
         int height = random.nextInt(20) + 10;
-        int woolColor = random.nextInt(15);
 
         ArrayList<Location> possibleJumps = new ArrayList<>();
 
@@ -435,7 +440,7 @@ public class LobbyPlayer {
 
         Block startBlock = possibleJumps.get(random.nextInt(possibleJumps.size())).getBlock();
 
-        int y = random.nextInt(1);
+        int y = 0;
         Block nextBlock = possibleJumps.get(random.nextInt(possibleJumps.size())).getBlock();
 
         boolean notOk = nextBlock.getX() == startBlock.getX() + 1 || nextBlock.getX() == startBlock.getX() - 1
@@ -450,22 +455,14 @@ public class LobbyPlayer {
         }
 
         if (startBlock.getType().equals(Material.AIR)) {
-
-            startBlock.setType(Material.STAINED_CLAY);
-            startBlock.setData((byte) woolColor);
-
+            startBlock.setType(Arrays.asList(concreteTypes).get(random.nextInt(concreteTypes.length)), true);
         } else {
-
             player.sendMessage(this.crimxLobby.getPrefix() + "§cEs konnte kein passender Start gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
             return;
-
         }
 
         if (nextBlock.getType().equals(Material.AIR)) {
-
-            nextBlock.setType(Material.WOOL);
-            nextBlock.setData((byte) woolColor);
-
+            nextBlock.setType(Arrays.asList(woolTypes).get(random.nextInt(woolTypes.length)), true);
         } else {
 
             player.sendMessage(this.crimxLobby.getPrefix() + "§cEs konnte kein passender Sprung gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
@@ -477,11 +474,11 @@ public class LobbyPlayer {
         this.player.getInventory().clear();
 
         player.teleport(startBlock.getLocation().clone().add(0, 2, 0));
-        player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 2, 4);
+        player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 2, 4);
 
-        player.getInventory().setItem(4, new ItemBuilder(Material.INK_SACK, 1, (byte) 1).setName("§cAbbrechen").toItemStack());
+        player.getInventory().setItem(4, new ItemBuilder(Material.RED_DYE, 1).setName("§cAbbrechen").toItemStack());
 
-        JumpAndRunPlayer jumpAndRunPlayer = new JumpAndRunPlayer(player, woolColor, null, startBlock, nextBlock, possibleJumps);
+        JumpAndRunPlayer jumpAndRunPlayer = new JumpAndRunPlayer(player, 0, null, startBlock, nextBlock, possibleJumps);
 
         this.data.getJumpAndRunPlayers().put(player.getUniqueId(), jumpAndRunPlayer);
         this.data.getJumpers().add(player.getUniqueId());
@@ -499,8 +496,7 @@ public class LobbyPlayer {
         jumpAndRunPlayer.getLastBlock().setType(Material.AIR);
 
         jumpAndRunPlayer.setCurrentBlock(jumpAndRunPlayer.getNextBlock());
-        jumpAndRunPlayer.getCurrentBlock().setType(Material.STAINED_CLAY);
-        jumpAndRunPlayer.getCurrentBlock().setData((byte) jumpAndRunPlayer.getWoolColor());
+        jumpAndRunPlayer.getCurrentBlock().setType(Arrays.asList(concreteTypes).get(random.nextInt(concreteTypes.length)), true);
 
         location = jumpAndRunPlayer.getCurrentBlock().getLocation();
 
@@ -537,12 +533,9 @@ public class LobbyPlayer {
         }
 
         if (nextBlock.getType().equals(Material.AIR)) {
-
-            nextBlock.setType(Material.WOOL);
-            nextBlock.setData((byte) jumpAndRunPlayer.getWoolColor());
+            nextBlock.setType(Arrays.asList(woolTypes).get(random.nextInt(woolTypes.length)), true);
 
             jumpAndRunPlayer.setNextBlock(nextBlock);
-
         } else {
 
             int c = 0;
@@ -556,9 +549,7 @@ public class LobbyPlayer {
 
             if (nextBlock.getType().equals(Material.AIR)) {
 
-                nextBlock.setType(Material.WOOL);
-                nextBlock.setData((byte) jumpAndRunPlayer.getWoolColor());
-
+                nextBlock.setType(Arrays.asList(woolTypes).get(random.nextInt(woolTypes.length)), true);
                 jumpAndRunPlayer.setNextBlock(nextBlock);
 
             } else {
@@ -604,7 +595,7 @@ public class LobbyPlayer {
 
         this.cleanUpPlayer();
         player.getInventory().setItem(3, new ItemBuilder(Material.WATER_BUCKET).setName("§9Wassereimer").toItemStack());
-        player.getInventory().setItem(5, new ItemBuilder(Material.INK_SACK, 1, (byte) 1).setName("§cAbbrechen").toItemStack());
+        player.getInventory().setItem(5, new ItemBuilder(Material.RED_DYE, 1).setName("§cAbbrechen").toItemStack());
 
         this.waterMlgHandler.getWaterMlgPlayers().add(player);
         this.waterMlgHandler.getFailed().put(player, false);
@@ -634,21 +625,21 @@ public class LobbyPlayer {
 
             if (coins >= required) {
                 player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast erfolgreich §a" + iCosmetic.getCosmeticName() + " §7freigeschalten");
-                player.playSound(player.getLocation(), Sound.LEVEL_UP, 2, 0.5f);
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2, 0.5f);
                 CosmeticInventory.COSMETICS_INVENTORY.open(player);
 
                 coinsAPI.removeCoins(required);
                 this.saveObjectInDocument(cosmetic.name(), true, MongoDBCollection.LOBBY);
 
             } else {
-                player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
                 player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast nicht genügend Coins!");
                 player.closeInventory();
             }
 
         } catch (InstantiationException | IllegalAccessException e) {
             player.closeInventory();
-            player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
             player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
         }
     }

@@ -26,7 +26,7 @@ public class ItemHeldListener implements Listener {
         boolean hotbarSound = this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).isHotbarSoundEnabled();
 
         if (hotbarSound && !lobbyPlayer.isInBuild()) {
-            player.playSound(player.getLocation(), Sound.CLICK, 3f, 2.5f);
+            player.playSound(player.getLocation(), Sound.BLOCK_COMPARATOR_CLICK, 3f, 2.5f);
         }
 
     }

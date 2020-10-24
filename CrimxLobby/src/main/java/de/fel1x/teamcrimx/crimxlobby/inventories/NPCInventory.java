@@ -40,7 +40,7 @@ public class NPCInventory implements InventoryProvider {
         AtomicReference<LobbyPlayer> lobbyPlayer = new AtomicReference<>(new LobbyPlayer(player));
         CrimxPlayer crimxPlayer = new CrimxPlayer(lobbyPlayer.get().getCloudPlayer());
 
-        contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName(" ").toItemStack()));
+        contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
 
         contents.set(0, 4, ClickableItem.empty(new ItemBuilder(crimxPlayer.getPlayerSkin()[0])
                 .setName("§8● §a" + player.getDisplayName()).addGlow().toItemStack()));
@@ -87,7 +87,7 @@ public class NPCInventory implements InventoryProvider {
                     player.sendMessage(crimxLobby.getPrefix() + "§7Du hast §a100 Coins §7durch die tägliche Belohnung erhalten!");
                     crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setLastReward(System.currentTimeMillis());
                     lobbyPlayer.get().saveObjectInDocument("lastReward", System.currentTimeMillis(), MongoDBCollection.LOBBY);
-                    player.playSound(player.getLocation(), Sound.ORB_PICKUP, 2, 0.75f);
+                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 2, 0.75f);
                     CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
                     coinsAPI.addCoins(100);
                     lobbyPlayer.set(new LobbyPlayer(player, true));
@@ -95,7 +95,7 @@ public class NPCInventory implements InventoryProvider {
                     this.crimxLobby.getLobbyScoreboard().updateBoard(player, String.format("§8● §e%s Coins", coins), "coins", "§e");
                 } else {
                     player.sendMessage(crimxLobby.getPrefix() + "§7Du hast bereits deine tägliche Belohnung abgeholt!");
-                    player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
                 }
 
                 player.closeInventory();

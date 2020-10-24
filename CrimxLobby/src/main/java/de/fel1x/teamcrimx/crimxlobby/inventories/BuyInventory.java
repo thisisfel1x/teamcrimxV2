@@ -26,7 +26,7 @@ public class BuyInventory implements InventoryProvider {
 
         Cosmetic cosmetic = Cosmetic.valueOf(player.getMetadata("toBuy").get(0).asString());
 
-        contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName(" ").toItemStack()));
+        contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
         contents.set(1, 4, ClickableItem.empty(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmFkYzA0OGE3Y2U3OGY3ZGFkNzJhMDdkYTI3ZDg1YzA5MTY4ODFlNTUyMmVlZWQxZTNkYWYyMTdhMzhjMWEifX19")
                 .setName("§eWirklich kaufen?").toItemStack()));
 

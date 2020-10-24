@@ -27,7 +27,6 @@ public class SetupCommand implements CommandExecutor {
         if (!(commandSender instanceof Player)) return false;
 
         Player player = (Player) commandSender;
-        LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
         if (!player.hasPermission("crimxlobby.setup")) return false;
 

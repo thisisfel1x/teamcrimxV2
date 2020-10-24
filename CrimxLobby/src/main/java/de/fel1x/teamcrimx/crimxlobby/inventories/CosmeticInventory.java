@@ -30,7 +30,7 @@ public class CosmeticInventory implements InventoryProvider {
 
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player, true);
 
-        contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName(" ").toItemStack()));
+        contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
 
         contents.set(4, 3, ClickableItem.empty(new ItemBuilder(Material.GOLD_NUGGET)
                 .setName("§7Coins §8» §a§l" + (int) lobbyPlayer.getObjectFromMongoDocument("coins", MongoDBCollection.USERS)).toItemStack()));
@@ -55,7 +55,7 @@ public class CosmeticInventory implements InventoryProvider {
 
                 if (!bought) {
 
-                    contents.set(row, slot, ClickableItem.of(new ItemBuilder(Material.INK_SACK, 1, (byte) 8)
+                    contents.set(row, slot, ClickableItem.of(new ItemBuilder(Material.LIGHT_GRAY_DYE, 1)
                                     .setName("§8● " + iCosmetic.getCosmeticName() + " §8» §e" + iCosmetic.getCosmeticCost() + " Coins")
                                     .setLore("§7§kaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                                             "§7§kaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").toItemStack(),

@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
@@ -18,9 +19,13 @@ public class PickupListener implements Listener {
     }
 
     @EventHandler
-    public void on(PlayerPickupItemEvent event) {
+    public void on(EntityPickupItemEvent event) {
 
-        Player player = event.getPlayer();
+        if(!(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        Player player = (Player) event.getEntity();
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
         if (!lobbyPlayer.isInBuild()) {

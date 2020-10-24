@@ -55,11 +55,11 @@ public class InteractListener implements Listener {
 
             if (event.hasItem()) {
                 switch (item.getType()) {
-                    case GREEN_RECORD:
+                    case MUSIC_DISC_CAT:
                         NavigatorInventory.NAVIGATOR_INVENTORY.open(player);
                         break;
 
-                    case INK_SACK:
+                    case LEGACY_INK_SACK:
                         if (lobbyPlayer.isInJumpAndRun()) {
                             lobbyPlayer.endJumpAndRun();
                         } else if (lobbyPlayer.isInWaterMLG()) {
@@ -69,11 +69,11 @@ public class InteractListener implements Listener {
                         }
                         break;
 
-                    case STORAGE_MINECART:
+                    case CHEST_MINECART:
                         CosmeticInventory.COSMETICS_INVENTORY.open(player);
                         break;
 
-                    case DIODE:
+                    case REPEATER:
                         SettingsInventory.SETTINGS_INVENTORY.open(player);
                         break;
 
@@ -121,7 +121,7 @@ public class InteractListener implements Listener {
                         player.setMetadata("gadgetDelay", new FixedMetadataValue(this.crimxLobby,
                                 System.currentTimeMillis() + (1000 * 5)));
 
-                        if (iCosmetic.getCosmeticMaterial() == Material.FIREWORK) {
+                        if (iCosmetic.getCosmeticMaterial() == Material.FIREWORK_ROCKET) {
                             Snowball snowball = player.launchProjectile(Snowball.class);
                             snowball.setMetadata("firework", new FixedMetadataValue(this.crimxLobby, true));
                         }

@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Fish;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,7 +32,7 @@ public class FishingHookListener implements Listener {
 
         Player player = event.getPlayer();
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
-        Fish h = event.getHook();
+        FishHook h = event.getHook();
 
         if (lobbyPlayer.isInBuild()) {
             return;
@@ -40,8 +41,8 @@ public class FishingHookListener implements Listener {
         if ((event.getState().equals(PlayerFishEvent.State.IN_GROUND)) ||
                 (event.getState().equals(PlayerFishEvent.State.CAUGHT_ENTITY)) ||
                 (event.getState().equals(PlayerFishEvent.State.FAILED_ATTEMPT))) {
-            if (Bukkit.getWorld(event.getPlayer().getWorld().getName()).getBlockAt(h.getLocation().getBlockX(), h.getLocation().getBlockY() - 1, h.getLocation().getBlockZ()).getType() != Material.AIR) {
-                if (Bukkit.getWorld(event.getPlayer().getWorld().getName()).getBlockAt(h.getLocation().getBlockX(), h.getLocation().getBlockY() - 1, h.getLocation().getBlockZ()).getType() != Material.STATIONARY_WATER) {
+            if (player.getWorld().getBlockAt(h.getLocation().getBlockX(), h.getLocation().getBlockY() - 1, h.getLocation().getBlockZ()).getType() != Material.AIR) {
+                if (player.getWorld().getBlockAt(h.getLocation().getBlockX(), h.getLocation().getBlockY() - 1, h.getLocation().getBlockZ()).getType() != Material.WATER) {
                     Location lc = player.getLocation();
                     Location to = event.getHook().getLocation();
 
@@ -60,9 +61,7 @@ public class FishingHookListener implements Listener {
                     v.setZ(v_z);
                     player.setVelocity(v);
 
-                    player.playSound(player.getLocation(), Sound.ENDERDRAGON_WINGS, 3.0F, 2.0F);
-
-                    player.getItemInHand().setDurability((short) 0);
+                    player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 3.0F, 2.0F);
                 }
             }
         }

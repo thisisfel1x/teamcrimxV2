@@ -34,7 +34,7 @@ public class ProjectileHitListener implements Listener {
                 ParticleUtils.display(Particles.LAVA, 1.3f, 1f, 1.3f, location, 16);
                 ParticleUtils.display(Particles.CLOUD, 1.3f, 1f, 1.3f, location, 16);
                 ParticleUtils.display(Particles.HEART, 0.8f, 0.8f, 0.8f, location, 20);
-                location.getWorld().playSound(location, Sound.CAT_PURREOW, 3f, 0.75f);
+                location.getWorld().playSound(location, Sound.ENTITY_CAT_PURREOW, 3f, 0.75f);
             } else if (entity.hasMetadata("firework")) {
                 new InstantFirework(FireworkEffect.builder().withColor(Color.GREEN, Color.RED, Color.BLUE, Color.YELLOW,
                         Color.AQUA, Color.ORANGE, Color.PURPLE, Color.MAROON, Color.FUCHSIA)

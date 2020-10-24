@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import org.bukkit.Color;
 import org.bukkit.Effect;
+import org.bukkit.EntityEffect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -31,7 +32,7 @@ public class RainbowArmor implements ICosmetic {
     }
 
     @Override
-    public Effect getWalkEffect() {
+    public EntityEffect getWalkEffect() {
         return null;
     }
 

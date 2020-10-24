@@ -32,7 +32,7 @@ public class DamageListener implements Listener {
             event.setDamage(0D);
 
             Actionbar.sendTitle(player, "§c§l✘", 2, 5, 3);
-            player.playSound(player.getLocation(), Sound.NOTE_BASS, 5, 7);
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 5, 7);
             lobbyPlayer.endWaterMLG();
 
             crimxLobby.getWaterMlgHandler().getFailed().put(player, true);

@@ -32,7 +32,7 @@ public class SettingsInventory implements InventoryProvider {
         defaultSpawn = this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).isSpawnAtLastLocation();
         hotbarSound = this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).isHotbarSoundEnabled();
 
-        contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName(" ").toItemStack()));
+        contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
 
         contents.set(1, 3, ClickableItem.empty(
                 new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjEyYTAzYTRjMTFiNGQ0NzI0NzJlN2U0NTkzZDJlMTI2YTYyNTllMzNjYzgxZjQ0ZWIwNWNmMDQyZDA3Njk2NyJ9fX0=")
@@ -57,9 +57,8 @@ public class SettingsInventory implements InventoryProvider {
 
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
-        contents.set(2, 3, ClickableItem.of(new ItemBuilder(Material.INK_SACK)
+        contents.set(2, 3, ClickableItem.of(new ItemBuilder((defaultSpawn) ? Material.LIME_DYE : Material.RED_DYE)
                         .setName((defaultSpawn) ? "§aAktiviert" : "§cDeaktiviert")
-                        .setColor((defaultSpawn) ? 10 : 1)
                         .toItemStack(),
                 event -> {
                     defaultSpawn = !defaultSpawn;
@@ -67,7 +66,7 @@ public class SettingsInventory implements InventoryProvider {
                     this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setSpawnAtLastLocation(defaultSpawn);
                 }));
 
-        contents.set(2, 5, ClickableItem.of(new ItemBuilder(Material.INK_SACK)
+        contents.set(2, 5, ClickableItem.of(new ItemBuilder((defaultSpawn) ? Material.LIME_DYE : Material.RED_DYE)
                         .setName((hotbarSound) ? "§aAktiviert" : "§cDeaktiviert")
                         .setColor((hotbarSound) ? 10 : 1)
                         .toItemStack(),

@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import org.bukkit.Color;
 import org.bukkit.Effect;
+import org.bukkit.EntityEffect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -22,7 +23,7 @@ public class RolexShoeTrail implements ICosmetic {
 
     @Override
     public Material getCosmeticMaterial() {
-        return Material.WATCH;
+        return Material.CLOCK;
     }
 
     @Override
@@ -31,7 +32,7 @@ public class RolexShoeTrail implements ICosmetic {
     }
 
     @Override
-    public Effect getWalkEffect() {
+    public EntityEffect getWalkEffect() {
         return null;
     }
 
@@ -73,7 +74,7 @@ public class RolexShoeTrail implements ICosmetic {
 
     @Override
     public Material itemToDrop() {
-        return Material.WATCH;
+        return Material.CLOCK;
     }
 
     @Override

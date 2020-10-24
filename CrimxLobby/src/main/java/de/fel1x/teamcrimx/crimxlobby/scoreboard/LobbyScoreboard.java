@@ -24,7 +24,7 @@ public class LobbyScoreboard {
 
         gameScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
-        objective = gameScoreboard.registerNewObjective("dummy", "test");
+        objective = gameScoreboard.registerNewObjective("dummy", "test", "test");
         objective.setDisplayName("§8» §bteamcrimx§lDE §8«");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
