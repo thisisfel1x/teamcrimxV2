@@ -45,7 +45,7 @@ public class SmokeGrenade extends BukkitRunnable {
         }
 
         for (Location effectLocation : locations) {
-            world.playEffect(effectLocation, Effect.LARGE_SMOKE, 0);
+            world.playEffect(effectLocation, Effect.SMOKE, 0);
         }
 
         lifeTime--; // decrease lifeTime 1 tick because 1 tick has passed.

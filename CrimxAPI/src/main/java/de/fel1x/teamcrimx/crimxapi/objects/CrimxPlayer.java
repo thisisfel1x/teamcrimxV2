@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.utils.ColorUtil;
 import de.fel1x.teamcrimx.crimxapi.utils.Skin;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.ChatColor;
@@ -112,7 +113,8 @@ public class CrimxPlayer {
                 for (int j = 0; j < image.getWidth(); j++) {
                     Color color = new Color(image.getRGB(j, i));
                     ChatColor chatColor = ColorUtil.fromRGB(color.getRed(), color.getGreen(), color.getBlue());
-                    chatHeadString.append(chatColor).append("⬛");
+                    TextComponent textComponent = new TextComponent("#" + color.getRGB());
+                    chatHeadString.append(textComponent.toString()).append("⬛");
                 }
                 toReturn[i] = chatHeadString.toString();
             }

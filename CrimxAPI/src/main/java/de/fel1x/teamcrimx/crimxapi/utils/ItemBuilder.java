@@ -263,22 +263,10 @@ public class ItemBuilder {
     public ItemBuilder setUnbreakable() {
 
         ItemMeta im = is.getItemMeta();
-        im.spigot().setUnbreakable(true);
+        im.setUnbreakable(true);
         is.setItemMeta(im);
         return this;
 
-    }
-
-    /**
-     * Sets the dye color on an item.
-     * <b>* Notice that this doesn't check for item type, sets the literal data of the dyecolor as durability.</b>
-     *
-     * @param color The color to put.
-     */
-    @SuppressWarnings("deprecation")
-    public ItemBuilder setDyeColor(DyeColor color) {
-        this.is.setDurability(color.getData());
-        return this;
     }
 
     /**
@@ -290,8 +278,6 @@ public class ItemBuilder {
      */
     @Deprecated
     public ItemBuilder setWoolColor(DyeColor color) {
-        if (!is.getType().equals(Material.WOOL)) return this;
-        this.is.setDurability(color.getData());
         return this;
     }
 
