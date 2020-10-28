@@ -87,6 +87,7 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>LATEST</version>
+            <scope>compile</scope>
         </dependency>
 
 
@@ -137,14 +138,6 @@
             <artifactId>LibsDisguises</artifactId>
             <version>LATEST</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>4.5.0</version>
-            <scope>system</scope>
-            <systemPath>C:/Users/Felix/Downloads/ProtocolLib(2).jar</systemPath>
         </dependency>
 
         <dependency>

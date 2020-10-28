@@ -22,7 +22,6 @@ import de.fel1x.teamcrimx.crimxlobby.minigames.jumpandrun.JumpAndRunPlayer;
 import de.fel1x.teamcrimx.crimxlobby.minigames.watermlg.WaterMlgHandler;
 import net.jitse.npclib.api.NPC;
 import net.jitse.npclib.api.skin.Skin;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.*;
@@ -89,14 +88,6 @@ public class LobbyPlayer {
 
         this.crimxLobby.getLobbyScoreboard().updateBoard(player, String.format("§8● §e%s Coins", coins), "coins", "§e");
         this.crimxLobby.getLobbyScoreboard().updateBoard(player, "§8● §6" + this.getOnlineTimeForScoreboard(), "playtime", "§6");
-
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            this.setSubtitle(onlinePlayer, this.player.getUniqueId(), "&e" + coins + " Coins");
-
-            coinsAPI = new CoinsAPI(onlinePlayer.getUniqueId());
-            this.setSubtitle(this.player, onlinePlayer.getUniqueId(), "&e" + coinsAPI.getCoins() + " Coins");
-
-        }
     }
 
     public ICloudPlayer getCloudPlayer() {
@@ -204,34 +195,30 @@ public class LobbyPlayer {
 
         this.crimxLobby.getData().getPlayerNPCs().put(this.player.getUniqueId(), playerNPC);
 
-        Bukkit.getScheduler().runTaskLater(this.crimxLobby, () -> this.crimxLobby.forceEmote(this.player, playerNPC.getUniqueId(), 4), 100L);
-
     }
 
     public void updatePlayerHiderState() {
 
         // STATES: 0: all shown, 1: vip shown, 2: nobody shown
         int state = this.data.getPlayerHiderState().get(player.getUniqueId());
-
         state++;
 
         if (state == 1) {
-            this.player.getInventory().getItem(1).setType(this.getPlayerHiderItemData());
             Bukkit.getOnlinePlayers().forEach(loop -> {
                 if (!loop.hasPermission("crimxlobby.vip")) {
                     this.player.hidePlayer(this.crimxLobby, loop);
                 }
             });
         } else if (state == 2) {
-            this.player.getInventory().getItem(1).setType(this.getPlayerHiderItemData());
             Bukkit.getOnlinePlayers().forEach(loop -> this.player.hidePlayer(this.crimxLobby, loop));
         } else {
             state = 0;
-            this.player.getInventory().getItem(1).setType(this.getPlayerHiderItemData());
             Bukkit.getOnlinePlayers().forEach(loop -> this.player.showPlayer(this.crimxLobby, loop));
         }
 
         this.data.getPlayerHiderState().put(player.getUniqueId(), state);
+
+        this.player.getInventory().getItem(1).setType(this.getPlayerHiderItemData());
         this.setPlayerHiderDisplayName();
 
     }
@@ -284,6 +271,7 @@ public class LobbyPlayer {
             itemMeta.setDisplayName("§8● §7Du siehst §ckeinen Spieler");
         } else {
             itemMeta.setDisplayName("§8● §7Du siehst §aalle Spieler");
+            player.playEffect(EntityEffect.WITCH_MAGIC);
         }
 
         itemStack.setItemMeta(itemMeta);
@@ -380,16 +368,6 @@ public class LobbyPlayer {
 
         CoinsAPI coinsAPI = new CoinsAPI(this.player.getUniqueId());
         int coins = coinsAPI.getCoins();
-
-        Bukkit.getOnlinePlayers().forEach(loopPlayer -> {
-            if (loopPlayer.hasMetadata("labymod")) {
-                boolean labyMod = loopPlayer.getMetadata("labymod").get(0).asBoolean();
-                if (labyMod) {
-                    this.setSubtitle(loopPlayer, this.player.getUniqueId(), "&e" + coins + " Coins");
-                }
-            }
-
-        });
 
     }
 
@@ -642,28 +620,6 @@ public class LobbyPlayer {
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
             player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
         }
-    }
-
-    public void setSubtitle(Player receiver, UUID subtitlePlayer, String value) {
-        // List of all subtitles
-        JsonArray array = new JsonArray();
-
-        // Add subtitle
-        JsonObject subtitle = new JsonObject();
-        subtitle.addProperty("uuid", subtitlePlayer.toString());
-
-        // Optional: Size of the subtitle
-        subtitle.addProperty("size", 1.1d); // Range is 0.8 - 1.6 (1.6 is Minecraft default)
-
-        // no value = remove the subtitle
-        if (value != null)
-            subtitle.addProperty("value", value);
-
-        // You can set multiple subtitles in one packet
-        array.add(subtitle);
-
-        // Send to LabyMod using the API
-        LabyModPlugin.getInstance().sendServerMessage(receiver, "account_subtitle", array);
     }
 
     public void setScoreboard() {

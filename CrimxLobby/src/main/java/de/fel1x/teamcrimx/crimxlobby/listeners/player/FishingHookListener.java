@@ -43,17 +43,17 @@ public class FishingHookListener implements Listener {
                 (event.getState().equals(PlayerFishEvent.State.FAILED_ATTEMPT))) {
             if (player.getWorld().getBlockAt(h.getLocation().getBlockX(), h.getLocation().getBlockY() - 1, h.getLocation().getBlockZ()).getType() != Material.AIR) {
                 if (player.getWorld().getBlockAt(h.getLocation().getBlockX(), h.getLocation().getBlockY() - 1, h.getLocation().getBlockZ()).getType() != Material.WATER) {
-                    Location lc = player.getLocation();
+                    Location from = player.getLocation();
                     Location to = event.getHook().getLocation();
 
-                    lc.setY(lc.getY() + 0.75D);
-                    player.teleport(lc);
+                    from.setY(from.getY() + 0.5D);
+                    player.teleport(from);
 
                     double g = -0.08D;
-                    double d = to.distance(lc);
-                    double v_x = (1.0D + 0.07D * d) * (to.getX() - lc.getX()) / d;
-                    double v_y = (1.0D + 0.06D * d) * (to.getY() - lc.getY()) / d - 0.75D * g * d;
-                    double v_z = (1.0D + 0.07D * d) * (to.getZ() - lc.getZ()) / d;
+                    double t = to.distance(from);
+                    double v_x = (1.0D + 0.07D * t) * (to.getX() - from.getX()) / t;
+                    double v_y = (1.0D + 0.07D * t) * (to.getY() - from.getY()) / t - 1.2D * g * t; // Höhe; 0.5 standard
+                    double v_z = (1.0D + 0.07D * t) * (to.getZ() - from.getZ()) / t;
 
                     Vector v = player.getVelocity();
                     v.setX(v_x);

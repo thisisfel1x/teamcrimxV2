@@ -59,7 +59,7 @@ public class InteractListener implements Listener {
                         NavigatorInventory.NAVIGATOR_INVENTORY.open(player);
                         break;
 
-                    case LEGACY_INK_SACK:
+                    case RED_DYE:
                         if (lobbyPlayer.isInJumpAndRun()) {
                             lobbyPlayer.endJumpAndRun();
                         } else if (lobbyPlayer.isInWaterMLG()) {
@@ -68,6 +68,12 @@ public class InteractListener implements Listener {
                             lobbyPlayer.updatePlayerHiderState();
                         }
                         break;
+
+
+                    case LIME_DYE: case PURPLE_DYE:
+                        lobbyPlayer.updatePlayerHiderState();
+                        break;
+
 
                     case CHEST_MINECART:
                         CosmeticInventory.COSMETICS_INVENTORY.open(player);
@@ -78,7 +84,8 @@ public class InteractListener implements Listener {
                         break;
 
                     case NETHER_STAR:
-                        MinigameInventory.MINIGAME_INVENTORY.open(player);
+                        //MinigameInventory.MINIGAME_INVENTORY.open(player);
+                        player.sendMessage(this.crimxLobby.getPrefix() + "§7Dieses Feature wird noch auf die 1.16 geupdatet!");
                         break;
 
                     case BLAZE_ROD:

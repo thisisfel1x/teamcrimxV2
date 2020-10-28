@@ -100,11 +100,11 @@ public final class MlgWars extends JavaPlugin {
 
         this.allMaterials = new ArrayList<>(Arrays.asList(Material.values()));
 
+        this.getServer().getScheduler().runTaskLater(this, () -> this.setMotd(mapName), 60L);
+
     }
 
     private String selectMap() {
-
-        MapHandler mapHandler = new MapHandler();
 
         File[] files = new File("plugins/MlgWars/maps").listFiles();
         Random rand = new Random();
@@ -116,7 +116,14 @@ public final class MlgWars extends JavaPlugin {
         }
 
         File file = files[rand.nextInt(files.length)];
-        String name = FilenameUtils.removeExtension(file.getName());
+
+        return FilenameUtils.removeExtension(file.getName());
+
+    }
+
+    private void setMotd(String name) {
+
+        MapHandler mapHandler = new MapHandler();
 
         Size size;
 
@@ -124,15 +131,12 @@ public final class MlgWars extends JavaPlugin {
             size = mapHandler.getSize(name);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return;
         }
 
         BukkitCloudNetHelper.setApiMotd(name + " " + size.getName());
         BukkitCloudNetHelper.setMaxPlayers(size.getSize());
         BridgeHelper.updateServiceInfo();
-
-        return name;
-
     }
 
     private void registerListener() {
@@ -150,6 +154,7 @@ public final class MlgWars extends JavaPlugin {
         new ToggleFlyListener(this);
         new InventoryClickListener(this);
         new RespawnListener(this);
+        new PlayerSwapItemListener(this);
 
         // ENTITY
         new DamageListener(this);

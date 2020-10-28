@@ -46,7 +46,7 @@ public class PreGameTimer implements ITimer {
                     case 0:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§cDie Schutzzeit ist vorbei! Kämpft!");
                         Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(),
-                                Sound.BLOCK_NOTE_BLOCK_BASS, 3f, 5f));
+                                Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 3f, 5f));
                         this.mlgWars.startTimerByClass(InGameTimer.class);
                         break;
                 }

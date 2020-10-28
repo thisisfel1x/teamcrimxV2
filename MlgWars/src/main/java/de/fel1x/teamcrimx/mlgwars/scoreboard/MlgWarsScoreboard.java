@@ -54,7 +54,7 @@ public class MlgWarsScoreboard {
 
     public void setEndingScoreboard(Player player, String winner, String farbcode) {
         Scoreboard endingScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        Objective objective = endingScoreboard.registerNewObjective("dummy", "test");
+        Objective objective = endingScoreboard.registerNewObjective("dummy", "test", "test");
 
         objective.setDisplayName("§8» §bteamcrimx§lDE §8«");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -87,7 +87,7 @@ public class MlgWarsScoreboard {
 
     public void setIngameScoreboard(Player player) {
         Scoreboard ingameScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        Objective objective = ingameScoreboard.registerNewObjective("dummy", "test");
+        Objective objective = ingameScoreboard.registerNewObjective("dummy", "test", "test");
 
         GamePlayer gamePlayer = new GamePlayer(player);
         Kit selectedKit = gamePlayer.getSelectedKit();

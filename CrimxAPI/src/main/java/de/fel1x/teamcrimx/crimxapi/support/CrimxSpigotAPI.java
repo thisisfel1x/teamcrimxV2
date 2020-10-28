@@ -13,7 +13,9 @@ public class CrimxSpigotAPI extends JavaPlugin {
 
         Bukkit.getConsoleSender().sendMessage("§eTrying to load CrimxAPI v1 by fel1x");
 
+        System.out.println(1);
         new CrimxAPI();
+        System.out.println(2);
         getCommand("coins").setExecutor(new CoinsCommand());
         getCommand("joinme").setExecutor(new JoinMeCommand());
 

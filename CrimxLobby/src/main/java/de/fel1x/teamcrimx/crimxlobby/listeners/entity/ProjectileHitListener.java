@@ -4,10 +4,7 @@ import de.fel1x.teamcrimx.crimxapi.utils.InstantFirework;
 import de.fel1x.teamcrimx.crimxapi.utils.ParticleUtils;
 import de.fel1x.teamcrimx.crimxapi.utils.Particles;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
@@ -31,9 +28,9 @@ public class ProjectileHitListener implements Listener {
 
         if (entity instanceof Snowball) {
             if (entity.hasMetadata("funGun")) {
-                ParticleUtils.display(Particles.LAVA, 1.3f, 1f, 1.3f, location, 16);
-                ParticleUtils.display(Particles.CLOUD, 1.3f, 1f, 1.3f, location, 16);
-                ParticleUtils.display(Particles.HEART, 0.8f, 0.8f, 0.8f, location, 20);
+                entity.playEffect(EntityEffect.LOVE_HEARTS);
+                entity.playEffect(EntityEffect.VILLAGER_HAPPY);
+                entity.playEffect(EntityEffect.WOLF_SMOKE);
                 location.getWorld().playSound(location, Sound.ENTITY_CAT_PURREOW, 3f, 0.75f);
             } else if (entity.hasMetadata("firework")) {
                 new InstantFirework(FireworkEffect.builder().withColor(Color.GREEN, Color.RED, Color.BLUE, Color.YELLOW,

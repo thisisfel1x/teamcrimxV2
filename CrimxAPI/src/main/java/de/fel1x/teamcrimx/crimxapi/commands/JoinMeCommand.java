@@ -42,7 +42,7 @@ public class JoinMeCommand implements CommandExecutor {
 
             if (cloudPlayer.getConnectedService().getTaskName().equalsIgnoreCase("Lobby")) {
                 player.sendMessage(this.crimxAPI.getPrefix() + "§7Du kannst auf der Lobby kein JoinMe erstellen");
-                return false;
+                //return false;
             }
 
             IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(permissionUser);

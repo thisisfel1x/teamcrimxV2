@@ -69,6 +69,11 @@ public class InteractListener implements Listener {
             return;
         }
 
+        if(event.getPlayer().getInventory().getHeldItemSlot() == 45) {
+            player.sendMessage(this.mlgWars.getPrefix() + "§cBitte nutze nicht die Off-Hand (verbuggt)");
+            return;
+        }
+
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
                 if (event.hasItem()) {
@@ -405,7 +410,7 @@ public class InteractListener implements Listener {
                                     DisguiseType.CHICKEN,
                                     DisguiseType.COW,
                                     DisguiseType.SHEEP,
-                                    DisguiseType.PIG
+                                    DisguiseType.PIG,
                             };
 
                             for (int i = 0; i < 3; i++) {

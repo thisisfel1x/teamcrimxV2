@@ -17,7 +17,7 @@ public class MongoDB {
 
     public MongoDB() {
 
-        this.mongoClient = new MongoClient("localhost", MongoClientOptions.builder().socketKeepAlive(true).build());
+        this.mongoClient = new MongoClient();
 
         this.networkDatabase = this.mongoClient.getDatabase("network");
 

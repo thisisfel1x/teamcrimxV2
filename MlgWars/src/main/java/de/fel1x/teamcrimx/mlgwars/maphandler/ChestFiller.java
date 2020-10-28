@@ -11,7 +11,9 @@ import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
@@ -129,12 +131,16 @@ public class ChestFiller {
         Random random = new Random();
 
         for (PotionType potionType : PotionType.values()) {
+            if (potionType == PotionType.UNCRAFTABLE) continue;
             if (potionType == PotionType.WATER) continue;
+            if (potionType == PotionType.MUNDANE) continue;
+            if (potionType == PotionType.THICK) continue;
+            if (potionType == PotionType.AWKWARD) continue;
 
-            ItemStack potion = new ItemStack(Material.POTION);
-            Potion pot = new Potion(potionType, 1);
-            pot.setSplash(true);
-            pot.apply(potion);
+            ItemStack potion = new ItemStack(Material.SPLASH_POTION);
+            PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
+            potionMeta.setBasePotionData(new PotionData(potionType));
+            potion.setItemMeta(potionMeta);
 
             potion.setAmount(1);
 
@@ -149,7 +155,7 @@ public class ChestFiller {
                     .toItemStack());
 
             items.add(new ItemBuilder(Material.STONE, 20 + random.nextInt(44)).toItemStack());
-            items.add(new ItemBuilder(Material.OAK_WOOD, 20 + random.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.OAK_PLANKS, 20 + random.nextInt(44)).toItemStack());
 
             items.add(new ItemBuilder(Material.TNT, random.nextInt(5) + 1)
                     .setName("§cVelocity TNT").addGlow().setLore("§7Dieses TNT boostet dich weit")
@@ -204,10 +210,10 @@ public class ChestFiller {
 
         Random r = new Random();
 
-        ItemStack potion = new ItemStack(Material.POTION);
-        Potion pot = new Potion(PotionType.INSTANT_HEAL, 1);
-        pot.setSplash(true);
-        pot.apply(potion);
+        ItemStack potion = new ItemStack(Material.SPLASH_POTION);
+        PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
+        potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
+        potion.setItemMeta(potionMeta);
 
 
         for (int i = 0; i < 2; i++) {
@@ -235,7 +241,7 @@ public class ChestFiller {
             items.add(new ItemBuilder(Material.STONE, 20 + r.nextInt(44)).toItemStack());
             items.add(new ItemBuilder(Material.BRICK, 20 + r.nextInt(44)).toItemStack());
             items.add(new ItemBuilder(Material.TNT, 5 + r.nextInt(4)).toItemStack());
-            items.add(new ItemBuilder(Material.OAK_WOOD, 20 + r.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.OAK_PLANKS, 20 + r.nextInt(44)).toItemStack());
 
         }
 
@@ -365,10 +371,10 @@ public class ChestFiller {
     public void addItemsTier2(ArrayList<ItemStack> items) {
         Random r = new Random();
 
-        ItemStack potion = new ItemStack(Material.POTION);
-        Potion pot = new Potion(PotionType.INSTANT_HEAL, 1);
-        pot.setSplash(true);
-        pot.apply(potion);
+        ItemStack potion = new ItemStack(Material.SPLASH_POTION);
+        PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
+        potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
+        potion.setItemMeta(potionMeta);
 
 
         for (int i = 0; i < 2; i++) {
@@ -396,7 +402,7 @@ public class ChestFiller {
             items.add(new ItemBuilder(Material.STONE, 20 + r.nextInt(44)).toItemStack());
             items.add(new ItemBuilder(Material.BRICK, 20 + r.nextInt(44)).toItemStack());
             items.add(new ItemBuilder(Material.TNT, 5 + r.nextInt(4)).toItemStack());
-            items.add(new ItemBuilder(Material.OAK_LOG, 20 + r.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.OAK_PLANKS, 20 + r.nextInt(44)).toItemStack());
 
         }
         for (int i = 0; i < 5; i++) {

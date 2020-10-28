@@ -41,6 +41,10 @@ public class InGameTimer implements ITimer {
             this.running = true;
             this.mlgWars.getGamestateHandler().setGamestate(Gamestate.INGAME);
 
+            if(this.mlgWars.isLabor()) {
+                this.mlgWars.getData().getPlayers().forEach(player -> player.setGlowing(true));
+            }
+
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
 
                 if (this.mlgWars.isLabor()) {

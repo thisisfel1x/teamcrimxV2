@@ -65,22 +65,22 @@ public class JoinListener implements Listener {
             switch (state) {
                 case 1:
                     if (!vipPerms) {
-                        loop.hidePlayer(player);
+                        loop.hidePlayer(this.crimxLobby, player);
                     }
                     break;
                 case 2:
-                    loop.hidePlayer(player);
+                    loop.hidePlayer(this.crimxLobby, player);
                     break;
             }
 
             switch (playerState) {
                 case 1:
                     if (!loop.hasPermission("crimxlobby.vip")) {
-                        player.hidePlayer(loop);
+                        player.hidePlayer(this.crimxLobby, loop);
                     }
                     break;
                 case 2:
-                    player.hidePlayer(loop);
+                    player.hidePlayer(this.crimxLobby, loop);
                     break;
             }
 

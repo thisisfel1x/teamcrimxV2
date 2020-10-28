@@ -1,8 +1,6 @@
 package de.fel1x.teamcrimx.crimxlobby;
 
 import com.github.juliarn.npc.NPCPool;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.crimxlobby.commands.BuildCommand;
@@ -20,7 +18,6 @@ import de.fel1x.teamcrimx.crimxlobby.objects.Spawn;
 import de.fel1x.teamcrimx.crimxlobby.scoreboard.LobbyScoreboard;
 import fr.minuskube.inv.InventoryManager;
 import net.jitse.npclib.NPCLib;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
 import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -28,7 +25,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
-import java.util.UUID;
 
 public final class CrimxLobby extends JavaPlugin {
 
@@ -132,8 +128,6 @@ public final class CrimxLobby extends JavaPlugin {
         new JoinListener(this);
         new QuitListener(this);
 
-        new LabyModPlayerJoinListener(this);
-
         new InventoryClickListener(this);
         new ChatListener(this);
         new InteractListener(this);
@@ -188,20 +182,6 @@ public final class CrimxLobby extends JavaPlugin {
             }
         }, 0L, 20L);
 
-    }
-
-    public void forceEmote(Player receiver, UUID npcUUID, int emoteId) {
-        // List of all forced emotes
-        JsonArray array = new JsonArray();
-
-        // Emote and target NPC
-        JsonObject forcedEmote = new JsonObject();
-        forcedEmote.addProperty("uuid", npcUUID.toString());
-        forcedEmote.addProperty("emote_id", emoteId);
-        array.add(forcedEmote);
-
-        // Send to LabyMod using the API
-        LabyModPlugin.getInstance().sendServerMessage(receiver, "emote_api", array);
     }
 
     public String getPrefix() {
