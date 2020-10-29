@@ -164,8 +164,8 @@ public class GamePlayer {
         this.player.getActivePotionEffects().forEach(potionEffect -> this.player.removePotionEffect(potionEffect.getType()));
 
         Bukkit.getOnlinePlayers().forEach(onlinePlayers -> {
-            onlinePlayers.showPlayer(this.player);
-            this.player.showPlayer(onlinePlayers);
+            onlinePlayers.showPlayer(this.mlgWars, this.player);
+            this.player.showPlayer(this.mlgWars, onlinePlayers);
         });
 
     }

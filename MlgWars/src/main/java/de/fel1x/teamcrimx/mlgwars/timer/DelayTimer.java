@@ -71,8 +71,7 @@ public class DelayTimer implements ITimer {
                     case 5:
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.5f, 0.75f);
-                            Actionbar.sendTitle(player, "§5teamcrimx Labor", 10, 30, 10);
-                            Actionbar.sendSubTitle(player, "§dTNT-Wahnsinn", 10, 30, 10);
+                            Actionbar.sendFullTitle(player, "§5teamcrimx Labor", "§dTNT-Wahnsinn", 10, 30, 10);
                         });
                         break;
                     case 3:
@@ -87,7 +86,7 @@ public class DelayTimer implements ITimer {
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§aDas Spiel beginnt!");
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1.5f, 2f);
-                            Actionbar.sendTitle(player, "§a§lGO!", 0, 20, 10);
+                            Actionbar.sendOnlyTitle(player, "§a§lGO!", 0, 20, 10);
                         });
                         this.mlgWars.startTimerByClass(PreGameTimer.class);
                         break;
@@ -98,12 +97,12 @@ public class DelayTimer implements ITimer {
                     player.setExp(0f);
 
                     if (this.countdown <= 3) {
-                        Actionbar.sendTitle(player, (countdown == 3) ? "§a§l3"
+                        Actionbar.sendOnlyTitle(player, (countdown == 3) ? "§a§l3"
                                 : (countdown == 2) ? "§e§l2" : (countdown == 1) ? "§c§l1" : "§a§lGO!", 0, 40, 10);
                     }
                     if (player.hasMetadata("team")) {
                         int team = player.getMetadata("team").get(0).asInt() + 1;
-                        Actionbar.sendActiobar(player, "§7Team §a#" + team);
+                        Actionbar.sendActionbar(player, "§7Team §a#" + team);
                     }
                 });
 

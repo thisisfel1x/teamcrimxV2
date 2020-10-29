@@ -46,9 +46,6 @@ public class FishListener implements Listener {
                         Location from = player.getLocation();
                         Location to = event.getHook().getLocation();
 
-                        from.setY(from.getY() + 0.5D);
-                        player.teleport(from);
-
                         double g = -0.08D;
                         double t = to.distance(from);
                         double v_x = (1.0D + 0.07D * t) * (to.getX() - from.getX()) / t;

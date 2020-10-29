@@ -1,14 +1,18 @@
 package de.fel1x.teamcrimx.mlgwars.listener.entity;
 
 import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
+import de.fel1x.teamcrimx.crimxapi.utils.ParticleUtils;
+import de.fel1x.teamcrimx.crimxapi.utils.math.MathUtils;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.utils.entites.CustomZombie;
 import de.fel1x.teamcrimx.mlgwars.utils.entites.ZombieEquipment;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
+import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -19,10 +23,12 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class ProjectileHitListener implements Listener {
 
@@ -105,6 +111,23 @@ public class ProjectileHitListener implements Listener {
             if (this.mlgWars.isLabor()) {
                 if (event.getEntity().hasMetadata("explode")) {
                     event.getEntity().getWorld().createExplosion(event.getEntity().getLocation(), 3.5f, true);
+                }
+            }
+        } else if (event.getEntity() instanceof Snowball) {
+            Snowball snowball = (Snowball) event.getEntity();
+
+            if(snowball.hasMetadata("nuts")) {
+                snowball.getPassengers().forEach(Entity::remove);
+
+                snowball.getWorld().createExplosion(snowball, 2F, true, false);
+
+                for (Player player : snowball.getWorld().getNearbyPlayers(snowball.getLocation(), 5, 5)
+                        .stream().filter(player -> !player.equals(snowball.getShooter())).collect(Collectors.toList())) {
+                    player.setLastDamage(5D);
+
+                    Vector vector = player.getVelocity();
+                    vector.add(new Vector(2, 2, 2));
+                    player.setVelocity(vector);
                 }
             }
         }

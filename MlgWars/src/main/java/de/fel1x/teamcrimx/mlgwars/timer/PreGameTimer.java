@@ -58,7 +58,7 @@ public class PreGameTimer implements ITimer {
 
                         if (player.hasMetadata("team")) {
                             int team = player.getMetadata("team").get(0).asInt() + 1;
-                            Actionbar.sendActiobar(player, "§7Team §a#" + team);
+                            Actionbar.sendActionbar(player, "§7Team §a#" + team);
                         }
 
                         if (gamePlayer.getSelectedKit() == Kit.KANGAROO) {
@@ -67,7 +67,7 @@ public class PreGameTimer implements ITimer {
                                 if (player.hasMetadata("essence")) {
                                     currentEssences = player.getMetadata("essence").get(0).asInt();
                                 }
-                                Actionbar.sendActiobar(player, "§6Känguru §8● §a" + currentEssences + " §7Essenzen übrig");
+                                Actionbar.sendActionbar(player, "§6Känguru §8● §a" + currentEssences + " §7Essenzen übrig");
                             }
                         }
                     }

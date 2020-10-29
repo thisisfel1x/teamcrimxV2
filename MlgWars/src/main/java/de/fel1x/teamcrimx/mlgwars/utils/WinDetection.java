@@ -61,8 +61,8 @@ public class WinDetection {
                                 DisguiseAPI.undisguiseToAll(player);
                             }
 
-                            Actionbar.sendTitle(player, winner.getDisplayName(), 10, 50, 10);
-                            Actionbar.sendSubTitle(player, "§7hat das Spiel gewonnen!", 10, 50, 10);
+                            Actionbar.sendFullTitle(player, winner.getDisplayName(),
+                                    "§7hat das Spiel gewonnen!",10, 50, 10);
 
                             player.setPlayerListName(player.getName());
                             mlgWarsScoreboard.setEndingScoreboard(player, permissionGroup.getDisplay().replace('&', '§')
@@ -98,8 +98,8 @@ public class WinDetection {
                                 DisguiseAPI.undisguiseToAll(player);
                             }
 
-                            Actionbar.sendTitle(player, "§cNiemand", 10, 50, 10);
-                            Actionbar.sendSubTitle(player, "§7hat das Spiel gewonnen!", 10, 50, 10);
+                            Actionbar.sendFullTitle(player, "§cNiemand",
+                                    "§7hat das Spiel gewonnen!",10, 50, 10);
 
                             player.setPlayerListName(player.getName());
                             mlgWarsScoreboard.setEndingScoreboard(player, "§cNiemand", "§c");
@@ -123,8 +123,8 @@ public class WinDetection {
                                 DisguiseAPI.undisguiseToAll(player);
                             }
 
-                            Actionbar.sendTitle(player, "§aTeam #" + winnerTeam.getTeamId(), 10, 50, 10);
-                            Actionbar.sendSubTitle(player, "§7hat das Spiel gewonnen!", 10, 50, 10);
+                            Actionbar.sendFullTitle(player, "§aTeam #" + winnerTeam.getTeamId(),
+                                    "§7hat das Spiel gewonnen!",10, 50, 10);
 
                             player.setPlayerListName(player.getName());
                             mlgWarsScoreboard.setEndingScoreboard(player, "§aTeam #" + winnerTeam.getTeamId(), "§a");
@@ -179,8 +179,8 @@ public class WinDetection {
                                 DisguiseAPI.undisguiseToAll(player);
                             }
 
-                            Actionbar.sendTitle(player, "§cKein Team", 10, 50, 10);
-                            Actionbar.sendSubTitle(player, "§7hat das Spiel gewonnen!", 10, 50, 10);
+                            Actionbar.sendFullTitle(player, "§cKein Team",
+                                    "§7hat das Spiel gewonnen!",10, 50, 10);
 
                             player.setPlayerListName(player.getName());
                             mlgWarsScoreboard.setEndingScoreboard(player, "§cKein Team", "§c");

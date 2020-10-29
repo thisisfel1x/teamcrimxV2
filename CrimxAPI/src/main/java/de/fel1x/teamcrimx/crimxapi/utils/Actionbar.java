@@ -7,24 +7,23 @@ import org.bukkit.entity.Player;
 
 public class Actionbar {
 
-    public static void sendTitle(Player p, String msg, int fadein, int stay, int fadeout) {
-
-        Title title = new Title(msg, "", fadein, stay, fadeout);
-        p.sendTitle(title);
-
+    public static void sendFullTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        Title toSend = new Title(title, subtitle, fadeIn, stay, fadeOut);
+        player.sendTitle(toSend);
     }
 
-    public static void sendSubTitle(Player p, String msg, int fadein, int stay, int fadeout) {
-
-        Title title = new Title("", msg, fadein, stay, fadeout);
-        p.sendTitle(title);
-
+    public static void sendOnlySubtitle(Player player, String subtitle, int fadeIn, int stay, int fadeOut) {
+        Title toSend = new Title(" ", subtitle, fadeIn, stay, fadeOut);
+        player.sendTitle(toSend);
     }
 
-    public static void sendActiobar(final Player p, final String message) {
+    public static void sendOnlyTitle(Player player, String title, int fadeIn, int stay, int fadeOut) {
+        Title toSend = new Title(title, " ", fadeIn, stay, fadeOut);
+        player.sendTitle(toSend);
+    }
 
-        p.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(message));
-
+    public static void sendActionbar(final Player p, final String message) {
+        p.sendActionBar(new TextComponent(message));
     }
 
 }

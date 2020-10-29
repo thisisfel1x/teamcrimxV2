@@ -1,7 +1,5 @@
 package de.fel1x.teamcrimx.mlgwars.listener.player;
 
-import com.destroystokyo.paper.entity.ai.MobGoalHelper;
-import com.destroystokyo.paper.entity.ai.MobGoals;
 import de.fel1x.teamcrimx.crimxapi.utils.*;
 import de.fel1x.teamcrimx.mlgwars.Data;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
@@ -14,7 +12,6 @@ import de.fel1x.teamcrimx.mlgwars.inventories.TeamInventory;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.utils.Tornado;
 import me.libraryaddict.disguise.DisguiseAPI;
-import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import org.bukkit.*;
@@ -238,13 +235,13 @@ public class InteractListener implements Listener {
 
                                     count = player.getMetadata("thorcount").get(0).asInt();
 
-                                    Actionbar.sendActiobar(player, "§6Thor §8● " + ProgressBar.getProgressBar(count, 10, 10,
+                                    Actionbar.sendActionbar(player, "§6Thor §8● " + ProgressBar.getProgressBar(count, 10, 10,
                                             '█', ChatColor.GREEN, ChatColor.DARK_GRAY));
 
                                     if (count == 10) {
                                         data.getThorTask().get(player.getUniqueId()).cancel();
                                         data.getThorTask().remove(player.getUniqueId());
-                                        Actionbar.sendActiobar(player, "§6Thor §8● §7Hammer wieder §abereit!");
+                                        Actionbar.sendActionbar(player, "§6Thor §8● §7Hammer wieder §abereit!");
                                     } else {
                                         player.setMetadata("thorcount", new FixedMetadataValue(mlgWars, count + 1));
                                     }
@@ -290,8 +287,8 @@ public class InteractListener implements Listener {
                                 player1.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 5, 1, false, false));
                                 player1.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 5, 1, false, false));
 
-                                Actionbar.sendTitle(player1, "§4" + player.getDisplayName(), 5, 20, 5);
-                                Actionbar.sendSubTitle(player1, "§7eskaliert komplett!", 5, 20, 5);
+                                Actionbar.sendFullTitle(player1, "§4" + player.getDisplayName(),
+                                        "§7eskaliert komplett!", 5, 20, 5);
                             }
 
                             break;
@@ -440,7 +437,7 @@ public class InteractListener implements Listener {
 
                                     count = player.getMetadata("farmer").get(0).asInt();
 
-                                    Actionbar.sendActiobar(player, "§6Farmer (versteckt) §8● " + ProgressBar.getProgressBar(count, 60, 15,
+                                    Actionbar.sendActionbar(player, "§6Farmer (versteckt) §8● " + ProgressBar.getProgressBar(count, 60, 15,
                                             '█', ChatColor.GREEN, ChatColor.DARK_GRAY));
 
                                     if (count == 0) {
@@ -449,11 +446,10 @@ public class InteractListener implements Listener {
                                         if (DisguiseAPI.isDisguised(player)) {
                                             DisguiseAPI.undisguiseToAll(player);
                                         }
-                                        Actionbar.sendActiobar(player, "§6Farmer §8● §7Du bist nun wieder §asichtbar");
+                                        Actionbar.sendActionbar(player, "§6Farmer §8● §7Du bist nun wieder §asichtbar");
                                         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 2.5f, 0.5f);
 
-                                        Actionbar.sendTitle(player, " ", 5, 20, 5);
-                                        Actionbar.sendSubTitle(player, "§aWieder sichtbar!", 5, 20, 5);
+                                        Actionbar.sendOnlySubtitle(player, "§aWieder sichtbar!", 5, 20, 5);
                                     } else {
                                         player.setMetadata("farmer", new FixedMetadataValue(mlgWars, count - 1));
                                     }
@@ -666,6 +662,71 @@ public class InteractListener implements Listener {
                                 data.getCsgoTasks().get(player.getUniqueId()).add(bukkitRunnable);
                             }
                             break;
+                        case VALORANT:
+                            if (interactedMaterial == Material.SPECTRAL_ARROW) {
+
+                                event.setCancelled(true);
+                                this.removeItem(player);
+
+                                this.data.getPlayers().forEach(ingamePlayer -> {
+                                    ingamePlayer.setGlowing(true);
+                                    Actionbar.sendOnlySubtitle(ingamePlayer, "§cPosition aufgedeckt!", 0, 20, 10);
+                                });
+
+                                Bukkit.getScheduler().runTaskLater(this.mlgWars,
+                                        () -> this.data.getPlayers().forEach(ingamePlayer -> ingamePlayer.setGlowing(false)), 100L);
+                            }
+                            break;
+
+                        case NUTS:
+                            if (interactedMaterial != Material.SNOWBALL) {
+                                return;
+                            }
+
+                            if (!event.getItem().getItemMeta().hasDisplayName()) {
+                                return;
+                            }
+
+                            if (!event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §aHülsenfrucht")) {
+                                return;
+                            }
+
+                            event.setCancelled(true);
+                            this.removeItem(player);
+
+                            Snowball nutsSnowball = player.launchProjectile(Snowball.class);
+
+                            FallingBlock fallingBlock = nutsSnowball.getWorld()
+                                    .spawnFallingBlock(nutsSnowball.getLocation().clone().add(0, 1, 0),
+                                    Bukkit.createBlockData(Material.ANVIL));
+                            fallingBlock.setGlowing(true);
+
+                            nutsSnowball.addPassenger(fallingBlock);
+                            nutsSnowball.setMetadata("nuts", new FixedMetadataValue(this.mlgWars, true));
+
+                            break;
+
+                        case ELYTRA:
+                            if (interactedMaterial != Material.CLAY_BALL) {
+                                return;
+                            }
+
+                            if (!event.getItem().getItemMeta().hasDisplayName()) {
+                                return;
+                            }
+
+                            if (!event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §dElytra")) {
+                                return;
+                            }
+
+                            event.setCancelled(true);
+                            this.removeItem(player);
+
+                            player.setVelocity(player.getVelocity().setY(20).multiply(2));
+                            player.setGliding(true);
+
+                            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2F, 2F);
+
                     }
                 }
             }
@@ -678,7 +739,7 @@ public class InteractListener implements Listener {
             case 5:
                 for (int x = -2; x < 3; x++) {
                     for (int y = -2; y < 3; y++) {
-                        location.clone().add(x, turtleHeight, y).getBlock().setType(Material.OAK_LOG);
+                        location.clone().add(x, turtleHeight, y).getBlock().setType(Material.OAK_PLANKS);
                     }
                 }
                 break;
@@ -686,39 +747,39 @@ public class InteractListener implements Listener {
             case 2:
             case 3:
             case 4:
-                location.clone().add(-2, turtleHeight, -2).getBlock().setType(Material.OAK_LOG);
-                location.clone().add(-2, turtleHeight, -1).getBlock().setType(Material.OAK_LOG);
-                location.clone().add(-2, turtleHeight, 0).getBlock().setType(Material.OAK_LOG);
-                location.clone().add(-2, turtleHeight, 1).getBlock().setType(Material.OAK_LOG);
-                location.clone().add(-2, turtleHeight, 2).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(-2, turtleHeight, -2).getBlock().setType(Material.OAK_PLANKS);
+                location.clone().add(-2, turtleHeight, -1).getBlock().setType(Material.OAK_PLANKS);
+                location.clone().add(-2, turtleHeight, 0).getBlock().setType(Material.OAK_PLANKS);
+                location.clone().add(-2, turtleHeight, 1).getBlock().setType(Material.OAK_PLANKS);
+                location.clone().add(-2, turtleHeight, 2).getBlock().setType(Material.OAK_PLANKS);
 
-                location.clone().add(2, turtleHeight, -2).getBlock().setType(Material.OAK_LOG);
-                location.clone().add(2, turtleHeight, -1).getBlock().setType(Material.OAK_LOG);
-                location.clone().add(2, turtleHeight, 0).getBlock().setType(Material.OAK_LOG);
-                location.clone().add(2, turtleHeight, 1).getBlock().setType(Material.OAK_LOG);
-                location.clone().add(2, turtleHeight, 2).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(2, turtleHeight, -2).getBlock().setType(Material.OAK_PLANKS);
+                location.clone().add(2, turtleHeight, -1).getBlock().setType(Material.OAK_PLANKS);
+                location.clone().add(2, turtleHeight, 0).getBlock().setType(Material.OAK_PLANKS);
+                location.clone().add(2, turtleHeight, 1).getBlock().setType(Material.OAK_PLANKS);
+                location.clone().add(2, turtleHeight, 2).getBlock().setType(Material.OAK_PLANKS);
 
-                location.clone().add(1, turtleHeight, 2).getBlock().setType(Material.OAK_LOG);
-                location.clone().add(0, turtleHeight, 2).getBlock().setType(Material.OAK_LOG);
-                location.clone().add(-1, turtleHeight, 2).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(1, turtleHeight, 2).getBlock().setType(Material.OAK_PLANKS);
+                location.clone().add(0, turtleHeight, 2).getBlock().setType(Material.OAK_PLANKS);
+                location.clone().add(-1, turtleHeight, 2).getBlock().setType(Material.OAK_PLANKS);
 
-                location.clone().add(1, turtleHeight, -2).getBlock().setType(Material.OAK_LOG);
-                location.clone().add(0, turtleHeight, -2).getBlock().setType(Material.OAK_LOG);
-                location.clone().add(-1, turtleHeight, -2).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(1, turtleHeight, -2).getBlock().setType(Material.OAK_PLANKS);
+                location.clone().add(0, turtleHeight, -2).getBlock().setType(Material.OAK_PLANKS);
+                location.clone().add(-1, turtleHeight, -2).getBlock().setType(Material.OAK_PLANKS);
 
                 break;
 
             case 6:
                 for (int x = -1; x < 2; x++) {
                     for (int y = -1; y < 2; y++) {
-                        location.clone().add(x, turtleHeight, y).getBlock().setType(Material.OAK_LOG);
+                        location.clone().add(x, turtleHeight, y).getBlock().setType(Material.OAK_PLANKS);
                     }
                 }
                 break;
 
 
             case 7:
-                location.clone().add(0, 5, 0).getBlock().setType(Material.OAK_LOG);
+                location.clone().add(0, 5, 0).getBlock().setType(Material.OAK_PLANKS);
                 location.clone().add(0, 3, 0).getBlock().setType(Material.GLOWSTONE);
 
                 location.clone().add(0, 1, 2).getBlock().setType(Material.AIR);

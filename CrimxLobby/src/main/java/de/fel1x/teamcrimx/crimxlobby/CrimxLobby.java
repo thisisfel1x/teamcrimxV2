@@ -170,7 +170,7 @@ public final class CrimxLobby extends JavaPlugin {
         })), 0L, 3L);
 
         Bukkit.getScheduler().runTaskTimer(this, () -> {
-            Bukkit.getOnlinePlayers().forEach(player -> Actionbar.sendActiobar(player, actionBarMessages.get(actionBarCount).replace('&', '§')));
+            Bukkit.getOnlinePlayers().forEach(player -> Actionbar.sendActionbar(player, actionBarMessages.get(actionBarCount).replace('&', '§')));
 
             this.actionbarTimer++;
             if (this.actionbarTimer % 10 == 0) {

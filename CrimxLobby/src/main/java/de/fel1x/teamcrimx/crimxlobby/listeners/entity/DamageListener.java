@@ -31,7 +31,7 @@ public class DamageListener implements Listener {
         } else if (lobbyPlayer.isInWaterMLG()) {
             event.setDamage(0D);
 
-            Actionbar.sendTitle(player, "§c§l✘", 2, 5, 3);
+            Actionbar.sendOnlyTitle(player, "§c§l✘", 2, 5, 3);
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 5, 7);
             lobbyPlayer.endWaterMLG();
 

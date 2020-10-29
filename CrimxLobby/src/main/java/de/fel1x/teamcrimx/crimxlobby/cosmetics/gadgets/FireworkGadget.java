@@ -3,10 +3,7 @@ package de.fel1x.teamcrimx.crimxlobby.cosmetics.gadgets;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
-import org.bukkit.Color;
-import org.bukkit.Effect;
-import org.bukkit.EntityEffect;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -35,7 +32,7 @@ public class FireworkGadget implements ICosmetic {
     }
 
     @Override
-    public EntityEffect getWalkEffect() {
+    public Particle getWalkEffect() {
         return null;
     }
 

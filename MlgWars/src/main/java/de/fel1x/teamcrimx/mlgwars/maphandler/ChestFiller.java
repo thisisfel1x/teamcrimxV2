@@ -239,7 +239,7 @@ public class ChestFiller {
         for (int i = 0; i < 20; i++) {
 
             items.add(new ItemBuilder(Material.STONE, 20 + r.nextInt(44)).toItemStack());
-            items.add(new ItemBuilder(Material.BRICK, 20 + r.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.BRICKS, 20 + r.nextInt(44)).toItemStack());
             items.add(new ItemBuilder(Material.TNT, 5 + r.nextInt(4)).toItemStack());
             items.add(new ItemBuilder(Material.OAK_PLANKS, 20 + r.nextInt(44)).toItemStack());
 
@@ -400,7 +400,7 @@ public class ChestFiller {
         for (int i = 0; i < 10; i++) {
 
             items.add(new ItemBuilder(Material.STONE, 20 + r.nextInt(44)).toItemStack());
-            items.add(new ItemBuilder(Material.BRICK, 20 + r.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.BRICKS, 20 + r.nextInt(44)).toItemStack());
             items.add(new ItemBuilder(Material.TNT, 5 + r.nextInt(4)).toItemStack());
             items.add(new ItemBuilder(Material.OAK_PLANKS, 20 + r.nextInt(44)).toItemStack());
 

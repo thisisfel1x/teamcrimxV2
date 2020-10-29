@@ -5,10 +5,7 @@ import de.fel1x.teamcrimx.crimxlobby.Data;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import de.fel1x.teamcrimx.crimxlobby.minigames.jumpandrun.JumpAndRunPlayer;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.Effect;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -40,6 +37,8 @@ public class MoveListener implements Listener {
 
             if (!iCosmetic.dropItem() && !iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()) {
                 if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
+                    player.getWorld().spawnParticle(iCosmetic.getWalkEffect(),
+                            player.getLocation().clone().add(0, 0.5, 0), iCosmetic.effectData());
                 }
             } else if (!iCosmetic.dropItem() && iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()) {
                 if ((player.getLocation().clone().subtract(0, 1, 0).getBlock().getType() != Material.AIR
