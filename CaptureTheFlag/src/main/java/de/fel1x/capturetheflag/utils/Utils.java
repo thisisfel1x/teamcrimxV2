@@ -6,6 +6,7 @@ import de.fel1x.capturetheflag.filehandler.SpawnHandler;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.capturetheflag.gamestate.Gamestate;
 import de.fel1x.capturetheflag.team.Teams;
+import de.fel1x.capturetheflag.timers.EndingTimer;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
@@ -26,6 +27,7 @@ public class Utils {
         });
 
         CaptureTheFlag.getInstance().getGamestateHandler().setGamestate(Gamestate.ENDING);
+        CaptureTheFlag.getInstance().startTimerByClass(EndingTimer.class);
 
         Bukkit.getOnlinePlayers().forEach(current -> {
 

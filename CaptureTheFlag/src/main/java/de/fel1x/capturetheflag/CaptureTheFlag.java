@@ -11,9 +11,7 @@ import de.fel1x.capturetheflag.listener.block.InteractListener;
 import de.fel1x.capturetheflag.listener.entity.DamageListener;
 import de.fel1x.capturetheflag.listener.player.*;
 import de.fel1x.capturetheflag.scoreboard.ScoreboardHandler;
-import de.fel1x.capturetheflag.timers.EndingTimer;
-import de.fel1x.capturetheflag.timers.InGameTimer;
-import de.fel1x.capturetheflag.timers.LobbyTimer;
+import de.fel1x.capturetheflag.timers.*;
 import de.fel1x.capturetheflag.world.WorldLoader;
 import fr.minuskube.inv.InventoryManager;
 import org.bukkit.Bukkit;
@@ -26,15 +24,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class CaptureTheFlag extends JavaPlugin {
 
     public static CaptureTheFlag instance;
+
     private final String prefix = "§9CaptureTheFlag §8● §r";
     private final PluginManager pluginManager = Bukkit.getPluginManager();
+
+    private ITimer iTimer;
+
     private Data data;
     private GamestateHandler gamestateHandler;
     private ScoreboardHandler scoreboardHandler;
     private KitHandler kitHandler;
-    private LobbyTimer lobbyTimer;
-    private InGameTimer inGameTimer;
-    private EndingTimer endingTimer;
+
     private InventoryManager inventoryManager;
 
     public static CaptureTheFlag getInstance() {
@@ -58,26 +58,37 @@ public final class CaptureTheFlag extends JavaPlugin {
         new FlagHandler();
         scoreboardHandler = new ScoreboardHandler();
 
-        lobbyTimer = new LobbyTimer();
-        inGameTimer = new InGameTimer();
-        endingTimer = new EndingTimer();
-
         this.registerListener();
         this.registerCommands();
 
         for (World world : Bukkit.getWorlds()) {
             world.getEntities().forEach(Entity::remove);
-
-            world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
-            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-            world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-
         }
+
+        this.iTimer = new IdleTimer();
+        this.iTimer.start();
+
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+    }
+
+    public void startTimerByClass(Class<?> clazz) {
+        this.getiTimer().stop();
+
+        try {
+            if (!(clazz.newInstance() instanceof ITimer)) {
+                return;
+            }
+
+            this.setiTimer((ITimer) clazz.newInstance());
+            this.getiTimer().start();
+
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void registerListener() {
@@ -101,18 +112,25 @@ public final class CaptureTheFlag extends JavaPlugin {
         // ENTITY
         new DamageListener(this);
 
-
     }
 
     private void registerCommands() {
 
         this.getCommand("setup").setExecutor(new SetupCommand());
-        this.getCommand("start").setExecutor(new StartCommand());
+        new StartCommand(this);
 
     }
 
     public KitHandler getKitHandler() {
         return kitHandler;
+    }
+
+    public ITimer getiTimer() {
+        return iTimer;
+    }
+
+    public void setiTimer(ITimer iTimer) {
+        this.iTimer = iTimer;
     }
 
     public PluginManager getPluginManager() {
@@ -129,14 +147,6 @@ public final class CaptureTheFlag extends JavaPlugin {
 
     public Data getData() {
         return data;
-    }
-
-    public LobbyTimer getLobbyTimer() {
-        return lobbyTimer;
-    }
-
-    public EndingTimer getEndingTimer() {
-        return endingTimer;
     }
 
     public InventoryManager getInventoryManager() {

@@ -5,6 +5,8 @@ import de.fel1x.capturetheflag.Data;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.capturetheflag.gamestate.Gamestate;
 import de.fel1x.capturetheflag.team.Teams;
+import de.fel1x.capturetheflag.timers.EndingTimer;
+import de.fel1x.capturetheflag.timers.IdleTimer;
 import de.fel1x.capturetheflag.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,7 +16,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class QuitListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
+    private final CaptureTheFlag captureTheFlag;
 
     public QuitListener(CaptureTheFlag captureTheFlag) {
         this.captureTheFlag = captureTheFlag;
@@ -39,16 +41,11 @@ public class QuitListener implements Listener {
         switch (gamestate) {
 
             case LOBBY:
+                event.setQuitMessage("§8« " + player.getDisplayName() + " §7hat das Spiel verlassen");
 
-                event.setQuitMessage("§c« " + player.getDisplayName() + " §7hat das Spiel verlassen");
-
-                if (this.captureTheFlag.getLobbyTimer().isRunning()) {
-                    if (data.getPlayers().size() < 2) {
-                        this.captureTheFlag.getLobbyTimer().stop();
-                        return;
-                    }
+                if (data.getPlayers().size() < 6) {
+                    this.captureTheFlag.startTimerByClass(IdleTimer.class);
                 }
-
                 break;
 
             case INGAME:
@@ -58,34 +55,24 @@ public class QuitListener implements Listener {
                 }
 
                 if (Teams.RED.getTeamPlayers().size() == 0) {
-
                     Utils.win(Teams.BLUE);
-
                 } else if (Teams.BLUE.getTeamPlayers().size() == 0) {
-
                     Utils.win(Teams.RED);
-
                 }
 
 
-                if (data.getPlayers().size() == 0) {
-                    Bukkit.getScheduler().cancelTasks(this.captureTheFlag);
-                    this.captureTheFlag.getEndingTimer().start();
-                    return;
-                }
-
-                if (Bukkit.getOnlinePlayers().size() == 0) {
+                if (data.getPlayers().size() == 0 && !Bukkit.getOnlinePlayers().isEmpty()) {
+                    this.captureTheFlag.startTimerByClass(EndingTimer.class);
+                } else if (Bukkit.getOnlinePlayers().isEmpty()) {
                     Bukkit.getServer().shutdown();
-                    return;
                 }
 
                 break;
 
             case ENDING:
 
-                if (Bukkit.getOnlinePlayers().size() == 0) {
+                if (Bukkit.getOnlinePlayers().isEmpty()) {
                     Bukkit.getServer().shutdown();
-                    return;
                 }
 
                 break;

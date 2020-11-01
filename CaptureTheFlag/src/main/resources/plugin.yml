@@ -6,3 +6,9 @@ depend: [ CrimxAPI ]
 authors: [ fel1x ]
 description: A CTF minigame
 website: teamcrimx.de
+
+commands:
+  setup:
+    description: setup
+  start:
+    description: start

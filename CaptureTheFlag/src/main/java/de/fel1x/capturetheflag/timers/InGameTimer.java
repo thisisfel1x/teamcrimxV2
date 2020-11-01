@@ -4,6 +4,7 @@ import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.Data;
 import de.fel1x.capturetheflag.filehandler.SpawnHandler;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
+import de.fel1x.capturetheflag.gamestate.Gamestate;
 import de.fel1x.capturetheflag.team.Teams;
 import de.fel1x.capturetheflag.utils.particles.ParticleEffects;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
@@ -16,9 +17,11 @@ public class InGameTimer implements ITimer {
 
     private final CaptureTheFlag captureTheFlag = CaptureTheFlag.getInstance();
     private final Data data = this.captureTheFlag.getData();
-    int taskId;
-    boolean running;
-    int timer = 0;
+
+    private int taskId;
+    private boolean running;
+
+    private int timer = 0;
 
     public void start() {
 
@@ -27,31 +30,28 @@ public class InGameTimer implements ITimer {
             current.setExp(0);
         });
 
-        if (!running) {
-            running = true;
+        if (!this.running) {
 
-            taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.captureTheFlag, () -> {
+            this.captureTheFlag.getGamestateHandler().setGamestate(Gamestate.INGAME);
+            this.running = true;
+
+            this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.captureTheFlag, () -> {
+
                 Bukkit.getOnlinePlayers().forEach(current -> {
-
                     GamePlayer gamePlayer = new GamePlayer(current);
 
-                    if ((data.getRedFlagHolder() != null && current.equals(data.getRedFlagHolder())
-                            || (data.getBlueFlagHolder() != null && current.equals(data.getBlueFlagHolder())))) {
+                    if(gamePlayer.isPlayer()) {
+                        if ((this.data.getRedFlagHolder() != null && current.equals(this.data.getRedFlagHolder())
+                                || (this.data.getBlueFlagHolder() != null && current.equals(this.data.getBlueFlagHolder())))) {
+                            current.setWalkSpeed(0.05f);
 
-                        current.setWalkSpeed(0.05f);
-
-                    } else {
-
-                        current.setWalkSpeed(0.2f);
-                    }
-
-                    if (gamePlayer.isPlayer()) {
+                        } else {
+                            current.setWalkSpeed(0.2f);
+                        }
                         current.sendActionBar("§7Team " + gamePlayer.getTeam().getTeamName());
                     } else {
                         current.sendActionBar("§7Spectator");
                     }
-
-
                 });
 
                 ParticleEffects.drawBannerCircle(SpawnHandler.loadBannerLocation("redFlag"), 0.25, 20);
@@ -59,7 +59,7 @@ public class InGameTimer implements ITimer {
 
                 this.checkBanner();
 
-                timer++;
+                this.timer++;
 
             }, 0L, 20L);
 
@@ -68,17 +68,12 @@ public class InGameTimer implements ITimer {
     }
 
     public void stop() {
-        if (running) {
-
-            running = false;
+        if (this.running) {
+            this.running = false;
             Bukkit.getScheduler().cancelTask(taskId);
-
         }
     }
 
-    public boolean isRunning() {
-        return running;
-    }
 
     public void checkBanner() {
         try {
@@ -90,8 +85,7 @@ public class InGameTimer implements ITimer {
                     Actionbar.sendOnlySubtitle(player, "§cDeine Flagge wurde gestohlen!", 0, 40, 20);
                 });
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) { }
 
         try {
             Banner banner = (Banner) data.getBlueFlagBaseLocation().getBlock().getState();
@@ -104,8 +98,6 @@ public class InGameTimer implements ITimer {
 
             }
 
-        } catch (Exception ignored) {
-        }
-
+        } catch (Exception ignored) { }
     }
 }

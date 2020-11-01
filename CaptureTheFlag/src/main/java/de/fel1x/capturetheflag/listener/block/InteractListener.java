@@ -46,7 +46,7 @@ public class InteractListener implements Listener {
 
         Flag flag;
 
-        if (gamestate.equals(Gamestate.LOBBY)) {
+        if (gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
             if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
                 if (event.getMaterial().equals(Material.RED_BED)) {
@@ -95,7 +95,6 @@ public class InteractListener implements Listener {
 
                     switch (flag) {
                         case BLUE_FLAG:
-
                             if (teams.equals(Teams.BLUE)) {
 
                                 if (!banner.getLocation().equals(data.getBlueFlagBaseLocation()) && !player.equals(data.getRedFlagHolder())) {
@@ -199,7 +198,6 @@ public class InteractListener implements Listener {
                             break;
 
                         case RED_FLAG:
-
                             if (teams.equals(Teams.RED)) {
 
                                 if (!banner.getLocation().equals(data.getRedFlagBaseLocation()) && !player.equals(data.getBlueFlagHolder())) {

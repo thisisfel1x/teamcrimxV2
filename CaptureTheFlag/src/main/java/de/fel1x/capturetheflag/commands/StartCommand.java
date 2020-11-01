@@ -2,12 +2,21 @@ package de.fel1x.capturetheflag.commands;
 
 import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.gamestate.Gamestate;
+import de.fel1x.capturetheflag.timers.IdleTimer;
+import de.fel1x.capturetheflag.timers.LobbyTimer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class StartCommand implements CommandExecutor {
+
+    private final CaptureTheFlag captureTheFlag;
+
+    public StartCommand(CaptureTheFlag captureTheFlag) {
+        this.captureTheFlag = captureTheFlag;
+        this.captureTheFlag.getCommand("start").setExecutor(this);
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String string, String[] args) {
@@ -20,17 +29,18 @@ public class StartCommand implements CommandExecutor {
 
         Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
 
-        if (!gamestate.equals(Gamestate.LOBBY)) return false;
+        if (gamestate != Gamestate.IDLE && gamestate != Gamestate.LOBBY) return false;
 
-        if (!CaptureTheFlag.getInstance().getLobbyTimer().isRunning()) {
-            CaptureTheFlag.getInstance().getLobbyTimer().setCountdown(10);
-            CaptureTheFlag.getInstance().getLobbyTimer().start();
-            return true;
+        if(this.captureTheFlag.getiTimer() instanceof IdleTimer) {
+            this.captureTheFlag.getiTimer().stop();
+            this.captureTheFlag.setiTimer(new LobbyTimer());
+            ((LobbyTimer) this.captureTheFlag.getiTimer()).setCountdown(10);
+            this.captureTheFlag.getiTimer().start();
+        } else if(this.captureTheFlag.getiTimer() instanceof LobbyTimer) {
+            if(((LobbyTimer) this.captureTheFlag.getiTimer()).getCountdown() > 10) {
+                ((LobbyTimer) this.captureTheFlag.getiTimer()).setCountdown(10);
+            }
         }
-
-        if (CaptureTheFlag.getInstance().getLobbyTimer().getCountdown() <= 10) return false;
-
-        CaptureTheFlag.getInstance().getLobbyTimer().setCountdown(10);
 
         return true;
     }

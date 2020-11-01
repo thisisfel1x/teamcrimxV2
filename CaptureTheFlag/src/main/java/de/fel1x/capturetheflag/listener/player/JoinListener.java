@@ -4,6 +4,7 @@ import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.Data;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.capturetheflag.gamestate.Gamestate;
+import de.fel1x.capturetheflag.timers.LobbyTimer;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -36,7 +37,7 @@ public class JoinListener implements Listener {
 
         switch (gamestate) {
 
-            case LOBBY:
+            case IDLE: case LOBBY:
 
                 gamePlayer.teleportToLobby();
                 gamePlayer.addToInGamePlayers();
@@ -44,10 +45,10 @@ public class JoinListener implements Listener {
                 gamePlayer.cleanupInventory();
                 gamePlayer.cleanupTeams();
 
-                event.setJoinMessage("§a» " + player.getDisplayName() + " §7hat das Spiel betreten!");
+                event.setJoinMessage("§8» " + player.getDisplayName() + " §7hat das Spiel betreten!");
 
-                if (data.getPlayers().size() >= 2) {
-                    this.captureTheFlag.getLobbyTimer().start();
+                if (data.getPlayers().size() >= 6) {
+                    this.captureTheFlag.startTimerByClass(LobbyTimer.class);
                 }
 
                 player.getInventory().setItem(0, new ItemBuilder(Material.RED_BED).setName("§a§lWähle dein Team").addEnchant(Enchantment.DEPTH_STRIDER, 1).addGlow().toItemStack());

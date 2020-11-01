@@ -34,7 +34,7 @@ public class ScoreboardHandler {
         blueTeam = gameScoreboard.registerNewTeam("009Rot");
         blueTeam.setPrefix("§9Blau §7| §9");
         blueTeam.setDisplayName("§9");
-        redTeam.setColor(ChatColor.BLUE);
+        blueTeam.setColor(ChatColor.BLUE);
 
     }
 

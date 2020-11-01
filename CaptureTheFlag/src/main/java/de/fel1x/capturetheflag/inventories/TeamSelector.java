@@ -20,7 +20,7 @@ public class TeamSelector implements InventoryProvider {
             .id("customInventory")
             .provider(new TeamSelector())
             .size(3, 9)
-            .title("§a§lWähle dein Team")
+            .title("§e§lWähle dein Team")
             .manager(CaptureTheFlag.getInstance().getInventoryManager())
             .build();
 
