@@ -28,14 +28,14 @@ import java.util.UUID;
  */
 public class SkullCreator {
 
+    private SkullCreator() {}
+
     private static boolean warningPosted = false;
+
     // some reflection stuff to be used when setting a skull's profile
     private static Field blockProfileField;
     private static Method metaSetProfileMethod;
     private static Field metaProfileField;
-
-    private SkullCreator() {
-    }
 
     /**
      * Creates a player skull, should work in both legacy and new Bukkit APIs.
@@ -59,6 +59,16 @@ public class SkullCreator {
      */
     public static ItemStack itemFromName(String name) {
         return itemWithName(createSkull(), name);
+    }
+
+    /**
+     * Creates a player skull item with the skin based on a player's UUID.
+     *
+     * @param id The Player's UUID.
+     * @return The head of the Player.
+     */
+    public static ItemStack itemFromUuid(UUID id) {
+        return itemWithUuid(createSkull(), id);
     }
 
     /**
@@ -102,6 +112,24 @@ public class SkullCreator {
     }
 
     /**
+     * Modifies a skull to use the skin of the player with a given UUID.
+     *
+     * @param item The item to apply the name to. Must be a player skull.
+     * @param id   The Player's UUID.
+     * @return The head of the Player.
+     */
+    public static ItemStack itemWithUuid(ItemStack item, UUID id) {
+        notNull(item, "item");
+        notNull(id, "id");
+
+        SkullMeta meta = (SkullMeta) item.getItemMeta();
+        meta.setOwningPlayer(Bukkit.getOfflinePlayer(id));
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    /**
      * Modifies a skull to use the skin at the given Mojang URL.
      *
      * @param item The item to apply the skin to. Must be a player skull.
@@ -134,6 +162,39 @@ public class SkullCreator {
         item.setItemMeta(meta);
 
         return item;
+    }
+
+    /**
+     * Sets the block to a skull with the given name.
+     *
+     * @param block The block to set.
+     * @param name  The player to set it to.
+     * @deprecated names don't make for good identifiers.
+     */
+    @Deprecated
+    public static void blockWithName(Block block, String name) {
+        notNull(block, "block");
+        notNull(name, "name");
+
+        Skull state = (Skull) block.getState();
+        state.setOwningPlayer(Bukkit.getOfflinePlayer(name));
+        state.update(false, false);
+    }
+
+    /**
+     * Sets the block to a skull with the given UUID.
+     *
+     * @param block The block to set.
+     * @param id    The player to set it to.
+     */
+    public static void blockWithUuid(Block block, UUID id) {
+        notNull(block, "block");
+        notNull(id, "id");
+
+        setToSkull(block);
+        Skull state = (Skull) block.getState();
+        state.setOwningPlayer(Bukkit.getOfflinePlayer(id));
+        state.update(false, false);
     }
 
     /**
@@ -256,7 +317,6 @@ public class SkullCreator {
                 Bukkit.getLogger().warning("SKULLCREATOR API - Using the legacy bukkit API with 1.13+ bukkit versions is not supported!");
                 warningPosted = true;
             }
-        } catch (NoSuchFieldException | IllegalArgumentException ignored) {
-        }
+        } catch (NoSuchFieldException | IllegalArgumentException ignored) {}
     }
 }
