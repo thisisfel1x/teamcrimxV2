@@ -15,7 +15,6 @@ import de.fel1x.capturetheflag.timers.*;
 import de.fel1x.capturetheflag.world.WorldLoader;
 import fr.minuskube.inv.InventoryManager;
 import org.bukkit.Bukkit;
-import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.PluginManager;

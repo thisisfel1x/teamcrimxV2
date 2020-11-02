@@ -43,10 +43,8 @@ public class DeathListener implements Listener {
         event.getDrops().clear();
 
         if (gamestate.equals(Gamestate.INGAME)) {
-
             if (player.equals(data.getRedFlagHolder())) {
-
-                player.sendMessage("§cDu hast die Flagge verloren!");
+                player.sendMessage(this.captureTheFlag.getPrefix() + "§cDu hast die Flagge verloren!");
                 player.setGlowing(false);
 
                 data.setRedFlagHolder(null);
@@ -68,8 +66,7 @@ public class DeathListener implements Listener {
             }
 
             if (player.equals(data.getBlueFlagHolder())) {
-
-                player.sendMessage("§cDu hast die Flagge verloren!");
+                player.sendMessage(this.captureTheFlag.getPrefix() + "§cDu hast die Flagge verloren!");
                 player.setGlowing(false);
 
                 data.setBlueFlagHolder(null);
@@ -88,7 +85,6 @@ public class DeathListener implements Listener {
                 }
 
             }
-
         }
 
         Player attacker = null;
@@ -105,11 +101,11 @@ public class DeathListener implements Listener {
 
         if (attacker != null) {
 
-            event.setDeathMessage(player.getDisplayName() + " §7wurde von " + attacker.getDisplayName() + " §7getötet");
+            event.setDeathMessage(this.captureTheFlag.getPrefix() + player.getDisplayName() + " §7wurde von " + attacker.getDisplayName() + " §7getötet");
 
         } else {
 
-            event.setDeathMessage(player.getDisplayName() + " §7ist gestorben");
+            event.setDeathMessage(this.captureTheFlag.getPrefix() + player.getDisplayName() + " §7ist gestorben");
 
         }
 

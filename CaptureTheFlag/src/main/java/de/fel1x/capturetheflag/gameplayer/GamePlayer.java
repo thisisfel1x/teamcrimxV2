@@ -94,12 +94,12 @@ public class GamePlayer {
             if (!teams.getTeamPlayers().contains(this.player)) {
                 teams.getTeamPlayers().add(this.player);
             }
-            this.player.sendMessage("§7Du bist Team " + teams.getTeamName() + " §7beigetreten!");
+            this.player.sendMessage(this.captureTheFlag.getPrefix() + "§7Du bist Team " + teams.getTeamName() + " §7beigetreten!");
 
             this.captureTheFlag.getScoreboardHandler().setGameScoreboard(player, teams);
 
         } else {
-            this.player.sendMessage("Dieses Team ist voll!");
+            this.player.sendMessage(this.captureTheFlag.getPrefix() + "Dieses Team ist voll!");
             this.player.closeInventory();
         }
     }

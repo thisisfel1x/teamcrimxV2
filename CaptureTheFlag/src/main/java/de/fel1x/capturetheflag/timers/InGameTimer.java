@@ -54,8 +54,10 @@ public class InGameTimer implements ITimer {
                     }
                 });
 
-                ParticleEffects.drawBannerCircle(SpawnHandler.loadBannerLocation("redFlag"), 0.25, 20);
-                ParticleEffects.drawBannerCircle(SpawnHandler.loadBannerLocation("blueFlag"), 0.25, 20);
+                ParticleEffects.drawBannerCircle(SpawnHandler.loadBannerLocation("redFlag").toCenterLocation(),
+                        0.25, 20);
+                ParticleEffects.drawBannerCircle(SpawnHandler.loadBannerLocation("blueFlag").toCenterLocation(),
+                        0.25, 20);
 
                 this.checkBanner();
 

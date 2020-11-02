@@ -24,6 +24,8 @@ public class TeamSelector implements InventoryProvider {
             .manager(CaptureTheFlag.getInstance().getInventoryManager())
             .build();
 
+    private final CaptureTheFlag captureTheFlag = CaptureTheFlag.getInstance();
+
     @Override
     public void init(Player player, InventoryContents contents) {
 
@@ -51,7 +53,7 @@ public class TeamSelector implements InventoryProvider {
             GamePlayer gamePlayer = new GamePlayer(clickedPlayer);
 
             if (Teams.RED.getTeamPlayers().size() > 4) {
-                player.sendMessage("§cDieses Team ist voll!");
+                player.sendMessage(this.captureTheFlag.getPrefix() + "§cDieses Team ist voll!");
                 player.closeInventory();
                 return;
             }
@@ -73,7 +75,7 @@ public class TeamSelector implements InventoryProvider {
             GamePlayer gamePlayer = new GamePlayer(clickedPlayer);
 
             if (Teams.BLUE.getTeamPlayers().size() > 4) {
-                player.sendMessage("§cDieses Team ist voll!");
+                player.sendMessage(this.captureTheFlag.getPrefix() + "§cDieses Team ist voll!");
                 player.closeInventory();
                 return;
             }

@@ -48,10 +48,10 @@ public class Data {
         }
 
         try {
-            redFlagLocation = SpawnHandler.loadBannerLocation("redFlag");
-            redFlagBaseLocation = SpawnHandler.loadBannerLocation("redFlag");
-            blueFlagLocation = SpawnHandler.loadBannerLocation("blueFlag");
-            blueFlagBaseLocation = SpawnHandler.loadBannerLocation("blueFlag");
+            redFlagLocation = SpawnHandler.loadBannerLocation("redFlag").toCenterLocation();
+            redFlagBaseLocation = SpawnHandler.loadBannerLocation("redFlag").toCenterLocation();
+            blueFlagLocation = SpawnHandler.loadBannerLocation("blueFlag").toCenterLocation();
+            blueFlagBaseLocation = SpawnHandler.loadBannerLocation("blueFlag").toCenterLocation();
         } catch (Exception ignored) {
             Bukkit.getConsoleSender().sendMessage("§cERROR: FLAG_STORE_LOCATION_ERROR");
         }
@@ -67,16 +67,8 @@ public class Data {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
-
     public List<Player> getSpectators() {
         return spectators;
-    }
-
-    public void setSpectators(List<Player> spectators) {
-        this.spectators = spectators;
     }
 
     public Player getBlueFlagHolder() {
@@ -96,16 +88,8 @@ public class Data {
         this.redFlagHolder = redFlagHolder;
     }
 
-    public Location getRedFlagLocation() {
-        return redFlagLocation;
-    }
-
     public void setRedFlagLocation(Location redFlagLocation) {
         this.redFlagLocation = redFlagLocation;
-    }
-
-    public Location getBlueFlagLocation() {
-        return blueFlagLocation;
     }
 
     public void setBlueFlagLocation(Location blueFlagLocation) {

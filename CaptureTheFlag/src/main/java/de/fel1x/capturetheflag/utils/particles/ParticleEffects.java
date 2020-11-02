@@ -20,7 +20,7 @@ public class ParticleEffects {
             double z = center.getZ() + (radius * Math.sin(angle));
 
             Location particle = new Location(world, x, center.getY(), z);
-            particle.getWorld().spawnParticle(Particle.SPELL_WITCH, center, 1);
+            particle.getWorld().spawnParticle(Particle.SPELL_WITCH, center, 1, 0, 0, 0);
         }
     }
 
