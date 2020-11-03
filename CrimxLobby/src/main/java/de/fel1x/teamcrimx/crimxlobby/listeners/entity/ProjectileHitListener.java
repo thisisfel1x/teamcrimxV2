@@ -28,9 +28,9 @@ public class ProjectileHitListener implements Listener {
 
         if (entity instanceof Snowball) {
             if (entity.hasMetadata("funGun")) {
-                entity.playEffect(EntityEffect.LOVE_HEARTS);
-                entity.playEffect(EntityEffect.VILLAGER_HAPPY);
-                entity.playEffect(EntityEffect.WOLF_SMOKE);
+                entity.getWorld().spawnParticle(Particle.HEART, location, 0);
+                entity.getWorld().spawnParticle(Particle.LAVA, location, 0);
+                entity.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, location, 0);
                 location.getWorld().playSound(location, Sound.ENTITY_CAT_PURREOW, 3f, 0.75f);
             } else if (entity.hasMetadata("firework")) {
                 new InstantFirework(FireworkEffect.builder().withColor(Color.GREEN, Color.RED, Color.BLUE, Color.YELLOW,
