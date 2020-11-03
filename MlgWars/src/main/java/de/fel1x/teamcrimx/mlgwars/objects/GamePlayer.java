@@ -23,6 +23,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attributable;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
@@ -158,6 +160,9 @@ public class GamePlayer {
         this.player.setFlying(false);
         this.player.setAllowFlight(false);
         this.player.setFlying(false);
+
+
+        this.player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(24);
 
         this.data.getPlayerGg().put(this.player.getUniqueId(), false);
 

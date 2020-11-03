@@ -24,8 +24,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -707,7 +709,7 @@ public class InteractListener implements Listener {
                             break;
 
                         case ELYTRA:
-                            if (interactedMaterial != Material.CLAY_BALL) {
+                            if (interactedMaterial != Material.PURPLE_DYE) {
                                 return;
                             }
 
@@ -715,22 +717,34 @@ public class InteractListener implements Listener {
                                 return;
                             }
 
-                            if (!event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §dElytra")) {
+                            if (!event.getItem().getItemMeta().getDisplayName()
+                                    .equalsIgnoreCase("§8● §5Jumppad spawnen")) {
                                 return;
                             }
 
                             event.setCancelled(true);
                             this.removeItem(player);
 
-                            player.setVelocity(player.getVelocity().setY(20).multiply(2));
-                            player.setGliding(true);
-
-                            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2F, 2F);
+                            this.spawnBouncePad(player.getLocation());
 
                     }
                 }
             }
         }
+    }
+
+    private void spawnBouncePad(Location location) {
+        AreaEffectCloud areaEffectCloud = (AreaEffectCloud) location.getWorld()
+                .spawnEntity(location, EntityType.AREA_EFFECT_CLOUD);
+
+        areaEffectCloud.addCustomEffect(new PotionEffect(PotionEffectType.JUMP, 0, 0), false);
+
+        areaEffectCloud.setRadius(2);
+        areaEffectCloud.setDuration(20 * 10);
+        areaEffectCloud.setCustomName("§8● §5Jumppad");
+        areaEffectCloud.setCustomNameVisible(true);
+
+        areaEffectCloud.setParticle(Particle.SPELL_WITCH);
     }
 
     private boolean buildTurtle(Location location, Player player, int turtleBuildState, int turtleHeight) {

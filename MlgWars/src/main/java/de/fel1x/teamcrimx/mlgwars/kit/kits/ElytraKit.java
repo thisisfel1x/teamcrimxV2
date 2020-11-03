@@ -15,7 +15,7 @@ public class ElytraKit implements IKit {
     @Override
     public String[] getKitDescription() {
         return new String[] {
-                "§7Fliege durch die Welt"
+                "§7Fliege durch die Welt", "mit deinem Jumppad"
         };
     }
 
@@ -31,7 +31,7 @@ public class ElytraKit implements IKit {
 
     @Override
     public void setKitInventory(Player player) {
-        player.getInventory().setItem(0, new ItemBuilder(Material.CLAY_BALL, 3)
-                .setName("§8● §dElytra").toItemStack());
+        player.getInventory().setItem(0, new ItemBuilder(Material.PURPLE_DYE, 2)
+                .setName("§8● §5Jumppad spawnen").toItemStack());
     }
 }

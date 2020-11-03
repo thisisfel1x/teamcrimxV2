@@ -3,10 +3,13 @@ package de.fel1x.teamcrimx.mlgwars.listener.player;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 
 public class InventoryClickListener implements Listener {
 
@@ -25,6 +28,10 @@ public class InventoryClickListener implements Listener {
         GamePlayer gamePlayer = new GamePlayer(player);
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
+
+        if(event.getRawSlot() == 45) {
+            event.setCancelled(true);
+        }
 
         switch (gamestate) {
 
