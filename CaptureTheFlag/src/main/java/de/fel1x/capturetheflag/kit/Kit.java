@@ -6,6 +6,8 @@ import de.fel1x.capturetheflag.kit.kits.TankKit;
 
 public enum Kit {
 
+    NONE(null),
+
     ARCHER(ArcherKit.class),
     TANK(TankKit.class),
     MEDIC(MedicKit.class);

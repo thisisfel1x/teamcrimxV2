@@ -2,6 +2,7 @@ package de.fel1x.capturetheflag;
 
 import de.fel1x.capturetheflag.commands.SetupCommand;
 import de.fel1x.capturetheflag.commands.StartCommand;
+import de.fel1x.capturetheflag.commands.StatsCommand;
 import de.fel1x.capturetheflag.flag.FlagHandler;
 import de.fel1x.capturetheflag.gamestate.GamestateHandler;
 import de.fel1x.capturetheflag.listener.block.BlockBreakListener;
@@ -12,6 +13,7 @@ import de.fel1x.capturetheflag.listener.player.*;
 import de.fel1x.capturetheflag.scoreboard.ScoreboardHandler;
 import de.fel1x.capturetheflag.timers.*;
 import de.fel1x.capturetheflag.world.WorldLoader;
+import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import fr.minuskube.inv.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -22,6 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class CaptureTheFlag extends JavaPlugin {
 
     public static CaptureTheFlag instance;
+    private CrimxAPI crimxAPI;
 
     private final String prefix = "§9CaptureTheFlag §8● §r";
     private final PluginManager pluginManager = Bukkit.getPluginManager();
@@ -42,6 +45,8 @@ public final class CaptureTheFlag extends JavaPlugin {
     public void onEnable() {
 
         instance = this;
+
+        this.crimxAPI = new CrimxAPI();
 
         new WorldLoader();
 
@@ -113,8 +118,14 @@ public final class CaptureTheFlag extends JavaPlugin {
     private void registerCommands() {
 
         this.getCommand("setup").setExecutor(new SetupCommand());
-        new StartCommand(this);
 
+        new StartCommand(this);
+        new StatsCommand(this);
+
+    }
+
+    public CrimxAPI getCrimxAPI() {
+        return crimxAPI;
     }
 
     public ITimer getiTimer() {

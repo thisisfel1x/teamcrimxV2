@@ -29,6 +29,7 @@ public class KitSelector implements InventoryProvider {
         int i = 0;
 
         for (Kit kit : Kit.values()) {
+            if(kit == Kit.NONE) continue;
 
             try {
                 IKit iKit = kit.getClazz().newInstance();
@@ -43,7 +44,8 @@ public class KitSelector implements InventoryProvider {
                     GamePlayer gamePlayer = new GamePlayer(clickedPlayer);
 
                     gamePlayer.selectKit(kit);
-                    player.sendMessage("§7Du hast das §e" + iKit.getKitName() + "§7-Kit ausgewählt!");
+                    player.sendMessage(this.captureTheFlag.getPrefix() + "§7Du hast das §e"
+                            + iKit.getKitName() + "-Kit §7ausgewählt!");
                 }));
 
                 i++;

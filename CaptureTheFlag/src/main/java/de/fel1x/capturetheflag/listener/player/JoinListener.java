@@ -5,6 +5,8 @@ import de.fel1x.capturetheflag.Data;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.capturetheflag.gamestate.Gamestate;
 import de.fel1x.capturetheflag.timers.LobbyTimer;
+import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
+import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -15,10 +17,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
+    private final CaptureTheFlag captureTheFlag;
+    private final Data data;
 
     public JoinListener(CaptureTheFlag captureTheFlag) {
         this.captureTheFlag = captureTheFlag;
+        this.data = this.captureTheFlag.getData();
+
         this.captureTheFlag.getPluginManager().registerEvents(this, this.captureTheFlag);
     }
 
@@ -29,15 +34,21 @@ public class JoinListener implements Listener {
 
         Player player = event.getPlayer();
         GamePlayer gamePlayer = new GamePlayer(player);
-        Data data = this.captureTheFlag.getData();
+        CrimxPlayer crimxPlayer = new CrimxPlayer(gamePlayer.getICloudPlayer());
 
         Gamestate gamestate = this.captureTheFlag.getGamestateHandler().getGamestate();
+
+        if (!crimxPlayer.checkIfPlayerExistsInCollection(player.getUniqueId(), MongoDBCollection.CAPTURE_THE_FLAG)) {
+            gamePlayer.createPlayerData();
+        }
 
         this.captureTheFlag.getScoreboardHandler().handleJoin(player);
 
         switch (gamestate) {
 
             case IDLE: case LOBBY:
+
+                gamePlayer.fetchPlayerData();
 
                 gamePlayer.teleportToLobby();
                 gamePlayer.addToInGamePlayers();

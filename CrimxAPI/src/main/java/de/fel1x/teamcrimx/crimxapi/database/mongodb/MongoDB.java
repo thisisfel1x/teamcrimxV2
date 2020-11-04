@@ -14,6 +14,7 @@ public class MongoDB {
     private MongoCollection<Document> userCollection;
     private MongoCollection<Document> lobbyCollection;
     private MongoCollection<Document> mlgWarsCollection;
+    private MongoCollection<Document> captureTheFlagCollection;
 
     public MongoDB() {
 
@@ -24,6 +25,7 @@ public class MongoDB {
         this.userCollection = this.networkDatabase.getCollection("users");
         this.lobbyCollection = this.networkDatabase.getCollection("lobby");
         this.mlgWarsCollection = this.networkDatabase.getCollection("mlgwars");
+        this.captureTheFlagCollection = this.networkDatabase.getCollection("capturetheflag");
 
     }
 
@@ -45,5 +47,9 @@ public class MongoDB {
 
     public MongoCollection<Document> getMlgWarsCollection() {
         return mlgWarsCollection;
+    }
+
+    public MongoCollection<Document> getCaptureTheFlagCollection() {
+        return captureTheFlagCollection;
     }
 }

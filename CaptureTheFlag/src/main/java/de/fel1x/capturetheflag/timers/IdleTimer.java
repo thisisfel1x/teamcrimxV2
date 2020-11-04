@@ -24,9 +24,10 @@ public class IdleTimer implements ITimer {
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.captureTheFlag, () -> {
 
                 int neededPlayers = 6 - this.captureTheFlag.getData().getPlayers().size();
-                Bukkit.broadcastMessage(this.captureTheFlag.getPrefix() + "§7Warten auf §e" + (neededPlayers == 1 ? "einen §7weiteren" : neededPlayers + " §7weitere") + " Spieler!");
+                Bukkit.broadcastMessage(this.captureTheFlag.getPrefix() + "§7Warten auf §e"
+                        + (neededPlayers == 1 ? "einen §7weiteren" : neededPlayers + " §7weitere") + " Spieler");
 
-            }, 0L, 15 * 20L);
+            }, 0L, 30 * 20L);
         }
 
     }

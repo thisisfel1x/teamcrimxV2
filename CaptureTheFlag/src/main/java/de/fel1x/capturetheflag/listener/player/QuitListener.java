@@ -34,6 +34,8 @@ public class QuitListener implements Listener {
 
         Gamestate gamestate = this.captureTheFlag.getGamestateHandler().getGamestate();
 
+        gamePlayer.saveStats();
+
         gamePlayer.cleanupTeams();
         gamePlayer.removeFromSpectators();
         gamePlayer.removeFromInGamePlayers();
@@ -54,14 +56,14 @@ public class QuitListener implements Listener {
                     event.setQuitMessage("§c« " + player.getDisplayName() + " §7hat das Spiel verlassen");
                 }
 
-                if (Teams.RED.getTeamPlayers().size() == 0) {
+                if (Teams.RED.getTeamPlayers().isEmpty()) {
                     Utils.win(Teams.BLUE);
-                } else if (Teams.BLUE.getTeamPlayers().size() == 0) {
+                } else if (Teams.BLUE.getTeamPlayers().isEmpty()) {
                     Utils.win(Teams.RED);
                 }
 
 
-                if (data.getPlayers().size() == 0 && !Bukkit.getOnlinePlayers().isEmpty()) {
+                if (data.getPlayers().isEmpty() && !Bukkit.getOnlinePlayers().isEmpty()) {
                     this.captureTheFlag.startTimerByClass(EndingTimer.class);
                 } else if (Bukkit.getOnlinePlayers().isEmpty()) {
                     Bukkit.getServer().shutdown();

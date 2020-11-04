@@ -35,9 +35,11 @@ public class CrimxPlayer {
 
     public boolean checkIfPlayerExistsInCollection(UUID uuid, @Nullable MongoDBCollection mongoDBCollection) {
         if (mongoDBCollection == null) {
-            return Arrays.stream(MongoDBCollection.values()).allMatch(collection -> this.crimxAPI.getMongoDB().getNetworkDatabase().getCollection(collection.getName()).countDocuments(new Document("_id", uuid.toString())) > 0);
+            return Arrays.stream(MongoDBCollection.values()).allMatch(collection -> this.crimxAPI.getMongoDB()
+                    .getNetworkDatabase().getCollection(collection.getName()).countDocuments(new Document("_id", uuid.toString())) > 0);
         } else {
-            return this.crimxAPI.getMongoDB().getNetworkDatabase().getCollection(mongoDBCollection.getName()).countDocuments(new Document("_id", uuid.toString())) > 0;
+            return this.crimxAPI.getMongoDB().getNetworkDatabase().getCollection(mongoDBCollection.getName())
+                    .countDocuments(new Document("_id", uuid.toString())) > 0;
         }
     }
 

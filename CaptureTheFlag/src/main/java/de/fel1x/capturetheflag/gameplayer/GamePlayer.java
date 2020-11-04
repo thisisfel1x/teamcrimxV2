@@ -1,21 +1,27 @@
 package de.fel1x.capturetheflag.gameplayer;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.mongodb.client.model.Sorts;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.Data;
+import de.fel1x.capturetheflag.database.CaptureTheFlagDatabase;
+import de.fel1x.capturetheflag.database.Stats;
 import de.fel1x.capturetheflag.filehandler.SpawnHandler;
 import de.fel1x.capturetheflag.kit.IKit;
 import de.fel1x.capturetheflag.kit.Kit;
+import de.fel1x.capturetheflag.kit.kits.ArcherKit;
 import de.fel1x.capturetheflag.team.Teams;
-import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
+import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bukkit.*;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GamePlayer {
@@ -56,9 +62,42 @@ public class GamePlayer {
         this.data.getPlayers().forEach(gamePlayers -> gamePlayers.hidePlayer(this.captureTheFlag, this.player));
     }
 
+    public void fetchPlayerData() {
+        Bukkit.getScheduler().runTaskAsynchronously(this.captureTheFlag, () -> {
+            Document ctfDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().
+                    find(new Document("_id", player.getUniqueId().toString())).first();
+
+            if(ctfDocument == null) {
+                this.createPlayerData();
+                this.fetchPlayerData();
+            }
+
+            int kills = ctfDocument.getInteger("kills");
+            int deaths = ctfDocument.getInteger("deaths");
+            int gamesPlayed = ctfDocument.getInteger("gamesPlayed");
+            int gamesWon = ctfDocument.getInteger("gamesWon");
+
+            int placement = this.getRankingPosition();
+
+            Stats stats = new Stats(kills, deaths, gamesPlayed, gamesWon, placement);
+            this.data.getCachedStats().put(player, stats);
+
+            Kit savedKit = Kit.valueOf(ctfDocument.getString("selectedKit"));
+
+            if(savedKit != Kit.NONE) {
+                this.data.getSelectedKit().put(this.player, savedKit);
+            }
+
+        });
+    }
+
     public void cleanupTeams() {
         Teams.RED.getTeamPlayers().remove(this.player);
         Teams.BLUE.getTeamPlayers().remove(this.player);
+    }
+
+    public ICloudPlayer getICloudPlayer() {
+        return this.playerManager.getOnlinePlayer(this.player.getUniqueId());
     }
 
     public void cleanupInventory() {
@@ -181,10 +220,54 @@ public class GamePlayer {
 
     public void setKitItems() {
         try {
-            IKit iKit = this.data.getSelectedKit().get(this.player).getClazz().newInstance();
+            IKit iKit = (this.data.getSelectedKit().get(this.player) != null)
+                    ? this.data.getSelectedKit().get(this.player).getClazz().newInstance()
+                    : ArcherKit.class.newInstance();
             iKit.setKitInventory(player);
         } catch (InstantiationException | IllegalAccessException ignored) {
             player.sendMessage(this.captureTheFlag.getPrefix() + "§cEin Fehler ist aufgetreten! Du erhälst keine Kit-Items");
         }
+    }
+
+    public void createPlayerData() {
+        new CaptureTheFlagDatabase().createPlayerData(player);
+    }
+
+    public int getRankingPosition() {
+        List<Document> documents = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().find()
+                .sort(Sorts.descending("gamesWon")).into(Lists.newArrayList());
+
+        for (Document document : documents) {
+            if (document.getString("_id").equalsIgnoreCase(this.player.getUniqueId().toString())) {
+                return documents.indexOf(document) + 1;
+            }
+        }
+
+        return -1;
+    }
+
+    public void saveStats() {
+        Bukkit.getScheduler().runTaskAsynchronously(this.captureTheFlag, () -> {
+            Document ctfDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().
+                    find(new Document("_id", player.getUniqueId().toString())).first();
+
+            Stats stats = this.data.getCachedStats().get(this.player);
+
+            if(stats == null) {
+                return;
+            }
+
+            this.saveObjectInDocument("kills", stats.getKills(), ctfDocument);
+            this.saveObjectInDocument("deaths", stats.getDeaths(), ctfDocument);
+            this.saveObjectInDocument("gamesPlayed", stats.getGamesPlayed(), ctfDocument);
+            this.saveObjectInDocument("gamesWon", stats.getGamesWon(), ctfDocument);
+        });
+    }
+
+    public void saveObjectInDocument(String key, Object value, Document gamemodeDocument) {
+        Document document = new Document(key, value);
+        Bson updateOperation = new Document("$set", document);
+
+        this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().updateOne(gamemodeDocument, updateOperation);
     }
 }

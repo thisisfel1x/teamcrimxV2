@@ -22,6 +22,7 @@ public class Utils {
         String name = teams.getTeamName();
 
         CaptureTheFlag.getInstance().getData().getPlayers().forEach(current -> {
+            CaptureTheFlag.getInstance().getData().getCachedStats().get(current).increaseWinsByOne();
             GamePlayer gamePlayer = new GamePlayer(current);
             gamePlayer.cleanupInventory();
         });
@@ -46,6 +47,9 @@ public class Utils {
 
             current.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
             BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(current);
+
+            GamePlayer gamePlayer = new GamePlayer(current);
+            gamePlayer.saveStats();
 
         });
 
@@ -74,8 +78,6 @@ public class Utils {
             firework.setFireworkMeta(fireworkMeta);
 
         }
-
-
     }
 
 }

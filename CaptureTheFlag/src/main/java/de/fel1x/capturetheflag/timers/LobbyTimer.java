@@ -48,7 +48,7 @@ public class LobbyTimer implements ITimer {
                         this.stopFinally();
 
                         Bukkit.getOnlinePlayers().forEach(current -> current.playSound(current.getLocation(),
-                                Sound.ENTITY_PLAYER_LEVELUP, 5, 7));
+                                Sound.ENTITY_PLAYER_LEVELUP, 4f, 0.8f));
 
                         CaptureTheFlag.getInstance().getData().getPlayers().forEach(current -> {
                             GamePlayer player = new GamePlayer(current);
@@ -57,6 +57,8 @@ public class LobbyTimer implements ITimer {
                             player.cleanupInventory();
                             player.teleportToTeamSpawn();
                             player.setKitItems();
+
+                            this.captureTheFlag.getData().getCachedStats().get(current).increaseGamesByOne();
 
                             current.setLevel(0);
                             current.setExp(0);

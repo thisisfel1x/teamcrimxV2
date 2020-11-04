@@ -12,3 +12,5 @@ commands:
     description: setup
   start:
     description: start
+  stats:
+    description: check your stats

@@ -36,6 +36,33 @@ public class InGameTimer implements ITimer {
             this.running = true;
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.captureTheFlag, () -> {
+                if(timer >= 3 && timer <= 6) {
+                    switch (timer) {
+                        case 3:
+                            Bukkit.getOnlinePlayers().forEach(player -> {
+                                Actionbar.sendOnlyTitle(player, "§a§l3", 0, 30, 0);
+                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
+                            });
+                            break;
+                        case 4:
+                            Bukkit.getOnlinePlayers().forEach(player -> {
+                                Actionbar.sendOnlyTitle(player, "§e§l2", 0, 30, 0);
+                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
+                            });
+                            break;
+                        case 5:
+                            Bukkit.getOnlinePlayers().forEach(player -> {
+                                Actionbar.sendOnlyTitle(player, "§c§l1", 0, 30, 0);
+                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
+                            });
+                        case 6:
+                            Bukkit.getOnlinePlayers().forEach(player -> {
+                                Actionbar.sendOnlyTitle(player, "§c§lGO", 0, 20, 10);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 0.8f);
+                            });
+                            break;
+                    }
+                }
 
                 Bukkit.getOnlinePlayers().forEach(current -> {
                     GamePlayer gamePlayer = new GamePlayer(current);

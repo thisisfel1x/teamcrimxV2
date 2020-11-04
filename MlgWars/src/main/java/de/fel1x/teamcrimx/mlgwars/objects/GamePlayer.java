@@ -374,7 +374,6 @@ public class GamePlayer {
     }
 
     public int getRankingPosition() {
-
         List<Document> documents = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().find().sort(Sorts.descending("gamesWon")).into(Lists.newArrayList());
 
         for (Document document : documents) {

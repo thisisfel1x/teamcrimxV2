@@ -8,6 +8,7 @@ import de.fel1x.capturetheflag.gamestate.Gamestate;
 import de.fel1x.capturetheflag.inventories.KitSelector;
 import de.fel1x.capturetheflag.inventories.TeamSelector;
 import de.fel1x.capturetheflag.team.Teams;
+import de.fel1x.capturetheflag.utils.Utils;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import org.bukkit.*;
 import org.bukkit.block.Banner;
@@ -45,8 +46,6 @@ public class InteractListener implements Listener {
         }
 
         Gamestate gamestate = this.captureTheFlag.getGamestateHandler().getGamestate();
-
-        Flag flag;
 
         if(event.getHand() != EquipmentSlot.HAND) {
             return;
@@ -119,7 +118,7 @@ public class InteractListener implements Listener {
                                  */
                                 if (player.equals(this.data.getRedFlagHolder()) && this.data.getRedFlagHolder() != null) {
                                     if (blockLocation.equals(this.data.getBlueFlagBaseLocation())) {
-                                        Bukkit.broadcastMessage("Debug: blau gewinnt");
+                                        Utils.win(Teams.BLUE);
                                         return;
                                     }
                                 }
@@ -198,7 +197,7 @@ public class InteractListener implements Listener {
                                     */
                                 if (player.equals(this.data.getBlueFlagHolder()) && this.data.getBlueFlagHolder() != null) {
                                     if (blockLocation.equals(this.data.getRedFlagBaseLocation())) {
-                                        Bukkit.broadcastMessage("Debug: red gewinnt");
+                                        Utils.win(Teams.RED);
                                         return;
                                     }
                                 }
@@ -239,7 +238,7 @@ public class InteractListener implements Listener {
                                 // CASE HE HOLDS BLUE FLAG
                                 if(player.equals(this.data.getBlueFlagHolder()) && this.data.getBlueFlagHolder() != null) {
                                     if(blockLocation.equals(this.data.getRedFlagBaseLocation())) {
-                                        Bukkit.broadcastMessage("debug: red gewinnt!");
+                                        Utils.win(Teams.RED);
                                         return;
                                     }
                                 } else if(player.equals(this.data.getRedFlagHolder()) && this.data.getRedFlagHolder() != null) {
@@ -265,7 +264,7 @@ public class InteractListener implements Listener {
                                 // CASE HE HOLDS RED FLAG
                                 if(player.equals(this.data.getRedFlagHolder()) && this.data.getRedFlagHolder() != null) {
                                     if(blockLocation.equals(this.data.getBlueFlagBaseLocation())) {
-                                        Bukkit.broadcastMessage("debug: blue gewinnt!");
+                                        Utils.win(Teams.BLUE);
                                         return;
                                     }
                                 } else if(player.equals(this.data.getBlueFlagHolder()) && this.data.getBlueFlagHolder() != null) {

@@ -98,12 +98,15 @@ public class DeathListener implements Listener {
         if (attacker != null) {
 
             event.setDeathMessage(this.captureTheFlag.getPrefix() + player.getDisplayName() + " §7wurde von " + attacker.getDisplayName() + " §7getötet");
+            this.data.getCachedStats().get(attacker).increaseKillsByOne();
 
         } else {
 
             event.setDeathMessage(this.captureTheFlag.getPrefix() + player.getDisplayName() + " §7ist gestorben");
 
         }
+
+        this.data.getCachedStats().get(player).increaseDeathsByOne();
 
     }
 

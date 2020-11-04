@@ -1,5 +1,6 @@
 package de.fel1x.capturetheflag;
 
+import de.fel1x.capturetheflag.database.Stats;
 import de.fel1x.capturetheflag.filehandler.SpawnHandler;
 import de.fel1x.capturetheflag.kit.Kit;
 import de.fel1x.capturetheflag.world.Cuboid;
@@ -21,6 +22,7 @@ public class Data {
     private List<Player> spectators;
     private Map<Player, Player> lastHit;
     private Map<Player, Kit> selectedKit;
+    private Map<Player, Stats> cachedStats;
     private Player redFlagHolder;
     private Location redFlagBaseLocation;
     private Player blueFlagHolder;
@@ -38,6 +40,7 @@ public class Data {
 
         this.selectedKit = new HashMap<>();
         this.lastHit = new HashMap<>();
+        this.cachedStats = new HashMap<>();
 
         this.redFlagHolder = null;
 
@@ -121,5 +124,9 @@ public class Data {
 
     public Cuboid getRedSpawnCuboid() {
         return redSpawnCuboid;
+    }
+
+    public Map<Player, Stats> getCachedStats() {
+        return cachedStats;
     }
 }

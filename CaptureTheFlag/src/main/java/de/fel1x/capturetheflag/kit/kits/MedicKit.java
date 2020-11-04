@@ -28,7 +28,7 @@ public class MedicKit implements IKit {
                 " §8» §eFull Leather",
                 " §8» §e4x Healpotion",
                 " §8» §e2x Trank der Regeneration",
-                " §8» §e1x Goldapfel", "§cNachteile",
+                " §8» §e1x Goldapfel"
         };
     }
 

@@ -1,8 +1,9 @@
-package de.fel1x.teamcrimx.mlgwars.commands;
+package de.fel1x.capturetheflag.commands;
 
+import de.fel1x.capturetheflag.CaptureTheFlag;
+import de.fel1x.capturetheflag.database.Stats;
+import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
-import de.fel1x.teamcrimx.mlgwars.MlgWars;
-import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,11 +14,11 @@ import java.util.Locale;
 
 public class StatsCommand implements CommandExecutor {
 
-    private MlgWars mlgWars;
+    private CaptureTheFlag captureTheFlag;
 
-    public StatsCommand(MlgWars mlgWars) {
-        this.mlgWars = mlgWars;
-        this.mlgWars.getCommand("stats").setExecutor(this);
+    public StatsCommand(CaptureTheFlag captureTheFlag) {
+        this.captureTheFlag = captureTheFlag;
+        this.captureTheFlag.getCommand("stats").setExecutor(this);
     }
 
     @Override
@@ -26,22 +27,27 @@ public class StatsCommand implements CommandExecutor {
         if (!(commandSender instanceof Player)) return false;
 
         Player player = (Player) commandSender;
-        GamePlayer gamePlayer;
+        GamePlayer gamePlayer = new GamePlayer(player);
 
         try {
             if (args.length == 1) {
-                player.sendMessage(this.mlgWars.getPrefix() + "§7Statistiken von anderen Spielern können momentan " +
+                player.sendMessage(this.captureTheFlag.getPrefix() + "§7Statistiken von anderen Spielern können momentan " +
                         "§cnoch nicht §7eingesehen werden!");
                 return false;
             } else {
-                gamePlayer = new GamePlayer(player, true);
-                Bukkit.getScheduler().runTaskAsynchronously(this.mlgWars, () -> {
-                    String ranking = String.format(Locale.GERMANY, "%d", gamePlayer.getRankingPosition());
+                if(this.captureTheFlag.getData().getCachedStats().get(player) == null) {
+                    player.sendMessage(this.captureTheFlag.getPrefix() + "§cDeine Stats werden noch geladen. " +
+                            "Bitte warte einen Moment.");
+                    return false;
+                } else {
+                    Stats stats = this.captureTheFlag.getData().getCachedStats().get(player);
 
-                    int kills = (int) gamePlayer.getObjectFromMongoDocument("kills", MongoDBCollection.MLGWARS);
-                    int deaths = (int) gamePlayer.getObjectFromMongoDocument("deaths", MongoDBCollection.MLGWARS);
-                    int gamesPlayed = (int) gamePlayer.getObjectFromMongoDocument("gamesPlayed", MongoDBCollection.MLGWARS);
-                    int gamesWon = (int) gamePlayer.getObjectFromMongoDocument("gamesWon", MongoDBCollection.MLGWARS);
+                    String ranking = String.format(Locale.GERMANY, "%d", stats.getPlacement());
+
+                    int kills = stats.getKills();
+                    int deaths = stats.getDeaths();
+                    int gamesPlayed = stats.getGamesPlayed();
+                    int gamesWon = stats.getGamesWon();
 
                     double kd;
                     if (deaths > 0) {
@@ -70,13 +76,14 @@ public class StatsCommand implements CommandExecutor {
                     };
 
                     player.sendMessage(message);
-                });
+                }
             }
 
         } catch (Exception ignored) {
-            player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten!");
+            player.sendMessage(this.captureTheFlag.getPrefix() + "§cEin Fehler ist aufgetreten!");
         }
 
         return true;
     }
+
 }
