@@ -2,7 +2,8 @@ package de.fel1x.capturetheflag.inventories;
 
 import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
-import de.fel1x.capturetheflag.kits.Kit;
+import de.fel1x.capturetheflag.kit.IKit;
+import de.fel1x.capturetheflag.kit.Kit;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
@@ -20,6 +21,8 @@ public class KitSelector implements InventoryProvider {
             .manager(CaptureTheFlag.getInstance().getInventoryManager())
             .build();
 
+    private final CaptureTheFlag captureTheFlag = CaptureTheFlag.getInstance();
+
     @Override
     public void init(Player player, InventoryContents contents) {
 
@@ -27,22 +30,28 @@ public class KitSelector implements InventoryProvider {
 
         for (Kit kit : Kit.values()) {
 
-            contents.set(0, i, ClickableItem.of(new ItemBuilder(kit.getMaterial()).setName(kit.getName()).setLore(kit.getDescription()).toItemStack(), event -> {
+            try {
+                IKit iKit = kit.getClazz().newInstance();
 
-                if (!(event.getWhoClicked() instanceof Player)) return;
+                contents.set(0, i, ClickableItem.of(new ItemBuilder(iKit.getKitMaterial())
+                        .setName("§8● §e" + iKit.getKitName())
+                        .setLore(iKit.getKitDescription()).toItemStack(), event -> {
 
-                Player clickedPlayer = (Player) event.getWhoClicked();
-                GamePlayer gamePlayer = new GamePlayer(clickedPlayer);
+                    if (!(event.getWhoClicked() instanceof Player)) return;
 
-                gamePlayer.selectKit(kit);
+                    Player clickedPlayer = (Player) event.getWhoClicked();
+                    GamePlayer gamePlayer = new GamePlayer(clickedPlayer);
 
-            }));
+                    gamePlayer.selectKit(kit);
+                    player.sendMessage("§7Du hast das §e" + iKit.getKitName() + "§7-Kit ausgewählt!");
+                }));
 
-            i++;
-
+                i++;
+            } catch (InstantiationException | IllegalAccessException exception) {
+                player.sendMessage(this.captureTheFlag.getPrefix() + "§cEs trat ein Fehler auf!");
+                exception.printStackTrace();
+            }
         }
-
-
     }
 
     @Override

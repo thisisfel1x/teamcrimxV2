@@ -5,7 +5,8 @@ import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.Data;
 import de.fel1x.capturetheflag.filehandler.SpawnHandler;
-import de.fel1x.capturetheflag.kits.Kit;
+import de.fel1x.capturetheflag.kit.IKit;
+import de.fel1x.capturetheflag.kit.Kit;
 import de.fel1x.capturetheflag.team.Teams;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import org.bukkit.*;
@@ -168,130 +169,22 @@ public class GamePlayer {
     }
 
     public void selectKit(Kit kit) {
-        this.captureTheFlag.getKitHandler().getSelectedKit().put(player, kit);
+        this.captureTheFlag.getData().getSelectedKit().put(player, kit);
 
         this.player.closeInventory();
         this.player.playSound(player.getLocation(), Sound.ENTITY_CAT_PURREOW, 5, 8);
-        this.player.sendMessage("§7Du hast das §l" + kit.getName() + "§7-Kit ausgewählt!");
-
     }
 
-    public Kit getSelectedKit() {
-        return this.captureTheFlag.getKitHandler().getSelectedKit().get(player);
+    public Class<? extends IKit> getSelectedKit() {
+        return this.captureTheFlag.getData().getSelectedKit().get(player).getClazz();
     }
 
     public void setKitItems() {
-        Color dyeColor = null;
-
-        if (getTeam().equals(Teams.RED)) {
-            dyeColor = Color.RED;
-        } else if (getTeam().equals(Teams.BLUE)) {
-            dyeColor = Color.BLUE;
+        try {
+            IKit iKit = this.data.getSelectedKit().get(this.player).getClazz().newInstance();
+            iKit.setKitInventory(player);
+        } catch (InstantiationException | IllegalAccessException ignored) {
+            player.sendMessage(this.captureTheFlag.getPrefix() + "§cEin Fehler ist aufgetreten! Du erhälst keine Kit-Items");
         }
-
-        if (getSelectedKit() == null) {
-
-            ItemStack helmet = new ItemBuilder(Material.LEATHER_HELMET).setLeatherArmorColor(dyeColor).toItemStack();
-            ItemStack chestplate = new ItemBuilder(Material.LEATHER_CHESTPLATE).setLeatherArmorColor(dyeColor).toItemStack();
-            ItemStack leggins = new ItemBuilder(Material.LEATHER_LEGGINGS).setLeatherArmorColor(dyeColor).toItemStack();
-            ItemStack boots = new ItemBuilder(Material.LEATHER_BOOTS).setLeatherArmorColor(dyeColor).toItemStack();
-
-            ItemStack sword = new ItemStack(Material.STONE_SWORD);
-            ItemStack bow = new ItemStack(Material.BOW);
-            ItemStack arrow = new ItemStack(Material.ARROW, 16);
-
-            player.getInventory().addItem(sword, bow, arrow);
-            player.getInventory().setHelmet(helmet);
-            player.getInventory().setChestplate(chestplate);
-            player.getInventory().setLeggings(leggins);
-            player.getInventory().setBoots(boots);
-
-            return;
-
-        }
-
-        switch (getSelectedKit()) {
-
-            case TANK:
-
-                ItemStack helmet = new ItemBuilder(Material.IRON_HELMET).toItemStack();
-                ItemStack chestplate = new ItemBuilder(Material.IRON_CHESTPLATE).toItemStack();
-                ItemStack leggins = new ItemBuilder(Material.IRON_LEGGINGS).toItemStack();
-                ItemStack boots = new ItemBuilder(Material.IRON_BOOTS).toItemStack();
-
-                ItemStack sword = new ItemStack(Material.STONE_SWORD);
-
-                this.player.getInventory().addItem(sword);
-                this.player.getInventory().setHelmet(helmet);
-                this.player.getInventory().setChestplate(chestplate);
-                this.player.getInventory().setLeggings(leggins);
-                this.player.getInventory().setBoots(boots);
-
-                this.player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0, true, false));
-
-                break;
-
-            case ARCHER:
-
-                helmet = new ItemBuilder(Material.LEATHER_HELMET).setLeatherArmorColor(dyeColor).toItemStack();
-                chestplate = new ItemBuilder(Material.LEATHER_CHESTPLATE).setLeatherArmorColor(dyeColor).toItemStack();
-                leggins = new ItemBuilder(Material.LEATHER_LEGGINGS).setLeatherArmorColor(dyeColor).toItemStack();
-                boots = new ItemBuilder(Material.LEATHER_BOOTS).setLeatherArmorColor(dyeColor).toItemStack();
-
-                sword = new ItemBuilder(Material.WOODEN_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).toItemStack();
-                ItemStack bow = new ItemBuilder(Material.BOW).addEnchant(Enchantment.ARROW_INFINITE, 1).addEnchant(Enchantment.ARROW_DAMAGE, 1).toItemStack();
-                ItemStack arrow = new ItemStack(Material.ARROW, 1);
-
-                this.player.getInventory().addItem(sword, bow);
-                this.player.getInventory().setItem(8, arrow);
-
-                this.player.getInventory().setHelmet(helmet);
-                this.player.getInventory().setChestplate(chestplate);
-                this.player.getInventory().setLeggings(leggins);
-                this.player.getInventory().setBoots(boots);
-
-                break;
-
-            case PYRO:
-
-                helmet = new ItemBuilder(Material.LEATHER_HELMET).setLeatherArmorColor(dyeColor).toItemStack();
-                chestplate = new ItemBuilder(Material.LEATHER_CHESTPLATE).setLeatherArmorColor(dyeColor).toItemStack();
-                leggins = new ItemBuilder(Material.LEATHER_LEGGINGS).setLeatherArmorColor(dyeColor).toItemStack();
-                boots = new ItemBuilder(Material.LEATHER_BOOTS).setLeatherArmorColor(dyeColor).toItemStack();
-
-                sword = new ItemBuilder(Material.GOLDEN_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).addEnchant(Enchantment.FIRE_ASPECT, 1).toItemStack();
-
-                this.player.getInventory().addItem(sword);
-
-                this.player.getInventory().setHelmet(helmet);
-                this.player.getInventory().setChestplate(chestplate);
-                this.player.getInventory().setLeggings(leggins);
-                this.player.getInventory().setBoots(boots);
-
-                break;
-
-            case MEDIC:
-
-                helmet = new ItemBuilder(Material.LEATHER_HELMET).setLeatherArmorColor(dyeColor).toItemStack();
-                chestplate = new ItemBuilder(Material.LEATHER_CHESTPLATE).setLeatherArmorColor(dyeColor).toItemStack();
-                leggins = new ItemBuilder(Material.LEATHER_LEGGINGS).setLeatherArmorColor(dyeColor).toItemStack();
-                boots = new ItemBuilder(Material.LEATHER_BOOTS).setLeatherArmorColor(dyeColor).toItemStack();
-
-                sword = new ItemBuilder(Material.IRON_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).toItemStack();
-
-                ItemStack regPotion = new ItemBuilder(Material.POTION, 2).setColor(16417).toItemStack();
-                ItemStack healPotion = new ItemBuilder(Material.POTION, 4).setColor(16453).toItemStack();
-                ItemStack goldenApple = new ItemBuilder(Material.GOLDEN_APPLE).toItemStack();
-
-                this.player.getInventory().addItem(sword, healPotion, regPotion, goldenApple);
-
-                this.player.getInventory().setHelmet(helmet);
-                this.player.getInventory().setChestplate(chestplate);
-                this.player.getInventory().setLeggings(leggins);
-                this.player.getInventory().setBoots(boots);
-
-                break;
-        }
-
     }
 }

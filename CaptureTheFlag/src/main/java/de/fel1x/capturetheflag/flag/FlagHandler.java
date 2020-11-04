@@ -22,14 +22,10 @@ public class FlagHandler {
         try {
 
             blueFlag.getBlock().setType(Material.BLUE_BANNER);
-
-            CaptureTheFlag.getInstance().getData().setBlueFlagLocation(blueFlag);
             CaptureTheFlag.getInstance().getData().setBlueFlagBaseLocation(blueFlag);
 
 
             redFlag.getBlock().setType(Material.RED_BANNER);
-
-            CaptureTheFlag.getInstance().getData().setRedFlagLocation(redFlag);
             CaptureTheFlag.getInstance().getData().setRedFlagBaseLocation(redFlag);
 
         } catch (Exception ignored) {

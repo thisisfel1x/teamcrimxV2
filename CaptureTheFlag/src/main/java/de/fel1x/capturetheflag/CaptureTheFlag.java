@@ -4,7 +4,6 @@ import de.fel1x.capturetheflag.commands.SetupCommand;
 import de.fel1x.capturetheflag.commands.StartCommand;
 import de.fel1x.capturetheflag.flag.FlagHandler;
 import de.fel1x.capturetheflag.gamestate.GamestateHandler;
-import de.fel1x.capturetheflag.kits.KitHandler;
 import de.fel1x.capturetheflag.listener.block.BlockBreakListener;
 import de.fel1x.capturetheflag.listener.block.BlockPlaceListener;
 import de.fel1x.capturetheflag.listener.block.InteractListener;
@@ -32,7 +31,6 @@ public final class CaptureTheFlag extends JavaPlugin {
     private Data data;
     private GamestateHandler gamestateHandler;
     private ScoreboardHandler scoreboardHandler;
-    private KitHandler kitHandler;
 
     private InventoryManager inventoryManager;
 
@@ -52,7 +50,6 @@ public final class CaptureTheFlag extends JavaPlugin {
         inventoryManager.init();
 
         gamestateHandler = new GamestateHandler();
-        kitHandler = new KitHandler();
 
         new FlagHandler();
         scoreboardHandler = new ScoreboardHandler();
@@ -118,10 +115,6 @@ public final class CaptureTheFlag extends JavaPlugin {
         this.getCommand("setup").setExecutor(new SetupCommand());
         new StartCommand(this);
 
-    }
-
-    public KitHandler getKitHandler() {
-        return kitHandler;
     }
 
     public ITimer getiTimer() {

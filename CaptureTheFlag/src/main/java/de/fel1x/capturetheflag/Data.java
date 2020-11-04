@@ -1,6 +1,7 @@
 package de.fel1x.capturetheflag;
 
 import de.fel1x.capturetheflag.filehandler.SpawnHandler;
+import de.fel1x.capturetheflag.kit.Kit;
 import de.fel1x.capturetheflag.world.Cuboid;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,11 +20,10 @@ public class Data {
     private List<Player> players;
     private List<Player> spectators;
     private Map<Player, Player> lastHit;
+    private Map<Player, Kit> selectedKit;
     private Player redFlagHolder;
-    private Location redFlagLocation;
     private Location redFlagBaseLocation;
     private Player blueFlagHolder;
-    private Location blueFlagLocation;
     private Location blueFlagBaseLocation;
     private List<Block> placedBlocks;
     private Cuboid redSpawnCuboid;
@@ -31,36 +31,39 @@ public class Data {
 
     public Data() {
 
-        players = new ArrayList<>();
-        spectators = new ArrayList<>();
+        this.players = new ArrayList<>();
+        this.spectators = new ArrayList<>();
 
-        placedBlocks = new ArrayList<>();
+        this.placedBlocks = new ArrayList<>();
 
-        lastHit = new HashMap<>();
+        this.selectedKit = new HashMap<>();
+        this.lastHit = new HashMap<>();
 
-        redFlagHolder = null;
+        this.redFlagHolder = null;
 
         try {
-            redSpawnLocation = SpawnHandler.loadLocation("redSpawn");
-            blueSpawnLocation = SpawnHandler.loadLocation("blueSpawn");
+            this.redSpawnLocation = SpawnHandler.loadLocation("redSpawn");
+            this.blueSpawnLocation = SpawnHandler.loadLocation("blueSpawn");
         } catch (Exception exception) {
             Bukkit.getConsoleSender().sendMessage("§cERROR: NO_SPAWN_FOUND");
         }
 
         try {
-            redFlagLocation = SpawnHandler.loadBannerLocation("redFlag").toCenterLocation();
-            redFlagBaseLocation = SpawnHandler.loadBannerLocation("redFlag").toCenterLocation();
-            blueFlagLocation = SpawnHandler.loadBannerLocation("blueFlag").toCenterLocation();
-            blueFlagBaseLocation = SpawnHandler.loadBannerLocation("blueFlag").toCenterLocation();
+            this.redFlagBaseLocation = SpawnHandler.loadBannerLocation("redFlag").toCenterLocation();
+            this.blueFlagBaseLocation = SpawnHandler.loadBannerLocation("blueFlag").toCenterLocation();
         } catch (Exception ignored) {
             Bukkit.getConsoleSender().sendMessage("§cERROR: FLAG_STORE_LOCATION_ERROR");
         }
 
-        blueFlagHolder = null;
+        this.blueFlagHolder = null;
 
-        redSpawnCuboid = new Cuboid(redSpawnLocation.clone().add(4, -4, 4), redSpawnLocation.clone().add(-4, 4, -4));
-        blueSpawnCuboid = new Cuboid(blueSpawnLocation.clone().add(4, -4, 4), blueSpawnLocation.clone().add(-4, 4, -4));
+        this.redSpawnCuboid = new Cuboid(redSpawnLocation.clone().add(4, -4, 4), redSpawnLocation.clone().add(-4, 4, -4));
+        this.blueSpawnCuboid = new Cuboid(blueSpawnLocation.clone().add(4, -4, 4), blueSpawnLocation.clone().add(-4, 4, -4));
 
+    }
+
+    public Map<Player, Kit> getSelectedKit() {
+        return selectedKit;
     }
 
     public List<Player> getPlayers() {
@@ -86,14 +89,6 @@ public class Data {
 
     public void setRedFlagHolder(Player redFlagHolder) {
         this.redFlagHolder = redFlagHolder;
-    }
-
-    public void setRedFlagLocation(Location redFlagLocation) {
-        this.redFlagLocation = redFlagLocation;
-    }
-
-    public void setBlueFlagLocation(Location blueFlagLocation) {
-        this.blueFlagLocation = blueFlagLocation;
     }
 
     public Location getRedFlagBaseLocation() {

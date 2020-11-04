@@ -56,8 +56,6 @@ public class DeathListener implements Listener {
                     block.setType(Material.RED_BANNER);
                     block.getState().update();
 
-                    data.setRedFlagLocation(block.getLocation());
-
                 } catch (Exception ignored) {
 
                 }
@@ -77,8 +75,6 @@ public class DeathListener implements Listener {
 
                     block.setType(Material.BLUE_BANNER);
                     block.getState().update();
-
-                    data.setBlueFlagLocation(block.getLocation());
 
                 } catch (Exception ignored) {
 
