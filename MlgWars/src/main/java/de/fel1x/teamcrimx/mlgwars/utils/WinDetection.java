@@ -50,6 +50,18 @@ public class WinDetection {
                         coinsAPI.addCoins(100);
                         winner.sendMessage(this.mlgWars.getPrefix() + "§7Du hast das Spiel gewonnen! §a(+100 Coins)");
 
+                        long onlineTimeInMillis;
+
+                        try {
+                            onlineTimeInMillis = (long) winnerGamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS);
+                        } catch (Exception ignored) {
+                            onlineTimeInMillis = Integer.toUnsignedLong((Integer) winnerGamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS));
+                        }
+
+                        long timePlayed = System.currentTimeMillis() - this.mlgWars.getData().getPlayTime().get(winner.getUniqueId());
+                        long added = timePlayed + onlineTimeInMillis;
+                        winnerGamePlayer.saveObjectInDocument("onlinetime", added, MongoDBCollection.USERS);
+
                         stopTasks(winner);
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
@@ -145,6 +157,20 @@ public class WinDetection {
 
                             int gamesWon = (int) winnerGamePlayer.getObjectFromMongoDocument("gamesWon", MongoDBCollection.MLGWARS);
                             winnerGamePlayer.saveObjectInDocument("gamesWon", (gamesWon + 1), MongoDBCollection.MLGWARS);
+
+                            if(winnerGamePlayer.isPlayer()) {
+                                long onlineTimeInMillis;
+
+                                try {
+                                    onlineTimeInMillis = (long) winnerGamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS);
+                                } catch (Exception ignored) {
+                                    onlineTimeInMillis = Integer.toUnsignedLong((Integer) winnerGamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS));
+                                }
+
+                                long timePlayed = System.currentTimeMillis() - this.mlgWars.getData().getPlayTime().get(winnerTeamTeamPlayer.getUniqueId());
+                                long added = timePlayed + onlineTimeInMillis;
+                                winnerGamePlayer.saveObjectInDocument("onlinetime", added, MongoDBCollection.USERS);
+                            }
 
                             stopTasks(winnerTeamTeamPlayer);
                         }
