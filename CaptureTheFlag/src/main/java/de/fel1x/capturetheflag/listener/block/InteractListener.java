@@ -2,16 +2,15 @@ package de.fel1x.capturetheflag.listener.block;
 
 import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.Data;
-import de.fel1x.capturetheflag.flag.Flag;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.capturetheflag.gamestate.Gamestate;
 import de.fel1x.capturetheflag.inventories.KitSelector;
 import de.fel1x.capturetheflag.inventories.TeamSelector;
-import de.fel1x.capturetheflag.team.Teams;
+import de.fel1x.capturetheflag.team.Team;
 import de.fel1x.capturetheflag.utils.Utils;
+import de.fel1x.capturetheflag.utils.WinDetection;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import org.bukkit.*;
-import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,7 +38,7 @@ public class InteractListener implements Listener {
         Player player = event.getPlayer();
 
         GamePlayer gamePlayer = new GamePlayer(player);
-        Teams playerTeam = gamePlayer.getTeam();
+        Team playerTeam = gamePlayer.getTeam();
 
         if (!gamePlayer.isPlayer()) {
             return;
@@ -118,7 +117,7 @@ public class InteractListener implements Listener {
                                  */
                                 if (player.equals(this.data.getRedFlagHolder()) && this.data.getRedFlagHolder() != null) {
                                     if (blockLocation.equals(this.data.getBlueFlagBaseLocation())) {
-                                        Utils.win(Teams.BLUE);
+                                        new WinDetection(Team.BLUE);
                                         return;
                                     }
                                 }
@@ -197,7 +196,7 @@ public class InteractListener implements Listener {
                                     */
                                 if (player.equals(this.data.getBlueFlagHolder()) && this.data.getBlueFlagHolder() != null) {
                                     if (blockLocation.equals(this.data.getRedFlagBaseLocation())) {
-                                        Utils.win(Teams.RED);
+                                        new WinDetection(Team.RED);
                                         return;
                                     }
                                 }
@@ -238,7 +237,7 @@ public class InteractListener implements Listener {
                                 // CASE HE HOLDS BLUE FLAG
                                 if(player.equals(this.data.getBlueFlagHolder()) && this.data.getBlueFlagHolder() != null) {
                                     if(blockLocation.equals(this.data.getRedFlagBaseLocation())) {
-                                        Utils.win(Teams.RED);
+                                        new WinDetection(Team.RED);
                                         return;
                                     }
                                 } else if(player.equals(this.data.getRedFlagHolder()) && this.data.getRedFlagHolder() != null) {
@@ -264,7 +263,7 @@ public class InteractListener implements Listener {
                                 // CASE HE HOLDS RED FLAG
                                 if(player.equals(this.data.getRedFlagHolder()) && this.data.getRedFlagHolder() != null) {
                                     if(blockLocation.equals(this.data.getBlueFlagBaseLocation())) {
-                                        Utils.win(Teams.BLUE);
+                                        new WinDetection(Team.BLUE);
                                         return;
                                     }
                                 } else if(player.equals(this.data.getBlueFlagHolder()) && this.data.getBlueFlagHolder() != null) {

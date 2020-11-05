@@ -5,7 +5,7 @@ import de.fel1x.capturetheflag.Data;
 import de.fel1x.capturetheflag.filehandler.SpawnHandler;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.capturetheflag.gamestate.Gamestate;
-import de.fel1x.capturetheflag.team.Teams;
+import de.fel1x.capturetheflag.team.Team;
 import de.fel1x.capturetheflag.utils.particles.ParticleEffects;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import org.bukkit.Bukkit;
@@ -55,10 +55,11 @@ public class InGameTimer implements ITimer {
                                 Actionbar.sendOnlyTitle(player, "§c§l1", 0, 30, 0);
                                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
                             });
+                            break;
                         case 6:
                             Bukkit.getOnlinePlayers().forEach(player -> {
-                                Actionbar.sendOnlyTitle(player, "§c§lGO", 0, 20, 10);
-                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 0.8f);
+                                Actionbar.sendOnlyTitle(player, "§a§lGO!", 0, 20, 10);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 0.3f);
                             });
                             break;
                     }
@@ -109,7 +110,7 @@ public class InGameTimer implements ITimer {
             Banner banner = (Banner) data.getRedFlagBaseLocation().getBlock().getState();
 
             if (!banner.getBaseColor().equals(DyeColor.RED)) {
-                Teams.RED.getTeamPlayers().forEach(player -> {
+                Team.RED.getTeamPlayers().forEach(player -> {
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 7, 2);
                     Actionbar.sendOnlySubtitle(player, "§cDeine Flagge wurde gestohlen!", 0, 40, 20);
                 });
@@ -120,7 +121,7 @@ public class InGameTimer implements ITimer {
             Banner banner = (Banner) data.getBlueFlagBaseLocation().getBlock().getState();
 
             if (!banner.getBaseColor().equals(DyeColor.BLUE)) {
-                Teams.BLUE.getTeamPlayers().forEach(player -> {
+                Team.BLUE.getTeamPlayers().forEach(player -> {
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 7, 2);
                     Actionbar.sendOnlySubtitle(player, "§cDeine Flagge wurde gestohlen!", 0, 40, 20);
                 });

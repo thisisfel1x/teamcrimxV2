@@ -9,10 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Data {
 
@@ -23,6 +20,8 @@ public class Data {
     private Map<Player, Player> lastHit;
     private Map<Player, Kit> selectedKit;
     private Map<Player, Stats> cachedStats;
+    private Map<UUID, Boolean> playerGG;
+    private Map<UUID, Long> playTime;
     private Player redFlagHolder;
     private Location redFlagBaseLocation;
     private Player blueFlagHolder;
@@ -41,6 +40,8 @@ public class Data {
         this.selectedKit = new HashMap<>();
         this.lastHit = new HashMap<>();
         this.cachedStats = new HashMap<>();
+        this.playerGG = new HashMap<>();
+        this.playTime = new HashMap<>();
 
         this.redFlagHolder = null;
 
@@ -128,5 +129,13 @@ public class Data {
 
     public Map<Player, Stats> getCachedStats() {
         return cachedStats;
+    }
+
+    public Map<UUID, Boolean> getPlayerGG() {
+        return playerGG;
+    }
+
+    public Map<UUID, Long> getPlayTime() {
+        return playTime;
     }
 }

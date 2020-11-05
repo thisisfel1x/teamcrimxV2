@@ -1,5 +1,6 @@
 package de.fel1x.capturetheflag;
 
+import com.mongodb.client.model.Sorts;
 import de.fel1x.capturetheflag.commands.SetupCommand;
 import de.fel1x.capturetheflag.commands.StartCommand;
 import de.fel1x.capturetheflag.commands.StatsCommand;
@@ -15,11 +16,16 @@ import de.fel1x.capturetheflag.timers.*;
 import de.fel1x.capturetheflag.world.WorldLoader;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import fr.minuskube.inv.InventoryManager;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public final class CaptureTheFlag extends JavaPlugin {
 
@@ -73,6 +79,12 @@ public final class CaptureTheFlag extends JavaPlugin {
 
     @Override
     public void onDisable() {
+    }
+
+    public List<Document> getTop(int limit) {
+        return StreamSupport.stream(this.crimxAPI.getMongoDB().getCaptureTheFlagCollection().find()
+                .sort(Sorts.descending("gamesWon")).limit(limit).spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     public void startTimerByClass(Class<?> clazz) {

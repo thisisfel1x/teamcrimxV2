@@ -2,7 +2,7 @@ package de.fel1x.capturetheflag.kit.kits;
 
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.capturetheflag.kit.IKit;
-import de.fel1x.capturetheflag.team.Teams;
+import de.fel1x.capturetheflag.team.Team;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -38,7 +38,7 @@ public class ArcherKit implements IKit {
 
     @Override
     public void setKitInventory(Player player) {
-        Color dyeColor = new GamePlayer(player).getTeam() == Teams.RED ? Color.RED : Color.BLUE;
+        Color dyeColor = new GamePlayer(player).getTeam() == Team.RED ? Color.RED : Color.BLUE;
 
         ItemStack helmet = new ItemBuilder(Material.LEATHER_HELMET).setLeatherArmorColor(dyeColor).toItemStack();
         ItemStack chestplate = new ItemBuilder(Material.LEATHER_CHESTPLATE).setLeatherArmorColor(dyeColor).toItemStack();

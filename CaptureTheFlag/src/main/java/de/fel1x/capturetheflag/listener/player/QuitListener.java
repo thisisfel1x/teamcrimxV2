@@ -4,10 +4,11 @@ import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.Data;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.capturetheflag.gamestate.Gamestate;
-import de.fel1x.capturetheflag.team.Teams;
+import de.fel1x.capturetheflag.team.Team;
 import de.fel1x.capturetheflag.timers.EndingTimer;
 import de.fel1x.capturetheflag.timers.IdleTimer;
 import de.fel1x.capturetheflag.utils.Utils;
+import de.fel1x.capturetheflag.utils.WinDetection;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -56,10 +57,10 @@ public class QuitListener implements Listener {
                     event.setQuitMessage("§c« " + player.getDisplayName() + " §7hat das Spiel verlassen");
                 }
 
-                if (Teams.RED.getTeamPlayers().isEmpty()) {
-                    Utils.win(Teams.BLUE);
-                } else if (Teams.BLUE.getTeamPlayers().isEmpty()) {
-                    Utils.win(Teams.RED);
+                if (Team.RED.getTeamPlayers().isEmpty()) {
+                    new WinDetection(Team.BLUE);
+                } else if (Team.BLUE.getTeamPlayers().isEmpty()) {
+                    new WinDetection(Team.RED);
                 }
 
 

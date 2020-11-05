@@ -1,13 +1,5 @@
 package de.fel1x.capturetheflag.utils;
 
-import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
-import de.fel1x.capturetheflag.CaptureTheFlag;
-import de.fel1x.capturetheflag.filehandler.SpawnHandler;
-import de.fel1x.capturetheflag.gameplayer.GamePlayer;
-import de.fel1x.capturetheflag.gamestate.Gamestate;
-import de.fel1x.capturetheflag.team.Teams;
-import de.fel1x.capturetheflag.timers.EndingTimer;
-import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -16,44 +8,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import java.util.Random;
 
 public class Utils {
-
-    public static void win(Teams teams) {
-
-        String name = teams.getTeamName();
-
-        CaptureTheFlag.getInstance().getData().getPlayers().forEach(current -> {
-            CaptureTheFlag.getInstance().getData().getCachedStats().get(current).increaseWinsByOne();
-            GamePlayer gamePlayer = new GamePlayer(current);
-            gamePlayer.cleanupInventory();
-        });
-
-        CaptureTheFlag.getInstance().getGamestateHandler().setGamestate(Gamestate.ENDING);
-        CaptureTheFlag.getInstance().startTimerByClass(EndingTimer.class);
-
-        Bukkit.getOnlinePlayers().forEach(current -> {
-
-            Actionbar.sendFullTitle(current, "§7Team " + name, "§7hat das Spiel gewonnen", 5, 30, 5);
-
-            spawnCircle(SpawnHandler.loadLocation("lobby"), 1.5, 12);
-
-            current.getInventory().clear();
-            current.getInventory().setArmorContents(null);
-
-            current.setGameMode(GameMode.SURVIVAL);
-
-            current.getActivePotionEffects().forEach(potionEffect -> {
-                current.removePotionEffect(potionEffect.getType());
-            });
-
-            current.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-            BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(current);
-
-            GamePlayer gamePlayer = new GamePlayer(current);
-            gamePlayer.saveStats();
-
-        });
-
-    }
 
     public static void spawnCircle(Location center, double radius, int amount) {
 

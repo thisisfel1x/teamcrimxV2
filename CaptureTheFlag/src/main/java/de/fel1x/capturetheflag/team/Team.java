@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum Teams {
+public enum Team {
 
     NONE("§fnull", new ArrayList<>()),
 
@@ -15,7 +15,7 @@ public enum Teams {
     private String teamName;
     private List<Player> teamPlayers;
 
-    Teams(String teamName, List<Player> teamPlayers) {
+    Team(String teamName, List<Player> teamPlayers) {
         this.teamName = teamName;
         this.teamPlayers = teamPlayers;
     }

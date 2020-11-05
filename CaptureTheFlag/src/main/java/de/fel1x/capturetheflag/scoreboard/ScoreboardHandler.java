@@ -2,21 +2,20 @@ package de.fel1x.capturetheflag.scoreboard;
 
 import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
-import de.fel1x.capturetheflag.team.Teams;
+import de.fel1x.capturetheflag.team.Team;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 public class ScoreboardHandler {
 
     private Scoreboard gameScoreboard;
     private Objective objective;
-    private Team redTeam;
-    private Team blueTeam;
+    private org.bukkit.scoreboard.Team redTeam;
+    private org.bukkit.scoreboard.Team blueTeam;
 
     public ScoreboardHandler() {
 
@@ -38,7 +37,7 @@ public class ScoreboardHandler {
 
     }
 
-    public void setGameScoreboard(Player player, Teams team) {
+    public void setGameScoreboard(Player player, Team team) {
 
         GamePlayer gamePlayer = new GamePlayer(player);
 
@@ -88,7 +87,7 @@ public class ScoreboardHandler {
         Bukkit.getOnlinePlayers().forEach(current -> {
 
             GamePlayer gamePlayer = new GamePlayer(current);
-            Teams team = gamePlayer.getTeam();
+            Team team = gamePlayer.getTeam();
 
             if (team == null) return;
 

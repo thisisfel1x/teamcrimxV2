@@ -51,6 +51,7 @@ public class LobbyTimer implements ITimer {
                                 Sound.ENTITY_PLAYER_LEVELUP, 4f, 0.8f));
 
                         CaptureTheFlag.getInstance().getData().getPlayers().forEach(current -> {
+                            this.captureTheFlag.getData().getPlayTime().put(current.getUniqueId(), System.currentTimeMillis());
                             GamePlayer player = new GamePlayer(current);
 
                             player.checkForTeam();

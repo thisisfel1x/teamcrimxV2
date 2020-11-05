@@ -1,6 +1,5 @@
 package de.fel1x.capturetheflag.gameplayer;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.mongodb.client.model.Sorts;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
@@ -14,7 +13,7 @@ import de.fel1x.capturetheflag.filehandler.SpawnHandler;
 import de.fel1x.capturetheflag.kit.IKit;
 import de.fel1x.capturetheflag.kit.Kit;
 import de.fel1x.capturetheflag.kit.kits.ArcherKit;
-import de.fel1x.capturetheflag.team.Teams;
+import de.fel1x.capturetheflag.team.Team;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -92,8 +91,8 @@ public class GamePlayer {
     }
 
     public void cleanupTeams() {
-        Teams.RED.getTeamPlayers().remove(this.player);
-        Teams.BLUE.getTeamPlayers().remove(this.player);
+        Team.RED.getTeamPlayers().remove(this.player);
+        Team.BLUE.getTeamPlayers().remove(this.player);
     }
 
     public ICloudPlayer getICloudPlayer() {
@@ -129,14 +128,14 @@ public class GamePlayer {
         }
     }
 
-    public void addTeam(Teams teams) {
-        if (teams.getTeamPlayers().size() <= 4) {
-            if (!teams.getTeamPlayers().contains(this.player)) {
-                teams.getTeamPlayers().add(this.player);
+    public void addTeam(Team team) {
+        if (team.getTeamPlayers().size() <= 4) {
+            if (!team.getTeamPlayers().contains(this.player)) {
+                team.getTeamPlayers().add(this.player);
             }
-            this.player.sendMessage(this.captureTheFlag.getPrefix() + "§7Du bist Team " + teams.getTeamName() + " §7beigetreten!");
+            this.player.sendMessage(this.captureTheFlag.getPrefix() + "§7Du bist Team " + team.getTeamName() + " §7beigetreten!");
 
-            this.captureTheFlag.getScoreboardHandler().setGameScoreboard(player, teams);
+            this.captureTheFlag.getScoreboardHandler().setGameScoreboard(player, team);
 
         } else {
             this.player.sendMessage(this.captureTheFlag.getPrefix() + "Dieses Team ist voll!");
@@ -144,29 +143,29 @@ public class GamePlayer {
         }
     }
 
-    public void removeTeam(Teams teams) {
-        teams.getTeamPlayers().remove(this.player);
+    public void removeTeam(Team team) {
+        team.getTeamPlayers().remove(this.player);
     }
 
-    public Teams getTeam() {
-        if (Teams.BLUE.getTeamPlayers().contains(this.player)) {
-            return Teams.BLUE;
-        } else if (Teams.RED.getTeamPlayers().contains(this.player)) {
-            return Teams.RED;
+    public Team getTeam() {
+        if (Team.BLUE.getTeamPlayers().contains(this.player)) {
+            return Team.BLUE;
+        } else if (Team.RED.getTeamPlayers().contains(this.player)) {
+            return Team.RED;
         } else {
-            return Teams.NONE;
+            return Team.NONE;
         }
     }
 
     public boolean hasTeam() {
-        return (Teams.BLUE.getTeamPlayers().contains(this.player) || Teams.RED.getTeamPlayers().contains(this.player));
+        return (Team.BLUE.getTeamPlayers().contains(this.player) || Team.RED.getTeamPlayers().contains(this.player));
     }
 
     public void teleportToTeamSpawn() {
-        if (Teams.BLUE.getTeamPlayers().contains(player)) {
+        if (Team.BLUE.getTeamPlayers().contains(player)) {
             Location blueSpawn = SpawnHandler.loadLocation("blueSpawn");
             this.player.teleport(blueSpawn);
-        } else if (Teams.RED.getTeamPlayers().contains(player)) {
+        } else if (Team.RED.getTeamPlayers().contains(player)) {
             Location redSpawn = SpawnHandler.loadLocation("redSpawn");
             this.player.teleport(redSpawn);
         } else {
@@ -175,9 +174,9 @@ public class GamePlayer {
     }
 
     public Location getRespawnLocation() {
-        if (Teams.BLUE.getTeamPlayers().contains(player)) {
+        if (Team.BLUE.getTeamPlayers().contains(player)) {
             return SpawnHandler.loadLocation("blueSpawn");
-        } else if (Teams.RED.getTeamPlayers().contains(player)) {
+        } else if (Team.RED.getTeamPlayers().contains(player)) {
             return SpawnHandler.loadLocation("redSpawn");
         }
         return SpawnHandler.loadLocation("spectator");
@@ -189,9 +188,9 @@ public class GamePlayer {
         boolean random = ThreadLocalRandom.current().nextBoolean();
 
         if (random) {
-            this.addTeam(Teams.RED);
+            this.addTeam(Team.RED);
         } else {
-            this.addTeam(Teams.BLUE);
+            this.addTeam(Team.BLUE);
         }
     }
 
@@ -250,6 +249,8 @@ public class GamePlayer {
         Bukkit.getScheduler().runTaskAsynchronously(this.captureTheFlag, () -> {
             Document ctfDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().
                     find(new Document("_id", player.getUniqueId().toString())).first();
+            Document networkDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getUserCollection().
+                    find(new Document("_id", player.getUniqueId().toString())).first();
 
             Stats stats = this.data.getCachedStats().get(this.player);
 
@@ -257,10 +258,29 @@ public class GamePlayer {
                 return;
             }
 
+            if(networkDocument == null) {
+                return;
+            }
+
             this.saveObjectInDocument("kills", stats.getKills(), ctfDocument);
             this.saveObjectInDocument("deaths", stats.getDeaths(), ctfDocument);
             this.saveObjectInDocument("gamesPlayed", stats.getGamesPlayed(), ctfDocument);
             this.saveObjectInDocument("gamesWon", stats.getGamesWon(), ctfDocument);
+
+            long onlineTimeInMillis;
+
+            try {
+                onlineTimeInMillis = (long)  networkDocument.get("onlinetime");
+            } catch (Exception ignored) {
+                onlineTimeInMillis = Integer.toUnsignedLong((Integer) networkDocument.get("onlinetime"));
+            }
+
+            long timePlayed = System.currentTimeMillis() - this.captureTheFlag.getData().getPlayTime()
+                    .get(this.player.getUniqueId());
+            long added = timePlayed + onlineTimeInMillis;
+            Document document = new Document("onlinetime", added);
+            Bson updateOperation = new Document("$set", document);
+            this.captureTheFlag.getCrimxAPI().getMongoDB().getUserCollection().updateOne(networkDocument, updateOperation);
         });
     }
 
