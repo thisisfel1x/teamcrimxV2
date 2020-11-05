@@ -73,14 +73,19 @@ public class JoinMeCommand implements CommandExecutor {
                             permissionGroup.getDisplay().replace('&', '§') + player.getName() +
                             " §7spielt nun auf §a" + cloudPlayer.getConnectedService().getServerName() + " \n"));
                 } else if (i == 3) {
-                    BaseComponent baseComponents = new TextComponent(new ComponentBuilder(toSend[i] + " §7Klicke ")
-                            .append("§e§l*hier*")
+
+                    TextComponent messageComponent = new TextComponent(new ComponentBuilder(" §7Klicke ").append("§e§l*hier*")
                             .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/joinme ?server=" + cloudPlayer.getConnectedService().getServerName()))
                             .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("§eKlicke, um zu joinen")))
                             .append("§r§7, um zu joinen").color(ChatColor.GRAY)
                             .append(" \n")
                             .create());
-                    message[i] = baseComponents;
+
+                    BaseComponent[] components = {
+                            new TextComponent(TextComponent.fromLegacyText(toSend[i])), messageComponent
+                    };
+
+                    message[i] = new TextComponent(components);
                 } else if (i == 5) {
                     message[i] = new TextComponent(TextComponent.fromLegacyText(toSend[i] +
                             String.format(" §7Spieler online: §a%s§8/§c%s §8● §7Map: §e%s\n", onlinePlayers, maxPlayers, map)));
