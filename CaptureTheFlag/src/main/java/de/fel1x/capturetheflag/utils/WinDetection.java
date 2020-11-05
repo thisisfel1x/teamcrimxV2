@@ -61,6 +61,8 @@ public class WinDetection {
 
             current.setGameMode(GameMode.SURVIVAL);
 
+            current.setGlowing(false);
+
             current.getActivePotionEffects().forEach(potionEffect -> current.removePotionEffect(potionEffect.getType()));
 
             current.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
