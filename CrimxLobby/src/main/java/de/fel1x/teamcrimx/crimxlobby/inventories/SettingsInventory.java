@@ -66,15 +66,13 @@ public class SettingsInventory implements InventoryProvider {
                     this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setSpawnAtLastLocation(defaultSpawn);
                 }));
 
-        contents.set(2, 5, ClickableItem.of(new ItemBuilder((defaultSpawn) ? Material.LIME_DYE : Material.RED_DYE)
+        contents.set(2, 5, ClickableItem.of(new ItemBuilder((hotbarSound) ? Material.LIME_DYE : Material.RED_DYE)
                         .setName((hotbarSound) ? "§aAktiviert" : "§cDeaktiviert")
-                        .setColor((hotbarSound) ? 10 : 1)
                         .toItemStack(),
                 event -> {
                     hotbarSound = !hotbarSound;
                     lobbyPlayer.saveObjectInDocument("hotbarSound", hotbarSound, MongoDBCollection.LOBBY);
                     this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setHotbarSoundEnabled(hotbarSound);
                 }));
-
     }
 }

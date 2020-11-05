@@ -21,7 +21,7 @@ public class QuitListener implements Listener {
     public void on(PlayerQuitEvent event) {
 
         Player player = event.getPlayer();
-        LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
+        LobbyPlayer lobbyPlayer = new LobbyPlayer(player, true);
 
         event.setQuitMessage(null);
 
