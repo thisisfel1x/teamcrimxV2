@@ -10,6 +10,7 @@ import de.fel1x.capturetheflag.listener.block.BlockBreakListener;
 import de.fel1x.capturetheflag.listener.block.BlockPlaceListener;
 import de.fel1x.capturetheflag.listener.block.InteractListener;
 import de.fel1x.capturetheflag.listener.entity.DamageListener;
+import de.fel1x.capturetheflag.listener.entity.ArmorStandInteractListener;
 import de.fel1x.capturetheflag.listener.player.*;
 import de.fel1x.capturetheflag.scoreboard.ScoreboardHandler;
 import de.fel1x.capturetheflag.timers.ITimer;
@@ -19,11 +20,11 @@ import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import fr.minuskube.inv.InventoryManager;
 import org.bson.Document;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
+import org.bukkit.Location;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -66,10 +67,6 @@ public final class CaptureTheFlag extends JavaPlugin {
 
         this.registerListener();
         this.registerCommands();
-
-        for (World world : Bukkit.getWorlds()) {
-            world.getEntities().forEach(Entity::remove);
-        }
 
         this.iTimer = new IdleTimer();
         this.iTimer.start();
@@ -123,6 +120,7 @@ public final class CaptureTheFlag extends JavaPlugin {
 
         // ENTITY
         new DamageListener(this);
+        new ArmorStandInteractListener(this);
 
     }
 

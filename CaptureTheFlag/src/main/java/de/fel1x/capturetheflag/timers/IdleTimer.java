@@ -16,8 +16,6 @@ public class IdleTimer implements ITimer {
 
         if (!this.running) {
 
-            Bukkit.getScheduler().cancelTasks(this.captureTheFlag);
-
             this.captureTheFlag.getGamestateHandler().setGamestate(Gamestate.IDLE);
             this.running = true;
 

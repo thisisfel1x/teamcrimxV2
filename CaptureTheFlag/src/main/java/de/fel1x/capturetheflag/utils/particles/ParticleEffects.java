@@ -24,7 +24,7 @@ public class ParticleEffects {
         }
     }
 
-    public ArrayList<Location> getCirclePoints(Location center, double radius, int amount) {
+    public static ArrayList<Location> getCirclePoints(Location center, double radius, int amount) {
 
         World world = center.getWorld();
         double increment = (2 * Math.PI) / amount;
