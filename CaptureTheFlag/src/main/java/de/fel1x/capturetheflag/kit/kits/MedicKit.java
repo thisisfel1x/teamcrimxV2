@@ -21,7 +21,7 @@ public class MedicKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§aVorteile:",
                 " §8» §eEisenschwert (Sharp 1)",
                 " §8» §eFull Leather",

@@ -31,14 +31,14 @@ public class StartCommand implements CommandExecutor {
 
         if (gamestate != Gamestate.IDLE && gamestate != Gamestate.LOBBY) return false;
 
-        if(this.captureTheFlag.getiTimer() instanceof IdleTimer) {
+        if (this.captureTheFlag.getiTimer() instanceof IdleTimer) {
             this.captureTheFlag.getiTimer().stop();
             this.captureTheFlag.setiTimer(new LobbyTimer());
             ((LobbyTimer) this.captureTheFlag.getiTimer()).setCountdown(10);
             this.captureTheFlag.getiTimer().start();
             player.sendMessage(this.captureTheFlag.getPrefix() + "§aDer Countdown wurde verkürzt und gestartet");
-        } else if(this.captureTheFlag.getiTimer() instanceof LobbyTimer) {
-            if(((LobbyTimer) this.captureTheFlag.getiTimer()).getCountdown() > 10) {
+        } else if (this.captureTheFlag.getiTimer() instanceof LobbyTimer) {
+            if (((LobbyTimer) this.captureTheFlag.getiTimer()).getCountdown() > 10) {
                 ((LobbyTimer) this.captureTheFlag.getiTimer()).setCountdown(10);
                 player.sendMessage(this.captureTheFlag.getPrefix() + "§aDer Countdown wurde gestartet");
             } else {

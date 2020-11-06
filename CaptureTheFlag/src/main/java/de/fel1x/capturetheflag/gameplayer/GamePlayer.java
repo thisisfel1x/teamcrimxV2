@@ -14,10 +14,12 @@ import de.fel1x.capturetheflag.kit.IKit;
 import de.fel1x.capturetheflag.kit.Kit;
 import de.fel1x.capturetheflag.kit.kits.ArcherKit;
 import de.fel1x.capturetheflag.team.Team;
-import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -66,7 +68,7 @@ public class GamePlayer {
             Document ctfDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().
                     find(new Document("_id", player.getUniqueId().toString())).first();
 
-            if(ctfDocument == null) {
+            if (ctfDocument == null) {
                 this.createPlayerData();
                 this.fetchPlayerData();
             }
@@ -83,7 +85,7 @@ public class GamePlayer {
 
             Kit savedKit = Kit.valueOf(ctfDocument.getString("selectedKit"));
 
-            if(savedKit != Kit.NONE) {
+            if (savedKit != Kit.NONE) {
                 this.data.getSelectedKit().put(this.player, savedKit);
             }
 
@@ -254,11 +256,11 @@ public class GamePlayer {
 
             Stats stats = this.data.getCachedStats().get(this.player);
 
-            if(stats == null) {
+            if (stats == null) {
                 return;
             }
 
-            if(networkDocument == null) {
+            if (networkDocument == null) {
                 return;
             }
 
@@ -270,7 +272,7 @@ public class GamePlayer {
             long onlineTimeInMillis;
 
             try {
-                onlineTimeInMillis = (long)  networkDocument.get("onlinetime");
+                onlineTimeInMillis = (long) networkDocument.get("onlinetime");
             } catch (Exception ignored) {
                 onlineTimeInMillis = Integer.toUnsignedLong((Integer) networkDocument.get("onlinetime"));
             }

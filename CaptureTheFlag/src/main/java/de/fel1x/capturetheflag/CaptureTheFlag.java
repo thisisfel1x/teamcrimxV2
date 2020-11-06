@@ -12,7 +12,8 @@ import de.fel1x.capturetheflag.listener.block.InteractListener;
 import de.fel1x.capturetheflag.listener.entity.DamageListener;
 import de.fel1x.capturetheflag.listener.player.*;
 import de.fel1x.capturetheflag.scoreboard.ScoreboardHandler;
-import de.fel1x.capturetheflag.timers.*;
+import de.fel1x.capturetheflag.timers.ITimer;
+import de.fel1x.capturetheflag.timers.IdleTimer;
 import de.fel1x.capturetheflag.world.WorldLoader;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import fr.minuskube.inv.InventoryManager;
@@ -30,11 +31,9 @@ import java.util.stream.StreamSupport;
 public final class CaptureTheFlag extends JavaPlugin {
 
     public static CaptureTheFlag instance;
-    private CrimxAPI crimxAPI;
-
     private final String prefix = "§9CaptureTheFlag §8● §r";
     private final PluginManager pluginManager = Bukkit.getPluginManager();
-
+    private CrimxAPI crimxAPI;
     private ITimer iTimer;
 
     private Data data;

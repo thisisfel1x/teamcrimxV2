@@ -29,7 +29,7 @@ public class KitSelector implements InventoryProvider {
         int i = 0;
 
         for (Kit kit : Kit.values()) {
-            if(kit == Kit.NONE) continue;
+            if (kit == Kit.NONE) continue;
 
             try {
                 IKit iKit = kit.getClazz().newInstance();

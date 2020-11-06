@@ -74,7 +74,7 @@ public class WinDetection {
                             }
 
                             Actionbar.sendFullTitle(player, winner.getDisplayName(),
-                                    "§7hat das Spiel gewonnen!",10, 50, 10);
+                                    "§7hat das Spiel gewonnen!", 10, 50, 10);
 
                             player.setPlayerListName(player.getName());
                             mlgWarsScoreboard.setEndingScoreboard(player, permissionGroup.getDisplay().replace('&', '§')
@@ -111,7 +111,7 @@ public class WinDetection {
                             }
 
                             Actionbar.sendFullTitle(player, "§cNiemand",
-                                    "§7hat das Spiel gewonnen!",10, 50, 10);
+                                    "§7hat das Spiel gewonnen!", 10, 50, 10);
 
                             player.setPlayerListName(player.getName());
                             mlgWarsScoreboard.setEndingScoreboard(player, "§cNiemand", "§c");
@@ -136,7 +136,7 @@ public class WinDetection {
                             }
 
                             Actionbar.sendFullTitle(player, "§aTeam #" + winnerTeam.getTeamId(),
-                                    "§7hat das Spiel gewonnen!",10, 50, 10);
+                                    "§7hat das Spiel gewonnen!", 10, 50, 10);
 
                             player.setPlayerListName(player.getName());
                             mlgWarsScoreboard.setEndingScoreboard(player, "§aTeam #" + winnerTeam.getTeamId(), "§a");
@@ -158,7 +158,7 @@ public class WinDetection {
                             int gamesWon = (int) winnerGamePlayer.getObjectFromMongoDocument("gamesWon", MongoDBCollection.MLGWARS);
                             winnerGamePlayer.saveObjectInDocument("gamesWon", (gamesWon + 1), MongoDBCollection.MLGWARS);
 
-                            if(winnerGamePlayer.isPlayer()) {
+                            if (winnerGamePlayer.isPlayer()) {
                                 long onlineTimeInMillis;
 
                                 try {
@@ -206,7 +206,7 @@ public class WinDetection {
                             }
 
                             Actionbar.sendFullTitle(player, "§cKein Team",
-                                    "§7hat das Spiel gewonnen!",10, 50, 10);
+                                    "§7hat das Spiel gewonnen!", 10, 50, 10);
 
                             player.setPlayerListName(player.getName());
                             mlgWarsScoreboard.setEndingScoreboard(player, "§cKein Team", "§c");

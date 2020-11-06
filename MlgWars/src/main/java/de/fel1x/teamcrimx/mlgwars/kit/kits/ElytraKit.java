@@ -14,7 +14,7 @@ public class ElytraKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§7Fliege durch die Welt", "mit deinem Jumppad"
         };
     }

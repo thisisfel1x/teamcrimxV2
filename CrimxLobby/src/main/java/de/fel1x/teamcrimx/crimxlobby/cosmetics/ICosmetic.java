@@ -1,6 +1,8 @@
 package de.fel1x.teamcrimx.crimxlobby.cosmetics;
 
-import org.bukkit.*;
+import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 public interface ICosmetic {

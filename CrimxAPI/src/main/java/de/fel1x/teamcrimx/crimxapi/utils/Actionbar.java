@@ -1,7 +1,6 @@
 package de.fel1x.teamcrimx.crimxapi.utils;
 
 import com.destroystokyo.paper.Title;
-import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 

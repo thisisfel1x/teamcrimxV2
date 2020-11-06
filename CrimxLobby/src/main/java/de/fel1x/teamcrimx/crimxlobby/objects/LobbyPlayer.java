@@ -1,7 +1,5 @@
 package de.fel1x.teamcrimx.crimxlobby.objects;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
@@ -30,26 +28,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
 
 public class LobbyPlayer {
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
     Player player;
-
-    private Material[] woolTypes = {
-            Material.WHITE_WOOL, Material.ORANGE_WOOL, Material.MAGENTA_WOOL, Material.LIGHT_BLUE_WOOL, Material.YELLOW_WOOL,
-            Material.LIME_WOOL, Material.PINK_WOOL, Material.GRAY_WOOL, Material.LIGHT_GRAY_WOOL, Material.CYAN_WOOL,
-            Material.PURPLE_WOOL, Material.BLUE_WOOL, Material.GREEN_WOOL, Material.RED_WOOL
-    };
-
-    private Material[] concreteTypes = {
-            Material.WHITE_CONCRETE, Material.ORANGE_CONCRETE, Material.MAGENTA_CONCRETE, Material.LIGHT_BLUE_CONCRETE, Material.YELLOW_CONCRETE,
-            Material.LIME_CONCRETE, Material.PINK_CONCRETE, Material.GRAY_CONCRETE, Material.LIGHT_GRAY_CONCRETE, Material.CYAN_CONCRETE,
-            Material.PURPLE_CONCRETE, Material.BLUE_CONCRETE, Material.GREEN_CONCRETE, Material.RED_CONCRETE
-    };
-
     CrimxLobby crimxLobby = CrimxLobby.getInstance();
     private final WaterMlgHandler waterMlgHandler = this.crimxLobby.getWaterMlgHandler();
     Data data = this.crimxLobby.getData();
@@ -57,6 +45,16 @@ public class LobbyPlayer {
     LobbyDatabase lobbyDatabase = new LobbyDatabase();
     Document lobbyDocument;
     Document networkDocument;
+    private Material[] woolTypes = {
+            Material.WHITE_WOOL, Material.ORANGE_WOOL, Material.MAGENTA_WOOL, Material.LIGHT_BLUE_WOOL, Material.YELLOW_WOOL,
+            Material.LIME_WOOL, Material.PINK_WOOL, Material.GRAY_WOOL, Material.LIGHT_GRAY_WOOL, Material.CYAN_WOOL,
+            Material.PURPLE_WOOL, Material.BLUE_WOOL, Material.GREEN_WOOL, Material.RED_WOOL
+    };
+    private Material[] concreteTypes = {
+            Material.WHITE_CONCRETE, Material.ORANGE_CONCRETE, Material.MAGENTA_CONCRETE, Material.LIGHT_BLUE_CONCRETE, Material.YELLOW_CONCRETE,
+            Material.LIME_CONCRETE, Material.PINK_CONCRETE, Material.GRAY_CONCRETE, Material.LIGHT_GRAY_CONCRETE, Material.CYAN_CONCRETE,
+            Material.PURPLE_CONCRETE, Material.BLUE_CONCRETE, Material.GREEN_CONCRETE, Material.RED_CONCRETE
+    };
 
     public LobbyPlayer(Player player) {
         this.player = player;

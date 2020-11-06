@@ -8,8 +8,6 @@ import de.fel1x.capturetheflag.gamestate.Gamestate;
 import de.fel1x.capturetheflag.team.Team;
 import de.fel1x.capturetheflag.timers.EndingTimer;
 import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
-import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
-import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -30,7 +28,7 @@ public class WinDetection {
         Bukkit.getScheduler().runTaskAsynchronously(this.captureTheFlag, () -> {
             for (Player inGamePlayer : this.captureTheFlag.getData().getPlayers()) {
                 GamePlayer gamePlayer = new GamePlayer(inGamePlayer);
-                if(team.getTeamPlayers().contains(inGamePlayer)) {
+                if (team.getTeamPlayers().contains(inGamePlayer)) {
                     this.captureTheFlag.getData().getCachedStats().get(inGamePlayer).increaseWinsByOne();
 
                     int earnedCoins = 100 + (4 * (10 + new Random().nextInt(20)));

@@ -1,8 +1,6 @@
 package de.fel1x.teamcrimx.crimxlobby.listeners.entity;
 
 import de.fel1x.teamcrimx.crimxapi.utils.InstantFirework;
-import de.fel1x.teamcrimx.crimxapi.utils.ParticleUtils;
-import de.fel1x.teamcrimx.crimxapi.utils.Particles;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;

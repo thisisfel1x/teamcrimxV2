@@ -3,8 +3,6 @@ package de.fel1x.capturetheflag.commands;
 import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.database.Stats;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
-import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -35,7 +33,7 @@ public class StatsCommand implements CommandExecutor {
                         "§cnoch nicht §7eingesehen werden!");
                 return false;
             } else {
-                if(this.captureTheFlag.getData().getCachedStats().get(player) == null) {
+                if (this.captureTheFlag.getData().getCachedStats().get(player) == null) {
                     player.sendMessage(this.captureTheFlag.getPrefix() + "§cDeine Stats werden noch geladen. " +
                             "Bitte warte einen Moment.");
                     return false;

@@ -1,17 +1,13 @@
 package de.fel1x.capturetheflag.world;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
-import com.destroystokyo.paper.profile.ProfileProperty;
 import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.filehandler.SpawnHandler;
 import org.bson.Document;
 import org.bukkit.*;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.Skull;
 
 import java.util.List;
-import java.util.UUID;
 
 public class WorldLoader {
 
@@ -37,7 +33,8 @@ public class WorldLoader {
             gameWorld.setStorm(false);
             gameWorld.setTime(8000);
 
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         this.setTop5Wall();
 
@@ -56,7 +53,7 @@ public class WorldLoader {
             Location locHead = SpawnHandler.loadLocation("topHead" + current);
             Location locSign = SpawnHandler.loadLocation("topSign" + current);
 
-            if(locHead == null || locSign == null) continue;
+            if (locHead == null || locSign == null) continue;
 
             Skull skull = (Skull) locHead.getBlock().getState();
 
@@ -85,7 +82,7 @@ public class WorldLoader {
             Location locHead = SpawnHandler.loadLocation("topHead" + current);
             Location locSign = SpawnHandler.loadLocation("topSign" + current);
 
-            if(locHead == null || locSign == null) continue;
+            if (locHead == null || locSign == null) continue;
 
             Skull skull = (Skull) locHead.getBlock().getState();
 

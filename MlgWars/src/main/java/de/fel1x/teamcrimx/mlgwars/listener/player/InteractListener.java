@@ -24,10 +24,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -68,7 +66,7 @@ public class InteractListener implements Listener {
             return;
         }
 
-        if(event.getPlayer().getInventory().getHeldItemSlot() == 45) {
+        if (event.getPlayer().getInventory().getHeldItemSlot() == 45) {
             player.sendMessage(this.mlgWars.getPrefix() + "§cBitte nutze nicht die Off-Hand (verbuggt)");
             return;
         }
@@ -700,7 +698,7 @@ public class InteractListener implements Listener {
 
                             FallingBlock fallingBlock = nutsSnowball.getWorld()
                                     .spawnFallingBlock(nutsSnowball.getLocation().clone().add(0, 1, 0),
-                                    Bukkit.createBlockData(Material.ANVIL));
+                                            Bukkit.createBlockData(Material.ANVIL));
                             fallingBlock.setGlowing(true);
 
                             nutsSnowball.addPassenger(fallingBlock);

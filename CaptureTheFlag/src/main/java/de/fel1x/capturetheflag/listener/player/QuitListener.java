@@ -7,7 +7,6 @@ import de.fel1x.capturetheflag.gamestate.Gamestate;
 import de.fel1x.capturetheflag.team.Team;
 import de.fel1x.capturetheflag.timers.EndingTimer;
 import de.fel1x.capturetheflag.timers.IdleTimer;
-import de.fel1x.capturetheflag.utils.Utils;
 import de.fel1x.capturetheflag.utils.WinDetection;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
@@ -78,7 +77,7 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
-        if(Arrays.stream(this.allowedBlocksToBreak).anyMatch(stream -> stream == block.getType())) {
+        if (Arrays.stream(this.allowedBlocksToBreak).anyMatch(stream -> stream == block.getType())) {
             return;
         }
 

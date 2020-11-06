@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 
 public class PickupListener implements Listener {
 
@@ -21,7 +20,7 @@ public class PickupListener implements Listener {
     @EventHandler
     public void on(EntityPickupItemEvent event) {
 
-        if(!(event.getEntity() instanceof Player)) {
+        if (!(event.getEntity() instanceof Player)) {
             return;
         }
 

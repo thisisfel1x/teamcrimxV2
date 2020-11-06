@@ -36,7 +36,7 @@ public class InGameTimer implements ITimer {
             this.running = true;
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.captureTheFlag, () -> {
-                if(timer >= 3 && timer <= 6) {
+                if (timer >= 3 && timer <= 6) {
                     switch (timer) {
                         case 3:
                             Bukkit.getOnlinePlayers().forEach(player -> {
@@ -68,7 +68,7 @@ public class InGameTimer implements ITimer {
                 Bukkit.getOnlinePlayers().forEach(current -> {
                     GamePlayer gamePlayer = new GamePlayer(current);
 
-                    if(gamePlayer.isPlayer()) {
+                    if (gamePlayer.isPlayer()) {
                         if ((this.data.getRedFlagHolder() != null && current.equals(this.data.getRedFlagHolder())
                                 || (this.data.getBlueFlagHolder() != null && current.equals(this.data.getBlueFlagHolder())))) {
                             current.setWalkSpeed(0.05f);
@@ -115,7 +115,8 @@ public class InGameTimer implements ITimer {
                     Actionbar.sendOnlySubtitle(player, "§cDeine Flagge wurde gestohlen!", 0, 40, 20);
                 });
             }
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         try {
             Banner banner = (Banner) data.getBlueFlagBaseLocation().getBlock().getState();
@@ -128,6 +129,7 @@ public class InGameTimer implements ITimer {
 
             }
 
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
     }
 }

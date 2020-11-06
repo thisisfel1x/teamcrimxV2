@@ -3,10 +3,8 @@ package de.fel1x.teamcrimx.crimxapi.objects;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
-import de.fel1x.teamcrimx.crimxapi.utils.ColorUtil;
 import de.fel1x.teamcrimx.crimxapi.utils.Skin;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 

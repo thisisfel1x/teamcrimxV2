@@ -3,7 +3,6 @@ package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import de.fel1x.teamcrimx.crimxlobby.inventories.CosmeticInventory;
-import de.fel1x.teamcrimx.crimxlobby.inventories.MinigameInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.NavigatorInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.SettingsInventory;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
@@ -70,7 +69,8 @@ public class InteractListener implements Listener {
                         break;
 
 
-                    case LIME_DYE: case PURPLE_DYE:
+                    case LIME_DYE:
+                    case PURPLE_DYE:
                         lobbyPlayer.updatePlayerHiderState();
                         break;
 

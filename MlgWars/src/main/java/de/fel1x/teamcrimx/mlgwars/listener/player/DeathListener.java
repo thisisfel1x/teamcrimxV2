@@ -133,7 +133,7 @@ public class DeathListener implements Listener {
                 Bukkit.broadcastMessage(this.mlgWars.getPrefix() + playersLeftMessage);
             }
 
-            if(player.isGlowing()) {
+            if (player.isGlowing()) {
                 player.setGlowing(false);
             }
 

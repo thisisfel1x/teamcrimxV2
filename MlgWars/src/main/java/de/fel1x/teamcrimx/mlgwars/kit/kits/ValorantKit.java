@@ -14,7 +14,7 @@ public class ValorantKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§dZeige dir die Gegner als Cypher an!"
         };
     }

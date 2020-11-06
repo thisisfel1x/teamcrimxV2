@@ -16,7 +16,7 @@ public class TankKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§aVorteile:",
                 " §8» §eSteinschwert (Sharp 1)",
                 " §8» §eFull Iron",

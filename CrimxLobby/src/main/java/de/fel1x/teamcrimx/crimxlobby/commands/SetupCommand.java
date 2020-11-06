@@ -2,7 +2,6 @@ package de.fel1x.teamcrimx.crimxlobby.commands;
 
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.manager.SpawnManager;
-import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

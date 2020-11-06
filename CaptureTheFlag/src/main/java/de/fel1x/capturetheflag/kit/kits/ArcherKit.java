@@ -18,7 +18,7 @@ public class ArcherKit implements IKit {
 
     @Override
     public String[] getKitDescription() {
-        return new String[] {
+        return new String[]{
                 "§aVorteile:",
                 " §8» §eHolzschwert (Sharp 1)",
                 " §8» §eBogen (Stärke 1 / Infinity)",

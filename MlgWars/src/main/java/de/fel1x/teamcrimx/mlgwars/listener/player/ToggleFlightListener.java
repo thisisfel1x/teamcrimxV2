@@ -17,7 +17,7 @@ public class ToggleFlightListener implements Listener {
     @EventHandler
     public void on(EntityToggleGlideEvent event) {
 
-        if(!event.getEntity().isOnGround()) {
+        if (!event.getEntity().isOnGround()) {
             event.setCancelled(true);
         }
 

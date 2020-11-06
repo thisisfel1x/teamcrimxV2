@@ -40,31 +40,16 @@ public class SpawnHandler {
 
     public static Location loadLocation(String root) {
 
-        if (configfile.exists()) {
+        try {
+            World world = Bukkit.getWorld(config.getString(root + ".World"));
+            double x = config.getDouble(root + ".X");
+            double y = config.getDouble(root + ".Y");
+            double z = config.getDouble(root + ".Z");
+            float yaw = (float) config.getDouble(root + ".Yaw");
+            float pitch = (float) config.getDouble(root + ".Pitch");
 
-            if (config.get(root + ".World") != null) {
-
-                World world = Bukkit.getWorld(config.getString(root + ".World"));
-                double x = config.getDouble(root + ".X");
-                double y = config.getDouble(root + ".Y");
-                double z = config.getDouble(root + ".Z");
-                float yaw = (float) config.getDouble(root + ".Yaw");
-                float pitch = (float) config.getDouble(root + ".Pitch");
-
-                try {
-                    return new Location(world, x, y, z, yaw, pitch);
-                } catch (Exception ignored) {
-                    return null;
-                }
-
-            } else {
-
-                return null;
-
-            }
-
-
-        } else {
+            return new Location(world, x, y, z, yaw, pitch);
+        } catch (NullPointerException exception) {
             return null;
         }
 

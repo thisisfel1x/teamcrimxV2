@@ -1,7 +1,6 @@
 package de.fel1x.teamcrimx.crimxapi.database.mongodb;
 
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;

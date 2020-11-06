@@ -7,10 +7,11 @@ import de.fel1x.capturetheflag.gamestate.Gamestate;
 import de.fel1x.capturetheflag.inventories.KitSelector;
 import de.fel1x.capturetheflag.inventories.TeamSelector;
 import de.fel1x.capturetheflag.team.Team;
-import de.fel1x.capturetheflag.utils.Utils;
 import de.fel1x.capturetheflag.utils.WinDetection;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
-import org.bukkit.*;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,7 +47,7 @@ public class InteractListener implements Listener {
 
         Gamestate gamestate = this.captureTheFlag.getGamestateHandler().getGamestate();
 
-        if(event.getHand() != EquipmentSlot.HAND) {
+        if (event.getHand() != EquipmentSlot.HAND) {
             return;
         }
 
@@ -225,7 +226,7 @@ public class InteractListener implements Listener {
 
                                 break;
                         }
-                    } else if(block.getType() == Material.WHITE_BANNER) {
+                    } else if (block.getType() == Material.WHITE_BANNER) {
                         /*
                         Now we have to check what happens if the player interacts with a white banner
                          */
@@ -235,13 +236,13 @@ public class InteractListener implements Listener {
                                 if he is in team red he can either save his own flag or win with the flag of team blue
                                  */
                                 // CASE HE HOLDS BLUE FLAG
-                                if(player.equals(this.data.getBlueFlagHolder()) && this.data.getBlueFlagHolder() != null) {
-                                    if(blockLocation.equals(this.data.getRedFlagBaseLocation())) {
+                                if (player.equals(this.data.getBlueFlagHolder()) && this.data.getBlueFlagHolder() != null) {
+                                    if (blockLocation.equals(this.data.getRedFlagBaseLocation())) {
                                         new WinDetection(Team.RED);
                                         return;
                                     }
-                                } else if(player.equals(this.data.getRedFlagHolder()) && this.data.getRedFlagHolder() != null) {
-                                    if(blockLocation.equals(this.data.getRedFlagBaseLocation())) {
+                                } else if (player.equals(this.data.getRedFlagHolder()) && this.data.getRedFlagHolder() != null) {
+                                    if (blockLocation.equals(this.data.getRedFlagBaseLocation())) {
                                         /*
                                         He saved his own flag. setting the color back to red
                                          */
@@ -261,13 +262,13 @@ public class InteractListener implements Listener {
                                 if he is in team blue he can either save his own flag or win with the flag of team red
                                  */
                                 // CASE HE HOLDS RED FLAG
-                                if(player.equals(this.data.getRedFlagHolder()) && this.data.getRedFlagHolder() != null) {
-                                    if(blockLocation.equals(this.data.getBlueFlagBaseLocation())) {
+                                if (player.equals(this.data.getRedFlagHolder()) && this.data.getRedFlagHolder() != null) {
+                                    if (blockLocation.equals(this.data.getBlueFlagBaseLocation())) {
                                         new WinDetection(Team.BLUE);
                                         return;
                                     }
-                                } else if(player.equals(this.data.getBlueFlagHolder()) && this.data.getBlueFlagHolder() != null) {
-                                    if(blockLocation.equals(this.data.getBlueFlagBaseLocation())) {
+                                } else if (player.equals(this.data.getBlueFlagHolder()) && this.data.getBlueFlagHolder() != null) {
+                                    if (blockLocation.equals(this.data.getBlueFlagBaseLocation())) {
                                         /*
                                         He saved his own flag. setting the color back to blue
                                          */

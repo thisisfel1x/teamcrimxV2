@@ -1,19 +1,14 @@
 package de.fel1x.teamcrimx.mlgwars.listener.entity;
 
 import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
-import de.fel1x.teamcrimx.crimxapi.utils.ParticleUtils;
-import de.fel1x.teamcrimx.crimxapi.utils.math.MathUtils;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.utils.entites.CustomZombie;
 import de.fel1x.teamcrimx.mlgwars.utils.entites.ZombieEquipment;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
-import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -25,7 +20,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -116,7 +110,7 @@ public class ProjectileHitListener implements Listener {
         } else if (event.getEntity() instanceof Snowball) {
             Snowball snowball = (Snowball) event.getEntity();
 
-            if(snowball.hasMetadata("nuts")) {
+            if (snowball.hasMetadata("nuts")) {
                 snowball.getPassengers().forEach(Entity::remove);
 
                 snowball.getWorld().createExplosion(snowball, 2F, true, false);
