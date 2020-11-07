@@ -9,6 +9,7 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class KitSelector implements InventoryProvider {
@@ -46,6 +47,8 @@ public class KitSelector implements InventoryProvider {
                     gamePlayer.selectKit(kit);
                     player.sendMessage(this.captureTheFlag.getPrefix() + "§7Du hast das §e"
                             + iKit.getKitName() + "-Kit §7ausgewählt!");
+                    player.closeInventory();
+                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 5, 0.5f);
                 }));
 
                 i++;

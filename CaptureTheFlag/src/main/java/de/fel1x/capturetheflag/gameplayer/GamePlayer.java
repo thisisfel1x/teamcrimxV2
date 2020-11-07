@@ -90,7 +90,6 @@ public class GamePlayer {
             Kit savedKit = Kit.valueOf(ctfDocument.getString("selectedKit"));
 
             if (savedKit != Kit.NONE) {
-                //this.data.getSelectedKit().put(this.player, savedKit);
                 this.selectKit(savedKit);
             }
 
@@ -215,9 +214,6 @@ public class GamePlayer {
 
     public void selectKit(Kit kit) {
         this.captureTheFlag.getData().getSelectedKit().put(player, kit);
-
-        this.player.closeInventory();
-        this.player.playSound(player.getLocation(), Sound.ENTITY_CAT_PURREOW, 5, 8);
 
         try {
             IKit iKit = kit.getClazz().newInstance();

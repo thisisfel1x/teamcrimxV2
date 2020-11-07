@@ -66,8 +66,10 @@ public class JoinListener implements Listener {
                     this.captureTheFlag.startTimerByClass(LobbyTimer.class);
                 }
 
-                player.getInventory().setItem(0, new ItemBuilder(Material.RED_BED).setName("§a§lWähle dein Team").addEnchant(Enchantment.DEPTH_STRIDER, 1).addGlow().toItemStack());
-                player.getInventory().setItem(1, new ItemBuilder(Material.CHEST_MINECART).setName("§e§lWähle dein Kit").addEnchant(Enchantment.DEPTH_STRIDER, 1).addGlow().toItemStack());
+                player.getInventory().setItem(0, new ItemBuilder(Material.CHEST_MINECART)
+                        .setName("§8● §eWähle dein Kit").toItemStack());
+                player.getInventory().setItem(1, new ItemBuilder(Material.RED_BED)
+                        .setName("§8● §6Wähle dein Team").toItemStack());
 
                 break;
 
@@ -84,10 +86,6 @@ public class JoinListener implements Listener {
                 gamePlayer.teleportToLobby();
 
                 break;
-
         }
-
-
     }
-
 }
