@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Sound;
 import org.bukkit.block.Banner;
+import org.bukkit.entity.Player;
 
 public class InGameTimer implements ITimer {
 
@@ -34,6 +35,11 @@ public class InGameTimer implements ITimer {
 
             this.captureTheFlag.getGamestateHandler().setGamestate(Gamestate.INGAME);
             this.running = true;
+
+            for (Player player : this.data.getPlayers()) {
+                GamePlayer gamePlayer = new GamePlayer(player);
+                gamePlayer.saveKitToDatabase();
+            }
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.captureTheFlag, () -> {
                 if (timer >= 3 && timer <= 6) {

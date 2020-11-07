@@ -13,7 +13,9 @@ import de.fel1x.capturetheflag.filehandler.SpawnHandler;
 import de.fel1x.capturetheflag.kit.IKit;
 import de.fel1x.capturetheflag.kit.Kit;
 import de.fel1x.capturetheflag.kit.kits.ArcherKit;
+import de.fel1x.capturetheflag.scoreboard.ScoreboardHandler;
 import de.fel1x.capturetheflag.team.Team;
+import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
@@ -29,6 +31,8 @@ public class GamePlayer {
 
     private final CaptureTheFlag captureTheFlag = CaptureTheFlag.getInstance();
     private final Data data = captureTheFlag.getData();
+
+    private final ScoreboardHandler scoreboardHandler = CaptureTheFlag.getInstance().getScoreboardHandler();
 
     private final Player player;
 
@@ -86,7 +90,8 @@ public class GamePlayer {
             Kit savedKit = Kit.valueOf(ctfDocument.getString("selectedKit"));
 
             if (savedKit != Kit.NONE) {
-                this.data.getSelectedKit().put(this.player, savedKit);
+                //this.data.getSelectedKit().put(this.player, savedKit);
+                this.selectKit(savedKit);
             }
 
         });
@@ -213,6 +218,16 @@ public class GamePlayer {
 
         this.player.closeInventory();
         this.player.playSound(player.getLocation(), Sound.ENTITY_CAT_PURREOW, 5, 8);
+
+        try {
+            IKit iKit = kit.getClazz().newInstance();
+            this.player.getInventory().setItem(8, new ItemBuilder(iKit.getKitMaterial())
+                    .setName("§8● §a" + iKit.getKitName())
+                    .setLore(iKit.getKitDescription()).toItemStack());
+            this.scoreboardHandler.updateBoard(player, "§8● §6" + iKit.getKitName(), "kit", "§6");
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public Class<? extends IKit> getSelectedKit() {
@@ -291,5 +306,11 @@ public class GamePlayer {
         Bson updateOperation = new Document("$set", document);
 
         this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().updateOne(gamemodeDocument, updateOperation);
+    }
+
+    public void saveKitToDatabase() {
+        Document ctfDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().
+                find(new Document("_id", player.getUniqueId().toString())).first();
+        this.saveObjectInDocument("selectedKit", this.data.getSelectedKit().get(this.player).name(), ctfDocument);
     }
 }
