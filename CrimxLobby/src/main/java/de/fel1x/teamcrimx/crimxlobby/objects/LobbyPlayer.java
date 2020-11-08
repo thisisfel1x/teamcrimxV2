@@ -331,7 +331,8 @@ public class LobbyPlayer {
                 .append("lastLocationY", this.player.getLocation().getY())
                 .append("lastLocationZ", this.player.getLocation().getZ())
                 .append("lastLocationPitch", this.player.getLocation().getPitch())
-                .append("lastLocationYaw", this.player.getLocation().getYaw());
+                .append("lastLocationYaw", this.player.getLocation().getYaw())
+                .append("playerhiderState", this.data.getPlayerHiderState().get(player.getUniqueId()));
 
         Bson updateOperation = new Document("$set", toUpdate);
         this.crimxLobby.getCrimxAPI().getMongoDB().getLobbyCollection().updateOne(this.lobbyDocument, updateOperation);

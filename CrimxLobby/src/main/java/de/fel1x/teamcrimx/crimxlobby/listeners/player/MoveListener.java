@@ -54,7 +54,7 @@ public class MoveListener implements Listener {
                 }
             } else if (iCosmetic.dropItem() && !iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()) {
                 Item item = player.getWorld().dropItem(player.getLocation(), new ItemStack(iCosmetic.itemToDrop()));
-                Bukkit.getScheduler().runTaskLater(this.crimxLobby, item::remove, 20 * 5L);
+                Bukkit.getScheduler().runTaskLater(this.crimxLobby, item::remove, 20 * 2L);
             }
 
         }

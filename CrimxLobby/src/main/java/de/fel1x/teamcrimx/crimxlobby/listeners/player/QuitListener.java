@@ -26,9 +26,6 @@ public class QuitListener implements Listener {
         event.setQuitMessage(null);
 
         lobbyPlayer.saveNewLocation();
-        lobbyPlayer.saveObjectInDocument("playerhiderState",
-                this.crimxLobby.getData().getPlayerHiderState().get(player.getUniqueId()),
-                MongoDBCollection.LOBBY);
 
         if (lobbyPlayer.isInBuild()) {
             lobbyPlayer.removeFromBuild();
