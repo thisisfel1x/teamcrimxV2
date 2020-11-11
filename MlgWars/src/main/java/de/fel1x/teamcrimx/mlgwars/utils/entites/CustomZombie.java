@@ -14,13 +14,13 @@ public class CustomZombie extends EntityZombie {
     public CustomZombie(org.bukkit.World world) {
         super(((CraftWorld) world).getHandle());
 
-        List goalB = (List) getPrivateField("b", PathfinderGoalSelector.class, goalSelector);
+        List goalB = (List) getPrivateField("b", PathfinderGoalSelector.class, this.goalSelector);
         goalB.clear();
-        List goalC = (List) getPrivateField("c", PathfinderGoalSelector.class, goalSelector);
+        List goalC = (List) getPrivateField("c", PathfinderGoalSelector.class, this.goalSelector);
         goalC.clear();
-        List targetB = (List) getPrivateField("b", PathfinderGoalSelector.class, targetSelector);
+        List targetB = (List) getPrivateField("b", PathfinderGoalSelector.class, this.targetSelector);
         targetB.clear();
-        List targetC = (List) getPrivateField("c", PathfinderGoalSelector.class, targetSelector);
+        List targetC = (List) getPrivateField("c", PathfinderGoalSelector.class, this.targetSelector);
         targetC.clear();
 
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
@@ -37,7 +37,7 @@ public class CustomZombie extends EntityZombie {
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityZombie.class, true));
     }
 
-    public static Object getPrivateField(String fieldName, Class<? extends Object> clazz, PathfinderGoalSelector object) {
+    public static Object getPrivateField(String fieldName, Class<?> clazz, PathfinderGoalSelector object) {
         Field field;
         Object o = null;
 

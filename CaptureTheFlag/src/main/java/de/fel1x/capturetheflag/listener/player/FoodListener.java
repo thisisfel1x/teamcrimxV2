@@ -8,7 +8,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 public class FoodListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
+    private final CaptureTheFlag captureTheFlag;
 
     public FoodListener(CaptureTheFlag captureTheFlag) {
         this.captureTheFlag = captureTheFlag;

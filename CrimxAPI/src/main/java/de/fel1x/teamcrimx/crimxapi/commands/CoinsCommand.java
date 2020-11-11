@@ -26,13 +26,13 @@ public class CoinsCommand implements CommandExecutor {
 
         if (!hasPermission) {
             coinsAPI = new CoinsAPI(player.getUniqueId());
-            player.sendMessage(crimxAPI.getPrefix() + "§7Du besitzt momentan stolze §e" + coinsAPI.getCoins() + " Coins");
+            player.sendMessage(this.crimxAPI.getPrefix() + "§7Du besitzt momentan stolze §e" + coinsAPI.getCoins() + " Coins");
         } else {
             if (args.length == 0) {
                 coinsAPI = new CoinsAPI(player.getUniqueId());
-                player.sendMessage(crimxAPI.getPrefix() + "§7Du besitzt momentan stolze §e" + coinsAPI.getCoins() + " Coins");
+                player.sendMessage(this.crimxAPI.getPrefix() + "§7Du besitzt momentan stolze §e" + coinsAPI.getCoins() + " Coins");
             } else if (args.length == 1) {
-                player.sendMessage(crimxAPI.getPrefix() + "§cUsage: /coins <set|add|remove> <playername>");
+                player.sendMessage(this.crimxAPI.getPrefix() + "§cUsage: /coins <set|add|remove> <playername>");
             } else if (args.length == 3) {
 
                 String operation = args[0];
@@ -47,7 +47,7 @@ public class CoinsCommand implements CommandExecutor {
                 }
 
                 if (targetPlayer == null || !targetPlayer.isOnline()) {
-                    player.sendMessage(crimxAPI.getPrefix() + "§cDieser Spieler ist nicht online");
+                    player.sendMessage(this.crimxAPI.getPrefix() + "§cDieser Spieler ist nicht online");
                     return false;
                 }
 

@@ -67,7 +67,7 @@ public class DelayTimer implements ITimer {
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
 
-                switch (countdown) {
+                switch (this.countdown) {
                     case 5:
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.5f, 0.75f);
@@ -78,7 +78,7 @@ public class DelayTimer implements ITimer {
                     case 2:
                     case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Das Spiel startet in §e"
-                                + (countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
+                                + (this.countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
                         Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.5f, 0.75f));
                         break;
 
@@ -97,8 +97,8 @@ public class DelayTimer implements ITimer {
                     player.setExp(0f);
 
                     if (this.countdown <= 3) {
-                        Actionbar.sendOnlyTitle(player, (countdown == 3) ? "§a§l3"
-                                : (countdown == 2) ? "§e§l2" : (countdown == 1) ? "§c§l1" : "§a§lGO!", 0, 40, 10);
+                        Actionbar.sendOnlyTitle(player, (this.countdown == 3) ? "§a§l3"
+                                : (this.countdown == 2) ? "§e§l2" : (this.countdown == 1) ? "§c§l1" : "§a§lGO!", 0, 40, 10);
                     }
                     if (player.hasMetadata("team")) {
                         int team = player.getMetadata("team").get(0).asInt() + 1;
@@ -106,7 +106,7 @@ public class DelayTimer implements ITimer {
                     }
                 });
 
-                countdown--;
+                this.countdown--;
 
             }, 0L, 20L);
         }
@@ -116,7 +116,7 @@ public class DelayTimer implements ITimer {
     @Override
     public void stop() {
         if (this.running) {
-            Bukkit.getScheduler().cancelTask(taskId);
+            Bukkit.getScheduler().cancelTask(this.taskId);
             this.running = false;
             this.countdown = 60;
         }

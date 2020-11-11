@@ -28,17 +28,17 @@ import java.util.Random;
 
 public class WinDetection {
 
-    private final MlgWars mlgWars = MlgWars.getInstance();
     private final MlgWarsScoreboard mlgWarsScoreboard = new MlgWarsScoreboard();
     private int timer;
 
     public WinDetection() {
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
-            if (this.mlgWars.getGamestateHandler().getGamestate() != Gamestate.ENDING) {
-                if (this.mlgWars.getTeamSize() == 1) {
-                    if (this.mlgWars.getData().getPlayers().size() == 1) {
+            MlgWars mlgWars = MlgWars.getInstance();
+            if (mlgWars.getGamestateHandler().getGamestate() != Gamestate.ENDING) {
+                if (mlgWars.getTeamSize() == 1) {
+                    if (mlgWars.getData().getPlayers().size() == 1) {
 
-                        Player winner = this.mlgWars.getData().getPlayers().get(0);
+                        Player winner = mlgWars.getData().getPlayers().get(0);
                         GamePlayer winnerGamePlayer = new GamePlayer(winner, true);
                         CoinsAPI coinsAPI = new CoinsAPI(winner.getUniqueId());
                         IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(winner.getUniqueId());
@@ -48,7 +48,7 @@ public class WinDetection {
                         IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(iPermissionUser);
 
                         coinsAPI.addCoins(100);
-                        winner.sendMessage(this.mlgWars.getPrefix() + "§7Du hast das Spiel gewonnen! §a(+100 Coins)");
+                        winner.sendMessage(mlgWars.getPrefix() + "§7Du hast das Spiel gewonnen! §a(+100 Coins)");
 
                         long onlineTimeInMillis;
 
@@ -58,7 +58,7 @@ public class WinDetection {
                             onlineTimeInMillis = Integer.toUnsignedLong((Integer) winnerGamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS));
                         }
 
-                        long timePlayed = System.currentTimeMillis() - this.mlgWars.getData().getPlayTime().get(winner.getUniqueId());
+                        long timePlayed = System.currentTimeMillis() - mlgWars.getData().getPlayTime().get(winner.getUniqueId());
                         long added = timePlayed + onlineTimeInMillis;
                         winnerGamePlayer.saveObjectInDocument("onlinetime", added, MongoDBCollection.USERS);
 
@@ -77,30 +77,30 @@ public class WinDetection {
                                     "§7hat das Spiel gewonnen!", 10, 50, 10);
 
                             player.setPlayerListName(player.getName());
-                            mlgWarsScoreboard.setEndingScoreboard(player, permissionGroup.getDisplay().replace('&', '§')
+                            this.mlgWarsScoreboard.setEndingScoreboard(player, permissionGroup.getDisplay().replace('&', '§')
                                     + winner.getName(), permissionGroup.getDisplay().replace('&', '§'));
                             BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
                         });
 
-                        timer = 5;
+                        this.timer = 5;
                         new BukkitRunnable() {
                             @Override
                             public void run() {
                                 spawnFireworkCircle(Spawns.LOBBY.getLocation(), 5, 10);
-                                if (timer == 0) {
+                                if (WinDetection.this.timer == 0) {
                                     this.cancel();
                                 }
-                                timer--;
+                                WinDetection.this.timer--;
                             }
-                        }.runTaskTimer(this.mlgWars, 0L, 20L);
+                        }.runTaskTimer(mlgWars, 0L, 20L);
 
                         int gamesWon = (int) winnerGamePlayer.getObjectFromMongoDocument("gamesWon", MongoDBCollection.MLGWARS);
                         winnerGamePlayer.saveObjectInDocument("gamesWon", (gamesWon + 1), MongoDBCollection.MLGWARS);
 
-                        this.mlgWars.startTimerByClass(EndingTimer.class);
-                    } else if (this.mlgWars.getData().getPlayers().size() == 0) {
+                        mlgWars.startTimerByClass(EndingTimer.class);
+                    } else if (mlgWars.getData().getPlayers().size() == 0) {
 
-                        this.mlgWars.getWorldLoader().setTop3Wall();
+                        mlgWars.getWorldLoader().setTop3Wall();
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             GamePlayer gamePlayer = new GamePlayer(player);
@@ -114,17 +114,17 @@ public class WinDetection {
                                     "§7hat das Spiel gewonnen!", 10, 50, 10);
 
                             player.setPlayerListName(player.getName());
-                            mlgWarsScoreboard.setEndingScoreboard(player, "§cNiemand", "§c");
+                            this.mlgWarsScoreboard.setEndingScoreboard(player, "§cNiemand", "§c");
                             BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
 
                         });
 
-                        this.mlgWars.startTimerByClass(EndingTimer.class);
+                        mlgWars.startTimerByClass(EndingTimer.class);
                     }
-                } else if (this.mlgWars.getTeamSize() > 1) {
-                    if (this.mlgWars.getData().getGameTeams().size() == 1) {
+                } else if (mlgWars.getTeamSize() > 1) {
+                    if (mlgWars.getData().getGameTeams().size() == 1) {
 
-                        ScoreboardTeam winnerTeam = new ArrayList<>(this.mlgWars.getData().getGameTeams().values()).get(0);
+                        ScoreboardTeam winnerTeam = new ArrayList<>(mlgWars.getData().getGameTeams().values()).get(0);
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             GamePlayer gamePlayer = new GamePlayer(player);
@@ -139,7 +139,7 @@ public class WinDetection {
                                     "§7hat das Spiel gewonnen!", 10, 50, 10);
 
                             player.setPlayerListName(player.getName());
-                            mlgWarsScoreboard.setEndingScoreboard(player, "§aTeam #" + winnerTeam.getTeamId(), "§a");
+                            this.mlgWarsScoreboard.setEndingScoreboard(player, "§aTeam #" + winnerTeam.getTeamId(), "§a");
                             BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
                         });
 
@@ -153,7 +153,7 @@ public class WinDetection {
                             CoinsAPI coinsAPI = new CoinsAPI(winnerTeamTeamPlayer.getUniqueId());
 
                             coinsAPI.addCoins(100);
-                            winnerTeamTeamPlayer.sendMessage(this.mlgWars.getPrefix() + "§7Du hast das Spiel gewonnen! §a(+100 Coins)");
+                            winnerTeamTeamPlayer.sendMessage(mlgWars.getPrefix() + "§7Du hast das Spiel gewonnen! §a(+100 Coins)");
 
                             int gamesWon = (int) winnerGamePlayer.getObjectFromMongoDocument("gamesWon", MongoDBCollection.MLGWARS);
                             winnerGamePlayer.saveObjectInDocument("gamesWon", (gamesWon + 1), MongoDBCollection.MLGWARS);
@@ -167,7 +167,7 @@ public class WinDetection {
                                     onlineTimeInMillis = Integer.toUnsignedLong((Integer) winnerGamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS));
                                 }
 
-                                long timePlayed = System.currentTimeMillis() - this.mlgWars.getData().getPlayTime().get(winnerTeamTeamPlayer.getUniqueId());
+                                long timePlayed = System.currentTimeMillis() - mlgWars.getData().getPlayTime().get(winnerTeamTeamPlayer.getUniqueId());
                                 long added = timePlayed + onlineTimeInMillis;
                                 winnerGamePlayer.saveObjectInDocument("onlinetime", added, MongoDBCollection.USERS);
                             }
@@ -175,27 +175,27 @@ public class WinDetection {
                             stopTasks(winnerTeamTeamPlayer);
                         }
 
-                        String winMessage = this.mlgWars.getPrefix() + "§7Das Team §a#" + winnerTeam.getTeamId()
+                        String winMessage = mlgWars.getPrefix() + "§7Das Team §a#" + winnerTeam.getTeamId()
                                 + " §8(" + String.join(", ", teamPlayers) + "§8) §7hat das Spiel §agewonnen!";
 
                         Bukkit.broadcastMessage(winMessage);
 
-                        timer = 5;
+                        this.timer = 5;
                         new BukkitRunnable() {
                             @Override
                             public void run() {
                                 spawnFireworkCircle(Spawns.LOBBY.getLocation(), 5, 10);
-                                if (timer == 0) {
+                                if (WinDetection.this.timer == 0) {
                                     this.cancel();
                                 }
-                                timer--;
+                                WinDetection.this.timer--;
                             }
-                        }.runTaskTimer(this.mlgWars, 0L, 20L);
+                        }.runTaskTimer(mlgWars, 0L, 20L);
 
-                        this.mlgWars.startTimerByClass(EndingTimer.class);
-                    } else if (this.mlgWars.getData().getGameTeams().size() == 0) {
+                        mlgWars.startTimerByClass(EndingTimer.class);
+                    } else if (mlgWars.getData().getGameTeams().size() == 0) {
 
-                        this.mlgWars.getWorldLoader().setTop3Wall();
+                        mlgWars.getWorldLoader().setTop3Wall();
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             GamePlayer gamePlayer = new GamePlayer(player);
@@ -209,12 +209,12 @@ public class WinDetection {
                                     "§7hat das Spiel gewonnen!", 10, 50, 10);
 
                             player.setPlayerListName(player.getName());
-                            mlgWarsScoreboard.setEndingScoreboard(player, "§cKein Team", "§c");
+                            this.mlgWarsScoreboard.setEndingScoreboard(player, "§cKein Team", "§c");
                             BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
 
                         });
 
-                        this.mlgWars.startTimerByClass(EndingTimer.class);
+                        mlgWars.startTimerByClass(EndingTimer.class);
                     }
                 }
             }

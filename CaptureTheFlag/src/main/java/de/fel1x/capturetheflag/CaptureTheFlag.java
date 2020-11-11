@@ -32,7 +32,6 @@ import java.util.stream.StreamSupport;
 public final class CaptureTheFlag extends JavaPlugin {
 
     public static CaptureTheFlag instance;
-    private final String prefix = "§9CaptureTheFlag §8● §r";
     private final PluginManager pluginManager = Bukkit.getPluginManager();
     private CrimxAPI crimxAPI;
     private ITimer iTimer;
@@ -56,14 +55,14 @@ public final class CaptureTheFlag extends JavaPlugin {
 
         new WorldLoader();
 
-        data = new Data();
-        inventoryManager = new InventoryManager(this);
-        inventoryManager.init();
+        this.data = new Data();
+        this.inventoryManager = new InventoryManager(this);
+        this.inventoryManager.init();
 
-        gamestateHandler = new GamestateHandler();
+        this.gamestateHandler = new GamestateHandler();
 
         new FlagHandler();
-        scoreboardHandler = new ScoreboardHandler();
+        this.scoreboardHandler = new ScoreboardHandler();
 
         this.registerListener();
         this.registerCommands();
@@ -134,11 +133,11 @@ public final class CaptureTheFlag extends JavaPlugin {
     }
 
     public CrimxAPI getCrimxAPI() {
-        return crimxAPI;
+        return this.crimxAPI;
     }
 
     public ITimer getiTimer() {
-        return iTimer;
+        return this.iTimer;
     }
 
     public void setiTimer(ITimer iTimer) {
@@ -146,26 +145,27 @@ public final class CaptureTheFlag extends JavaPlugin {
     }
 
     public PluginManager getPluginManager() {
-        return pluginManager;
+        return this.pluginManager;
     }
 
     public String getPrefix() {
+        String prefix = "§9CaptureTheFlag §8● §r";
         return prefix;
     }
 
     public GamestateHandler getGamestateHandler() {
-        return gamestateHandler;
+        return this.gamestateHandler;
     }
 
     public Data getData() {
-        return data;
+        return this.data;
     }
 
     public InventoryManager getInventoryManager() {
-        return inventoryManager;
+        return this.inventoryManager;
     }
 
     public ScoreboardHandler getScoreboardHandler() {
-        return scoreboardHandler;
+        return this.scoreboardHandler;
     }
 }

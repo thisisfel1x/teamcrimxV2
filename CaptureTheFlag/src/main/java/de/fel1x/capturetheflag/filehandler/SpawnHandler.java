@@ -12,8 +12,8 @@ import java.io.IOException;
 
 public class SpawnHandler {
 
-    private static File configfile = new File("plugins/CaptureTheFlag/", "spawns.yml");
-    private static FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
+    private static final File configfile = new File("plugins/CaptureTheFlag/", "spawns.yml");
+    private static final FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
 
     public static void saveLocation(Location location, String root, Player p) {
 

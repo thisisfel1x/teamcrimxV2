@@ -29,8 +29,8 @@ public class SettingsInventory implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
 
-        defaultSpawn = this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).isSpawnAtLastLocation();
-        hotbarSound = this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).isHotbarSoundEnabled();
+        this.defaultSpawn = this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).isSpawnAtLastLocation();
+        this.hotbarSound = this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).isHotbarSoundEnabled();
 
         contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
 
@@ -57,22 +57,22 @@ public class SettingsInventory implements InventoryProvider {
 
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
-        contents.set(2, 3, ClickableItem.of(new ItemBuilder((defaultSpawn) ? Material.LIME_DYE : Material.RED_DYE)
-                        .setName((defaultSpawn) ? "§aAktiviert" : "§cDeaktiviert")
+        contents.set(2, 3, ClickableItem.of(new ItemBuilder((this.defaultSpawn) ? Material.LIME_DYE : Material.RED_DYE)
+                        .setName((this.defaultSpawn) ? "§aAktiviert" : "§cDeaktiviert")
                         .toItemStack(),
                 event -> {
-                    defaultSpawn = !defaultSpawn;
-                    lobbyPlayer.saveObjectInDocument("defaultSpawn", defaultSpawn, MongoDBCollection.LOBBY);
-                    this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setSpawnAtLastLocation(defaultSpawn);
+                    this.defaultSpawn = !this.defaultSpawn;
+                    lobbyPlayer.saveObjectInDocument("defaultSpawn", this.defaultSpawn, MongoDBCollection.LOBBY);
+                    this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setSpawnAtLastLocation(this.defaultSpawn);
                 }));
 
-        contents.set(2, 5, ClickableItem.of(new ItemBuilder((hotbarSound) ? Material.LIME_DYE : Material.RED_DYE)
-                        .setName((hotbarSound) ? "§aAktiviert" : "§cDeaktiviert")
+        contents.set(2, 5, ClickableItem.of(new ItemBuilder((this.hotbarSound) ? Material.LIME_DYE : Material.RED_DYE)
+                        .setName((this.hotbarSound) ? "§aAktiviert" : "§cDeaktiviert")
                         .toItemStack(),
                 event -> {
-                    hotbarSound = !hotbarSound;
-                    lobbyPlayer.saveObjectInDocument("hotbarSound", hotbarSound, MongoDBCollection.LOBBY);
-                    this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setHotbarSoundEnabled(hotbarSound);
+                    this.hotbarSound = !this.hotbarSound;
+                    lobbyPlayer.saveObjectInDocument("hotbarSound", this.hotbarSound, MongoDBCollection.LOBBY);
+                    this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setHotbarSoundEnabled(this.hotbarSound);
                 }));
     }
 }

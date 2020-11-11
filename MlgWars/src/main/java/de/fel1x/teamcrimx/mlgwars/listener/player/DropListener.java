@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 public class DropListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public DropListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;

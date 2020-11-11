@@ -34,7 +34,7 @@ public class IdleTimer implements ITimer {
     public void stop() {
         if (this.running) {
             this.running = false;
-            Bukkit.getScheduler().cancelTask(taskId);
+            Bukkit.getScheduler().cancelTask(this.taskId);
         }
 
     }

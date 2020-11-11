@@ -12,8 +12,8 @@ public enum Team {
     RED("§cRot", new ArrayList<>()),
     BLUE("§9Blau", new ArrayList<>());
 
-    private String teamName;
-    private List<Player> teamPlayers;
+    private final String teamName;
+    private final List<Player> teamPlayers;
 
     Team(String teamName, List<Player> teamPlayers) {
         this.teamName = teamName;
@@ -21,10 +21,10 @@ public enum Team {
     }
 
     public List<Player> getTeamPlayers() {
-        return teamPlayers;
+        return this.teamPlayers;
     }
 
     public String getTeamName() {
-        return teamName;
+        return this.teamName;
     }
 }

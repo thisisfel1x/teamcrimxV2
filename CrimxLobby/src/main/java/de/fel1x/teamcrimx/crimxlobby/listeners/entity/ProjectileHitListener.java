@@ -11,11 +11,8 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class ProjectileHitListener implements Listener {
 
-    private CrimxLobby crimxLobby;
-
     public ProjectileHitListener(CrimxLobby crimxLobby) {
-        this.crimxLobby = crimxLobby;
-        this.crimxLobby.getPluginManager().registerEvents(this, this.crimxLobby);
+        crimxLobby.getPluginManager().registerEvents(this, crimxLobby);
     }
 
     @EventHandler

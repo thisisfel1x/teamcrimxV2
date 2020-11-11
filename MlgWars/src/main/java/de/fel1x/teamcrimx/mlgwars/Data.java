@@ -72,23 +72,23 @@ public class Data {
     }
 
     public List<Player> getPlayers() {
-        return players;
+        return this.players;
     }
 
     public List<Player> getSpectators() {
-        return spectators;
+        return this.spectators;
     }
 
     public Map<Player, Player> getLastHit() {
-        return lastHit;
+        return this.lastHit;
     }
 
     public List<Location> getPlayerSpawns() {
-        return playerSpawns;
+        return this.playerSpawns;
     }
 
     public Cuboid getMiddleRegion() {
-        return middleRegion;
+        return this.middleRegion;
     }
 
     public void setMiddleRegion(Cuboid middleRegion) {
@@ -96,7 +96,7 @@ public class Data {
     }
 
     public Cuboid getMapRegion() {
-        return mapRegion;
+        return this.mapRegion;
     }
 
     public void setMapRegion(Cuboid mapRegion) {
@@ -104,58 +104,58 @@ public class Data {
     }
 
     public Map<UUID, Long> getPlayTime() {
-        return playTime;
+        return this.playTime;
     }
 
     public Map<UUID, Document> getMlgWarsPlayerDocument() {
-        return mlgWarsPlayerDocument;
+        return this.mlgWarsPlayerDocument;
     }
 
     public Map<UUID, Document> getNetworkPlayerDocument() {
-        return networkPlayerDocument;
+        return this.networkPlayerDocument;
     }
 
     public Map<Player, Kit> getSelectedKit() {
-        return selectedKit;
+        return this.selectedKit;
     }
 
     public Map<UUID, Boolean> getPlayerGg() {
-        return playerGg;
+        return this.playerGg;
     }
 
     public Map<UUID, ArrayList<Block>> getPlacedExploderTnt() {
-        return placedExploderTnt;
+        return this.placedExploderTnt;
     }
 
     public Map<UUID, BukkitRunnable> getThorTask() {
-        return thorTask;
+        return this.thorTask;
     }
 
     public Map<UUID, BukkitRunnable> getKangarooTask() {
-        return kangarooTask;
+        return this.kangarooTask;
     }
 
     public Map<UUID, ArrayList<BukkitRunnable>> getEggTask() {
-        return eggTask;
+        return this.eggTask;
     }
 
     public Map<UUID, BukkitRunnable> getFarmerTask() {
-        return farmerTask;
+        return this.farmerTask;
     }
 
     public Map<UUID, ArrayList<BukkitRunnable>> getTurtleTask() {
-        return turtleTask;
+        return this.turtleTask;
     }
 
     public Map<UUID, BukkitRunnable> getTeleporterTask() {
-        return teleporterTask;
+        return this.teleporterTask;
     }
 
     public Map<UUID, ArrayList<BukkitRunnable>> getCsgoTasks() {
-        return csgoTasks;
+        return this.csgoTasks;
     }
 
     public Map<Integer, ScoreboardTeam> getGameTeams() {
-        return gameTeams;
+        return this.gameTeams;
     }
 }

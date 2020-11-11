@@ -7,11 +7,8 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 
 public class ToggleFlightListener implements Listener {
 
-    private MlgWars mlgWars;
-
     public ToggleFlightListener(MlgWars mlgWars) {
-        this.mlgWars = mlgWars;
-        this.mlgWars.getPluginManager().registerEvents(this, this.mlgWars);
+        mlgWars.getPluginManager().registerEvents(this, mlgWars);
     }
 
     @EventHandler

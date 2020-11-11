@@ -14,8 +14,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class DeathListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
-    private Data data;
+    private final CaptureTheFlag captureTheFlag;
+    private final Data data;
 
     public DeathListener(CaptureTheFlag captureTheFlag) {
         this.captureTheFlag = captureTheFlag;
@@ -43,11 +43,11 @@ public class DeathListener implements Listener {
         event.getDrops().clear();
 
         if (gamestate.equals(Gamestate.INGAME)) {
-            if (player.equals(data.getRedFlagHolder())) {
+            if (player.equals(this.data.getRedFlagHolder())) {
                 player.sendMessage(this.captureTheFlag.getPrefix() + "§cDu hast die Flagge verloren!");
                 player.setGlowing(false);
 
-                data.setRedFlagHolder(null);
+                this.data.setRedFlagHolder(null);
 
                 Block block = location.getBlock();
 
@@ -63,11 +63,11 @@ public class DeathListener implements Listener {
 
             }
 
-            if (player.equals(data.getBlueFlagHolder())) {
+            if (player.equals(this.data.getBlueFlagHolder())) {
                 player.sendMessage(this.captureTheFlag.getPrefix() + "§cDu hast die Flagge verloren!");
                 player.setGlowing(false);
 
-                data.setBlueFlagHolder(null);
+                this.data.setBlueFlagHolder(null);
 
                 Block block = location.getBlock();
 
@@ -85,9 +85,9 @@ public class DeathListener implements Listener {
 
         Player attacker = null;
 
-        if (data.getLastHit().get(player) != null) {
+        if (this.data.getLastHit().get(player) != null) {
 
-            attacker = data.getLastHit().get(player);
+            attacker = this.data.getLastHit().get(player);
 
         } else {
 

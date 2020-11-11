@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 public class DropListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
+    private final CaptureTheFlag captureTheFlag;
 
     public DropListener(CaptureTheFlag captureTheFlag) {
         this.captureTheFlag = captureTheFlag;

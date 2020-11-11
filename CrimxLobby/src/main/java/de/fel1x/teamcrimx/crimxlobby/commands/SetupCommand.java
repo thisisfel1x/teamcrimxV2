@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
 
 public class SetupCommand implements CommandExecutor {
 
-    private CrimxLobby crimxLobby;
-    private SpawnManager spawnManager;
+    private final CrimxLobby crimxLobby;
+    private final SpawnManager spawnManager;
 
     public SetupCommand(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;
@@ -31,7 +31,7 @@ public class SetupCommand implements CommandExecutor {
 
         if (args.length == 0) {
 
-            player.sendMessage(crimxLobby.getPrefix() + "§cNutze /setup <setspawn>|<setspawnnpc>|<mlgwars>|<mlgwarsnpc> etc.");
+            player.sendMessage(this.crimxLobby.getPrefix() + "§cNutze /setup <setspawn>|<setspawnnpc>|<mlgwars>|<mlgwarsnpc> etc.");
 
         } else if (args.length == 1) {
 

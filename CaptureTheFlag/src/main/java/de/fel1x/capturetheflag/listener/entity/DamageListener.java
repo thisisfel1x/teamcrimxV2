@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class DamageListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
+    private final CaptureTheFlag captureTheFlag;
 
     public DamageListener(CaptureTheFlag captureTheFlag) {
         this.captureTheFlag = captureTheFlag;

@@ -18,7 +18,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class InteractListener implements Listener {
 
-    private CrimxLobby crimxLobby;
+    private final CrimxLobby crimxLobby;
 
     public InteractListener(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;

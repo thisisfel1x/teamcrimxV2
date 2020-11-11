@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityTargetEvent;
 
 public class EntityTargetListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public EntityTargetListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;

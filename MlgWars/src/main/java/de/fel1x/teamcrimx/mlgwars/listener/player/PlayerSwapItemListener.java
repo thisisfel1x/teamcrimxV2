@@ -7,11 +7,8 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 public class PlayerSwapItemListener implements Listener {
 
-    private MlgWars mlgWars;
-
     public PlayerSwapItemListener(MlgWars mlgWars) {
-        this.mlgWars = mlgWars;
-        this.mlgWars.getPluginManager().registerEvents(this, this.mlgWars);
+        mlgWars.getPluginManager().registerEvents(this, mlgWars);
     }
 
     @EventHandler

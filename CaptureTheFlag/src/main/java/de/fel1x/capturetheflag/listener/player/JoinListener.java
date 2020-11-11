@@ -62,7 +62,7 @@ public class JoinListener implements Listener {
 
                 event.setJoinMessage("§8» " + player.getDisplayName() + " §7hat das Spiel betreten!");
 
-                if (data.getPlayers().size() >= 6) {
+                if (this.data.getPlayers().size() >= 6) {
                     this.captureTheFlag.startTimerByClass(LobbyTimer.class);
                 }
 

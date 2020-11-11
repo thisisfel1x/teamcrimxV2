@@ -502,7 +502,7 @@ public enum Particles {
      * @return The name
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -511,7 +511,7 @@ public enum Particles {
      * @return The id
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -520,7 +520,7 @@ public enum Particles {
      * @return The required version
      */
     public int getRequiredVersion() {
-        return requiredVersion;
+        return this.requiredVersion;
     }
 
     /**
@@ -529,7 +529,7 @@ public enum Particles {
      * @return Whether it has the property or not
      */
     public boolean hasProperty(ParticleProperty property) {
-        return properties.contains(property);
+        return this.properties.contains(property);
     }
 
     /**
@@ -538,7 +538,7 @@ public enum Particles {
      * @return Whether the particle effect is supported or not
      */
     public boolean isSupported() {
-        return requiredVersion == -1 || ParticlePacket.getVersion() >= requiredVersion;
+        return this.requiredVersion == -1 || ParticlePacket.getVersion() >= this.requiredVersion;
     }
 
     /**
@@ -958,7 +958,7 @@ public enum Particles {
          * @return The material
          */
         public Material getMaterial() {
-            return material;
+            return this.material;
         }
 
         /**
@@ -967,7 +967,7 @@ public enum Particles {
          * @return The data value
          */
         public byte getData() {
-            return data;
+            return this.data;
         }
 
         /**
@@ -976,7 +976,7 @@ public enum Particles {
          * @return The data for the packet
          */
         public int[] getPacketData() {
-            return packetData;
+            return this.packetData;
         }
 
         /**
@@ -985,7 +985,7 @@ public enum Particles {
          * @return The data string for the packet
          */
         public String getPacketDataString() {
-            return "_" + packetData[0] + "_" + packetData[1];
+            return "_" + this.packetData[0] + "_" + this.packetData[1];
         }
     }
 
@@ -1108,7 +1108,7 @@ public enum Particles {
          * @return The red value
          */
         public int getRed() {
-            return red;
+            return this.red;
         }
 
         /**
@@ -1117,7 +1117,7 @@ public enum Particles {
          * @return The green value
          */
         public int getGreen() {
-            return green;
+            return this.green;
         }
 
         /**
@@ -1126,7 +1126,7 @@ public enum Particles {
          * @return The blue value
          */
         public int getBlue() {
-            return blue;
+            return this.blue;
         }
 
         /**
@@ -1136,7 +1136,7 @@ public enum Particles {
          */
         @Override
         public float getValueX() {
-            return (float) red / 255F;
+            return (float) this.red / 255F;
         }
 
         /**
@@ -1146,7 +1146,7 @@ public enum Particles {
          */
         @Override
         public float getValueY() {
-            return (float) green / 255F;
+            return (float) this.green / 255F;
         }
 
         /**
@@ -1156,7 +1156,7 @@ public enum Particles {
          */
         @Override
         public float getValueZ() {
-            return (float) blue / 255F;
+            return (float) this.blue / 255F;
         }
     }
 
@@ -1194,7 +1194,7 @@ public enum Particles {
          */
         @Override
         public float getValueX() {
-            return (float) note / 24F;
+            return (float) this.note / 24F;
         }
 
         /**
@@ -1365,7 +1365,7 @@ public enum Particles {
         public ParticlePacket(Particles effect, ParticleColor color, boolean longDistance) {
             this(effect, color.getValueX(), color.getValueY(), color.getValueZ(), 1, 0, longDistance, null);
             if (effect == Particles.REDSTONE && color instanceof OrdinaryColor && ((OrdinaryColor) color).getRed() == 0) {
-                offsetX = Float.MIN_NORMAL;
+                this.offsetX = Float.MIN_NORMAL;
             }
         }
 
@@ -1430,34 +1430,34 @@ public enum Particles {
          * @throws PacketInstantiationException If instantion fails due to an unknown error
          */
         private void initializePacket(Location center) throws PacketInstantiationException {
-            if (packet != null) {
+            if (this.packet != null) {
                 return;
             }
             if (!useSendParticle) {
                 try {
-                    packet = packetConstructor.newInstance();
+                    this.packet = packetConstructor.newInstance();
                     if (version < 8) {
-                        String name = effect.getName();
-                        if (data != null) {
-                            name += data.getPacketDataString();
+                        String name = this.effect.getName();
+                        if (this.data != null) {
+                            name += this.data.getPacketDataString();
                         }
-                        ReflectionUtils.setValue(packet, true, "a", name);
+                        ReflectionUtils.setValue(this.packet, true, "a", name);
                     } else {
-                        ReflectionUtils.setValue(packet, true, "a", enumParticle.getEnumConstants()[effect.getId()]);
-                        ReflectionUtils.setValue(packet, true, "j", longDistance);
-                        if (data != null) {
-                            int[] packetData = data.getPacketData();
-                            ReflectionUtils.setValue(packet, true, "k", effect == Particles.ITEM_CRACK ? packetData : new int[]{packetData[0] | (packetData[1] << 12)});
+                        ReflectionUtils.setValue(this.packet, true, "a", enumParticle.getEnumConstants()[this.effect.getId()]);
+                        ReflectionUtils.setValue(this.packet, true, "j", this.longDistance);
+                        if (this.data != null) {
+                            int[] packetData = this.data.getPacketData();
+                            ReflectionUtils.setValue(this.packet, true, "k", this.effect == Particles.ITEM_CRACK ? packetData : new int[]{packetData[0] | (packetData[1] << 12)});
                         }
                     }
-                    ReflectionUtils.setValue(packet, true, "b", (float) center.getX());
-                    ReflectionUtils.setValue(packet, true, "c", (float) center.getY());
-                    ReflectionUtils.setValue(packet, true, "d", (float) center.getZ());
-                    ReflectionUtils.setValue(packet, true, "e", offsetX);
-                    ReflectionUtils.setValue(packet, true, "f", offsetY);
-                    ReflectionUtils.setValue(packet, true, "g", offsetZ);
-                    ReflectionUtils.setValue(packet, true, "h", speed);
-                    ReflectionUtils.setValue(packet, true, "i", amount);
+                    ReflectionUtils.setValue(this.packet, true, "b", (float) center.getX());
+                    ReflectionUtils.setValue(this.packet, true, "c", (float) center.getY());
+                    ReflectionUtils.setValue(this.packet, true, "d", (float) center.getZ());
+                    ReflectionUtils.setValue(this.packet, true, "e", this.offsetX);
+                    ReflectionUtils.setValue(this.packet, true, "f", this.offsetY);
+                    ReflectionUtils.setValue(this.packet, true, "g", this.offsetZ);
+                    ReflectionUtils.setValue(this.packet, true, "h", this.speed);
+                    ReflectionUtils.setValue(this.packet, true, "i", this.amount);
                 } catch (Exception exception) {
                     throw new PacketInstantiationException("Packet instantiation failed", exception);
                 }
@@ -1479,7 +1479,7 @@ public enum Particles {
                 return;
             }
             try {
-                sendPacket.invoke(playerConnection.get(getHandle.invoke(player)), packet);
+                sendPacket.invoke(playerConnection.get(getHandle.invoke(player)), this.packet);
             } catch (Exception exception) {
                 throw new PacketSendingException("Failed to send the packet to player '" + player.getName() + "'", exception);
             }

@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 
 public class ItemHeldListener implements Listener {
 
-    private CrimxLobby crimxLobby;
+    private final CrimxLobby crimxLobby;
 
     public ItemHeldListener(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;

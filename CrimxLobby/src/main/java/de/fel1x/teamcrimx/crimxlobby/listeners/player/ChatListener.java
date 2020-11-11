@@ -12,11 +12,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
 
-    private CrimxLobby crimxLobby;
-
     public ChatListener(CrimxLobby crimxLobby) {
-        this.crimxLobby = crimxLobby;
-        this.crimxLobby.getPluginManager().registerEvents(this, this.crimxLobby);
+        crimxLobby.getPluginManager().registerEvents(this, crimxLobby);
     }
 
     @EventHandler

@@ -48,21 +48,21 @@ public class InGameTimer implements ITimer {
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
 
                 if (this.mlgWars.isLabor()) {
-                    spawnTime++;
+                    this.spawnTime++;
 
-                    if (spawnTime % 30 == 0) {
+                    if (this.spawnTime % 30 == 0) {
                         Cuboid middleCuboid = this.mlgWars.getData().getMiddleRegion();
                         Location center = middleCuboid.getCenter();
 
                         for (int i = 0; i < 5; i++) {
-                            int x = random.nextInt(15) * (random.nextBoolean() ? 1 : -1);
-                            int z = random.nextInt(15) * (random.nextBoolean() ? 1 : -1);
+                            int x = this.random.nextInt(15) * (this.random.nextBoolean() ? 1 : -1);
+                            int z = this.random.nextInt(15) * (this.random.nextBoolean() ? 1 : -1);
 
                             Block block = center.getWorld().getHighestBlockAt(x, z);
 
                             while (block.getType() == Material.AIR) {
-                                x = random.nextInt(15) * (random.nextBoolean() ? 1 : -1);
-                                z = random.nextInt(15) * (random.nextBoolean() ? 1 : -1);
+                                x = this.random.nextInt(15) * (this.random.nextBoolean() ? 1 : -1);
+                                z = this.random.nextInt(15) * (this.random.nextBoolean() ? 1 : -1);
 
                                 block = center.getWorld().getHighestBlockAt(x, z);
                             }
@@ -74,7 +74,7 @@ public class InGameTimer implements ITimer {
 
                     }
 
-                    if (spawnTime % 60 == 0) {
+                    if (this.spawnTime % 60 == 0) {
                         Cuboid middleCuboid = this.mlgWars.getData().getMiddleRegion();
                         Location center = middleCuboid.getCenter();
 
@@ -140,7 +140,7 @@ public class InGameTimer implements ITimer {
     @Override
     public void stop() {
         if (this.running) {
-            Bukkit.getScheduler().cancelTask(taskId);
+            Bukkit.getScheduler().cancelTask(this.taskId);
             this.running = false;
         }
     }

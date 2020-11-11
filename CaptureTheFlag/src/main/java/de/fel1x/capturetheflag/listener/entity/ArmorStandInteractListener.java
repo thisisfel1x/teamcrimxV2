@@ -7,11 +7,8 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 
 public class ArmorStandInteractListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
-
     public ArmorStandInteractListener(CaptureTheFlag captureTheFlag) {
-        this.captureTheFlag = captureTheFlag;
-        this.captureTheFlag.getPluginManager().registerEvents(this, this.captureTheFlag);
+        captureTheFlag.getPluginManager().registerEvents(this, captureTheFlag);
     }
 
     @EventHandler

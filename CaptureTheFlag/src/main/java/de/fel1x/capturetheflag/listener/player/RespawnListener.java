@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class RespawnListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
+    private final CaptureTheFlag captureTheFlag;
 
     public RespawnListener(CaptureTheFlag captureTheFlag) {
         this.captureTheFlag = captureTheFlag;

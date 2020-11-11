@@ -61,7 +61,7 @@ public class MoveListener implements Listener {
 
         if (lobbyPlayer.isInJumpAndRun()) {
 
-            JumpAndRunPlayer jumpAndRunPlayer = crimxLobby.getData().getJumpAndRunPlayers().get(player.getUniqueId());
+            JumpAndRunPlayer jumpAndRunPlayer = this.crimxLobby.getData().getJumpAndRunPlayers().get(player.getUniqueId());
 
             Block block = player.getLocation().clone().add(0, -1, 0).getBlock();
 

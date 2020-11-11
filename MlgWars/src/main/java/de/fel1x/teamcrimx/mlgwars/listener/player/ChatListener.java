@@ -16,7 +16,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public ChatListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
@@ -28,7 +28,7 @@ public class ChatListener implements Listener {
 
         Player player = event.getPlayer();
         GamePlayer gamePlayer = new GamePlayer(player);
-        Gamestate currentState = mlgWars.getGamestateHandler().getGamestate();
+        Gamestate currentState = this.mlgWars.getGamestateHandler().getGamestate();
 
         IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(player.getUniqueId());
 

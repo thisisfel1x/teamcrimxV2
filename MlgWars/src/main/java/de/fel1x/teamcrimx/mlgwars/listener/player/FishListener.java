@@ -16,7 +16,7 @@ import org.bukkit.util.Vector;
 
 public class FishListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public FishListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;

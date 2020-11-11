@@ -67,9 +67,9 @@ public class MoveListener implements Listener {
 
                 if (gamePlayer.isPlayer()) {
 
-                    if (!borderPlayers.contains(player)) {
+                    if (!this.borderPlayers.contains(player)) {
                         player.sendMessage(this.mlgWars.getPrefix() + "§cDu darfst die Map nicht verlassen!");
-                        borderPlayers.add(player);
+                        this.borderPlayers.add(player);
 
                         player.setVelocity(vector);
                         player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, 5, 3);
@@ -81,7 +81,7 @@ public class MoveListener implements Listener {
                             player.setHealth(0);
                         }
 
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(MlgWars.getInstance(), () -> borderPlayers.remove(player), 30L);
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(MlgWars.getInstance(), () -> this.borderPlayers.remove(player), 30L);
                     }
 
                 } else {

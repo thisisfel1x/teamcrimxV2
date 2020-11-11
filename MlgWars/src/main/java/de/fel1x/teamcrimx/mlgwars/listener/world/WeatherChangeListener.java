@@ -7,11 +7,8 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 
 public class WeatherChangeListener implements Listener {
 
-    private final MlgWars mlgWars;
-
     public WeatherChangeListener(MlgWars mlgWars) {
-        this.mlgWars = mlgWars;
-        this.mlgWars.getPluginManager().registerEvents(this, this.mlgWars);
+        mlgWars.getPluginManager().registerEvents(this, mlgWars);
     }
 
     @EventHandler

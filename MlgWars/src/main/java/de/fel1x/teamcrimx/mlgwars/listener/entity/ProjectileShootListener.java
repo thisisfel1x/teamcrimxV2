@@ -12,7 +12,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class ProjectileShootListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public ProjectileShootListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;

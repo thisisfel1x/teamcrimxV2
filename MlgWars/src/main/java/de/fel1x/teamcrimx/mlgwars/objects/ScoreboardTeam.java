@@ -21,7 +21,7 @@ public class ScoreboardTeam {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -29,7 +29,7 @@ public class ScoreboardTeam {
     }
 
     public int getTeamId() {
-        return teamId;
+        return this.teamId;
     }
 
     public void setTeamId(int teamId) {
@@ -37,7 +37,7 @@ public class ScoreboardTeam {
     }
 
     public int getMaxPlayers() {
-        return maxPlayers;
+        return this.maxPlayers;
     }
 
     public void setMaxPlayers(int maxPlayers) {
@@ -45,7 +45,7 @@ public class ScoreboardTeam {
     }
 
     public ArrayList<Player> getTeamPlayers() {
-        return teamPlayers;
+        return this.teamPlayers;
     }
 
     public void setTeamPlayers(ArrayList<Player> teamPlayers) {
@@ -53,7 +53,7 @@ public class ScoreboardTeam {
     }
 
     public ArrayList<Player> getAlivePlayers() {
-        return alivePlayers;
+        return this.alivePlayers;
     }
 
     public void setAlivePlayers(ArrayList<Player> alivePlayers) {

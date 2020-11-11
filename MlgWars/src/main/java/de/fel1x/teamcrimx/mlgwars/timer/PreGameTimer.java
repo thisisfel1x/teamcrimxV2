@@ -28,7 +28,7 @@ public class PreGameTimer implements ITimer {
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
 
-                switch (countdown) {
+                switch (this.countdown) {
                     case 30:
                     case 20:
                     case 10:
@@ -38,7 +38,7 @@ public class PreGameTimer implements ITimer {
                     case 2:
                     case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Die Schutzzeit endet in §e"
-                                + (countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
+                                + (this.countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
                         Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(),
                                 Sound.BLOCK_NOTE_BLOCK_BASS, 2f, 3f));
                         break;
@@ -90,7 +90,7 @@ public class PreGameTimer implements ITimer {
     @Override
     public void stop() {
         if (this.running) {
-            Bukkit.getScheduler().cancelTask(taskId);
+            Bukkit.getScheduler().cancelTask(this.taskId);
             this.running = false;
             this.countdown = 60;
         }

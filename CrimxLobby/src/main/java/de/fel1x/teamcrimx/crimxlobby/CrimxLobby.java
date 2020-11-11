@@ -30,7 +30,6 @@ public final class CrimxLobby extends JavaPlugin {
 
     private static CrimxLobby instance;
     int actionBarCount;
-    private String prefix = "§aCrimx§lLobby §8● §r";
     private int actionbarTimer = 0;
     private Data data;
     private CrimxAPI crimxAPI;
@@ -38,7 +37,7 @@ public final class CrimxLobby extends JavaPlugin {
     private NPCPool npcPool;
     private NPCLib npcLib;
     private InventoryManager inventoryManager;
-    private SpawnManager spawnManager = new SpawnManager();
+    private final SpawnManager spawnManager = new SpawnManager();
     private WaterMlgHandler waterMlgHandler;
     private LobbyScoreboard lobbyScoreboard;
 
@@ -153,7 +152,7 @@ public final class CrimxLobby extends JavaPlugin {
 
     private void runMainScheduler() {
 
-        actionBarCount = 0;
+        this.actionBarCount = 0;
         List<String> actionBarMessages = this.getConfig().getStringList("actionbar");
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> this.getData().getHueMap().forEach(((uuid, hue) -> {
@@ -170,14 +169,14 @@ public final class CrimxLobby extends JavaPlugin {
         })), 0L, 3L);
 
         Bukkit.getScheduler().runTaskTimer(this, () -> {
-            Bukkit.getOnlinePlayers().forEach(player -> Actionbar.sendActionbar(player, actionBarMessages.get(actionBarCount).replace('&', '§')));
+            Bukkit.getOnlinePlayers().forEach(player -> Actionbar.sendActionbar(player, actionBarMessages.get(this.actionBarCount).replace('&', '§')));
 
             this.actionbarTimer++;
             if (this.actionbarTimer % 10 == 0) {
-                if (actionBarCount + 1 < actionBarMessages.size()) {
-                    actionBarCount++;
+                if (this.actionBarCount + 1 < actionBarMessages.size()) {
+                    this.actionBarCount++;
                 } else {
-                    actionBarCount = 0;
+                    this.actionBarCount = 0;
                 }
             }
         }, 0L, 20L);
@@ -185,42 +184,43 @@ public final class CrimxLobby extends JavaPlugin {
     }
 
     public String getPrefix() {
+        String prefix = "§aCrimx§lLobby §8● §r";
         return prefix;
     }
 
     public CrimxAPI getCrimxAPI() {
-        return crimxAPI;
+        return this.crimxAPI;
     }
 
     public PluginManager getPluginManager() {
-        return pluginManager;
+        return this.pluginManager;
     }
 
     public Data getData() {
-        return data;
+        return this.data;
     }
 
     public NPCPool getNpcPool() {
-        return npcPool;
+        return this.npcPool;
     }
 
     public NPCLib getNpcLib() {
-        return npcLib;
+        return this.npcLib;
     }
 
     public InventoryManager getInventoryManager() {
-        return inventoryManager;
+        return this.inventoryManager;
     }
 
     public SpawnManager getSpawnManager() {
-        return spawnManager;
+        return this.spawnManager;
     }
 
     public WaterMlgHandler getWaterMlgHandler() {
-        return waterMlgHandler;
+        return this.waterMlgHandler;
     }
 
     public LobbyScoreboard getLobbyScoreboard() {
-        return lobbyScoreboard;
+        return this.lobbyScoreboard;
     }
 }

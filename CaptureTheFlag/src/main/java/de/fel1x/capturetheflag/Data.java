@@ -15,20 +15,20 @@ public class Data {
 
     Location redSpawnLocation;
     Location blueSpawnLocation;
-    private List<Player> players;
-    private List<Player> spectators;
-    private Map<Player, Player> lastHit;
-    private Map<Player, Kit> selectedKit;
-    private Map<Player, Stats> cachedStats;
-    private Map<UUID, Boolean> playerGG;
-    private Map<UUID, Long> playTime;
+    private final List<Player> players;
+    private final List<Player> spectators;
+    private final Map<Player, Player> lastHit;
+    private final Map<Player, Kit> selectedKit;
+    private final Map<Player, Stats> cachedStats;
+    private final Map<UUID, Boolean> playerGG;
+    private final Map<UUID, Long> playTime;
     private Player redFlagHolder;
     private Location redFlagBaseLocation;
     private Player blueFlagHolder;
     private Location blueFlagBaseLocation;
-    private List<Block> placedBlocks;
-    private Cuboid redSpawnCuboid;
-    private Cuboid blueSpawnCuboid;
+    private final List<Block> placedBlocks;
+    private final Cuboid redSpawnCuboid;
+    private final Cuboid blueSpawnCuboid;
 
     public Data() {
 
@@ -61,25 +61,25 @@ public class Data {
 
         this.blueFlagHolder = null;
 
-        this.redSpawnCuboid = new Cuboid(redSpawnLocation.clone().add(4, -4, 4), redSpawnLocation.clone().add(-4, 4, -4));
-        this.blueSpawnCuboid = new Cuboid(blueSpawnLocation.clone().add(4, -4, 4), blueSpawnLocation.clone().add(-4, 4, -4));
+        this.redSpawnCuboid = new Cuboid(this.redSpawnLocation.clone().add(4, -4, 4), this.redSpawnLocation.clone().add(-4, 4, -4));
+        this.blueSpawnCuboid = new Cuboid(this.blueSpawnLocation.clone().add(4, -4, 4), this.blueSpawnLocation.clone().add(-4, 4, -4));
 
     }
 
     public Map<Player, Kit> getSelectedKit() {
-        return selectedKit;
+        return this.selectedKit;
     }
 
     public List<Player> getPlayers() {
-        return players;
+        return this.players;
     }
 
     public List<Player> getSpectators() {
-        return spectators;
+        return this.spectators;
     }
 
     public Player getBlueFlagHolder() {
-        return blueFlagHolder;
+        return this.blueFlagHolder;
     }
 
     public void setBlueFlagHolder(Player blueFlagHolder) {
@@ -87,7 +87,7 @@ public class Data {
     }
 
     public Player getRedFlagHolder() {
-        return redFlagHolder;
+        return this.redFlagHolder;
 
     }
 
@@ -96,7 +96,7 @@ public class Data {
     }
 
     public Location getRedFlagBaseLocation() {
-        return redFlagBaseLocation;
+        return this.redFlagBaseLocation;
     }
 
     public void setRedFlagBaseLocation(Location redFlagBaseLocation) {
@@ -104,7 +104,7 @@ public class Data {
     }
 
     public Location getBlueFlagBaseLocation() {
-        return blueFlagBaseLocation;
+        return this.blueFlagBaseLocation;
     }
 
     public void setBlueFlagBaseLocation(Location blueFlagBaseLocation) {
@@ -112,30 +112,30 @@ public class Data {
     }
 
     public Map<Player, Player> getLastHit() {
-        return lastHit;
+        return this.lastHit;
     }
 
     public List<Block> getPlacedBlocks() {
-        return placedBlocks;
+        return this.placedBlocks;
     }
 
     public Cuboid getBlueSpawnCuboid() {
-        return blueSpawnCuboid;
+        return this.blueSpawnCuboid;
     }
 
     public Cuboid getRedSpawnCuboid() {
-        return redSpawnCuboid;
+        return this.redSpawnCuboid;
     }
 
     public Map<Player, Stats> getCachedStats() {
-        return cachedStats;
+        return this.cachedStats;
     }
 
     public Map<UUID, Boolean> getPlayerGG() {
-        return playerGG;
+        return this.playerGG;
     }
 
     public Map<UUID, Long> getPlayTime() {
-        return playTime;
+        return this.playTime;
     }
 }

@@ -20,11 +20,11 @@ public class MapHandler {
 
     public void createMap(String name, Size size) {
 
-        configfile = new File("plugins/MlgWars/maps", name + ".yml");
-        config = YamlConfiguration.loadConfiguration(configfile);
+        this.configfile = new File("plugins/MlgWars/maps", name + ".yml");
+        this.config = YamlConfiguration.loadConfiguration(this.configfile);
 
-        config.set("name", name);
-        config.set("size", size.getName());
+        this.config.set("name", name);
+        this.config.set("size", size.getName());
 
         try {
             this.save();
@@ -35,27 +35,27 @@ public class MapHandler {
     }
 
     public void save() throws IOException {
-        config.save(configfile);
+        this.config.save(this.configfile);
     }
 
     public void saveLocation(Location location, String mapName, String root, Player player) {
 
-        configfile = new File("plugins/MlgWars/maps", mapName + ".yml");
-        config = YamlConfiguration.loadConfiguration(configfile);
+        this.configfile = new File("plugins/MlgWars/maps", mapName + ".yml");
+        this.config = YamlConfiguration.loadConfiguration(this.configfile);
 
-        config.set(root + ".World", location.getWorld().getName());
-        config.set(root + ".X", location.getX());
-        config.set(root + ".Y", location.getY());
-        config.set(root + ".Z", location.getZ());
-        config.set(root + ".Yaw", location.getYaw());
-        config.set(root + ".Pitch", location.getPitch());
-        config.set(root, location);
+        this.config.set(root + ".World", location.getWorld().getName());
+        this.config.set(root + ".X", location.getX());
+        this.config.set(root + ".Y", location.getY());
+        this.config.set(root + ".Z", location.getZ());
+        this.config.set(root + ".Yaw", location.getYaw());
+        this.config.set(root + ".Pitch", location.getPitch());
+        this.config.set(root, location);
 
 
-        config.options().copyDefaults(true);
+        this.config.options().copyDefaults(true);
 
         try {
-            config.save(configfile);
+            this.config.save(this.configfile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,26 +66,26 @@ public class MapHandler {
 
     public Location loadLocation(String mapName, String id) {
 
-        configfile = new File("plugins/MlgWars/maps", mapName + ".yml");
-        config = YamlConfiguration.loadConfiguration(configfile);
+        this.configfile = new File("plugins/MlgWars/maps", mapName + ".yml");
+        this.config = YamlConfiguration.loadConfiguration(this.configfile);
 
-        config.options().copyDefaults(true);
+        this.config.options().copyDefaults(true);
 
-        if (configfile.exists()) {
+        if (this.configfile.exists()) {
 
             try {
-                config.load(configfile);
+                this.config.load(this.configfile);
             } catch (IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
 
-            if (config.get(id) != null) {
-                World world = Bukkit.getWorld(Objects.requireNonNull(config.getString(id + ".World")));
-                double x = config.getDouble(id + ".X");
-                double y = config.getDouble(id + ".Y");
-                double z = config.getDouble(id + ".Z");
-                float yaw = (float) config.getDouble(id + ".Yaw");
-                float pitch = (float) config.getDouble(id + ".Pitch");
+            if (this.config.get(id) != null) {
+                World world = Bukkit.getWorld(Objects.requireNonNull(this.config.getString(id + ".World")));
+                double x = this.config.getDouble(id + ".X");
+                double y = this.config.getDouble(id + ".Y");
+                double z = this.config.getDouble(id + ".Z");
+                float yaw = (float) this.config.getDouble(id + ".Yaw");
+                float pitch = (float) this.config.getDouble(id + ".Pitch");
 
                 return new Location(world, x, y, z, yaw, pitch);
 
@@ -101,13 +101,13 @@ public class MapHandler {
 
     public Size getSize(String mapName) {
 
-        configfile = new File("plugins/MlgWars/maps", mapName + ".yml");
-        config = YamlConfiguration.loadConfiguration(configfile);
+        this.configfile = new File("plugins/MlgWars/maps", mapName + ".yml");
+        this.config = YamlConfiguration.loadConfiguration(this.configfile);
 
-        if (configfile.exists()) {
+        if (this.configfile.exists()) {
 
             for (Size size : Size.values()) {
-                if (size.getName().equals(config.get("size"))) {
+                if (size.getName().equals(this.config.get("size"))) {
                     return size;
                 }
             }
@@ -120,15 +120,15 @@ public class MapHandler {
 
     public String getWorld(String mapName, String root) {
 
-        configfile = new File("plugins/MlgWars/maps", mapName + ".yml");
-        return config.getString(root + ".World");
+        this.configfile = new File("plugins/MlgWars/maps", mapName + ".yml");
+        return this.config.getString(root + ".World");
 
     }
 
     public boolean exists(String mapName) {
 
-        configfile = new File("plugins/MlgWars/maps", mapName + ".yml");
-        return (configfile.exists());
+        this.configfile = new File("plugins/MlgWars/maps", mapName + ".yml");
+        return (this.configfile.exists());
 
     }
 

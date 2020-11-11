@@ -80,18 +80,18 @@ public class ToggleFlyListener implements Listener {
                     @Override
                     public void run() {
 
-                        count = player.getMetadata("kangaroocount").get(0).asInt();
+                        ToggleFlyListener.this.count = player.getMetadata("kangaroocount").get(0).asInt();
 
-                        Actionbar.sendActionbar(player, "§6Känguru §8● " + ProgressBar.getProgressBar(count, 10, 10,
+                        Actionbar.sendActionbar(player, "§6Känguru §8● " + ProgressBar.getProgressBar(ToggleFlyListener.this.count, 10, 10,
                                 '█', ChatColor.GREEN, ChatColor.DARK_GRAY));
 
-                        if (count == 10) {
-                            data.getKangarooTask().get(player.getUniqueId()).cancel();
-                            data.getKangarooTask().remove(player.getUniqueId());
+                        if (ToggleFlyListener.this.count == 10) {
+                            ToggleFlyListener.this.data.getKangarooTask().get(player.getUniqueId()).cancel();
+                            ToggleFlyListener.this.data.getKangarooTask().remove(player.getUniqueId());
                             Actionbar.sendActionbar(player, "§6Känguru §8● §7Sprung wieder §abereit!");
                             player.setAllowFlight(true);
                         } else {
-                            player.setMetadata("kangaroocount", new FixedMetadataValue(mlgWars, count + 1));
+                            player.setMetadata("kangaroocount", new FixedMetadataValue(ToggleFlyListener.this.mlgWars, ToggleFlyListener.this.count + 1));
                         }
                     }
                 });

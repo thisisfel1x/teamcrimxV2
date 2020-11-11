@@ -24,8 +24,8 @@ public enum Cosmetic {
     FIREWORK(FireworkGadget.class, CosmeticCategory.GADGETS);
 
 
-    private Class<? extends ICosmetic> cosmeticClass;
-    private CosmeticCategory cosmeticCategory;
+    private final Class<? extends ICosmetic> cosmeticClass;
+    private final CosmeticCategory cosmeticCategory;
 
     Cosmetic(Class<? extends ICosmetic> cosmeticClass, CosmeticCategory cosmeticCategory) {
         this.cosmeticClass = cosmeticClass;
@@ -33,10 +33,10 @@ public enum Cosmetic {
     }
 
     public Class<? extends ICosmetic> getCosmeticClass() {
-        return cosmeticClass;
+        return this.cosmeticClass;
     }
 
     public CosmeticCategory getCosmeticCategory() {
-        return cosmeticCategory;
+        return this.cosmeticCategory;
     }
 }

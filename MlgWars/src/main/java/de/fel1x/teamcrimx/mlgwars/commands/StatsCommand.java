@@ -13,7 +13,7 @@ import java.util.Locale;
 
 public class StatsCommand implements CommandExecutor {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public StatsCommand(MlgWars mlgWars) {
         this.mlgWars = mlgWars;

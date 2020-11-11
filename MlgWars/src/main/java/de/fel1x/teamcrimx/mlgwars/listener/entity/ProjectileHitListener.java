@@ -78,7 +78,7 @@ public class ProjectileHitListener implements Listener {
                 entity.getEquipment().setLeggings(this.zombieEquipment.getLeggins()[this.random.nextInt(this.zombieEquipment.getLeggins().length)]);
                 entity.getEquipment().setBoots(this.zombieEquipment.getShoes()[this.random.nextInt(this.zombieEquipment.getShoes().length)]);
 
-                entity.setMetadata("owner", new FixedMetadataValue(mlgWars, player.getName()));
+                entity.setMetadata("owner", new FixedMetadataValue(this.mlgWars, player.getName()));
 
                 Disguise disguise = new PlayerDisguise(player.getName(), player.getName());
                 disguise.setReplaceSounds(true);

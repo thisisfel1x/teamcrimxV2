@@ -45,12 +45,12 @@ public class LobbyPlayer {
     LobbyDatabase lobbyDatabase = new LobbyDatabase();
     Document lobbyDocument;
     Document networkDocument;
-    private Material[] woolTypes = {
+    private final Material[] woolTypes = {
             Material.WHITE_WOOL, Material.ORANGE_WOOL, Material.MAGENTA_WOOL, Material.LIGHT_BLUE_WOOL, Material.YELLOW_WOOL,
             Material.LIME_WOOL, Material.PINK_WOOL, Material.GRAY_WOOL, Material.LIGHT_GRAY_WOOL, Material.CYAN_WOOL,
             Material.PURPLE_WOOL, Material.BLUE_WOOL, Material.GREEN_WOOL, Material.RED_WOOL
     };
-    private Material[] concreteTypes = {
+    private final Material[] concreteTypes = {
             Material.WHITE_CONCRETE, Material.ORANGE_CONCRETE, Material.MAGENTA_CONCRETE, Material.LIGHT_BLUE_CONCRETE, Material.YELLOW_CONCRETE,
             Material.LIME_CONCRETE, Material.PINK_CONCRETE, Material.GRAY_CONCRETE, Material.LIGHT_GRAY_CONCRETE, Material.CYAN_CONCRETE,
             Material.PURPLE_CONCRETE, Material.BLUE_CONCRETE, Material.GREEN_CONCRETE, Material.RED_CONCRETE
@@ -89,29 +89,29 @@ public class LobbyPlayer {
     }
 
     public ICloudPlayer getCloudPlayer() {
-        return this.playerManager.getOnlinePlayer(player.getUniqueId());
+        return this.playerManager.getOnlinePlayer(this.player.getUniqueId());
     }
 
     public boolean isInBuild() {
-        return data.getBuilders().contains(player.getUniqueId());
+        return this.data.getBuilders().contains(this.player.getUniqueId());
     }
 
     public void activateBuild() {
 
-        data.getBuilders().add(player.getUniqueId());
+        this.data.getBuilders().add(this.player.getUniqueId());
 
         this.cleanUpPlayer();
         this.player.setGameMode(GameMode.CREATIVE);
 
-        player.sendMessage(crimxLobby.getPrefix() + "§7Du bist nun im Baumodus");
+        this.player.sendMessage(this.crimxLobby.getPrefix() + "§7Du bist nun im Baumodus");
 
     }
 
     public void removeFromBuild() {
 
-        data.getBuilders().remove(player.getUniqueId());
+        this.data.getBuilders().remove(this.player.getUniqueId());
 
-        player.sendMessage(crimxLobby.getPrefix() + "§7Du bist nun nicht mehr im Baumodus");
+        this.player.sendMessage(this.crimxLobby.getPrefix() + "§7Du bist nun nicht mehr im Baumodus");
 
         this.setLobbyInventory();
 
@@ -198,7 +198,7 @@ public class LobbyPlayer {
     public void updatePlayerHiderState() {
 
         // STATES: 0: all shown, 1: vip shown, 2: nobody shown
-        int state = this.data.getPlayerHiderState().get(player.getUniqueId());
+        int state = this.data.getPlayerHiderState().get(this.player.getUniqueId());
         state++;
 
         if (state == 1) {
@@ -214,7 +214,7 @@ public class LobbyPlayer {
             Bukkit.getOnlinePlayers().forEach(loop -> this.player.showPlayer(this.crimxLobby, loop));
         }
 
-        this.data.getPlayerHiderState().put(player.getUniqueId(), state);
+        this.data.getPlayerHiderState().put(this.player.getUniqueId(), state);
 
         this.player.getInventory().getItem(1).setType(this.getPlayerHiderItemData());
         this.setPlayerHiderDisplayName();
@@ -244,7 +244,7 @@ public class LobbyPlayer {
 
     public Material getPlayerHiderItemData() {
 
-        int state = this.data.getPlayerHiderState().get(player.getUniqueId());
+        int state = this.data.getPlayerHiderState().get(this.player.getUniqueId());
 
         if (state == 1) {
             return Material.PURPLE_DYE;
@@ -258,7 +258,7 @@ public class LobbyPlayer {
 
     public void setPlayerHiderDisplayName() {
 
-        int state = this.data.getPlayerHiderState().get(player.getUniqueId());
+        int state = this.data.getPlayerHiderState().get(this.player.getUniqueId());
 
         ItemStack itemStack = this.player.getInventory().getItem(1);
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -269,7 +269,7 @@ public class LobbyPlayer {
             itemMeta.setDisplayName("§8● §7Du siehst §ckeinen Spieler");
         } else {
             itemMeta.setDisplayName("§8● §7Du siehst §aalle Spieler");
-            player.playEffect(EntityEffect.WITCH_MAGIC);
+            this.player.playEffect(EntityEffect.WITCH_MAGIC);
         }
 
         itemStack.setItemMeta(itemMeta);
@@ -278,7 +278,7 @@ public class LobbyPlayer {
 
     public String getPlayerHiderDisplayName() {
 
-        int state = this.data.getPlayerHiderState().get(player.getUniqueId());
+        int state = this.data.getPlayerHiderState().get(this.player.getUniqueId());
 
         if (state == 1) {
             return "§8● §7Du siehst §5nur VIPs";
@@ -320,7 +320,7 @@ public class LobbyPlayer {
     }
 
     public void createPlayerData() {
-        this.lobbyDatabase.createPlayerData(player);
+        this.lobbyDatabase.createPlayerData(this.player);
     }
 
     public void saveNewLocation() {
@@ -332,7 +332,7 @@ public class LobbyPlayer {
                 .append("lastLocationZ", this.player.getLocation().getZ())
                 .append("lastLocationPitch", this.player.getLocation().getPitch())
                 .append("lastLocationYaw", this.player.getLocation().getYaw())
-                .append("playerhiderState", this.data.getPlayerHiderState().get(player.getUniqueId()));
+                .append("playerhiderState", this.data.getPlayerHiderState().get(this.player.getUniqueId()));
 
         Bson updateOperation = new Document("$set", toUpdate);
         this.crimxLobby.getCrimxAPI().getMongoDB().getLobbyCollection().updateOne(this.lobbyDocument, updateOperation);
@@ -342,19 +342,19 @@ public class LobbyPlayer {
     public void initPlayerHider() {
 
         int state = this.lobbyDocument.getInteger("playerhiderState");
-        this.data.getPlayerHiderState().put(player.getUniqueId(), state);
+        this.data.getPlayerHiderState().put(this.player.getUniqueId(), state);
 
     }
 
     public void loadMongoDocument() {
         Document found = this.crimxLobby.getCrimxAPI().getMongoDB().getLobbyCollection().
-                find(new Document("_id", player.getUniqueId().toString())).first();
+                find(new Document("_id", this.player.getUniqueId().toString())).first();
 
         Document foundNetwork = this.crimxLobby.getCrimxAPI().getMongoDB().getUserCollection().
-                find(new Document("_id", player.getUniqueId().toString())).first();
+                find(new Document("_id", this.player.getUniqueId().toString())).first();
 
-        this.crimxLobby.getData().getPlayerMongoDocument().put(player.getUniqueId(), found);
-        this.crimxLobby.getData().getPlayerMongoNetworkDocument().put(player.getUniqueId(), foundNetwork);
+        this.crimxLobby.getData().getPlayerMongoDocument().put(this.player.getUniqueId(), found);
+        this.crimxLobby.getData().getPlayerMongoNetworkDocument().put(this.player.getUniqueId(), foundNetwork);
 
         this.lobbyDocument = found;
         this.networkDocument = foundNetwork;
@@ -432,17 +432,17 @@ public class LobbyPlayer {
         }
 
         if (startBlock.getType().equals(Material.AIR)) {
-            startBlock.setType(Arrays.asList(concreteTypes).get(random.nextInt(concreteTypes.length)), true);
+            startBlock.setType(Arrays.asList(this.concreteTypes).get(random.nextInt(this.concreteTypes.length)), true);
         } else {
-            player.sendMessage(this.crimxLobby.getPrefix() + "§cEs konnte kein passender Start gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
+            this.player.sendMessage(this.crimxLobby.getPrefix() + "§cEs konnte kein passender Start gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
             return;
         }
 
         if (nextBlock.getType().equals(Material.AIR)) {
-            nextBlock.setType(Arrays.asList(woolTypes).get(random.nextInt(woolTypes.length)), true);
+            nextBlock.setType(Arrays.asList(this.woolTypes).get(random.nextInt(this.woolTypes.length)), true);
         } else {
 
-            player.sendMessage(this.crimxLobby.getPrefix() + "§cEs konnte kein passender Sprung gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
+            this.player.sendMessage(this.crimxLobby.getPrefix() + "§cEs konnte kein passender Sprung gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
             startBlock.setType(Material.AIR);
             return;
 
@@ -450,15 +450,15 @@ public class LobbyPlayer {
 
         this.player.getInventory().clear();
 
-        player.teleport(startBlock.getLocation().clone().add(0, 2, 0));
-        player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 2, 4);
+        this.player.teleport(startBlock.getLocation().clone().add(0, 2, 0));
+        this.player.playSound(this.player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 2, 4);
 
-        player.getInventory().setItem(4, new ItemBuilder(Material.RED_DYE, 1).setName("§cAbbrechen").toItemStack());
+        this.player.getInventory().setItem(4, new ItemBuilder(Material.RED_DYE, 1).setName("§cAbbrechen").toItemStack());
 
-        JumpAndRunPlayer jumpAndRunPlayer = new JumpAndRunPlayer(player, 0, null, startBlock, nextBlock, possibleJumps);
+        JumpAndRunPlayer jumpAndRunPlayer = new JumpAndRunPlayer(this.player, 0, null, startBlock, nextBlock, possibleJumps);
 
-        this.data.getJumpAndRunPlayers().put(player.getUniqueId(), jumpAndRunPlayer);
-        this.data.getJumpers().add(player.getUniqueId());
+        this.data.getJumpAndRunPlayers().put(this.player.getUniqueId(), jumpAndRunPlayer);
+        this.data.getJumpers().add(this.player.getUniqueId());
 
     }
 
@@ -473,7 +473,7 @@ public class LobbyPlayer {
         jumpAndRunPlayer.getLastBlock().setType(Material.AIR);
 
         jumpAndRunPlayer.setCurrentBlock(jumpAndRunPlayer.getNextBlock());
-        jumpAndRunPlayer.getCurrentBlock().setType(Arrays.asList(concreteTypes).get(random.nextInt(concreteTypes.length)), true);
+        jumpAndRunPlayer.getCurrentBlock().setType(Arrays.asList(this.concreteTypes).get(random.nextInt(this.concreteTypes.length)), true);
 
         location = jumpAndRunPlayer.getCurrentBlock().getLocation();
 
@@ -510,7 +510,7 @@ public class LobbyPlayer {
         }
 
         if (nextBlock.getType().equals(Material.AIR)) {
-            nextBlock.setType(Arrays.asList(woolTypes).get(random.nextInt(woolTypes.length)), true);
+            nextBlock.setType(Arrays.asList(this.woolTypes).get(random.nextInt(this.woolTypes.length)), true);
 
             jumpAndRunPlayer.setNextBlock(nextBlock);
         } else {
@@ -526,12 +526,12 @@ public class LobbyPlayer {
 
             if (nextBlock.getType().equals(Material.AIR)) {
 
-                nextBlock.setType(Arrays.asList(woolTypes).get(random.nextInt(woolTypes.length)), true);
+                nextBlock.setType(Arrays.asList(this.woolTypes).get(random.nextInt(this.woolTypes.length)), true);
                 jumpAndRunPlayer.setNextBlock(nextBlock);
 
             } else {
 
-                player.sendMessage("§cEs konnte kein passender Sprung gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
+                this.player.sendMessage("§cEs konnte kein passender Sprung gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
                 this.endJumpAndRun();
 
             }
@@ -548,34 +548,34 @@ public class LobbyPlayer {
 
         this.player.getInventory().clear();
 
-        this.data.getJumpers().remove(player.getUniqueId());
+        this.data.getJumpers().remove(this.player.getUniqueId());
         this.setLobbyInventory();
 
-        this.data.getJumpAndRunPlayers().get(player.getUniqueId()).getCurrentBlock().setType(Material.AIR);
-        this.data.getJumpAndRunPlayers().get(player.getUniqueId()).getNextBlock().setType(Material.AIR);
+        this.data.getJumpAndRunPlayers().get(this.player.getUniqueId()).getCurrentBlock().setType(Material.AIR);
+        this.data.getJumpAndRunPlayers().get(this.player.getUniqueId()).getNextBlock().setType(Material.AIR);
 
-        this.data.getJumpAndRunPlayers().remove(player.getUniqueId());
+        this.data.getJumpAndRunPlayers().remove(this.player.getUniqueId());
 
     }
 
     public boolean isInWaterMLG() {
-        return this.waterMlgHandler.getWaterMlgPlayers().contains(player);
+        return this.waterMlgHandler.getWaterMlgPlayers().contains(this.player);
     }
 
     public void startWaterMLG() {
 
         int height = new Random().nextInt(15) + 5;
 
-        player.closeInventory();
+        this.player.closeInventory();
 
-        player.setVelocity(player.getVelocity().setY(height));
+        this.player.setVelocity(this.player.getVelocity().setY(height));
 
         this.cleanUpPlayer();
-        player.getInventory().setItem(3, new ItemBuilder(Material.WATER_BUCKET).setName("§9Wassereimer").toItemStack());
-        player.getInventory().setItem(5, new ItemBuilder(Material.RED_DYE, 1).setName("§cAbbrechen").toItemStack());
+        this.player.getInventory().setItem(3, new ItemBuilder(Material.WATER_BUCKET).setName("§9Wassereimer").toItemStack());
+        this.player.getInventory().setItem(5, new ItemBuilder(Material.RED_DYE, 1).setName("§cAbbrechen").toItemStack());
 
-        this.waterMlgHandler.getWaterMlgPlayers().add(player);
-        this.waterMlgHandler.getFailed().put(player, false);
+        this.waterMlgHandler.getWaterMlgPlayers().add(this.player);
+        this.waterMlgHandler.getFailed().put(this.player, false);
 
     }
 
@@ -583,12 +583,12 @@ public class LobbyPlayer {
 
         this.cleanUpPlayer();
         this.setLobbyInventory();
-        this.waterMlgHandler.getWaterMlgPlayers().remove(player);
+        this.waterMlgHandler.getWaterMlgPlayers().remove(this.player);
 
     }
 
     public boolean isMlgFailed() {
-        return this.waterMlgHandler.getFailed().get(player);
+        return this.waterMlgHandler.getFailed().get(this.player);
     }
 
     public void unlockCosmetic(Cosmetic cosmetic) {
@@ -601,27 +601,27 @@ public class LobbyPlayer {
             int required = cosmetic.getCosmeticClass().newInstance().getCosmeticCost();
 
             if (coins >= required) {
-                player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast erfolgreich §a" + iCosmetic.getCosmeticName() + " §7freigeschalten");
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2, 0.5f);
-                CosmeticInventory.COSMETICS_INVENTORY.open(player);
+                this.player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast erfolgreich §a" + iCosmetic.getCosmeticName() + " §7freigeschalten");
+                this.player.playSound(this.player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2, 0.5f);
+                CosmeticInventory.COSMETICS_INVENTORY.open(this.player);
 
                 coinsAPI.removeCoins(required);
                 this.saveObjectInDocument(cosmetic.name(), true, MongoDBCollection.LOBBY);
 
             } else {
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
-                player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast nicht genügend Coins!");
-                player.closeInventory();
+                this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
+                this.player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast nicht genügend Coins!");
+                this.player.closeInventory();
             }
 
         } catch (InstantiationException | IllegalAccessException e) {
-            player.closeInventory();
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
-            player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
+            this.player.closeInventory();
+            this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
+            this.player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
         }
     }
 
     public void setScoreboard() {
-        this.crimxLobby.getLobbyScoreboard().setGameScoreboard(player);
+        this.crimxLobby.getLobbyScoreboard().setGameScoreboard(this.player);
     }
 }

@@ -48,12 +48,11 @@ public class StartCommand implements CommandExecutor {
             Bukkit.getScheduler().cancelTasks(this.mlgWars);
             lobbyTimer.start(10);
             player.sendMessage(this.mlgWars.getPrefix() + "§7Der Countdown wurde verkürzt und das Spiel wird gestartet");
-            return true;
         } else {
             Bukkit.getScheduler().cancelTasks(this.mlgWars);
             lobbyTimer.start(10);
             player.sendMessage(this.mlgWars.getPrefix() + "§7Der Countdown wurde verkürzt");
-            return true;
         }
+        return true;
     }
 }

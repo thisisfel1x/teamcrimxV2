@@ -13,18 +13,15 @@ import java.util.Objects;
 
 public class LobbyScoreboard {
 
-    private Scoreboard gameScoreboard;
-    private Objective objective;
-
     public LobbyScoreboard() {
 
     }
 
     public void setGameScoreboard(Player player) {
 
-        gameScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        Scoreboard gameScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
-        objective = gameScoreboard.registerNewObjective("dummy", "test", "test");
+        Objective objective = gameScoreboard.registerNewObjective("dummy", "test", "test");
         objective.setDisplayName("§8» §bteamcrimx§lDE §8«");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 

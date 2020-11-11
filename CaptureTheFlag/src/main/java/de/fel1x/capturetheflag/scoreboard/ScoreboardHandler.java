@@ -14,30 +14,29 @@ import java.util.Objects;
 
 public class ScoreboardHandler {
 
-    private Scoreboard lobbyScoreboard;
-    private Objective objective;
-    private org.bukkit.scoreboard.Team redTeam;
-    private org.bukkit.scoreboard.Team blueTeam;
+    private final Scoreboard lobbyScoreboard;
+    private final org.bukkit.scoreboard.Team redTeam;
+    private final org.bukkit.scoreboard.Team blueTeam;
 
     public ScoreboardHandler() {
 
-        lobbyScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        this.lobbyScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
-        objective = lobbyScoreboard.registerNewObjective("dummy", "test", "test");
+        Objective objective = this.lobbyScoreboard.registerNewObjective("dummy", "test", "test");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         objective.setDisplayName("§8» §bteamcrimx§lDE §8«");
 
-        redTeam = lobbyScoreboard.registerNewTeam("008Rot");
-        redTeam.setPrefix("§cRot §7| §c");
-        redTeam.setDisplayName("§c");
-        redTeam.setColor(ChatColor.RED);
+        this.redTeam = this.lobbyScoreboard.registerNewTeam("008Rot");
+        this.redTeam.setPrefix("§cRot §7| §c");
+        this.redTeam.setDisplayName("§c");
+        this.redTeam.setColor(ChatColor.RED);
 
-        blueTeam = lobbyScoreboard.registerNewTeam("009Rot");
-        blueTeam.setPrefix("§9Blau §7| §9");
-        blueTeam.setDisplayName("§9");
-        blueTeam.setColor(ChatColor.BLUE);
+        this.blueTeam = this.lobbyScoreboard.registerNewTeam("009Rot");
+        this.blueTeam.setPrefix("§9Blau §7| §9");
+        this.blueTeam.setDisplayName("§9");
+        this.blueTeam.setColor(ChatColor.BLUE);
 
-        org.bukkit.scoreboard.Team kit = lobbyScoreboard.registerNewTeam("kit");
+        org.bukkit.scoreboard.Team kit = this.lobbyScoreboard.registerNewTeam("kit");
         kit.addEntry("§9");
         kit.setPrefix("§8● §6%s");
 
@@ -52,27 +51,27 @@ public class ScoreboardHandler {
     }
 
     public void setGameScoreboard(Player player, Team team) {
-        if (player.getScoreboard().equals(lobbyScoreboard)) {
+        if (player.getScoreboard().equals(this.lobbyScoreboard)) {
             switch (team) {
                 case RED:
 
-                    if (blueTeam.hasEntry(player.getName())) {
-                        blueTeam.removeEntry(player.getName());
+                    if (this.blueTeam.hasEntry(player.getName())) {
+                        this.blueTeam.removeEntry(player.getName());
                     }
 
-                    redTeam.addEntry(player.getName());
+                    this.redTeam.addEntry(player.getName());
 
-                    player.setDisplayName(redTeam.getDisplayName() + player.getName());
+                    player.setDisplayName(this.redTeam.getDisplayName() + player.getName());
                     break;
                 case BLUE:
 
-                    if (redTeam.hasEntry(player.getName())) {
-                        redTeam.removeEntry(player.getName());
+                    if (this.redTeam.hasEntry(player.getName())) {
+                        this.redTeam.removeEntry(player.getName());
                     }
 
-                    blueTeam.addEntry(player.getName());
+                    this.blueTeam.addEntry(player.getName());
 
-                    player.setDisplayName(blueTeam.getDisplayName() + player.getName());
+                    player.setDisplayName(this.blueTeam.getDisplayName() + player.getName());
 
                     break;
 
@@ -81,8 +80,8 @@ public class ScoreboardHandler {
     }
 
     public void handleJoin(Player player) {
-        if (!player.getScoreboard().equals(lobbyScoreboard)) {
-            player.setScoreboard(lobbyScoreboard);
+        if (!player.getScoreboard().equals(this.lobbyScoreboard)) {
+            player.setScoreboard(this.lobbyScoreboard);
             BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
         }
 
@@ -96,25 +95,25 @@ public class ScoreboardHandler {
 
                 case RED:
 
-                    if (blueTeam.hasEntry(current.getName())) {
-                        blueTeam.removeEntry(current.getName());
+                    if (this.blueTeam.hasEntry(current.getName())) {
+                        this.blueTeam.removeEntry(current.getName());
                     }
 
-                    redTeam.addEntry(current.getName());
+                    this.redTeam.addEntry(current.getName());
 
-                    current.setDisplayName(redTeam.getDisplayName() + current.getName());
+                    current.setDisplayName(this.redTeam.getDisplayName() + current.getName());
 
                     break;
 
                 case BLUE:
 
-                    if (redTeam.hasEntry(current.getName())) {
-                        redTeam.removeEntry(current.getName());
+                    if (this.redTeam.hasEntry(current.getName())) {
+                        this.redTeam.removeEntry(current.getName());
                     }
 
-                    blueTeam.addEntry(current.getName());
+                    this.blueTeam.addEntry(current.getName());
 
-                    current.setDisplayName(blueTeam.getDisplayName() + current.getName());
+                    current.setDisplayName(this.blueTeam.getDisplayName() + current.getName());
 
                     break;
 

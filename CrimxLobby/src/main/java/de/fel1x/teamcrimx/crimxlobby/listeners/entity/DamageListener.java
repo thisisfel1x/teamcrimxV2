@@ -11,7 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class DamageListener implements Listener {
 
-    private CrimxLobby crimxLobby;
+    private final CrimxLobby crimxLobby;
 
     public DamageListener(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;
@@ -35,7 +35,7 @@ public class DamageListener implements Listener {
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 5, 7);
             lobbyPlayer.endWaterMLG();
 
-            crimxLobby.getWaterMlgHandler().getFailed().put(player, true);
+            this.crimxLobby.getWaterMlgHandler().getFailed().put(player, true);
 
         } else {
             event.setCancelled(true);

@@ -18,8 +18,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
-    private Data data;
+    private final CaptureTheFlag captureTheFlag;
+    private final Data data;
 
     public ChatListener(CaptureTheFlag captureTheFlag) {
         this.captureTheFlag = captureTheFlag;
@@ -45,14 +45,14 @@ public class ChatListener implements Listener {
 
             event.setFormat(ChatColor.translateAlternateColorCodes('&', permissionGroup.getDisplay()) + player.getName() + " §8» §f" + event.getMessage());
         } else {
-            if (data.getSpectators().contains(player)) {
+            if (this.data.getSpectators().contains(player)) {
 
                 event.setCancelled(true);
-                data.getSpectators().forEach(spectator -> {
+                this.data.getSpectators().forEach(spectator -> {
                     spectator.sendMessage("§7§o" + player.getName() + " §8» §f" + event.getMessage());
                 });
 
-            } else if (data.getPlayers().contains(player)) {
+            } else if (this.data.getPlayers().contains(player)) {
                 if (!event.getMessage().startsWith("@a ") && !event.getMessage().startsWith("@all ")) {
                     gamePlayer.getTeam().getTeamPlayers().forEach(teamplayer -> {
 

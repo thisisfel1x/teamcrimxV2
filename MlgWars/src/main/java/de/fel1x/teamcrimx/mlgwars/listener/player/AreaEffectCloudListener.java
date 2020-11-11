@@ -11,7 +11,7 @@ import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
 
 public class AreaEffectCloudListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public AreaEffectCloudListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;

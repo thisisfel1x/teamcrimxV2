@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class BuildCommand implements CommandExecutor {
 
-    private CrimxLobby crimxLobby;
+    private final CrimxLobby crimxLobby;
 
     public BuildCommand(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;

@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinListener implements Listener {
 
-    private CrimxLobby crimxLobby;
+    private final CrimxLobby crimxLobby;
 
     public JoinListener(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;

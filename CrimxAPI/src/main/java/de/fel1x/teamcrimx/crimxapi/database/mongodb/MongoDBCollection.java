@@ -14,6 +14,6 @@ public enum MongoDBCollection {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 }

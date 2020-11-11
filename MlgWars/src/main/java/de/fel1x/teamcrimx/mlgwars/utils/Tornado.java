@@ -31,7 +31,7 @@ public class Tornado {
         class VortexBlock {
 
             public boolean removable = true;
-            private Entity entity;
+            private final Entity entity;
             private float ticker_vertical = 0.0f;
             private float ticker_horisontal = (float) (Math.random() * 2 * Math.PI);
 
@@ -41,35 +41,35 @@ public class Tornado {
                 if (l.getBlock().getType() != Material.AIR) {
 
                     Block b = l.getBlock();
-                    entity = l.getWorld().spawnFallingBlock(l, b.getType(), b.getData());
+                    this.entity = l.getWorld().spawnFallingBlock(l, b.getType(), b.getData());
 
                     if (b.getType() != Material.WATER)
                         b.setType(Material.AIR);
 
-                    removable = !spew;
+                    this.removable = !spew;
                 } else {
-                    entity = l.getWorld().spawnFallingBlock(l, m, d);
-                    removable = !explode;
+                    this.entity = l.getWorld().spawnFallingBlock(l, m, d);
+                    this.removable = !explode;
                 }
 
                 addMetadata();
             }
 
             public VortexBlock(Entity e) {
-                entity = e;
-                removable = false;
+                this.entity = e;
+                this.removable = false;
                 addMetadata();
             }
 
             private void addMetadata() {
-                entity.setMetadata("vortex", new FixedMetadataValue(plugin, "protected"));
+                this.entity.setMetadata("vortex", new FixedMetadataValue(plugin, "protected"));
             }
 
             public void remove() {
-                if (removable) {
-                    entity.remove();
+                if (this.removable) {
+                    this.entity.remove();
                 }
-                entity.removeMetadata("vortex", plugin);
+                this.entity.removeMetadata("vortex", plugin);
             }
 
             @SuppressWarnings("deprecation")
@@ -83,13 +83,13 @@ public class Tornado {
                 HashSet<VortexBlock> new_blocks = new HashSet<VortexBlock>();
 
                 // Pick up blocks
-                Block b = entity.getLocation().add(v.clone().normalize()).getBlock();
+                Block b = this.entity.getLocation().add(v.clone().normalize()).getBlock();
                 if (b.getType() != Material.AIR) {
                     new_blocks.add(new VortexBlock(b.getLocation(), b.getType(), b.getData()));
                 }
 
                 // Pick up other entities
-                List<Entity> entities = entity.getNearbyEntities(1.0D, 1.0D, 1.0D);
+                List<Entity> entities = this.entity.getNearbyEntities(1.0D, 1.0D, 1.0D);
                 for (Entity e : entities) {
                     if (!e.hasMetadata("vortex")) {
                         new_blocks.add(new VortexBlock(e));
@@ -102,19 +102,19 @@ public class Tornado {
             }
 
             private void setVelocity(Vector v) {
-                entity.setVelocity(v);
+                this.entity.setVelocity(v);
             }
 
             private float verticalTicker() {
-                if (ticker_vertical < 1.0f) {
-                    ticker_vertical += 0.05f;
+                if (this.ticker_vertical < 1.0f) {
+                    this.ticker_vertical += 0.05f;
                 }
-                return ticker_vertical;
+                return this.ticker_vertical;
             }
 
             private float horisontalTicker() {
 //                ticker_horisontal = (float) ((ticker_horisontal + 0.8f) % 2*Math.PI);
-                return (ticker_horisontal += 0.8f);
+                return (this.ticker_horisontal += 0.8f);
             }
         }
 
@@ -128,7 +128,7 @@ public class Tornado {
 
         final int id = new BukkitRunnable() {
 
-            private ArrayDeque<VortexBlock> blocks = new ArrayDeque<VortexBlock>();
+            private final ArrayDeque<VortexBlock> blocks = new ArrayDeque<VortexBlock>();
 
             public void run() {
 
@@ -140,14 +140,14 @@ public class Tornado {
                 for (int i = 0; i < 10; i++) {
                     checkListSize();
                     VortexBlock vb = new VortexBlock(location, material, data);
-                    blocks.add(vb);
+                    this.blocks.add(vb);
                     clear.add(vb);
                 }
 
                 // Make all blocks in the list spin, and pick up any blocks that get in the way.
                 ArrayDeque<VortexBlock> que = new ArrayDeque<VortexBlock>();
 
-                for (VortexBlock vb : blocks) {
+                for (VortexBlock vb : this.blocks) {
                     HashSet<VortexBlock> new_blocks = vb.tick();
                     for (VortexBlock temp : new_blocks) {
                         que.add(temp);
@@ -157,17 +157,17 @@ public class Tornado {
                 // Add the new blocks
                 for (VortexBlock vb : que) {
                     checkListSize();
-                    blocks.add(vb);
+                    this.blocks.add(vb);
                     clear.add(vb);
                 }
             }
 
             // Removes the oldest block if the list goes over the limit.
             private void checkListSize() {
-                while (blocks.size() >= amount_of_blocks) {
-                    VortexBlock vb = blocks.getFirst();
+                while (this.blocks.size() >= amount_of_blocks) {
+                    VortexBlock vb = this.blocks.getFirst();
                     vb.remove();
-                    blocks.remove(vb);
+                    this.blocks.remove(vb);
                     clear.remove(vb);
                 }
             }

@@ -177,20 +177,20 @@ public class WorldLoader {
         ArrayList<Location> armorStand2 = ParticleEffects.getCirclePoints(location1, 0.7, 20);
         ArrayList<Location> armorStand3 = ParticleEffects.getCirclePoints(location2, 0.7, 20);
 
-        count = 0;
+        this.count = 0;
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(CaptureTheFlag.getInstance(), () -> {
-            armorStand1.get(count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand1.get(count), 2,
+            armorStand1.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand1.get(this.count), 2,
                     new Particle.DustOptions(Color.fromRGB(255,165,0), 1));
-            armorStand3.get(count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand3.get(count), 2,
+            armorStand3.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand3.get(this.count), 2,
                     new Particle.DustOptions(Color.fromRGB(211,211,211), 1));
-            armorStand2.get(count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand2.get(count), 2,
+            armorStand2.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand2.get(this.count), 2,
                     new Particle.DustOptions(Color.fromRGB(205, 127, 50), 1));
 
-            count++;
+            this.count++;
 
-            if(count > 19) {
-                count = 0;
+            if(this.count > 19) {
+                this.count = 0;
             }
         }, 0L, 0L);
     }

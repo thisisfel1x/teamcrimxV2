@@ -12,14 +12,14 @@ public enum Kit {
     TANK(TankKit.class),
     MEDIC(MedicKit.class);
 
-    private Class<? extends IKit> clazz;
+    private final Class<? extends IKit> clazz;
 
     Kit(Class<? extends IKit> clazz) {
         this.clazz = clazz;
     }
 
     public Class<? extends IKit> getClazz() {
-        return clazz;
+        return this.clazz;
     }
 
 }

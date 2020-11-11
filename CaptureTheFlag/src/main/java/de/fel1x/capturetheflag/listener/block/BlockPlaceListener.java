@@ -13,8 +13,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 public class BlockPlaceListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
-    private Data data;
+    private final CaptureTheFlag captureTheFlag;
+    private final Data data;
 
     public BlockPlaceListener(CaptureTheFlag captureTheFlag) {
         this.captureTheFlag = captureTheFlag;
@@ -47,7 +47,7 @@ public class BlockPlaceListener implements Listener {
             event.setCancelled(true);
         }
 
-        if (data.getBlueSpawnCuboid().contains(block) || data.getRedSpawnCuboid().contains(block)) {
+        if (this.data.getBlueSpawnCuboid().contains(block) || this.data.getRedSpawnCuboid().contains(block)) {
             player.sendMessage("§cDu darfst nicht im Spawnbereich bauen!");
             event.setCancelled(true);
             return;

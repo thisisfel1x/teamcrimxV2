@@ -23,7 +23,7 @@ import java.util.Map;
  * @author NonameSL
  */
 public class ItemBuilder {
-    private ItemStack is;
+    private final ItemStack is;
 
     /**
      * Create a new ItemBuilder from scratch.
@@ -54,7 +54,7 @@ public class ItemBuilder {
      * @param amount The amount of the item.
      */
     public ItemBuilder(Material m, int amount) {
-        is = new ItemStack(m, amount);
+        this.is = new ItemStack(m, amount);
     }
 
     /**
@@ -65,7 +65,7 @@ public class ItemBuilder {
      * @param durability The durability of the item.
      */
     public ItemBuilder(Material m, int amount, byte durability) {
-        is = new ItemStack(m, amount, durability);
+        this.is = new ItemStack(m, amount, durability);
     }
 
     /**
@@ -74,7 +74,7 @@ public class ItemBuilder {
      * @return The cloned instance.
      */
     public ItemBuilder clone() {
-        return new ItemBuilder(is);
+        return new ItemBuilder(this.is);
     }
 
     /**
@@ -83,7 +83,7 @@ public class ItemBuilder {
      * @param dur The durability to set it to.
      */
     public ItemBuilder setDurability(short dur) {
-        is.setDurability(dur);
+        this.is.setDurability(dur);
         return this;
     }
 
@@ -93,9 +93,9 @@ public class ItemBuilder {
      * @param name The name to change it to.
      */
     public ItemBuilder setName(String name) {
-        ItemMeta im = is.getItemMeta();
+        ItemMeta im = this.is.getItemMeta();
         im.setDisplayName(name);
-        is.setItemMeta(im);
+        this.is.setItemMeta(im);
         return this;
     }
 
@@ -106,7 +106,7 @@ public class ItemBuilder {
      * @param level The level to put the enchant on.
      */
     public ItemBuilder addUnsafeEnchantment(Enchantment ench, int level) {
-        is.addUnsafeEnchantment(ench, level);
+        this.is.addUnsafeEnchantment(ench, level);
         return this;
     }
 
@@ -116,7 +116,7 @@ public class ItemBuilder {
      * @param ench The enchantment to remove
      */
     public ItemBuilder removeEnchantment(Enchantment ench) {
-        is.removeEnchantment(ench);
+        this.is.removeEnchantment(ench);
         return this;
     }
 
@@ -127,9 +127,9 @@ public class ItemBuilder {
      */
     public ItemBuilder setSkullOwner(String owner) {
         try {
-            SkullMeta im = (SkullMeta) is.getItemMeta();
+            SkullMeta im = (SkullMeta) this.is.getItemMeta();
             im.setOwner(owner);
-            is.setItemMeta(im);
+            this.is.setItemMeta(im);
         } catch (ClassCastException expected) {
         }
         return this;
@@ -142,9 +142,9 @@ public class ItemBuilder {
      * @param level The level
      */
     public ItemBuilder addEnchant(Enchantment ench, int level) {
-        ItemMeta im = is.getItemMeta();
+        ItemMeta im = this.is.getItemMeta();
         im.addEnchant(ench, level, true);
-        is.setItemMeta(im);
+        this.is.setItemMeta(im);
         return this;
     }
 
@@ -154,7 +154,7 @@ public class ItemBuilder {
      * @param enchantments The enchants to add.
      */
     public ItemBuilder addEnchantments(Map<Enchantment, Integer> enchantments) {
-        is.addEnchantments(enchantments);
+        this.is.addEnchantments(enchantments);
         return this;
     }
 
@@ -162,7 +162,7 @@ public class ItemBuilder {
      * Sets infinity durability on the item by setting the durability to Short.MAX_VALUE.
      */
     public ItemBuilder setInfinityDurability() {
-        is.setDurability(Short.MAX_VALUE);
+        this.is.setDurability(Short.MAX_VALUE);
         return this;
     }
 
@@ -172,9 +172,9 @@ public class ItemBuilder {
      * @param lore The lore to set it to.
      */
     public ItemBuilder setLore(String... lore) {
-        ItemMeta im = is.getItemMeta();
+        ItemMeta im = this.is.getItemMeta();
         im.setLore(Arrays.asList(lore));
-        is.setItemMeta(im);
+        this.is.setItemMeta(im);
         return this;
     }
 
@@ -184,9 +184,9 @@ public class ItemBuilder {
      * @param lore The lore to set it to.
      */
     public ItemBuilder setLore(List<String> lore) {
-        ItemMeta im = is.getItemMeta();
+        ItemMeta im = this.is.getItemMeta();
         im.setLore(lore);
-        is.setItemMeta(im);
+        this.is.setItemMeta(im);
         return this;
     }
 
@@ -196,12 +196,12 @@ public class ItemBuilder {
      * @param line The lore to remove.
      */
     public ItemBuilder removeLoreLine(String line) {
-        ItemMeta im = is.getItemMeta();
+        ItemMeta im = this.is.getItemMeta();
         List<String> lore = new ArrayList<>(im.getLore());
         if (!lore.contains(line)) return this;
         lore.remove(line);
         im.setLore(lore);
-        is.setItemMeta(im);
+        this.is.setItemMeta(im);
         return this;
     }
 
@@ -211,12 +211,12 @@ public class ItemBuilder {
      * @param index The index of the lore line to remove.
      */
     public ItemBuilder removeLoreLine(int index) {
-        ItemMeta im = is.getItemMeta();
+        ItemMeta im = this.is.getItemMeta();
         List<String> lore = new ArrayList<>(im.getLore());
         if (index < 0 || index > lore.size()) return this;
         lore.remove(index);
         im.setLore(lore);
-        is.setItemMeta(im);
+        this.is.setItemMeta(im);
         return this;
     }
 
@@ -226,12 +226,12 @@ public class ItemBuilder {
      * @param line The lore line to add.
      */
     public ItemBuilder addLoreLine(String line) {
-        ItemMeta im = is.getItemMeta();
+        ItemMeta im = this.is.getItemMeta();
         List<String> lore = new ArrayList<>();
         if (im.hasLore()) lore = new ArrayList<>(im.getLore());
         lore.add(line);
         im.setLore(lore);
-        is.setItemMeta(im);
+        this.is.setItemMeta(im);
         return this;
     }
 
@@ -242,19 +242,19 @@ public class ItemBuilder {
      * @param pos  The index of where to put it.
      */
     public ItemBuilder addLoreLine(String line, int pos) {
-        ItemMeta im = is.getItemMeta();
+        ItemMeta im = this.is.getItemMeta();
         List<String> lore = new ArrayList<>(im.getLore());
         lore.set(pos, line);
         im.setLore(lore);
-        is.setItemMeta(im);
+        this.is.setItemMeta(im);
         return this;
     }
 
     public ItemBuilder addGlow() {
 
-        ItemMeta im = is.getItemMeta();
+        ItemMeta im = this.is.getItemMeta();
         im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        is.setItemMeta(im);
+        this.is.setItemMeta(im);
         this.addEnchant(Enchantment.DAMAGE_ARTHROPODS, 1);
         return this;
 
@@ -262,9 +262,9 @@ public class ItemBuilder {
 
     public ItemBuilder setUnbreakable() {
 
-        ItemMeta im = is.getItemMeta();
+        ItemMeta im = this.is.getItemMeta();
         im.setUnbreakable(true);
-        is.setItemMeta(im);
+        this.is.setItemMeta(im);
         return this;
 
     }
@@ -288,9 +288,9 @@ public class ItemBuilder {
      */
     public ItemBuilder setLeatherArmorColor(Color color) {
         try {
-            LeatherArmorMeta im = (LeatherArmorMeta) is.getItemMeta();
+            LeatherArmorMeta im = (LeatherArmorMeta) this.is.getItemMeta();
             im.setColor(color);
-            is.setItemMeta(im);
+            this.is.setItemMeta(im);
         } catch (ClassCastException expected) {
         }
         return this;
@@ -302,7 +302,7 @@ public class ItemBuilder {
      * @return The itemstack created/modified by the ItemBuilder instance.
      */
     public ItemStack toItemStack() {
-        return is;
+        return this.is;
     }
 
     public ItemBuilder setColor(int data) {

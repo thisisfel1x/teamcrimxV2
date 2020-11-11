@@ -16,10 +16,10 @@ import java.util.Arrays;
 
 public class BlockBreakListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
-    private Data data;
+    private final CaptureTheFlag captureTheFlag;
+    private final Data data;
 
-    private Material[] allowedBlocksToBreak = {
+    private final Material[] allowedBlocksToBreak = {
             Material.GRASS,
             Material.DANDELION,
             Material.POPPY,
@@ -71,7 +71,7 @@ public class BlockBreakListener implements Listener {
             event.setCancelled(true);
         }
 
-        if (data.getBlueSpawnCuboid().contains(block) || data.getRedSpawnCuboid().contains(block)) {
+        if (this.data.getBlueSpawnCuboid().contains(block) || this.data.getRedSpawnCuboid().contains(block)) {
             player.sendMessage("§cDu darfst nicht im Spawnbereich abbauen!");
             event.setCancelled(true);
             return;

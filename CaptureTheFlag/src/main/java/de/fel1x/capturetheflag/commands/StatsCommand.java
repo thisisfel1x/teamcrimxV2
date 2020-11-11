@@ -12,7 +12,7 @@ import java.util.Locale;
 
 public class StatsCommand implements CommandExecutor {
 
-    private CaptureTheFlag captureTheFlag;
+    private final CaptureTheFlag captureTheFlag;
 
     public StatsCommand(CaptureTheFlag captureTheFlag) {
         this.captureTheFlag = captureTheFlag;

@@ -7,13 +7,13 @@ import org.bson.Document;
 
 public class MongoDB {
 
-    private MongoClient mongoClient;
-    private MongoDatabase networkDatabase;
+    private final MongoClient mongoClient;
+    private final MongoDatabase networkDatabase;
 
-    private MongoCollection<Document> userCollection;
-    private MongoCollection<Document> lobbyCollection;
-    private MongoCollection<Document> mlgWarsCollection;
-    private MongoCollection<Document> captureTheFlagCollection;
+    private final MongoCollection<Document> userCollection;
+    private final MongoCollection<Document> lobbyCollection;
+    private final MongoCollection<Document> mlgWarsCollection;
+    private final MongoCollection<Document> captureTheFlagCollection;
 
     public MongoDB() {
 
@@ -29,26 +29,26 @@ public class MongoDB {
     }
 
     public MongoClient getMongoClient() {
-        return mongoClient;
+        return this.mongoClient;
     }
 
     public MongoDatabase getNetworkDatabase() {
-        return networkDatabase;
+        return this.networkDatabase;
     }
 
     public MongoCollection<Document> getUserCollection() {
-        return userCollection;
+        return this.userCollection;
     }
 
     public MongoCollection<Document> getLobbyCollection() {
-        return lobbyCollection;
+        return this.lobbyCollection;
     }
 
     public MongoCollection<Document> getMlgWarsCollection() {
-        return mlgWarsCollection;
+        return this.mlgWarsCollection;
     }
 
     public MongoCollection<Document> getCaptureTheFlagCollection() {
-        return captureTheFlagCollection;
+        return this.captureTheFlagCollection;
     }
 }

@@ -30,7 +30,7 @@ public class QuitListener implements Listener {
 
         Player player = event.getPlayer();
         GamePlayer gamePlayer = new GamePlayer(player);
-        Data data = captureTheFlag.getData();
+        Data data = this.captureTheFlag.getData();
 
         Gamestate gamestate = this.captureTheFlag.getGamestateHandler().getGamestate();
 

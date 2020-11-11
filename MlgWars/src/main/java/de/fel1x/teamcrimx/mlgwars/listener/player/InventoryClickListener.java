@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class InventoryClickListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public InventoryClickListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;

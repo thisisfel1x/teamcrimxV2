@@ -21,25 +21,25 @@ import java.util.Random;
 
 public class ChestFiller {
 
-    private final MlgWars mlgWars = MlgWars.getInstance();
     private ArrayList<ItemStack> items;
     private ArrayList<ItemStack> itemsTier2;
 
     public ChestFiller() {
 
-        if (this.mlgWars.isNoMap()) return;
+        MlgWars mlgWars = MlgWars.getInstance();
+        if (mlgWars.isNoMap()) return;
 
         Random random = new Random(); // Will be the instance of the random chance to generate all our random numbers.
 
-        items = new ArrayList<>();
-        itemsTier2 = new ArrayList<>();
+        this.items = new ArrayList<>();
+        this.itemsTier2 = new ArrayList<>();
 
-        if (this.mlgWars.isLabor()) {
-            this.addLaborItems(items);
-            this.addLaborItems(itemsTier2);
+        if (mlgWars.isLabor()) {
+            this.addLaborItems(this.items);
+            this.addLaborItems(this.itemsTier2);
         } else {
-            this.addItems(items);
-            this.addItemsTier2(itemsTier2);
+            this.addItems(this.items);
+            this.addItemsTier2(this.itemsTier2);
         }
 
         Cuboid cuboid = new Cuboid(Spawns.LOC_1.getLocation(), Spawns.LOC_2.getLocation());
@@ -56,7 +56,7 @@ public class ChestFiller {
 
                     chest.getBlockInventory().clear();
 
-                    Collections.shuffle(items);
+                    Collections.shuffle(this.items);
 
                     boolean[] chosen = new boolean[chest.getBlockInventory().getSize()]; // This checks which slots are already taken in the inventory.
 
@@ -72,11 +72,11 @@ public class ChestFiller {
                         } while (chosen[slot]); // Make sure the slot does not already have an item in it.
 
                         chosen[slot] = true;
-                        ItemStack is = items.get(random.nextInt(items.size()));
+                        ItemStack is = this.items.get(random.nextInt(this.items.size()));
                         Material current = is.getType();
 
                         while (chest.getBlockInventory().contains(current)) {
-                            is = items.get(random.nextInt(items.size()));
+                            is = this.items.get(random.nextInt(this.items.size()));
                             current = is.getType();
                         }
 
@@ -94,7 +94,7 @@ public class ChestFiller {
                     Chest chest = (Chest) b;
                     chest.getBlockInventory().clear();
 
-                    Collections.shuffle(itemsTier2);
+                    Collections.shuffle(this.itemsTier2);
 
                     boolean[] chosen = new boolean[chest.getBlockInventory().getSize()]; // This checks which slots are already taken in the inventory.
 
@@ -110,11 +110,11 @@ public class ChestFiller {
                         } while (chosen[slot]); // Make sure the slot does not already have an item in it.
 
                         chosen[slot] = true;
-                        ItemStack is = itemsTier2.get(random.nextInt(itemsTier2.size()));
+                        ItemStack is = this.itemsTier2.get(random.nextInt(this.itemsTier2.size()));
                         Material current = is.getType();
 
                         while (chest.getBlockInventory().contains(current)) {
-                            is = items.get(random.nextInt(items.size()));
+                            is = this.items.get(random.nextInt(this.items.size()));
                             current = is.getType();
                         }
 
@@ -512,11 +512,11 @@ public class ChestFiller {
     }
 
     public ArrayList<ItemStack> getItems() {
-        return items;
+        return this.items;
     }
 
     public ArrayList<ItemStack> getItemsTier2() {
-        return itemsTier2;
+        return this.itemsTier2;
     }
 
 }

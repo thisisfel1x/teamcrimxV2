@@ -17,7 +17,7 @@ public class Stats {
     }
 
     public int getKills() {
-        return kills;
+        return this.kills;
     }
 
     public void setKills(int kills) {
@@ -25,7 +25,7 @@ public class Stats {
     }
 
     public int getDeaths() {
-        return deaths;
+        return this.deaths;
     }
 
     public void setDeaths(int deaths) {
@@ -33,7 +33,7 @@ public class Stats {
     }
 
     public int getGamesPlayed() {
-        return gamesPlayed;
+        return this.gamesPlayed;
     }
 
     public void setGamesPlayed(int gamesPlayed) {
@@ -41,7 +41,7 @@ public class Stats {
     }
 
     public int getGamesWon() {
-        return gamesWon;
+        return this.gamesWon;
     }
 
     public void setGamesWon(int gamesWon) {
@@ -49,7 +49,7 @@ public class Stats {
     }
 
     public int getPlacement() {
-        return placement;
+        return this.placement;
     }
 
     public void setPlacement(int placement) {

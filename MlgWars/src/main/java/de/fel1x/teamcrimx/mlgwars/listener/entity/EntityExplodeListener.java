@@ -27,13 +27,13 @@ public class EntityExplodeListener implements Listener {
         this.mlgWars.getPluginManager().registerEvents(this, this.mlgWars);
 
         Random random = new Random();
-        drops.add(new ItemBuilder(Material.TNT, 3 + random.nextInt(5))
+        this.drops.add(new ItemBuilder(Material.TNT, 3 + random.nextInt(5))
                 .setName("§cInstant TNT")
                 .toItemStack());
-        drops.add(new ItemBuilder(Material.TNT, random.nextInt(3) + 1)
+        this.drops.add(new ItemBuilder(Material.TNT, random.nextInt(3) + 1)
                 .setName("§cVelocity TNT").addGlow()
                 .toItemStack());
-        drops.add(new ItemBuilder(Material.TNT, 1)
+        this.drops.add(new ItemBuilder(Material.TNT, 1)
                 .setName("§cInstant TNT Boost").addGlow()
                 .toItemStack());
     }

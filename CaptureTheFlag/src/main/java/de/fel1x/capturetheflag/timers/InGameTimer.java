@@ -42,8 +42,8 @@ public class InGameTimer implements ITimer {
             }
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.captureTheFlag, () -> {
-                if (timer >= 3 && timer <= 6) {
-                    switch (timer) {
+                if (this.timer >= 3 && this.timer <= 6) {
+                    switch (this.timer) {
                         case 3:
                             Bukkit.getOnlinePlayers().forEach(player -> {
                                 Actionbar.sendOnlyTitle(player, "§a§l3", 0, 30, 0);
@@ -106,14 +106,14 @@ public class InGameTimer implements ITimer {
     public void stop() {
         if (this.running) {
             this.running = false;
-            Bukkit.getScheduler().cancelTask(taskId);
+            Bukkit.getScheduler().cancelTask(this.taskId);
         }
     }
 
 
     public void checkBanner() {
         try {
-            Banner banner = (Banner) data.getRedFlagBaseLocation().getBlock().getState();
+            Banner banner = (Banner) this.data.getRedFlagBaseLocation().getBlock().getState();
 
             if (!banner.getBaseColor().equals(DyeColor.RED)) {
                 Team.RED.getTeamPlayers().forEach(player -> {
@@ -125,7 +125,7 @@ public class InGameTimer implements ITimer {
         }
 
         try {
-            Banner banner = (Banner) data.getBlueFlagBaseLocation().getBlock().getState();
+            Banner banner = (Banner) this.data.getBlueFlagBaseLocation().getBlock().getState();
 
             if (!banner.getBaseColor().equals(DyeColor.BLUE)) {
                 Team.BLUE.getTeamPlayers().forEach(player -> {

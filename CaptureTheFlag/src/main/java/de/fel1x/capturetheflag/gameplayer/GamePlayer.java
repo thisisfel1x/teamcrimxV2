@@ -30,7 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GamePlayer {
 
     private final CaptureTheFlag captureTheFlag = CaptureTheFlag.getInstance();
-    private final Data data = captureTheFlag.getData();
+    private final Data data = this.captureTheFlag.getData();
 
     private final ScoreboardHandler scoreboardHandler = CaptureTheFlag.getInstance().getScoreboardHandler();
 
@@ -43,19 +43,19 @@ public class GamePlayer {
     }
 
     public void addToInGamePlayers() {
-        this.data.getPlayers().add(player);
+        this.data.getPlayers().add(this.player);
     }
 
     public void removeFromInGamePlayers() {
-        this.data.getPlayers().remove(player);
+        this.data.getPlayers().remove(this.player);
     }
 
     public void addToSpectators() {
-        this.data.getSpectators().add(player);
+        this.data.getSpectators().add(this.player);
     }
 
     public void removeFromSpectators() {
-        this.data.getSpectators().remove(player);
+        this.data.getSpectators().remove(this.player);
     }
 
     public void setSpectator() {
@@ -70,7 +70,7 @@ public class GamePlayer {
     public void fetchPlayerData() {
         Bukkit.getScheduler().runTaskAsynchronously(this.captureTheFlag, () -> {
             Document ctfDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().
-                    find(new Document("_id", player.getUniqueId().toString())).first();
+                    find(new Document("_id", this.player.getUniqueId().toString())).first();
 
             if (ctfDocument == null) {
                 this.createPlayerData();
@@ -85,7 +85,7 @@ public class GamePlayer {
             int placement = this.getRankingPosition();
 
             Stats stats = new Stats(kills, deaths, gamesPlayed, gamesWon, placement);
-            this.data.getCachedStats().put(player, stats);
+            this.data.getCachedStats().put(this.player, stats);
 
             Kit savedKit = Kit.valueOf(ctfDocument.getString("selectedKit"));
 
@@ -128,9 +128,9 @@ public class GamePlayer {
     public void teleportToLobby() {
         try {
             Location location = SpawnHandler.loadLocation("lobby");
-            player.teleport(location);
+            this.player.teleport(location);
         } catch (Exception ignored) {
-            player.sendMessage("§cEs trat ein Fehler auf (TELEPORT_SPAWN)");
+            this.player.sendMessage("§cEs trat ein Fehler auf (TELEPORT_SPAWN)");
         }
     }
 
@@ -141,7 +141,7 @@ public class GamePlayer {
             }
             this.player.sendMessage(this.captureTheFlag.getPrefix() + "§7Du bist Team " + team.getTeamName() + " §7beigetreten!");
 
-            this.captureTheFlag.getScoreboardHandler().setGameScoreboard(player, team);
+            this.captureTheFlag.getScoreboardHandler().setGameScoreboard(this.player, team);
 
         } else {
             this.player.sendMessage(this.captureTheFlag.getPrefix() + "Dieses Team ist voll!");
@@ -168,10 +168,10 @@ public class GamePlayer {
     }
 
     public void teleportToTeamSpawn() {
-        if (Team.BLUE.getTeamPlayers().contains(player)) {
+        if (Team.BLUE.getTeamPlayers().contains(this.player)) {
             Location blueSpawn = SpawnHandler.loadLocation("blueSpawn");
             this.player.teleport(blueSpawn);
-        } else if (Team.RED.getTeamPlayers().contains(player)) {
+        } else if (Team.RED.getTeamPlayers().contains(this.player)) {
             Location redSpawn = SpawnHandler.loadLocation("redSpawn");
             this.player.teleport(redSpawn);
         } else {
@@ -180,9 +180,9 @@ public class GamePlayer {
     }
 
     public Location getRespawnLocation() {
-        if (Team.BLUE.getTeamPlayers().contains(player)) {
+        if (Team.BLUE.getTeamPlayers().contains(this.player)) {
             return SpawnHandler.loadLocation("blueSpawn");
-        } else if (Team.RED.getTeamPlayers().contains(player)) {
+        } else if (Team.RED.getTeamPlayers().contains(this.player)) {
             return SpawnHandler.loadLocation("redSpawn");
         }
         return SpawnHandler.loadLocation("spectator");
@@ -202,32 +202,32 @@ public class GamePlayer {
 
     public boolean isSpectator() {
 
-        return this.data.getSpectators().contains(player);
+        return this.data.getSpectators().contains(this.player);
 
     }
 
     public boolean isPlayer() {
 
-        return this.data.getPlayers().contains(player);
+        return this.data.getPlayers().contains(this.player);
 
     }
 
     public void selectKit(Kit kit) {
-        this.captureTheFlag.getData().getSelectedKit().put(player, kit);
+        this.captureTheFlag.getData().getSelectedKit().put(this.player, kit);
 
         try {
             IKit iKit = kit.getClazz().newInstance();
             this.player.getInventory().setItem(8, new ItemBuilder(iKit.getKitMaterial())
                     .setName("§8● §a" + iKit.getKitName())
                     .setLore(iKit.getKitDescription()).toItemStack());
-            this.scoreboardHandler.updateBoard(player, "§8● §6" + iKit.getKitName(), "kit", "§6");
+            this.scoreboardHandler.updateBoard(this.player, "§8● §6" + iKit.getKitName(), "kit", "§6");
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
 
     public Class<? extends IKit> getSelectedKit() {
-        return this.captureTheFlag.getData().getSelectedKit().get(player).getClazz();
+        return this.captureTheFlag.getData().getSelectedKit().get(this.player).getClazz();
     }
 
     public void setKitItems() {
@@ -235,14 +235,14 @@ public class GamePlayer {
             IKit iKit = (this.data.getSelectedKit().get(this.player) != null)
                     ? this.data.getSelectedKit().get(this.player).getClazz().newInstance()
                     : ArcherKit.class.newInstance();
-            iKit.setKitInventory(player);
+            iKit.setKitInventory(this.player);
         } catch (InstantiationException | IllegalAccessException ignored) {
-            player.sendMessage(this.captureTheFlag.getPrefix() + "§cEin Fehler ist aufgetreten! Du erhälst keine Kit-Items");
+            this.player.sendMessage(this.captureTheFlag.getPrefix() + "§cEin Fehler ist aufgetreten! Du erhälst keine Kit-Items");
         }
     }
 
     public void createPlayerData() {
-        new CaptureTheFlagDatabase().createPlayerData(player);
+        new CaptureTheFlagDatabase().createPlayerData(this.player);
     }
 
     public int getRankingPosition() {
@@ -261,9 +261,9 @@ public class GamePlayer {
     public void saveStats() {
         Bukkit.getScheduler().runTaskAsynchronously(this.captureTheFlag, () -> {
             Document ctfDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().
-                    find(new Document("_id", player.getUniqueId().toString())).first();
+                    find(new Document("_id", this.player.getUniqueId().toString())).first();
             Document networkDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getUserCollection().
-                    find(new Document("_id", player.getUniqueId().toString())).first();
+                    find(new Document("_id", this.player.getUniqueId().toString())).first();
 
             Stats stats = this.data.getCachedStats().get(this.player);
 
@@ -310,7 +310,7 @@ public class GamePlayer {
 
     public void saveKitToDatabase() {
         Document ctfDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().
-                find(new Document("_id", player.getUniqueId().toString())).first();
+                find(new Document("_id", this.player.getUniqueId().toString())).first();
         this.saveObjectInDocument("selectedKit", this.data.getSelectedKit().get(this.player).name(), ctfDocument);
     }
 }

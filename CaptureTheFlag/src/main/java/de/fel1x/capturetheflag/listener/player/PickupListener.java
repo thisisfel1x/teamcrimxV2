@@ -10,7 +10,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 
 public class PickupListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
+    private final CaptureTheFlag captureTheFlag;
 
     public PickupListener(CaptureTheFlag captureTheFlag) {
         this.captureTheFlag = captureTheFlag;

@@ -44,7 +44,7 @@ public enum Kit {
     }
 
     public Class<? extends IKit> getClazz() {
-        return clazz;
+        return this.clazz;
     }
 
     public void setClazz(Class<? extends IKit> clazz) {

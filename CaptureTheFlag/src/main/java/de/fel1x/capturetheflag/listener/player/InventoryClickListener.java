@@ -8,7 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class InventoryClickListener implements Listener {
 
-    private CaptureTheFlag captureTheFlag;
+    private final CaptureTheFlag captureTheFlag;
 
     public InventoryClickListener(CaptureTheFlag captureTheFlag) {
         this.captureTheFlag = captureTheFlag;

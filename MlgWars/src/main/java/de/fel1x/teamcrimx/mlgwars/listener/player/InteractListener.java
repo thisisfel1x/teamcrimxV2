@@ -38,7 +38,7 @@ public class InteractListener implements Listener {
     private final Random random = new Random();
     private int count;
 
-    private Material[] woolTypes = {
+    private final Material[] woolTypes = {
             Material.WHITE_WOOL, Material.ORANGE_WOOL, Material.MAGENTA_WOOL, Material.LIGHT_BLUE_WOOL, Material.YELLOW_WOOL,
             Material.LIME_WOOL, Material.PINK_WOOL, Material.GRAY_WOOL, Material.LIGHT_GRAY_WOOL, Material.CYAN_WOOL,
             Material.PURPLE_WOOL, Material.BLUE_WOOL, Material.GREEN_WOOL, Material.RED_WOOL
@@ -146,8 +146,8 @@ public class InteractListener implements Listener {
                             FireworkMeta fireworkMeta = firework.getFireworkMeta();
 
                             fireworkMeta.setPower(3);
-                            fireworkMeta.addEffect(FireworkEffect.builder().withColor(Color.fromBGR(random.nextInt(255),
-                                    random.nextInt(255), random.nextInt(255))).flicker(true).trail(true).build());
+                            fireworkMeta.addEffect(FireworkEffect.builder().withColor(Color.fromBGR(this.random.nextInt(255),
+                                    this.random.nextInt(255), this.random.nextInt(255))).flicker(true).trail(true).build());
                             firework.setFireworkMeta(fireworkMeta);
                             firework.addPassenger(player);
                             break;
@@ -170,7 +170,7 @@ public class InteractListener implements Listener {
                                 public void run() {
                                     placeCylinder(player.getLocation().clone().subtract(0, 10, 0),
                                             Material.SLIME_BLOCK, 2);
-                                    player.sendMessage(mlgWars.getPrefix() + "§7Die Rettungsplattform §cverschwindet " +
+                                    player.sendMessage(InteractListener.this.mlgWars.getPrefix() + "§7Die Rettungsplattform §cverschwindet " +
                                             "§7in §e30 Sekunden");
                                 }
                             }.runTaskLater(this.mlgWars, delay);
@@ -233,17 +233,17 @@ public class InteractListener implements Listener {
                                 @Override
                                 public void run() {
 
-                                    count = player.getMetadata("thorcount").get(0).asInt();
+                                    InteractListener.this.count = player.getMetadata("thorcount").get(0).asInt();
 
-                                    Actionbar.sendActionbar(player, "§6Thor §8● " + ProgressBar.getProgressBar(count, 10, 10,
+                                    Actionbar.sendActionbar(player, "§6Thor §8● " + ProgressBar.getProgressBar(InteractListener.this.count, 10, 10,
                                             '█', ChatColor.GREEN, ChatColor.DARK_GRAY));
 
-                                    if (count == 10) {
-                                        data.getThorTask().get(player.getUniqueId()).cancel();
-                                        data.getThorTask().remove(player.getUniqueId());
+                                    if (InteractListener.this.count == 10) {
+                                        InteractListener.this.data.getThorTask().get(player.getUniqueId()).cancel();
+                                        InteractListener.this.data.getThorTask().remove(player.getUniqueId());
                                         Actionbar.sendActionbar(player, "§6Thor §8● §7Hammer wieder §abereit!");
                                     } else {
-                                        player.setMetadata("thorcount", new FixedMetadataValue(mlgWars, count + 1));
+                                        player.setMetadata("thorcount", new FixedMetadataValue(InteractListener.this.mlgWars, InteractListener.this.count + 1));
                                     }
                                 }
                             });
@@ -318,25 +318,25 @@ public class InteractListener implements Listener {
                                     Block block = egg.getWorld().getBlockAt(egg.getLocation().clone().add(0, -2, 0));
                                     Block finalBlock = block;
 
-                                    if (Arrays.stream(woolTypes).noneMatch(material -> material == finalBlock.getType()) && block.getType() == Material.AIR) {
-                                        block.setType(Arrays.asList(woolTypes).get(random.nextInt(woolTypes.length)), true);
+                                    if (Arrays.stream(InteractListener.this.woolTypes).noneMatch(material -> material == finalBlock.getType()) && block.getType() == Material.AIR) {
+                                        block.setType(Arrays.asList(InteractListener.this.woolTypes).get(InteractListener.this.random.nextInt(InteractListener.this.woolTypes.length)), true);
                                     }
 
                                     block = egg.getWorld().getBlockAt(egg.getLocation().clone().add(1, -2, 0));
 
-                                    if (Arrays.stream(woolTypes).noneMatch(material -> material == finalBlock.getType()) && block.getType() == Material.AIR) {
-                                        block.setType(Arrays.asList(woolTypes).get(random.nextInt(woolTypes.length)), true);
+                                    if (Arrays.stream(InteractListener.this.woolTypes).noneMatch(material -> material == finalBlock.getType()) && block.getType() == Material.AIR) {
+                                        block.setType(Arrays.asList(InteractListener.this.woolTypes).get(InteractListener.this.random.nextInt(InteractListener.this.woolTypes.length)), true);
                                     }
 
                                     block = egg.getWorld().getBlockAt(egg.getLocation().clone().add(0, -2, 1));
 
-                                    if (Arrays.stream(woolTypes).noneMatch(material -> material == finalBlock.getType()) && block.getType() == Material.AIR) {
-                                        block.setType(Arrays.asList(woolTypes).get(random.nextInt(woolTypes.length)), true);
+                                    if (Arrays.stream(InteractListener.this.woolTypes).noneMatch(material -> material == finalBlock.getType()) && block.getType() == Material.AIR) {
+                                        block.setType(Arrays.asList(InteractListener.this.woolTypes).get(InteractListener.this.random.nextInt(InteractListener.this.woolTypes.length)), true);
                                     }
 
                                     if (egg.isDead() || egg.isOnGround() || egg.getLocation().getY() < 0) {
                                         this.cancel();
-                                        data.getEggTask().get(player.getUniqueId()).remove(this);
+                                        InteractListener.this.data.getEggTask().get(player.getUniqueId()).remove(this);
                                     }
                                 }
                             };
@@ -419,7 +419,7 @@ public class InteractListener implements Listener {
 
                             }
 
-                            DisguiseType toDisguise = disguiseType[random.nextInt(disguiseType.length)];
+                            DisguiseType toDisguise = disguiseType[this.random.nextInt(disguiseType.length)];
                             player.sendMessage(this.mlgWars.getPrefix() + "§7Du bist nun als §a" + toDisguise.name()
                                     + " §7versteckt!");
 
@@ -435,14 +435,14 @@ public class InteractListener implements Listener {
                                 @Override
                                 public void run() {
 
-                                    count = player.getMetadata("farmer").get(0).asInt();
+                                    InteractListener.this.count = player.getMetadata("farmer").get(0).asInt();
 
-                                    Actionbar.sendActionbar(player, "§6Farmer (versteckt) §8● " + ProgressBar.getProgressBar(count, 60, 15,
+                                    Actionbar.sendActionbar(player, "§6Farmer (versteckt) §8● " + ProgressBar.getProgressBar(InteractListener.this.count, 60, 15,
                                             '█', ChatColor.GREEN, ChatColor.DARK_GRAY));
 
-                                    if (count == 0) {
-                                        data.getFarmerTask().get(player.getUniqueId()).cancel();
-                                        data.getFarmerTask().remove(player.getUniqueId());
+                                    if (InteractListener.this.count == 0) {
+                                        InteractListener.this.data.getFarmerTask().get(player.getUniqueId()).cancel();
+                                        InteractListener.this.data.getFarmerTask().remove(player.getUniqueId());
                                         if (DisguiseAPI.isDisguised(player)) {
                                             DisguiseAPI.undisguiseToAll(player);
                                         }
@@ -451,7 +451,7 @@ public class InteractListener implements Listener {
 
                                         Actionbar.sendOnlySubtitle(player, "§aWieder sichtbar!", 5, 20, 5);
                                     } else {
-                                        player.setMetadata("farmer", new FixedMetadataValue(mlgWars, count - 1));
+                                        player.setMetadata("farmer", new FixedMetadataValue(InteractListener.this.mlgWars, InteractListener.this.count - 1));
                                     }
                                 }
                             });
@@ -497,18 +497,18 @@ public class InteractListener implements Listener {
 
                                         if (buildTurtle(turtleEgg.getLocation(), player, turtleBuildState, turtleHeight)) {
                                             this.cancel();
-                                            data.getTurtleTask().get(player.getUniqueId()).remove(this);
+                                            InteractListener.this.data.getTurtleTask().get(player.getUniqueId()).remove(this);
                                         }
 
                                         turtleEgg.setMetadata("state",
-                                                new FixedMetadataValue(mlgWars, turtleBuildState + 1));
+                                                new FixedMetadataValue(InteractListener.this.mlgWars, turtleBuildState + 1));
                                         turtleEgg.setMetadata("height",
-                                                new FixedMetadataValue(mlgWars, turtleHeight + 1));
+                                                new FixedMetadataValue(InteractListener.this.mlgWars, turtleHeight + 1));
                                     }
 
                                     if (turtleEgg.getLocation().getY() < 0) {
                                         this.cancel();
-                                        data.getTurtleTask().get(player.getUniqueId()).remove(this);
+                                        InteractListener.this.data.getTurtleTask().get(player.getUniqueId()).remove(this);
                                     }
                                 }
                             };
@@ -542,20 +542,20 @@ public class InteractListener implements Listener {
                                 event.setCancelled(true);
                                 this.removeItem(player);
 
-                                count = 0;
+                                this.count = 0;
                                 Location toTeleport = nearestPlayer.getLocation();
 
                                 this.data.getTeleporterTask().put(player.getUniqueId(), new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        if (count < 3) {
+                                        if (InteractListener.this.count < 3) {
                                             ParticleUtils.drawParticleLine(player.getLocation().clone().add(0, 0.5, 0),
                                                     nearestPlayer.getLocation().clone().add(0, 0.5, 0), Particles.SPELL_WITCH,
                                                     750, 0, 0, 0);
                                             player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 2f, 4.5f);
                                         } else {
                                             if (nearestPlayer.isDead() || nearestPlayer.getLocation().getY() < 0) {
-                                                player.sendMessage(mlgWars.getPrefix() + "§cDer angepeilte Spieler ist Tod! " +
+                                                player.sendMessage(InteractListener.this.mlgWars.getPrefix() + "§cDer angepeilte Spieler ist Tod! " +
                                                         "Du wirst in die Mitte teleportiert");
                                                 player.teleport(Spawns.SPECTATOR.getLocation());
                                             } else {
@@ -564,10 +564,10 @@ public class InteractListener implements Listener {
                                                 player.getWorld().playEffect(toTeleport, Effect.ENDER_SIGNAL, 1);
                                             }
 
-                                            data.getTeleporterTask().remove(player.getUniqueId());
+                                            InteractListener.this.data.getTeleporterTask().remove(player.getUniqueId());
                                             this.cancel();
                                         }
-                                        count++;
+                                        InteractListener.this.count++;
                                     }
                                 });
 
@@ -613,7 +613,7 @@ public class InteractListener implements Listener {
 
                                         if (item.isOnGround() || item.getLocation().getY() < 0 || item.isDead() || !item.isValid()) {
                                             this.cancel();
-                                            data.getCsgoTasks().get(player.getUniqueId()).remove(this);
+                                            InteractListener.this.data.getCsgoTasks().get(player.getUniqueId()).remove(this);
                                             item.remove();
                                         }
                                     }
@@ -648,18 +648,18 @@ public class InteractListener implements Listener {
                                             new InstantFirework(FireworkEffect.builder()
                                                     .withColor(Color.WHITE, Color.YELLOW, Color.GRAY).build(),
                                                     item.getLocation().clone().add(0, 0.5, 0));
-                                            new SmokeGrenade(mlgWars, item.getLocation(), 10, item.getWorld());
+                                            new SmokeGrenade(InteractListener.this.mlgWars, item.getLocation(), 10, item.getWorld());
                                         }
 
                                         if (item.isOnGround() || item.getLocation().getY() < 0 || item.isDead() || !item.isValid()) {
                                             this.cancel();
-                                            data.getCsgoTasks().get(player.getUniqueId()).remove(this);
+                                            InteractListener.this.data.getCsgoTasks().get(player.getUniqueId()).remove(this);
                                             item.remove();
                                         }
                                     }
                                 };
                                 bukkitRunnable.runTaskTimer(this.mlgWars, 0L, 1L);
-                                data.getCsgoTasks().get(player.getUniqueId()).add(bukkitRunnable);
+                                this.data.getCsgoTasks().get(player.getUniqueId()).add(bukkitRunnable);
                             }
                             break;
                         case VALORANT:

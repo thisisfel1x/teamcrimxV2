@@ -28,15 +28,15 @@ public class SpectatorInventory implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
 
-        column = 0;
-        row = 0;
+        this.column = 0;
+        this.row = 0;
         MlgWars.getInstance().getData().getPlayers().forEach(current -> {
 
             ItemStack skull = SkullCreator.itemFromName(current.getName());
             ItemMeta itemMeta = skull.getItemMeta();
             itemMeta.setDisplayName(current.getName());
             skull.setItemMeta(itemMeta);
-            contents.set(row, column, ClickableItem.of(skull, event -> {
+            contents.set(this.row, this.column, ClickableItem.of(skull, event -> {
 
                 if (!(event.getWhoClicked() instanceof Player)) return;
 
@@ -53,11 +53,11 @@ public class SpectatorInventory implements InventoryProvider {
 
             }));
 
-            column++;
+            this.column++;
 
-            if (column == 9) {
-                column = 0;
-                row += 1;
+            if (this.column == 9) {
+                this.column = 0;
+                this.row += 1;
             }
         });
     }
@@ -65,12 +65,12 @@ public class SpectatorInventory implements InventoryProvider {
     @Override
     public void update(Player player, InventoryContents contents) {
 
-        column = 0;
-        row = 0;
+        this.column = 0;
+        this.row = 0;
         MlgWars.getInstance().getData().getPlayers().forEach(current -> {
 
             ItemStack skull = SkullCreator.itemFromName(current.getName());
-            contents.set(row, column, ClickableItem.of(skull, event -> {
+            contents.set(this.row, this.column, ClickableItem.of(skull, event -> {
 
                 if (!(event.getWhoClicked() instanceof Player)) return;
 
@@ -86,11 +86,11 @@ public class SpectatorInventory implements InventoryProvider {
 
             }));
 
-            column++;
+            this.column++;
 
-            if (column == 9) {
-                column = 0;
-                row += 1;
+            if (this.column == 9) {
+                this.column = 0;
+                this.row += 1;
             }
         });
     }

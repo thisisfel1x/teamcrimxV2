@@ -34,7 +34,7 @@ public class EndingTimer implements ITimer {
             });
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.captureTheFlag, () -> {
-                switch (countdown) {
+                switch (this.countdown) {
                     case 20:
                     case 10:
                     case 5:
@@ -43,7 +43,7 @@ public class EndingTimer implements ITimer {
                     case 2:
                     case 1:
                         Bukkit.broadcastMessage(this.captureTheFlag.getPrefix() + "§cDer Server startet in "
-                                + (countdown == 1 ? "einer Sekunde" : this.countdown + " Sekunden") + " neu");
+                                + (this.countdown == 1 ? "einer Sekunde" : this.countdown + " Sekunden") + " neu");
                         Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2f, 3f));
                         break;
 
@@ -56,14 +56,14 @@ public class EndingTimer implements ITimer {
                         break;
                 }
 
-                if (countdown > 0) {
+                if (this.countdown > 0) {
                     Bukkit.getOnlinePlayers().forEach(current -> {
 
-                        current.setLevel(countdown);
-                        current.setExp((float) countdown / (float) 20);
+                        current.setLevel(this.countdown);
+                        current.setExp((float) this.countdown / (float) 20);
 
                     });
-                } else if (countdown < 0 && Bukkit.getOnlinePlayers().isEmpty()) {
+                } else if (this.countdown < 0 && Bukkit.getOnlinePlayers().isEmpty()) {
                     Bukkit.getServer().shutdown();
                 }
 

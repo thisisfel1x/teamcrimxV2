@@ -10,11 +10,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class QuitListener implements Listener {
 
-    private CrimxLobby crimxLobby;
-
     public QuitListener(CrimxLobby crimxLobby) {
-        this.crimxLobby = crimxLobby;
-        this.crimxLobby.getPluginManager().registerEvents(this, this.crimxLobby);
+        crimxLobby.getPluginManager().registerEvents(this, crimxLobby);
     }
 
     @EventHandler
