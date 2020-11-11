@@ -114,8 +114,8 @@ public class InGameTimer implements ITimer {
                                     continue;
 
                                 if (gamePlayer1.getSelectedKit() != Kit.STINKER) {
-                                    player1.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 3, 0, true, true), true);
-                                    player1.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 3, 0, true, true), true);
+                                    player1.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 3, 0, true, true));
+                                    player1.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 3, 0, true, true));
                                 }
                             }
                         } else if (gamePlayer.getSelectedKit() == Kit.KANGAROO) {

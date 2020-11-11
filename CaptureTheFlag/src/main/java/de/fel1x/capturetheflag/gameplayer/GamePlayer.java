@@ -275,10 +275,14 @@ public class GamePlayer {
                 return;
             }
 
-            this.saveObjectInDocument("kills", stats.getKills(), ctfDocument);
-            this.saveObjectInDocument("deaths", stats.getDeaths(), ctfDocument);
-            this.saveObjectInDocument("gamesPlayed", stats.getGamesPlayed(), ctfDocument);
-            this.saveObjectInDocument("gamesWon", stats.getGamesWon(), ctfDocument);
+            Document toUpdate = new Document();
+            toUpdate.append("kills", stats.getKills())
+                    .append("deaths", stats.getDeaths())
+                    .append("gamesPlayed", stats.getGamesPlayed())
+                    .append("gamesWon", stats.getGamesWon());
+
+            Bson statsUpdateOperation = new Document("$set", toUpdate);
+            this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().updateOne(ctfDocument , statsUpdateOperation);
 
             long onlineTimeInMillis;
 
