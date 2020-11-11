@@ -61,9 +61,9 @@ public class WorldLoader {
             return;
         }
 
-        Location titleSpawn = new Location(Bukkit.getWorld("Wartelobby"), -9, 7, 11);
+        Location titleSpawn = new Location(Bukkit.getWorld("Wartelobby"), -9, 6, 11);
         ArmorStand title = (ArmorStand) titleSpawn.getWorld().spawnEntity(titleSpawn.toCenterLocation(), EntityType.ARMOR_STAND);
-        title.setCustomName("§9CaptureTheFlag");
+        title.setCustomName("§9§lCaptureTheFlag");
         title.setInvisible(true);
         title.setGravity(false);
         title.setCustomNameVisible(true);
