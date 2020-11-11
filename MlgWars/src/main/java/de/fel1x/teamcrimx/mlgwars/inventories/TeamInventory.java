@@ -65,7 +65,6 @@ public class TeamInventory implements InventoryProvider {
         contents.setProperty("state", state + 1);
 
         if (state % 5 != 0) {
-            Bukkit.broadcastMessage("ab");
             return;
         }
 

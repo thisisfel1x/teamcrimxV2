@@ -83,7 +83,7 @@ public class WorldLoader {
 
     }
 
-    private void setTop3Wall() {
+    public void setTop3Wall() {
         if (this.spawnHandler.loadLocation("topHead1") == null) {
             return;
         }

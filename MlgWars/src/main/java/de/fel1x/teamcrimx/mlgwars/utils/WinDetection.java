@@ -100,7 +100,7 @@ public class WinDetection {
                         this.mlgWars.startTimerByClass(EndingTimer.class);
                     } else if (this.mlgWars.getData().getPlayers().size() == 0) {
 
-                        this.mlgWars.getWorldLoader().setTop5Wall();
+                        this.mlgWars.getWorldLoader().setTop3Wall();
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             GamePlayer gamePlayer = new GamePlayer(player);
@@ -195,7 +195,7 @@ public class WinDetection {
                         this.mlgWars.startTimerByClass(EndingTimer.class);
                     } else if (this.mlgWars.getData().getGameTeams().size() == 0) {
 
-                        this.mlgWars.getWorldLoader().setTop5Wall();
+                        this.mlgWars.getWorldLoader().setTop3Wall();
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             GamePlayer gamePlayer = new GamePlayer(player);
