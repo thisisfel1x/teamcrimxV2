@@ -100,8 +100,6 @@ public class WinDetection {
                         mlgWars.startTimerByClass(EndingTimer.class);
                     } else if (mlgWars.getData().getPlayers().size() == 0) {
 
-                        mlgWars.getWorldLoader().setTop3Wall();
-
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             GamePlayer gamePlayer = new GamePlayer(player);
                             gamePlayer.cleanUpOnJoin();
@@ -194,8 +192,6 @@ public class WinDetection {
 
                         mlgWars.startTimerByClass(EndingTimer.class);
                     } else if (mlgWars.getData().getGameTeams().size() == 0) {
-
-                        mlgWars.getWorldLoader().setTop3Wall();
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             GamePlayer gamePlayer = new GamePlayer(player);
