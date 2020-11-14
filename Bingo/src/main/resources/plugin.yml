@@ -1,0 +1,23 @@
+name: Bingo
+version: ${project.version}
+main: de.fel1x.bingo.Bingo
+authors: [ fel1x ]
+website: teamcrimx.de
+api-version: 1.16
+
+commands:
+  items:
+    description: check the to-do items
+
+  backpack:
+    description: open your team backpack
+    aliases: [ bp ]
+
+  skipitem:
+    description: skip items which you don't want
+
+  stats:
+    description: Check your current statistics
+
+  start:
+    description: Start the game
