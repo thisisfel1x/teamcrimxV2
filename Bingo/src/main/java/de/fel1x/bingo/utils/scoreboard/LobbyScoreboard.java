@@ -111,15 +111,11 @@ public class LobbyScoreboard {
     }
 
     public void handleQuit(Player player) {
-
         this.lobbyScoreboard.getTeams().forEach(scoreboardTeam -> {
-
             if (scoreboardTeam.hasEntry(player.getName())) {
                 scoreboardTeam.removeEntry(player.getName());
             }
-
         });
-
     }
 
     public void updateBoard(Player player, String value, String score, String lastColorcode) {

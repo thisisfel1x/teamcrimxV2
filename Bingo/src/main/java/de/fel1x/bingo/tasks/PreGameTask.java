@@ -7,6 +7,8 @@ import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.objects.BingoTeam;
+import de.fel1x.bingo.utils.Utils;
+import de.fel1x.bingo.utils.scoreboard.GameScoreboard;
 import org.bukkit.*;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.util.Vector;
@@ -25,7 +27,6 @@ public class PreGameTask implements IBingoTask {
 
     @Override
     public void start() {
-
         if (!this.isRunning) {
 
             BukkitCloudNetHelper.changeToIngame();
@@ -42,14 +43,15 @@ public class PreGameTask implements IBingoTask {
                         if (bingoTeam.getTeamPlayers().size() < bingoTeam.getTeamSize()) {
                             bingoPlayer.setTeam(bingoTeam);
                             player.sendMessage(this.bingo.getPrefix() + "§7Du wurdest zu Team "
-                                    + bingoTeam.getName() + " zugewiesen");
-                            this.bingo.getLobbyScoreboard().setLobbyScoreboard(player);
+                                    + Utils.getChatColor(bingoTeam.getColor()) + bingoTeam.getName() + " zugewiesen");
                             break;
                         }
                     }
                 }
-
             });
+
+            this.bingo.setGameScoreboard(new GameScoreboard());
+            this.bingo.getData().getPlayers().forEach(player -> this.bingo.getGameScoreboard().setGameScoreboard(player));
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.bingo, () -> {
 

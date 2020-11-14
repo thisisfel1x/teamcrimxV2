@@ -71,6 +71,8 @@ public class BingoPlayer {
                 this.bingo.getLobbyScoreboard().updateBoard(this.player, "§8● §6" + this.bingo.getFormattedBiomeName(),
                         "biome", "§6");
                 break;
+            case PREGAME: case INGAME:
+                this.bingo.getGameScoreboard().handleJoin(this.player);
         }
     }
 
@@ -97,7 +99,14 @@ public class BingoPlayer {
 
     public void cleanupOnQuit() {
 
-        this.bingo.getLobbyScoreboard().handleQuit(this.player);
+        switch (this.bingo.getGamestateHandler().getGamestate()) {
+            case IDLE: case LOBBY:
+                this.bingo.getLobbyScoreboard().handleQuit(this.player);
+                break;
+            case PREGAME: case INGAME:
+                this.bingo.getGameScoreboard().handleQuit(this.player);
+                break;
+        }
 
         this.data.getPlayers().remove(this.player);
         this.data.getSpectators().remove(this.player);

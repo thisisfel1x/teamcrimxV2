@@ -16,6 +16,7 @@ import de.fel1x.bingo.listener.player.*;
 import de.fel1x.bingo.scenarios.IBingoScenario;
 import de.fel1x.bingo.tasks.IBingoTask;
 import de.fel1x.bingo.tasks.IdleTask;
+import de.fel1x.bingo.utils.scoreboard.GameScoreboard;
 import de.fel1x.bingo.utils.scoreboard.LobbyScoreboard;
 import de.fel1x.bingo.utils.world.StatsArmorstand;
 import de.fel1x.bingo.utils.world.WorldGenerator;
@@ -50,7 +51,9 @@ public final class Bingo extends JavaPlugin {
     private ItemGenerator itemGenerator;
     private InventoryManager inventoryManager;
     private WorldGenerator worldGenerator;
+
     private LobbyScoreboard lobbyScoreboard;
+    private GameScoreboard gameScoreboard;
 
     private IBingoTask bingoTask;
     private Location spawnLocation;
@@ -226,6 +229,14 @@ public final class Bingo extends JavaPlugin {
 
     public Location getSpawnLocation() {
         return this.spawnLocation;
+    }
+
+    public GameScoreboard getGameScoreboard() {
+        return this.gameScoreboard;
+    }
+
+    public void setGameScoreboard(GameScoreboard gameScoreboard) {
+        this.gameScoreboard = gameScoreboard;
     }
 
     public String getFormattedBiomeName() {

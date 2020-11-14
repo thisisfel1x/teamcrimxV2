@@ -59,14 +59,18 @@ public class GameTask implements IBingoTask {
                                     String.format("%02d:%02d", this.eventTimer / 60, this.eventTimer % 60)))));
                 }
 
-                Bukkit.getOnlinePlayers().forEach(player -> player.sendActionBar("§7Vergangene Zeit: §e§l" + this.formatSeconds(this.timer)));
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    this.bingo.getGameScoreboard().updateIngameScoreboard(this.getTopTeams(), player);
+                    player.sendActionBar("§7Vergangene Zeit: §e§l" + this.formatSeconds(this.timer));
+                });
 
                 if (this.eventTimer == 0) {
                     this.eventTimer = this.random.nextInt(120) + 60;
                     this.timeToGo = this.eventTimer;
 
                     try {
-                        IBingoScenario bingoScenario = this.bingo.startRandomScenario().get(this.random.nextInt(this.bingo.startRandomScenario().size())).newInstance();
+                        IBingoScenario bingoScenario = this.bingo.startRandomScenario()
+                                .get(this.random.nextInt(this.bingo.startRandomScenario().size())).newInstance();
                         bingoScenario.execute();
                         this.bossBar.setTitle("§7Event §8» §a§l" + bingoScenario.getName());
                     } catch (InstantiationException | IllegalAccessException e) {
