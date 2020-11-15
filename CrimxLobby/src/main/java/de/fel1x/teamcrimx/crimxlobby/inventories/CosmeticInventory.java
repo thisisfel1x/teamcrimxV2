@@ -55,7 +55,7 @@ public class CosmeticInventory implements InventoryProvider {
 
                 if (!bought) {
 
-                    contents.set(row, slot, ClickableItem.of(new ItemBuilder(Material.LIGHT_GRAY_DYE, 1)
+                    contents.set(row, slot, ClickableItem.of(new ItemBuilder(Material.GRAY_DYE, 1)
                                     .setName("§8● " + iCosmetic.getCosmeticName() + " §8» §e" + iCosmetic.getCosmeticCost() + " Coins")
                                     .setLore("§7§kaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                                             "§7§kaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").toItemStack(),

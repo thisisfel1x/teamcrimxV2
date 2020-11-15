@@ -365,8 +365,11 @@ public class LobbyPlayer {
 
         this.data.getLobbyDatabasePlayer().put(this.player.getUniqueId(), new LobbyDatabasePlayer(hotbarSoundEnabled, spawnAtLastLocation, lastReward));
 
-        CoinsAPI coinsAPI = new CoinsAPI(this.player.getUniqueId());
-        int coins = coinsAPI.getCoins();
+        for (Cosmetic cosmetic : Cosmetic.values()) {
+            if(this.getObjectFromMongoDocument(cosmetic.name(), MongoDBCollection.LOBBY) == null) {
+                this.saveObjectInDocument(cosmetic.name(), false, MongoDBCollection.LOBBY);
+            }
+        }
 
     }
 

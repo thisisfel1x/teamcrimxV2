@@ -106,9 +106,9 @@ public class WorldLoader {
             if(armorStand.getItem(EquipmentSlot.HAND).getType() == Material.TNT) {
                 armorStandTop1 = armorStand;
             } else if(armorStand.getItem(EquipmentSlot.HAND).getType() == Material.GRASS_BLOCK) {
-                armorStandTop3 = armorStand;
-            } else if(armorStand.getItem(EquipmentSlot.HAND).getType() == Material.IRON_SWORD) {
                 armorStandTop2 = armorStand;
+            } else if(armorStand.getItem(EquipmentSlot.HAND).getType() == Material.IRON_SWORD) {
+                armorStandTop3 = armorStand;
             }
         }
 
@@ -182,9 +182,9 @@ public class WorldLoader {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(CaptureTheFlag.getInstance(), () -> {
             armorStand1.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand1.get(this.count), 2,
                     new Particle.DustOptions(Color.fromRGB(255,165,0), 1));
-            armorStand3.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand3.get(this.count), 2,
-                    new Particle.DustOptions(Color.fromRGB(211,211,211), 1));
             armorStand2.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand2.get(this.count), 2,
+                    new Particle.DustOptions(Color.fromRGB(211,211,211), 1));
+            armorStand3.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand3.get(this.count), 2,
                     new Particle.DustOptions(Color.fromRGB(205, 127, 50), 1));
 
             this.count++;
