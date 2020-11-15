@@ -35,10 +35,10 @@ public class ThrowerKit implements IKit {
                 new ItemBuilder(Material.TNT, 12)
                         .setName("§8● §7Werfbares §cTNT")
                         .toItemStack(),
-                new ItemBuilder(Material.FIREBALL, 16)
+                new ItemBuilder(Material.FIRE_CHARGE, 16)
                         .setName("§8● §7Werfbare §6Feuerkugeln")
                         .toItemStack(),
-                new ItemBuilder(Material.SKULL_ITEM, 16)
+                new ItemBuilder(Material.WITHER_SKELETON_SKULL, 16)
                         .setColor(1)
                         .setName("§8● §7Werfbare §0Witherköpfe")
                         .toItemStack());

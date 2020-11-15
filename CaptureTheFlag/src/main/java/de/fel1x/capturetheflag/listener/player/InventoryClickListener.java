@@ -8,10 +8,17 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class InventoryClickListener implements Listener {
 
+    private final CaptureTheFlag captureTheFlag;
+
+    public InventoryClickListener(CaptureTheFlag captureTheFlag) {
+        this.captureTheFlag = captureTheFlag;
+        this.captureTheFlag.getPluginManager().registerEvents(this, this.captureTheFlag);
+    }
+
     @EventHandler
     public void on(InventoryClickEvent event) {
 
-        if (!CaptureTheFlag.getInstance().getGamestateHandler().getGamestate().equals(Gamestate.INGAME)) {
+        if (!this.captureTheFlag.getGamestateHandler().getGamestate().equals(Gamestate.INGAME)) {
             event.setCancelled(true);
         }
 

@@ -23,6 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
@@ -72,10 +73,10 @@ public class GamePlayer {
     public void initDatabasePlayer() {
         Bukkit.getScheduler().runTaskAsynchronously(this.mlgWars, () -> {
             Document mlgWarsDocument = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().
-                    find(new Document("_id", player.getUniqueId().toString())).first();
+                    find(new Document("_id", this.player.getUniqueId().toString())).first();
 
             Document networkDocument = this.mlgWars.getCrimxAPI().getMongoDB().getUserCollection().
-                    find(new Document("_id", player.getUniqueId().toString())).first();
+                    find(new Document("_id", this.player.getUniqueId().toString())).first();
 
             this.data.getMlgWarsPlayerDocument().put(this.player.getUniqueId(), mlgWarsDocument);
             this.data.getNetworkPlayerDocument().put(this.player.getUniqueId(), networkDocument);
@@ -84,7 +85,7 @@ public class GamePlayer {
             this.networkDocument = this.data.getNetworkPlayerDocument().get(this.player.getUniqueId());
 
             if (!((String) this.getObjectFromMongoDocument("name", MongoDBCollection.MLGWARS)).equalsIgnoreCase(this.player.getName())) {
-                this.saveObjectInDocument("name", player.getName(), MongoDBCollection.MLGWARS);
+                this.saveObjectInDocument("name", this.player.getName(), MongoDBCollection.MLGWARS);
             }
 
             for (Kit kit : Kit.values()) {
@@ -113,27 +114,27 @@ public class GamePlayer {
     }
 
     public boolean isPlayer() {
-        return this.data.getPlayers().contains(player);
+        return this.data.getPlayers().contains(this.player);
     }
 
     public void addToPlayers() {
-        this.data.getPlayers().add(player);
+        this.data.getPlayers().add(this.player);
     }
 
     public void removeFromPlayers() {
-        this.data.getPlayers().remove(player);
+        this.data.getPlayers().remove(this.player);
     }
 
     public boolean isSpectator() {
-        return this.data.getSpectators().contains(player);
+        return this.data.getSpectators().contains(this.player);
     }
 
     public void addToSpectators() {
-        this.data.getSpectators().add(player);
+        this.data.getSpectators().add(this.player);
     }
 
     public void removeFromSpectators() {
-        this.data.getSpectators().remove(player);
+        this.data.getSpectators().remove(this.player);
     }
 
     public ICloudPlayer getCloudPlayer() {
@@ -159,13 +160,16 @@ public class GamePlayer {
         this.player.setAllowFlight(false);
         this.player.setFlying(false);
 
+
+        this.player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(24);
+
         this.data.getPlayerGg().put(this.player.getUniqueId(), false);
 
         this.player.getActivePotionEffects().forEach(potionEffect -> this.player.removePotionEffect(potionEffect.getType()));
 
         Bukkit.getOnlinePlayers().forEach(onlinePlayers -> {
-            onlinePlayers.showPlayer(this.player);
-            this.player.showPlayer(onlinePlayers);
+            onlinePlayers.showPlayer(this.mlgWars, this.player);
+            this.player.showPlayer(this.mlgWars, onlinePlayers);
         });
 
     }
@@ -183,10 +187,10 @@ public class GamePlayer {
             String playersLeftMessage = null;
 
             if (this.mlgWars.getTeamSize() > 1) {
-                if (player.hasMetadata("team")) {
-                    int team = player.getMetadata("team").get(0).asInt();
-                    this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().remove(player);
-                    this.mlgWars.getData().getGameTeams().get(team).getTeamPlayers().remove(player);
+                if (this.player.hasMetadata("team")) {
+                    int team = this.player.getMetadata("team").get(0).asInt();
+                    this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().remove(this.player);
+                    this.mlgWars.getData().getGameTeams().get(team).getTeamPlayers().remove(this.player);
 
                     if (this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().isEmpty()) {
                         this.mlgWars.getData().getGameTeams().remove(team);
@@ -203,9 +207,9 @@ public class GamePlayer {
             }
         } else if (gamestate == Gamestate.IDLE || gamestate == Gamestate.LOBBY) {
             if (this.mlgWars.getTeamSize() > 1) {
-                if (player.hasMetadata("team")) {
-                    int team = player.getMetadata("team").get(0).asInt();
-                    this.mlgWars.getData().getGameTeams().get(team).getTeamPlayers().remove(player);
+                if (this.player.hasMetadata("team")) {
+                    int team = this.player.getMetadata("team").get(0).asInt();
+                    this.mlgWars.getData().getGameTeams().get(team).getTeamPlayers().remove(this.player);
                 }
             }
         }
@@ -214,15 +218,15 @@ public class GamePlayer {
 
     public void setJoinItems() {
 
-        this.player.getInventory().setItem(0, new ItemBuilder(Material.STORAGE_MINECART).setName("§8● §aKitauswahl").toItemStack());
+        this.player.getInventory().setItem(0, new ItemBuilder(Material.CHEST_MINECART).setName("§8● §aKitauswahl").toItemStack());
 
         if (this.player.hasPermission("mlgwars.forcemap") || this.player.isOp()) {
             int slot = this.mlgWars.getTeamSize() > 1 ? 2 : 1;
-            this.player.getInventory().setItem(slot, new ItemBuilder(Material.REDSTONE_TORCH_ON).setName("§8● §cForcemap").toItemStack());
+            this.player.getInventory().setItem(slot, new ItemBuilder(Material.REDSTONE_TORCH).setName("§8● §cForcemap").toItemStack());
         }
 
         if (this.mlgWars.getTeamSize() > 1) {
-            this.player.getInventory().setItem(1, new ItemBuilder(Material.BED).setName("§8● §eTeamauswahl").toItemStack());
+            this.player.getInventory().setItem(1, new ItemBuilder(Material.RED_BED).setName("§8● §eTeamauswahl").toItemStack());
         }
 
     }
@@ -362,14 +366,13 @@ public class GamePlayer {
                     .setLore(iKit.getKitDescription()).toItemStack());
 
             this.saveObjectInDocument("selectedKit", kit.name(), MongoDBCollection.MLGWARS);
-            this.mlgWarsScoreboard.updateBoard(player, "§8● §6" + iKit.getKitName(), "kit", "§6");
+            this.mlgWarsScoreboard.updateBoard(this.player, "§8● §6" + iKit.getKitName(), "kit", "§6");
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
 
     public int getRankingPosition() {
-
         List<Document> documents = this.mlgWars.getCrimxAPI().getMongoDB().getMlgWarsCollection().find().sort(Sorts.descending("gamesWon")).into(Lists.newArrayList());
 
         for (Document document : documents) {
@@ -403,24 +406,24 @@ public class GamePlayer {
             int required = kit.getClazz().newInstance().getKitCost();
 
             if (coins >= required) {
-                player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast erfolgreich §e[" + iKit.getKitName() + "] §7freigeschalten");
-                player.playSound(player.getLocation(), Sound.LEVEL_UP, 2, 0.5f);
-                player.closeInventory();
+                this.player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast erfolgreich §e[" + iKit.getKitName() + "] §7freigeschalten");
+                this.player.playSound(this.player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2, 0.5f);
+                this.player.closeInventory();
 
                 coinsAPI.removeCoins(required);
                 this.saveObjectInDocument(kit.name(), true, MongoDBCollection.MLGWARS);
                 this.setSelectedKit(kit);
 
             } else {
-                player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
-                player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast nicht genügend Coins!");
-                player.closeInventory();
+                this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
+                this.player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast nicht genügend Coins!");
+                this.player.closeInventory();
             }
 
         } catch (InstantiationException | IllegalAccessException e) {
-            player.closeInventory();
-            player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
-            player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
+            this.player.closeInventory();
+            this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
+            this.player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
         }
     }
 
@@ -429,11 +432,11 @@ public class GamePlayer {
         if (this.player.hasMetadata("team")) {
             int team = this.player.getMetadata("team").get(0).asInt();
 
-            this.data.getGameTeams().get(team).getTeamPlayers().remove(player);
+            this.data.getGameTeams().get(team).getTeamPlayers().remove(this.player);
         }
 
         this.player.setMetadata("team", new FixedMetadataValue(this.mlgWars, scoreboardTeam.getId()));
-        this.data.getGameTeams().get(scoreboardTeam.getId()).getTeamPlayers().add(player);
+        this.data.getGameTeams().get(scoreboardTeam.getId()).getTeamPlayers().add(this.player);
 
         this.player.sendMessage(this.mlgWars.getPrefix() + "§7Du bist nun in §aTeam #" + scoreboardTeam.getTeamId());
 

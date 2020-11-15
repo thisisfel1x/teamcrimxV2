@@ -11,11 +11,12 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>Bingo</module>
         <module>CrimxAPI</module>
         <module>CrimxLobby</module>
         <module>CrimxBungee</module>
-        <module>MlgWars</module>
         <module>CaptureTheFlag</module>
+        <module>MlgWars</module>
     </modules>
 
 </project>

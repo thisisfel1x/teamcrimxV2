@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class InventoryClickListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public InventoryClickListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
@@ -25,6 +25,10 @@ public class InventoryClickListener implements Listener {
         GamePlayer gamePlayer = new GamePlayer(player);
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
+
+        if (event.getRawSlot() == 45) {
+            event.setCancelled(true);
+        }
 
         switch (gamestate) {
 

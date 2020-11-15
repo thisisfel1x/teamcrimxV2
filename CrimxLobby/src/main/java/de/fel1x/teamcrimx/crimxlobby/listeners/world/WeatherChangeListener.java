@@ -7,11 +7,8 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 
 public class WeatherChangeListener implements Listener {
 
-    private CrimxLobby crimxLobby;
-
     public WeatherChangeListener(CrimxLobby crimxLobby) {
-        this.crimxLobby = crimxLobby;
-        this.crimxLobby.getPluginManager().registerEvents(this, this.crimxLobby);
+        crimxLobby.getPluginManager().registerEvents(this, crimxLobby);
     }
 
     @EventHandler

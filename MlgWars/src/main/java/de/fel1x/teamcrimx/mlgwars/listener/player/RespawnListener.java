@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class RespawnListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public RespawnListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;

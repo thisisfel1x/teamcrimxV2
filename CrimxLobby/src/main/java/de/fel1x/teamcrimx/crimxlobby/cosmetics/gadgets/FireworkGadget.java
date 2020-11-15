@@ -4,8 +4,8 @@ import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import org.bukkit.Color;
-import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -25,7 +25,7 @@ public class FireworkGadget implements ICosmetic {
 
     @Override
     public Material getCosmeticMaterial() {
-        return Material.FIREWORK;
+        return Material.FIREWORK_ROCKET;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class FireworkGadget implements ICosmetic {
     }
 
     @Override
-    public Effect getWalkEffect() {
+    public Particle getWalkEffect() {
         return null;
     }
 

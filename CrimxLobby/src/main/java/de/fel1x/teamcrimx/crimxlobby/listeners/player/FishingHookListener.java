@@ -3,11 +3,10 @@ package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.Data;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Fish;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,7 +30,7 @@ public class FishingHookListener implements Listener {
 
         Player player = event.getPlayer();
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
-        Fish h = event.getHook();
+        FishHook h = event.getHook();
 
         if (lobbyPlayer.isInBuild()) {
             return;
@@ -40,34 +39,25 @@ public class FishingHookListener implements Listener {
         if ((event.getState().equals(PlayerFishEvent.State.IN_GROUND)) ||
                 (event.getState().equals(PlayerFishEvent.State.CAUGHT_ENTITY)) ||
                 (event.getState().equals(PlayerFishEvent.State.FAILED_ATTEMPT))) {
-            if (Bukkit.getWorld(event.getPlayer().getWorld().getName()).getBlockAt(h.getLocation().getBlockX(), h.getLocation().getBlockY() - 1, h.getLocation().getBlockZ()).getType() != Material.AIR) {
-                if (Bukkit.getWorld(event.getPlayer().getWorld().getName()).getBlockAt(h.getLocation().getBlockX(), h.getLocation().getBlockY() - 1, h.getLocation().getBlockZ()).getType() != Material.STATIONARY_WATER) {
-                    Location lc = player.getLocation();
-                    Location to = event.getHook().getLocation();
+            if (player.getWorld().getBlockAt(h.getLocation().getBlockX(), h.getLocation().getBlockY() - 1, h.getLocation().getBlockZ()).getType() != Material.WATER) {
+                Location from = player.getLocation();
+                Location to = event.getHook().getLocation();
 
-                    lc.setY(lc.getY() + 0.75D);
-                    player.teleport(lc);
+                double g = -0.08D;
+                double t = to.distance(from);
+                double v_x = (1.0D + 0.07D * t) * (to.getX() - from.getX()) / t;
+                double v_y = (1.0D + 0.07D * t) * (to.getY() - from.getY()) / t - 1.2D * g * t; // Höhe; 0.5 standard
+                double v_z = (1.0D + 0.07D * t) * (to.getZ() - from.getZ()) / t;
 
-                    double g = -0.08D;
-                    double d = to.distance(lc);
-                    double v_x = (1.0D + 0.07D * d) * (to.getX() - lc.getX()) / d;
-                    double v_y = (1.0D + 0.06D * d) * (to.getY() - lc.getY()) / d - 0.75D * g * d;
-                    double v_z = (1.0D + 0.07D * d) * (to.getZ() - lc.getZ()) / d;
+                Vector v = player.getVelocity();
+                v.setX(v_x);
+                v.setY(v_y);
+                v.setZ(v_z);
+                v.multiply(2);
+                player.setVelocity(v);
 
-                    Vector v = player.getVelocity();
-                    v.setX(v_x);
-                    v.setY(v_y);
-                    v.setZ(v_z);
-                    player.setVelocity(v);
-
-                    player.playSound(player.getLocation(), Sound.ENDERDRAGON_WINGS, 3.0F, 2.0F);
-
-                    player.getItemInHand().setDurability((short) 0);
-                }
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 3.0F, 2.0F);
             }
         }
-
-
     }
-
 }

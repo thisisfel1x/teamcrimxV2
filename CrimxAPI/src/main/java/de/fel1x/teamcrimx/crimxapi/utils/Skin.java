@@ -2,30 +2,12 @@ package de.fel1x.teamcrimx.crimxapi.utils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
 public class Skin {
-
-    public static String[] getSkinFromPlayer(Player playerBukkit) {
-
-        EntityPlayer playerNMS = ((CraftPlayer) playerBukkit).getHandle();
-        GameProfile profile = playerNMS.getProfile();
-
-        Property property = profile.getProperties().get("textures").iterator().next();
-
-        String texture = property.getValue();
-        String signature = property.getSignature();
-
-        return new String[]{texture, signature};
-    }
 
     public static String[] getSkinFromName(String name) {
         try {

@@ -26,12 +26,12 @@ public class ThorKit implements IKit {
 
     @Override
     public Material getKitMaterial() {
-        return Material.GOLD_AXE;
+        return Material.GOLDEN_AXE;
     }
 
     @Override
     public void setKitInventory(Player player) {
-        player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_AXE)
+        player.getInventory().setItem(0, new ItemBuilder(Material.GOLDEN_AXE)
                 .setName("§8● §eThors Axt")
                 .toItemStack());
     }

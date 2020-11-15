@@ -13,7 +13,7 @@ import java.util.Locale;
 
 public class StatsCommand implements CommandExecutor {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public StatsCommand(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
@@ -37,7 +37,6 @@ public class StatsCommand implements CommandExecutor {
                 gamePlayer = new GamePlayer(player, true);
                 Bukkit.getScheduler().runTaskAsynchronously(this.mlgWars, () -> {
                     String ranking = String.format(Locale.GERMANY, "%d", gamePlayer.getRankingPosition());
-                    ;
 
                     int kills = (int) gamePlayer.getObjectFromMongoDocument("kills", MongoDBCollection.MLGWARS);
                     int deaths = (int) gamePlayer.getObjectFromMongoDocument("deaths", MongoDBCollection.MLGWARS);

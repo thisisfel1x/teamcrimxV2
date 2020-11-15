@@ -15,28 +15,28 @@ import java.io.IOException;
 
 public class SpawnHandler {
 
-    private File configfile = new File("plugins/MlgWars/", "spawns.yml");
-    private FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
+    private final File configfile = new File("plugins/MlgWars/", "spawns.yml");
+    private final FileConfiguration config = YamlConfiguration.loadConfiguration(this.configfile);
 
     public void save() throws IOException {
-        config.save(configfile);
+        this.config.save(this.configfile);
     }
 
     @Deprecated
     public void saveLocation(Location location, String root, Player player, Sign sign) {
 
-        config.set(root + ".World", location.getWorld().getName());
-        config.set(root + ".X", location.getX());
-        config.set(root + ".Y", location.getY());
-        config.set(root + ".Z", location.getZ());
-        config.set(root + ".Yaw", location.getYaw());
-        config.set(root + ".Pitch", location.getPitch());
-        config.set(root + ".Face", sign.getBlock().getFace(sign.getBlock()).toString());
+        this.config.set(root + ".World", location.getWorld().getName());
+        this.config.set(root + ".X", location.getX());
+        this.config.set(root + ".Y", location.getY());
+        this.config.set(root + ".Z", location.getZ());
+        this.config.set(root + ".Yaw", location.getYaw());
+        this.config.set(root + ".Pitch", location.getPitch());
+        this.config.set(root + ".Face", sign.getBlock().getFace(sign.getBlock()).toString());
 
-        config.options().copyDefaults(true);
+        this.config.options().copyDefaults(true);
 
         try {
-            config.save(configfile);
+            this.config.save(this.configfile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,18 +48,18 @@ public class SpawnHandler {
 
     public void saveLocation(Location location, String root, Player player, BlockFace blockFace) {
 
-        config.set(root + ".World", location.getWorld().getName());
-        config.set(root + ".X", location.getX());
-        config.set(root + ".Y", location.getY());
-        config.set(root + ".Z", location.getZ());
-        config.set(root + ".Yaw", location.getYaw());
-        config.set(root + ".Pitch", location.getPitch());
-        config.set(root + ".Face", blockFace.toString());
+        this.config.set(root + ".World", location.getWorld().getName());
+        this.config.set(root + ".X", location.getX());
+        this.config.set(root + ".Y", location.getY());
+        this.config.set(root + ".Z", location.getZ());
+        this.config.set(root + ".Yaw", location.getYaw());
+        this.config.set(root + ".Pitch", location.getPitch());
+        this.config.set(root + ".Face", blockFace.toString());
 
-        config.options().copyDefaults(true);
+        this.config.options().copyDefaults(true);
 
         try {
-            config.save(configfile);
+            this.config.save(this.configfile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -71,17 +71,17 @@ public class SpawnHandler {
 
     public void saveLocation(Location location, String root, Player player) {
 
-        config.set(root + ".World", location.getWorld().getName());
-        config.set(root + ".X", location.getX());
-        config.set(root + ".Y", location.getY());
-        config.set(root + ".Z", location.getZ());
-        config.set(root + ".Yaw", location.getYaw());
-        config.set(root + ".Pitch", location.getPitch());
+        this.config.set(root + ".World", location.getWorld().getName());
+        this.config.set(root + ".X", location.getX());
+        this.config.set(root + ".Y", location.getY());
+        this.config.set(root + ".Z", location.getZ());
+        this.config.set(root + ".Yaw", location.getYaw());
+        this.config.set(root + ".Pitch", location.getPitch());
 
-        config.options().copyDefaults(true);
+        this.config.options().copyDefaults(true);
 
         try {
-            config.save(configfile);
+            this.config.save(this.configfile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,20 +93,20 @@ public class SpawnHandler {
 
     public Location loadLocation(String root) {
 
-        if (configfile.exists()) {
+        if (this.configfile.exists()) {
             try {
-                config.load(configfile);
+                this.config.load(this.configfile);
             } catch (IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
 
-            if (config.getString(root + ".World") != null) {
-                World world = Bukkit.getWorld(config.getString(root + ".World"));
-                double x = config.getDouble(root + ".X");
-                double y = config.getDouble(root + ".Y");
-                double z = config.getDouble(root + ".Z");
-                float yaw = (float) config.getDouble(root + ".Yaw");
-                float pitch = (float) config.getDouble(root + ".Pitch");
+            if (this.config.getString(root + ".World") != null) {
+                World world = Bukkit.getWorld(this.config.getString(root + ".World"));
+                double x = this.config.getDouble(root + ".X");
+                double y = this.config.getDouble(root + ".Y");
+                double z = this.config.getDouble(root + ".Z");
+                float yaw = (float) this.config.getDouble(root + ".Yaw");
+                float pitch = (float) this.config.getDouble(root + ".Pitch");
 
                 return new Location(world, x, y, z, yaw, pitch);
             } else {
@@ -121,13 +121,13 @@ public class SpawnHandler {
 
     public String getWorld(String root) {
 
-        return config.getString(root + ".World");
+        return this.config.getString(root + ".World");
 
     }
 
     public BlockFace getSignFace(String root) {
 
-        return BlockFace.valueOf(config.getString(root + ".Face"));
+        return BlockFace.valueOf(this.config.getString(root + ".Face"));
 
     }
 

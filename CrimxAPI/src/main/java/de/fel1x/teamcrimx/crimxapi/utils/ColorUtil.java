@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 public class ColorUtil {
 
-    private static Map<ChatColor, ColorSet<Integer, Integer, Integer>> colorMap = new EnumMap<>(ChatColor.class);
+    private static final Map<ChatColor, ColorSet<Integer, Integer, Integer>> colorMap = new EnumMap<>(ChatColor.class);
 
     static {
         colorMap.put(ChatColor.BLACK, new ColorSet<>(0, 0, 0));
@@ -52,15 +52,15 @@ public class ColorUtil {
         }
 
         public R getRed() {
-            return red;
+            return this.red;
         }
 
         public G getGreen() {
-            return green;
+            return this.green;
         }
 
         public B getBlue() {
-            return blue;
+            return this.blue;
         }
 
     }

@@ -25,7 +25,7 @@ public class InstantFirework {
      */
 
     public InstantFirework(FireworkEffect fe, Location loc) {
-        Firework f = (Firework) loc.getWorld().spawn(loc, Firework.class);
+        Firework f = loc.getWorld().spawn(loc, Firework.class);
         FireworkMeta fm = f.getFireworkMeta();
         fm.addEffect(fe);
         f.setFireworkMeta(fm);

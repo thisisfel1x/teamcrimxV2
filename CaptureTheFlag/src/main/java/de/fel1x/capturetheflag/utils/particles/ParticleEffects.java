@@ -1,7 +1,7 @@
 package de.fel1x.capturetheflag.utils.particles;
 
-import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.World;
 
 import java.util.ArrayList;
@@ -20,12 +20,11 @@ public class ParticleEffects {
             double z = center.getZ() + (radius * Math.sin(angle));
 
             Location particle = new Location(world, x, center.getY(), z);
-            particle.getWorld().playEffect(particle, Effect.WITCH_MAGIC, 2);
-
+            particle.getWorld().spawnParticle(Particle.SPELL_WITCH, center, 1, 0, 0, 0);
         }
     }
 
-    public ArrayList<Location> getCirclePoints(Location center, double radius, int amount) {
+    public static ArrayList<Location> getCirclePoints(Location center, double radius, int amount) {
 
         World world = center.getWorld();
         double increment = (2 * Math.PI) / amount;

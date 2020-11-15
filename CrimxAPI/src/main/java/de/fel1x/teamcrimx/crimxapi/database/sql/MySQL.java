@@ -145,7 +145,7 @@ public class MySQL {
         try {
             this.conn = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database + "?autoReconnect=true",
                     this.user, this.password);
-            conn.createStatement().setQueryTimeout(Integer.MAX_VALUE);
+            this.conn.createStatement().setQueryTimeout(Integer.MAX_VALUE);
             this.plugin.getLogger().log(Level.INFO, "Successfully connected to mysql");
         } catch (SQLException e) {
             this.plugin.getLogger().log(Level.WARNING, "An error appeared while connecting to mysql");
@@ -155,7 +155,7 @@ public class MySQL {
 
     public Connection getConnection() {
         if (this.isConnected()) {
-            return conn;
+            return this.conn;
         }
         return null;
     }

@@ -26,7 +26,7 @@ public class NavigatorInventory implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
 
-        contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName(" ").toItemStack()));
+        contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
 
         contents.set(3, 4, ClickableItem.of(new ItemBuilder(Material.MAGMA_CREAM).setName("§8» §e§lSpawn").toItemStack(), event -> {
 
@@ -39,12 +39,12 @@ public class NavigatorInventory implements InventoryProvider {
             player.closeInventory();
             lobbyPlayer.teleport(Spawn.SPAWN);
 
-            player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1.5f, 1.25f);
-            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 0);
+            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.5f, 1.25f);
+            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, null);
 
         }));
 
-        contents.set(1, 3, ClickableItem.of(new ItemBuilder(Material.EXPLOSIVE_MINECART).setName("§8» §6§lMlgWars").toItemStack(), event -> {
+        contents.set(1, 3, ClickableItem.of(new ItemBuilder(Material.TNT_MINECART).setName("§8» §6§lMlgWars").toItemStack(), event -> {
 
             if (!(event.getWhoClicked() instanceof Player)) return;
             event.setCancelled(true);
@@ -55,8 +55,8 @@ public class NavigatorInventory implements InventoryProvider {
             player.closeInventory();
             lobbyPlayer.teleport(Spawn.MLGWARS);
 
-            player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1.5f, 1.25f);
-            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 0);
+            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.5f, 1.25f);
+            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, null);
 
 
         }));
@@ -72,8 +72,8 @@ public class NavigatorInventory implements InventoryProvider {
             player.closeInventory();
             lobbyPlayer.teleport(Spawn.FLOOR_IS_LAVA);
 
-            player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1.5f, 1.25f);
-            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 0);
+            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.5f, 1.25f);
+            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, null);
 
         }));
 
@@ -88,12 +88,12 @@ public class NavigatorInventory implements InventoryProvider {
             player.closeInventory();
             lobbyPlayer.teleport(Spawn.MASTERBUILDERS);
 
-            player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1.5f, 1.25f);
-            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 0);
+            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.5f, 1.25f);
+            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, null);
 
         }));
 
-        contents.set(2, 2, ClickableItem.of(new ItemBuilder(Material.BED).setName("§8» §b§lBedWars & Training").toItemStack(), event -> {
+        contents.set(2, 2, ClickableItem.of(new ItemBuilder(Material.RED_BED).setName("§8» §b§lBedWars & Training").toItemStack(), event -> {
 
             if (!(event.getWhoClicked() instanceof Player)) return;
             event.setCancelled(true);
@@ -104,12 +104,12 @@ public class NavigatorInventory implements InventoryProvider {
             player.closeInventory();
             lobbyPlayer.teleport(Spawn.BEDWARS);
 
-            player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1.5f, 1.25f);
-            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 0);
+            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.5f, 1.25f);
+            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, null);
 
         }));
 
-        contents.set(2, 6, ClickableItem.of(new ItemBuilder(Material.BANNER, 1, (byte) 4).setName("§8» §9§lCaptureTheFlag").toItemStack(), event -> {
+        contents.set(2, 6, ClickableItem.of(new ItemBuilder(Material.BLUE_BANNER, 1, (byte) 4).setName("§8» §9§lCaptureTheFlag").toItemStack(), event -> {
 
             if (!(event.getWhoClicked() instanceof Player)) return;
             event.setCancelled(true);
@@ -119,9 +119,9 @@ public class NavigatorInventory implements InventoryProvider {
 
             player.closeInventory();
             lobbyPlayer.teleport(Spawn.CAPTURE_THE_FLAG);
-            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 0);
+            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, null);
 
-            player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1.5f, 1.25f);
+            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.5f, 1.25f);
 
         }));
 

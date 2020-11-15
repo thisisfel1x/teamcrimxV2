@@ -9,22 +9,22 @@ import java.util.Map;
 
 public class WaterMlgHandler {
 
-    private List<Player> waterMlgPlayers;
-    private Map<Player, Boolean> failed;
+    private final List<Player> waterMlgPlayers;
+    private final Map<Player, Boolean> failed;
 
     public WaterMlgHandler() {
 
-        waterMlgPlayers = new ArrayList<>();
-        failed = new HashMap<>();
+        this.waterMlgPlayers = new ArrayList<>();
+        this.failed = new HashMap<>();
 
     }
 
     public List<Player> getWaterMlgPlayers() {
-        return waterMlgPlayers;
+        return this.waterMlgPlayers;
     }
 
     public Map<Player, Boolean> getFailed() {
-        return failed;
+        return this.failed;
     }
 
 }

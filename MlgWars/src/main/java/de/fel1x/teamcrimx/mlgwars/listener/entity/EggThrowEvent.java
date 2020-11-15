@@ -7,11 +7,8 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 
 public class EggThrowEvent implements Listener {
 
-    private MlgWars mlgWars;
-
     public EggThrowEvent(MlgWars mlgWars) {
-        this.mlgWars = mlgWars;
-        this.mlgWars.getPluginManager().registerEvents(this, this.mlgWars);
+        mlgWars.getPluginManager().registerEvents(this, mlgWars);
     }
 
     @EventHandler

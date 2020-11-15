@@ -1,49 +1,60 @@
 package de.fel1x.teamcrimx.crimxapi.database.mongodb;
 
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 public class MongoDB {
 
-    private MongoClient mongoClient;
-    private MongoDatabase networkDatabase;
+    private final MongoClient mongoClient;
+    private final MongoDatabase networkDatabase;
 
-    private MongoCollection<Document> userCollection;
-    private MongoCollection<Document> lobbyCollection;
-    private MongoCollection<Document> mlgWarsCollection;
+    private final MongoCollection<Document> userCollection;
+    private final MongoCollection<Document> lobbyCollection;
+    private final MongoCollection<Document> mlgWarsCollection;
+    private final MongoCollection<Document> captureTheFlagCollection;
+    private final MongoCollection<Document> bingoCollection;
 
     public MongoDB() {
 
-        this.mongoClient = new MongoClient("localhost", MongoClientOptions.builder().socketKeepAlive(true).build());
+        this.mongoClient = new MongoClient();
 
         this.networkDatabase = this.mongoClient.getDatabase("network");
 
         this.userCollection = this.networkDatabase.getCollection("users");
         this.lobbyCollection = this.networkDatabase.getCollection("lobby");
         this.mlgWarsCollection = this.networkDatabase.getCollection("mlgwars");
+        this.captureTheFlagCollection = this.networkDatabase.getCollection("capturetheflag");
+        this.bingoCollection = this.networkDatabase.getCollection("bingo");
 
     }
 
     public MongoClient getMongoClient() {
-        return mongoClient;
+        return this.mongoClient;
     }
 
     public MongoDatabase getNetworkDatabase() {
-        return networkDatabase;
+        return this.networkDatabase;
     }
 
     public MongoCollection<Document> getUserCollection() {
-        return userCollection;
+        return this.userCollection;
     }
 
     public MongoCollection<Document> getLobbyCollection() {
-        return lobbyCollection;
+        return this.lobbyCollection;
     }
 
     public MongoCollection<Document> getMlgWarsCollection() {
-        return mlgWarsCollection;
+        return this.mlgWarsCollection;
+    }
+
+    public MongoCollection<Document> getCaptureTheFlagCollection() {
+        return this.captureTheFlagCollection;
+    }
+
+    public MongoCollection<Document> getBingoCollection() {
+        return this.bingoCollection;
     }
 }

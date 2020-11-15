@@ -10,11 +10,10 @@ public final class CrimxAPI {
 
     public static CrimxAPI instance;
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
-    private String prefix = "§bteamcrimx§lDE §8● §r";
 
-    private Logger logger;
+    private final Logger logger;
 
-    private MongoDB mongoDB;
+    private final MongoDB mongoDB;
 
     public CrimxAPI() {
 
@@ -30,18 +29,19 @@ public final class CrimxAPI {
     }
 
     public String getPrefix() {
+        String prefix = "§bteamcrimx§lDE §8● §r";
         return prefix;
     }
 
     public MongoDB getMongoDB() {
-        return mongoDB;
+        return this.mongoDB;
     }
 
     public Logger getLogger() {
-        return logger;
+        return this.logger;
     }
 
     public IPlayerManager getPlayerManager() {
-        return playerManager;
+        return this.playerManager;
     }
 }

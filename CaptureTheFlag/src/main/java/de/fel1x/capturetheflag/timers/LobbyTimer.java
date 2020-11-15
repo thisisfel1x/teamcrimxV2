@@ -7,25 +7,24 @@ import de.fel1x.capturetheflag.gamestate.Gamestate;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
-public class LobbyTimer {
+public class LobbyTimer implements ITimer {
 
-    int taskId;
-    boolean running;
+    private final CaptureTheFlag captureTheFlag = CaptureTheFlag.getInstance();
 
-    int countdown = 60;
+    private int taskId;
+    private boolean running;
+
+    private int countdown = 60;
 
     public void start() {
 
-        if (!running) {
+        if (!this.running) {
 
-            CaptureTheFlag.getInstance().getGamestateHandler().setGamestate(Gamestate.LOBBY);
+            this.captureTheFlag.getGamestateHandler().setGamestate(Gamestate.LOBBY);
+            this.running = true;
 
-            running = true;
-
-            taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(CaptureTheFlag.getInstance(), () -> {
-
-                switch (countdown) {
-
+            this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.captureTheFlag, () -> {
+                switch (this.countdown) {
                     case 60:
                     case 50:
                     case 40:
@@ -36,38 +35,23 @@ public class LobbyTimer {
                     case 4:
                     case 3:
                     case 2:
-
-                        Bukkit.broadcastMessage("§7Das Spiel startet in §e§l" + countdown + " Sekunden");
-
-                        Bukkit.getOnlinePlayers().forEach(current -> {
-                            current.playSound(current.getLocation(), Sound.NOTE_BASS, 5, 3);
-                        });
-
-                        break;
-
                     case 1:
-
-                        Bukkit.broadcastMessage("§7Das Spiel startet in §e§leiner Sekunde");
-
-                        Bukkit.getOnlinePlayers().forEach(current -> {
-                            current.playSound(current.getLocation(), Sound.NOTE_BASS, 5, 3);
-                        });
-
+                        Bukkit.broadcastMessage(this.captureTheFlag.getPrefix() + "§7Die Runde startet in §e"
+                                + (this.countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
+                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2f, 3f));
                         break;
 
 
                     case 0:
-
-                        Bukkit.broadcastMessage("§a§lDie Runde beginnt!");
+                        Bukkit.broadcastMessage(this.captureTheFlag.getPrefix() + "§a§lDie Runde beginnt!");
 
                         this.stopFinally();
 
-                        Bukkit.getOnlinePlayers().forEach(current -> {
-                            current.playSound(current.getLocation(), Sound.LEVEL_UP, 5, 7);
-                        });
+                        Bukkit.getOnlinePlayers().forEach(current -> current.playSound(current.getLocation(),
+                                Sound.ENTITY_PLAYER_LEVELUP, 4f, 0.8f));
 
                         CaptureTheFlag.getInstance().getData().getPlayers().forEach(current -> {
-
+                            this.captureTheFlag.getData().getPlayTime().put(current.getUniqueId(), System.currentTimeMillis());
                             GamePlayer player = new GamePlayer(current);
 
                             player.checkForTeam();
@@ -75,30 +59,26 @@ public class LobbyTimer {
                             player.teleportToTeamSpawn();
                             player.setKitItems();
 
+                            this.captureTheFlag.getData().getCachedStats().get(current).increaseGamesByOne();
+
                             current.setLevel(0);
                             current.setExp(0);
-
                         });
 
+                        this.captureTheFlag.startTimerByClass(InGameTimer.class);
+
                         BukkitCloudNetHelper.changeToIngame();
-
-                        CaptureTheFlag.getInstance().getGamestateHandler().setGamestate(Gamestate.INGAME);
-                        CaptureTheFlag.getInstance().getInGameTimer().start();
-
                         break;
-
                 }
 
-                if (countdown >= 1) {
+                if (this.countdown >= 1) {
                     Bukkit.getOnlinePlayers().forEach(current -> {
-
-                        current.setLevel(countdown);
-                        current.setExp((float) countdown / (float) 60);
-
+                        current.setLevel(this.countdown);
+                        current.setExp((float) this.countdown / (float) 60);
                     });
                 }
 
-                countdown--;
+                this.countdown--;
 
             }, 0L, 20L);
 
@@ -108,10 +88,10 @@ public class LobbyTimer {
 
     public void stop() {
 
-        if (running) {
+        if (this.running) {
 
-            running = false;
-            countdown = 60;
+            this.running = false;
+            this.countdown = 60;
 
             Bukkit.getOnlinePlayers().forEach(current -> {
 
@@ -120,7 +100,7 @@ public class LobbyTimer {
 
             });
 
-            Bukkit.getScheduler().cancelTask(taskId);
+            Bukkit.getScheduler().cancelTask(this.taskId);
 
         }
 
@@ -128,10 +108,10 @@ public class LobbyTimer {
 
     private void stopFinally() {
 
-        if (running) {
+        if (this.running) {
 
-            running = false;
-            countdown = 0;
+            this.running = false;
+            this.countdown = 0;
 
             Bukkit.getOnlinePlayers().forEach(current -> {
 
@@ -140,21 +120,18 @@ public class LobbyTimer {
 
             });
 
-            Bukkit.getScheduler().cancelTask(taskId);
+            Bukkit.getScheduler().cancelTask(this.taskId);
 
         }
 
     }
 
     public int getCountdown() {
-        return countdown;
+        return this.countdown;
     }
 
     public void setCountdown(int countdown) {
         this.countdown = countdown;
     }
 
-    public boolean isRunning() {
-        return running;
-    }
 }

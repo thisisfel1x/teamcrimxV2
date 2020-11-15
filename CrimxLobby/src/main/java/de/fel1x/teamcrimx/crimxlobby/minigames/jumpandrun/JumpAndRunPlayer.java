@@ -25,7 +25,7 @@ public class JumpAndRunPlayer {
     }
 
     public Player getPlayer() {
-        return player;
+        return this.player;
     }
 
     public void setPlayer(Player player) {
@@ -33,7 +33,7 @@ public class JumpAndRunPlayer {
     }
 
     public int getWoolColor() {
-        return woolColor;
+        return this.woolColor;
     }
 
     public void setWoolColor(int woolColor) {
@@ -41,7 +41,7 @@ public class JumpAndRunPlayer {
     }
 
     public Block getLastBlock() {
-        return lastBlock;
+        return this.lastBlock;
     }
 
     public void setLastBlock(Block lastBlock) {
@@ -49,7 +49,7 @@ public class JumpAndRunPlayer {
     }
 
     public Block getCurrentBlock() {
-        return currentBlock;
+        return this.currentBlock;
     }
 
     public void setCurrentBlock(Block currentBlock) {
@@ -57,7 +57,7 @@ public class JumpAndRunPlayer {
     }
 
     public Block getNextBlock() {
-        return nextBlock;
+        return this.nextBlock;
     }
 
     public void setNextBlock(Block nextBlock) {
@@ -65,7 +65,7 @@ public class JumpAndRunPlayer {
     }
 
     public ArrayList<Location> getPossibleJumps() {
-        return possibleJumps;
+        return this.possibleJumps;
     }
 
     public void setPossibleJumps(ArrayList<Location> possibleJumps) {

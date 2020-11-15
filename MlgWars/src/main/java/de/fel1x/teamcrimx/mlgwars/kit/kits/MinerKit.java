@@ -44,7 +44,7 @@ public class MinerKit implements IKit {
                         .setUnbreakable()
                         .toItemStack(),
 
-                new ItemBuilder(Material.DIAMOND_SPADE)
+                new ItemBuilder(Material.DIAMOND_SHOVEL)
                         .setName("§8● §eSchaufel des Untergangs")
                         .addEnchant(Enchantment.DIG_SPEED, 10)
                         .setUnbreakable()

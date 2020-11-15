@@ -4,10 +4,8 @@ import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.Data;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.capturetheflag.gamestate.Gamestate;
-import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,7 +14,15 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class DeathListener implements Listener {
 
-    Data data = CaptureTheFlag.getInstance().getData();
+    private final CaptureTheFlag captureTheFlag;
+    private final Data data;
+
+    public DeathListener(CaptureTheFlag captureTheFlag) {
+        this.captureTheFlag = captureTheFlag;
+        this.data = this.captureTheFlag.getData();
+
+        this.captureTheFlag.getPluginManager().registerEvents(this, this.captureTheFlag);
+    }
 
     @EventHandler
     public void on(PlayerDeathEvent event) {
@@ -30,31 +36,25 @@ public class DeathListener implements Listener {
             return;
         }
 
-        Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
+        Gamestate gamestate = this.captureTheFlag.getGamestateHandler().getGamestate();
 
         Location location = player.getLocation();
 
         event.getDrops().clear();
 
         if (gamestate.equals(Gamestate.INGAME)) {
+            if (player.equals(this.data.getRedFlagHolder())) {
+                player.sendMessage(this.captureTheFlag.getPrefix() + "§cDu hast die Flagge verloren!");
+                player.setGlowing(false);
 
-            if (player.equals(data.getRedFlagHolder())) {
-
-                player.sendMessage("§cDu hast die Flagge verloren!");
-
-                data.setRedFlagHolder(null);
+                this.data.setRedFlagHolder(null);
 
                 Block block = location.getBlock();
 
                 try {
 
-                    block.setType(Material.STANDING_BANNER);
+                    block.setType(Material.RED_BANNER);
                     block.getState().update();
-                    Banner banner = (Banner) block.getState();
-                    banner.setBaseColor(DyeColor.RED);
-                    banner.update();
-
-                    data.setRedFlagLocation(block.getLocation());
 
                 } catch (Exception ignored) {
 
@@ -63,37 +63,31 @@ public class DeathListener implements Listener {
 
             }
 
-            if (player.equals(data.getBlueFlagHolder())) {
+            if (player.equals(this.data.getBlueFlagHolder())) {
+                player.sendMessage(this.captureTheFlag.getPrefix() + "§cDu hast die Flagge verloren!");
+                player.setGlowing(false);
 
-                player.sendMessage("§cDu hast die Flagge verloren!");
-
-                data.setBlueFlagHolder(null);
+                this.data.setBlueFlagHolder(null);
 
                 Block block = location.getBlock();
 
                 try {
 
-                    block.setType(Material.STANDING_BANNER);
+                    block.setType(Material.BLUE_BANNER);
                     block.getState().update();
-                    Banner banner = (Banner) block.getState();
-                    banner.setBaseColor(DyeColor.BLUE);
-                    banner.update();
-
-                    data.setBlueFlagLocation(banner.getLocation());
 
                 } catch (Exception ignored) {
 
                 }
 
             }
-
         }
 
         Player attacker = null;
 
-        if (data.getLastHit().get(player) != null) {
+        if (this.data.getLastHit().get(player) != null) {
 
-            attacker = data.getLastHit().get(player);
+            attacker = this.data.getLastHit().get(player);
 
         } else {
 
@@ -103,13 +97,16 @@ public class DeathListener implements Listener {
 
         if (attacker != null) {
 
-            event.setDeathMessage(player.getDisplayName() + " §7wurde von " + attacker.getDisplayName() + " §7getötet");
+            event.setDeathMessage(this.captureTheFlag.getPrefix() + player.getDisplayName() + " §7wurde von " + attacker.getDisplayName() + " §7getötet");
+            this.data.getCachedStats().get(attacker).increaseKillsByOne();
 
         } else {
 
-            event.setDeathMessage(player.getDisplayName() + " §7ist gestorben");
+            event.setDeathMessage(this.captureTheFlag.getPrefix() + player.getDisplayName() + " §7ist gestorben");
 
         }
+
+        this.data.getCachedStats().get(player).increaseDeathsByOne();
 
     }
 

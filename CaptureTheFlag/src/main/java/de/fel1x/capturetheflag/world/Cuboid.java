@@ -549,7 +549,7 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
      * @return The block at the given position
      */
     public Block getRelativeBlock(World w, int x, int y, int z) {
-        return w.getBlockAt(this.x1 + x, y1 + y, this.z1 + z);
+        return w.getBlockAt(this.x1 + x, this.y1 + y, this.z1 + z);
     }
 
     /**
@@ -618,10 +618,14 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
     }
 
     public class CuboidIterator implements Iterator<Block> {
-        private World w;
-        private int baseX, baseY, baseZ;
+        private final World w;
+        private final int baseX;
+        private final int baseY;
+        private final int baseZ;
         private int x, y, z;
-        private int sizeX, sizeY, sizeZ;
+        private final int sizeX;
+        private final int sizeY;
+        private final int sizeZ;
 
         public CuboidIterator(World w, int x1, int y1, int z1, int x2, int y2, int z2) {
             this.w = w;
@@ -640,7 +644,7 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
 
         public Block next() {
             Block b = this.w.getBlockAt(this.baseX + this.x, this.baseY + this.y, this.baseZ + this.z);
-            if (++x >= this.sizeX) {
+            if (++this.x >= this.sizeX) {
                 this.x = 0;
                 if (++this.y >= this.sizeY) {
                     this.y = 0;

@@ -133,6 +133,10 @@ public class DeathListener implements Listener {
                 Bukkit.broadcastMessage(this.mlgWars.getPrefix() + playersLeftMessage);
             }
 
+            if (player.isGlowing()) {
+                player.setGlowing(false);
+            }
+
             Bukkit.getOnlinePlayers().forEach(inGamePlayer ->
                     this.mlgWarsScoreboard.updateBoard(inGamePlayer, "§8● §c" + MlgWars.getInstance().getData().getPlayers().size(), "players", "§c"));
 

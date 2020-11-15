@@ -30,11 +30,11 @@ public class WaterBucketEmptyListener implements Listener {
             Bukkit.getScheduler().scheduleSyncDelayedTask(CrimxLobby.getInstance(), () -> {
                 if (!lobbyPlayer.isMlgFailed()) {
 
-                    Actionbar.sendTitle(player, "§a§l✔", 2, 5, 3);
-                    player.playSound(player.getLocation(), Sound.ORB_PICKUP, 2, 4);
+                    Actionbar.sendOnlyTitle(player, "§a§l✔", 2, 5, 3);
+                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 2, 4);
                     lobbyPlayer.endWaterMLG();
 
-                    event.getBlockClicked().getLocation().clone().add(0, 1, 0).getBlock().setType(Material.STATIONARY_WATER);
+                    event.getBlockClicked().getLocation().clone().add(0, 1, 0).getBlock().setType(Material.WATER);
                 }
 
             }, 5L);

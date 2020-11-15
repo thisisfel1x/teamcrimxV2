@@ -9,11 +9,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class InventoryClickListener implements Listener {
 
-    private CrimxLobby crimxLobby;
-
     public InventoryClickListener(CrimxLobby crimxLobby) {
-        this.crimxLobby = crimxLobby;
-        this.crimxLobby.getPluginManager().registerEvents(this, this.crimxLobby);
+        crimxLobby.getPluginManager().registerEvents(this, crimxLobby);
     }
 
     @EventHandler

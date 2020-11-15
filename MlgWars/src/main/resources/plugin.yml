@@ -2,7 +2,7 @@ name: MlgWars
 version: ${project.version}
 main: de.fel1x.teamcrimx.mlgwars.MlgWars
 api-version: 1.16
-authors: [fel1x]
+authors: [ fel1x ]
 description: A minigame with too much mlg
 website: teamcrimx.de
 depend:

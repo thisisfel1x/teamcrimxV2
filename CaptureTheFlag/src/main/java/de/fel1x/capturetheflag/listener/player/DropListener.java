@@ -10,13 +10,20 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 public class DropListener implements Listener {
 
+    private final CaptureTheFlag captureTheFlag;
+
+    public DropListener(CaptureTheFlag captureTheFlag) {
+        this.captureTheFlag = captureTheFlag;
+        this.captureTheFlag.getPluginManager().registerEvents(this, this.captureTheFlag);
+    }
+
     @EventHandler
     public void on(PlayerDropItemEvent event) {
 
         Player player = event.getPlayer();
         GamePlayer gamePlayer = new GamePlayer(player);
 
-        Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
+        Gamestate gamestate = this.captureTheFlag.getGamestateHandler().getGamestate();
 
         if (!gamePlayer.isPlayer()) {
             event.setCancelled(true);

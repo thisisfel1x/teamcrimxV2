@@ -4,8 +4,8 @@ import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import org.bukkit.Color;
-import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 public class WitchShoeCosmetic implements ICosmetic {
@@ -31,8 +31,8 @@ public class WitchShoeCosmetic implements ICosmetic {
     }
 
     @Override
-    public Effect getWalkEffect() {
-        return Effect.WITCH_MAGIC;
+    public Particle getWalkEffect() {
+        return Particle.SPELL_WITCH;
     }
 
     @Override

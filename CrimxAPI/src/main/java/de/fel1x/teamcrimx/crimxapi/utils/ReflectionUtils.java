@@ -408,7 +408,7 @@ public final class ReflectionUtils {
          * @return The path
          */
         public String getPath() {
-            return path;
+            return this.path;
         }
 
         /**
@@ -425,7 +425,7 @@ public final class ReflectionUtils {
         // Override for convenience
         @Override
         public String toString() {
-            return path;
+            return this.path;
         }
     }
 
@@ -589,7 +589,7 @@ public final class ReflectionUtils {
          * @return The primitive class
          */
         public Class<?> getPrimitive() {
-            return primitive;
+            return this.primitive;
         }
 
         /**
@@ -598,7 +598,7 @@ public final class ReflectionUtils {
          * @return The reference class
          */
         public Class<?> getReference() {
-            return reference;
+            return this.reference;
         }
     }
 }

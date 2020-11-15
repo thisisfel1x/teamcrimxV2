@@ -10,10 +10,10 @@ public enum Size {
     SIZE_12x2("12x2", 24, 2, 12),
     SIZE_8x3("8x3", 24, 3, 8);
 
-    private String name;
-    private int size;
-    private int teamSize;
-    private int maxTeams;
+    private final String name;
+    private final int size;
+    private final int teamSize;
+    private final int maxTeams;
 
     Size(String name, int size, int teamSize, int maxTeams) {
         this.name = name;
@@ -23,18 +23,18 @@ public enum Size {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public int getSize() {
-        return size;
+        return this.size;
     }
 
     public int getTeamSize() {
-        return teamSize;
+        return this.teamSize;
     }
 
     public int getMaxTeams() {
-        return maxTeams;
+        return this.maxTeams;
     }
 }

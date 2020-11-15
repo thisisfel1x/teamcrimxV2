@@ -1,40 +1,44 @@
 package de.fel1x.capturetheflag;
 
+import com.mongodb.client.model.Sorts;
 import de.fel1x.capturetheflag.commands.SetupCommand;
 import de.fel1x.capturetheflag.commands.StartCommand;
+import de.fel1x.capturetheflag.commands.StatsCommand;
 import de.fel1x.capturetheflag.flag.FlagHandler;
 import de.fel1x.capturetheflag.gamestate.GamestateHandler;
-import de.fel1x.capturetheflag.kits.KitHandler;
 import de.fel1x.capturetheflag.listener.block.BlockBreakListener;
 import de.fel1x.capturetheflag.listener.block.BlockPlaceListener;
 import de.fel1x.capturetheflag.listener.block.InteractListener;
 import de.fel1x.capturetheflag.listener.entity.DamageListener;
+import de.fel1x.capturetheflag.listener.entity.ArmorStandInteractListener;
 import de.fel1x.capturetheflag.listener.player.*;
 import de.fel1x.capturetheflag.scoreboard.ScoreboardHandler;
-import de.fel1x.capturetheflag.timers.EndingTimer;
-import de.fel1x.capturetheflag.timers.InGameTimer;
-import de.fel1x.capturetheflag.timers.LobbyTimer;
+import de.fel1x.capturetheflag.timers.ITimer;
+import de.fel1x.capturetheflag.timers.IdleTimer;
 import de.fel1x.capturetheflag.world.WorldLoader;
+import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import fr.minuskube.inv.InventoryManager;
+import org.bson.Document;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
+import org.bukkit.Location;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public final class CaptureTheFlag extends JavaPlugin {
 
     public static CaptureTheFlag instance;
-    private final String prefix = "§9CaptureTheFlag §8● §r";
-    private Data data;
+    private final PluginManager pluginManager = Bukkit.getPluginManager();
+    private CrimxAPI crimxAPI;
+    private ITimer iTimer;
 
+    private Data data;
     private GamestateHandler gamestateHandler;
     private ScoreboardHandler scoreboardHandler;
-    private KitHandler kitHandler;
-
-    private LobbyTimer lobbyTimer;
-    private InGameTimer inGameTimer;
-    private EndingTimer endingTimer;
 
     private InventoryManager inventoryManager;
 
@@ -43,112 +47,125 @@ public final class CaptureTheFlag extends JavaPlugin {
     }
 
     @Override
-    public void onLoad() {
-        instance = this;
-    }
-
-    @Override
     public void onEnable() {
+
+        instance = this;
+
+        this.crimxAPI = new CrimxAPI();
 
         new WorldLoader();
 
-        data = new Data();
-        inventoryManager = new InventoryManager(this);
-        inventoryManager.init();
+        this.data = new Data();
+        this.inventoryManager = new InventoryManager(this);
+        this.inventoryManager.init();
 
-        gamestateHandler = new GamestateHandler();
-        kitHandler = new KitHandler();
+        this.gamestateHandler = new GamestateHandler();
 
         new FlagHandler();
-        scoreboardHandler = new ScoreboardHandler();
-
-        lobbyTimer = new LobbyTimer();
-        inGameTimer = new InGameTimer();
-        endingTimer = new EndingTimer();
+        this.scoreboardHandler = new ScoreboardHandler();
 
         this.registerListener();
         this.registerCommands();
 
-        for (World world : Bukkit.getWorlds()) {
-
-            world.getEntities().forEach(Entity::remove);
-
-        }
-
+        this.iTimer = new IdleTimer();
+        this.iTimer.start();
 
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+    }
+
+    public List<Document> getTop(int limit) {
+        return StreamSupport.stream(this.crimxAPI.getMongoDB().getCaptureTheFlagCollection().find()
+                .sort(Sorts.descending("gamesWon")).limit(limit).spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
+    public void startTimerByClass(Class<?> clazz) {
+        this.getiTimer().stop();
+
+        try {
+            if (!(clazz.newInstance() instanceof ITimer)) {
+                return;
+            }
+
+            this.setiTimer((ITimer) clazz.newInstance());
+            this.getiTimer().start();
+
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void registerListener() {
 
-        PluginManager pluginManager = Bukkit.getPluginManager();
-
         // PLAYER
-        pluginManager.registerEvents(new JoinListener(), this);
-        pluginManager.registerEvents(new QuitListener(), this);
-        pluginManager.registerEvents(new DeathListener(), this);
-        pluginManager.registerEvents(new RespawnListener(), this);
-        pluginManager.registerEvents(new FoodListener(), this);
-        pluginManager.registerEvents(new PickupListener(), this);
-        pluginManager.registerEvents(new DropListener(), this);
-        pluginManager.registerEvents(new InventoryClickListener(), this);
-        pluginManager.registerEvents(new ChatListener(), this);
+        new JoinListener(this);
+        new QuitListener(this);
+        new DeathListener(this);
+        new RespawnListener(this);
+        new FoodListener(this);
+        new PickupListener(this);
+        new DropListener(this);
+        new InventoryClickListener(this);
+        new ChatListener(this);
 
-        //BLOCK
-        pluginManager.registerEvents(new InteractListener(), this);
-        pluginManager.registerEvents(new BlockBreakListener(), this);
-        pluginManager.registerEvents(new BlockPlaceListener(), this);
+        // BLOCK
+        new InteractListener(this);
+        new BlockBreakListener(this);
+        new BlockPlaceListener(this);
 
-        //ENTITY
-        pluginManager.registerEvents(new DamageListener(), this);
-
+        // ENTITY
+        new DamageListener(this);
+        new ArmorStandInteractListener(this);
 
     }
 
     private void registerCommands() {
 
         this.getCommand("setup").setExecutor(new SetupCommand());
-        this.getCommand("start").setExecutor(new StartCommand());
+
+        new StartCommand(this);
+        new StatsCommand(this);
 
     }
 
+    public CrimxAPI getCrimxAPI() {
+        return this.crimxAPI;
+    }
+
+    public ITimer getiTimer() {
+        return this.iTimer;
+    }
+
+    public void setiTimer(ITimer iTimer) {
+        this.iTimer = iTimer;
+    }
+
+    public PluginManager getPluginManager() {
+        return this.pluginManager;
+    }
+
     public String getPrefix() {
+        String prefix = "§9CaptureTheFlag §8● §r";
         return prefix;
     }
 
     public GamestateHandler getGamestateHandler() {
-        return gamestateHandler;
+        return this.gamestateHandler;
     }
 
     public Data getData() {
-        return data;
-    }
-
-    public LobbyTimer getLobbyTimer() {
-        return lobbyTimer;
-    }
-
-    public InGameTimer getInGameTimer() {
-        return inGameTimer;
-    }
-
-    public EndingTimer getEndingTimer() {
-        return endingTimer;
+        return this.data;
     }
 
     public InventoryManager getInventoryManager() {
-        return inventoryManager;
+        return this.inventoryManager;
     }
 
     public ScoreboardHandler getScoreboardHandler() {
-        return scoreboardHandler;
-    }
-
-    public KitHandler getKitHandler() {
-        return kitHandler;
+        return this.scoreboardHandler;
     }
 }

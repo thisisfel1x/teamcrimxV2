@@ -1,396 +1,315 @@
 package de.fel1x.capturetheflag.gameplayer;
 
+import com.google.common.collect.Lists;
+import com.mongodb.client.model.Sorts;
+import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
+import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.Data;
+import de.fel1x.capturetheflag.database.CaptureTheFlagDatabase;
+import de.fel1x.capturetheflag.database.Stats;
 import de.fel1x.capturetheflag.filehandler.SpawnHandler;
-import de.fel1x.capturetheflag.kits.Kit;
-import de.fel1x.capturetheflag.team.Teams;
-import de.fel1x.capturetheflag.utils.ItemBuilder;
-import org.bukkit.*;
-import org.bukkit.enchantments.Enchantment;
+import de.fel1x.capturetheflag.kit.IKit;
+import de.fel1x.capturetheflag.kit.Kit;
+import de.fel1x.capturetheflag.kit.kits.ArcherKit;
+import de.fel1x.capturetheflag.scoreboard.ScoreboardHandler;
+import de.fel1x.capturetheflag.team.Team;
+import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-import java.util.Random;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GamePlayer {
 
-    Random random = new Random();
+    private final CaptureTheFlag captureTheFlag = CaptureTheFlag.getInstance();
+    private final Data data = this.captureTheFlag.getData();
 
-    private Data data = CaptureTheFlag.getInstance().getData();
-    private Player player;
+    private final ScoreboardHandler scoreboardHandler = CaptureTheFlag.getInstance().getScoreboardHandler();
+
+    private final Player player;
+
+    private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
     public GamePlayer(Player player) {
         this.player = player;
     }
 
     public void addToInGamePlayers() {
-
-        data.getPlayers().add(player);
-
+        this.data.getPlayers().add(this.player);
     }
 
     public void removeFromInGamePlayers() {
-
-        data.getPlayers().remove(player);
-
+        this.data.getPlayers().remove(this.player);
     }
 
     public void addToSpectators() {
-
-        data.getSpectators().add(player);
-
+        this.data.getSpectators().add(this.player);
     }
 
     public void removeFromSpectators() {
-
-        data.getSpectators().remove(player);
-
+        this.data.getSpectators().remove(this.player);
     }
 
     public void setSpectator() {
+        this.player.teleport(SpawnHandler.loadLocation("spectator"));
+        this.player.setGameMode(GameMode.SPECTATOR);
 
-        player.teleport(SpawnHandler.loadLocation("spectator"));
-        player.setGameMode(GameMode.SPECTATOR);
+        this.addToSpectators();
 
-        addToSpectators();
+        this.data.getPlayers().forEach(gamePlayers -> gamePlayers.hidePlayer(this.captureTheFlag, this.player));
+    }
 
-        data.getPlayers().forEach(gamePlayers -> {
+    public void fetchPlayerData() {
+        Bukkit.getScheduler().runTaskAsynchronously(this.captureTheFlag, () -> {
+            Document ctfDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().
+                    find(new Document("_id", this.player.getUniqueId().toString())).first();
 
-            gamePlayers.hidePlayer(player);
+            if (ctfDocument == null) {
+                this.createPlayerData();
+                this.fetchPlayerData();
+            }
+
+            int kills = ctfDocument.getInteger("kills");
+            int deaths = ctfDocument.getInteger("deaths");
+            int gamesPlayed = ctfDocument.getInteger("gamesPlayed");
+            int gamesWon = ctfDocument.getInteger("gamesWon");
+
+            int placement = this.getRankingPosition();
+
+            Stats stats = new Stats(kills, deaths, gamesPlayed, gamesWon, placement);
+            this.data.getCachedStats().put(this.player, stats);
+
+            Kit savedKit = Kit.valueOf(ctfDocument.getString("selectedKit"));
+
+            if (savedKit != Kit.NONE) {
+                this.selectKit(savedKit);
+            }
 
         });
-
     }
 
     public void cleanupTeams() {
+        Team.RED.getTeamPlayers().remove(this.player);
+        Team.BLUE.getTeamPlayers().remove(this.player);
+    }
 
-        Teams.RED.getTeamPlayers().remove(player);
-        Teams.BLUE.getTeamPlayers().remove(player);
-
-        //CaptureTheFlag.getInstance().getScoreboardHandler().handleQuit(player);
-
+    public ICloudPlayer getICloudPlayer() {
+        return this.playerManager.getOnlinePlayer(this.player.getUniqueId());
     }
 
     public void cleanupInventory() {
-
-        player.getInventory().clear();
-        player.getInventory().setArmorContents(null);
-        player.setFoodLevel(28);
-        player.setHealth(20);
-        player.setGameMode(GameMode.SURVIVAL);
-        player.setLevel(0);
-        player.setExp(0);
-        player.setWalkSpeed(0.2f);
-        player.getActivePotionEffects().forEach(effect -> {
-            player.removePotionEffect(effect.getType());
-        });
-
+        this.player.getInventory().clear();
+        this.player.getInventory().setArmorContents(null);
+        this.player.setFoodLevel(28);
+        this.player.setHealth(20);
+        this.player.setGameMode(GameMode.SURVIVAL);
+        this.player.setLevel(0);
+        this.player.setExp(0);
+        this.player.setWalkSpeed(0.2f);
+        this.player.getActivePotionEffects().forEach(effect -> this.player.removePotionEffect(effect.getType()));
     }
 
     public void showToAll() {
-
-        Bukkit.getScheduler().scheduleSyncDelayedTask(CaptureTheFlag.getInstance(), () -> {
-            Bukkit.getOnlinePlayers().forEach(current -> {
-                current.showPlayer(player);
-                player.showPlayer(current);
-            });
-        }, 20L);
-
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this.captureTheFlag,
+                () -> Bukkit.getOnlinePlayers().forEach(current -> {
+                    current.showPlayer(this.captureTheFlag, this.player);
+                    this.player.showPlayer(this.captureTheFlag, current);
+                }), 20L);
     }
 
     public void teleportToLobby() {
-
         try {
-
             Location location = SpawnHandler.loadLocation("lobby");
-            player.teleport(location);
-
+            this.player.teleport(location);
         } catch (Exception ignored) {
-
-            player.sendMessage("§cEs trat ein Fehler auf (TELEPORT_SPAWN)");
-
+            this.player.sendMessage("§cEs trat ein Fehler auf (TELEPORT_SPAWN)");
         }
-
     }
 
-    public void addTeam(Teams teams) {
-
-        if (teams.getTeamPlayers().size() <= 4) {
-
-            if (!teams.getTeamPlayers().contains(player)) {
-                teams.getTeamPlayers().add(player);
+    public void addTeam(Team team) {
+        if (team.getTeamPlayers().size() <= 4) {
+            if (!team.getTeamPlayers().contains(this.player)) {
+                team.getTeamPlayers().add(this.player);
             }
-            player.sendMessage("§7Du bist Team " + teams.getTeamName() + " §7beigetreten!");
+            this.player.sendMessage(this.captureTheFlag.getPrefix() + "§7Du bist Team " + team.getTeamName() + " §7beigetreten!");
 
-            CaptureTheFlag.getInstance().getScoreboardHandler().setGameScoreboard(player, teams);
+            this.captureTheFlag.getScoreboardHandler().setGameScoreboard(this.player, team);
 
         } else {
-
-            player.sendMessage("Dieses Team ist voll!");
-            player.closeInventory();
-
+            this.player.sendMessage(this.captureTheFlag.getPrefix() + "Dieses Team ist voll!");
+            this.player.closeInventory();
         }
-
-
     }
 
-    public void removeTeam(Teams teams) {
-
-        teams.getTeamPlayers().remove(player);
-
+    public void removeTeam(Team team) {
+        team.getTeamPlayers().remove(this.player);
     }
 
-    public Teams getTeam() {
-
-        if (Teams.BLUE.getTeamPlayers().contains(player))
-            return Teams.BLUE;
-
-        if (Teams.RED.getTeamPlayers().contains(player))
-            return Teams.RED;
-
-        return null;
-
+    public Team getTeam() {
+        if (Team.BLUE.getTeamPlayers().contains(this.player)) {
+            return Team.BLUE;
+        } else if (Team.RED.getTeamPlayers().contains(this.player)) {
+            return Team.RED;
+        } else {
+            return Team.NONE;
+        }
     }
 
     public boolean hasTeam() {
-
-        return (Teams.BLUE.getTeamPlayers().contains(player) || Teams.RED.getTeamPlayers().contains(player));
-
+        return (Team.BLUE.getTeamPlayers().contains(this.player) || Team.RED.getTeamPlayers().contains(this.player));
     }
 
     public void teleportToTeamSpawn() {
-
-        if (Teams.BLUE.getTeamPlayers().contains(player)) {
-
+        if (Team.BLUE.getTeamPlayers().contains(this.player)) {
             Location blueSpawn = SpawnHandler.loadLocation("blueSpawn");
-            player.teleport(blueSpawn);
-
-        } else if (Teams.RED.getTeamPlayers().contains(player)) {
-
+            this.player.teleport(blueSpawn);
+        } else if (Team.RED.getTeamPlayers().contains(this.player)) {
             Location redSpawn = SpawnHandler.loadLocation("redSpawn");
-            player.teleport(redSpawn);
-
+            this.player.teleport(redSpawn);
         } else {
-
-            player.sendMessage("§cEs trat ein Fehler auf (NO_TEAM_SELECTED_TELEPORT_ERROR)");
-
+            this.player.sendMessage("§cEs trat ein Fehler auf (NO_TEAM_SELECTED_TELEPORT_ERROR)");
         }
-
-
     }
 
     public Location getRespawnLocation() {
-
-        if (Teams.BLUE.getTeamPlayers().contains(player)) {
-
+        if (Team.BLUE.getTeamPlayers().contains(this.player)) {
             return SpawnHandler.loadLocation("blueSpawn");
-
-        } else if (Teams.RED.getTeamPlayers().contains(player)) {
-
+        } else if (Team.RED.getTeamPlayers().contains(this.player)) {
             return SpawnHandler.loadLocation("redSpawn");
-
         }
-
         return SpawnHandler.loadLocation("spectator");
-
-
     }
 
     public void checkForTeam() {
+        if (this.hasTeam()) return;
 
-        if (hasTeam()) return;
+        boolean random = ThreadLocalRandom.current().nextBoolean();
 
-        int number = random.nextInt(1);
-
-        if (number == 0) {
-            addTeam(Teams.RED);
+        if (random) {
+            this.addTeam(Team.RED);
         } else {
-            addTeam(Teams.BLUE);
+            this.addTeam(Team.BLUE);
         }
-
     }
 
     public boolean isSpectator() {
 
-        return this.data.getSpectators().contains(player);
+        return this.data.getSpectators().contains(this.player);
 
     }
 
     public boolean isPlayer() {
 
-        return this.data.getPlayers().contains(player);
+        return this.data.getPlayers().contains(this.player);
 
     }
 
     public void selectKit(Kit kit) {
+        this.captureTheFlag.getData().getSelectedKit().put(this.player, kit);
 
-        CaptureTheFlag.getInstance().getKitHandler().getSelectedKit().put(player, kit);
-
-        player.closeInventory();
-        player.playSound(player.getLocation(), Sound.CAT_MEOW, 5, 8);
-        player.sendMessage("§7Du hast das §l" + kit.getName() + "§7-Kit ausgewählt!");
-
+        try {
+            IKit iKit = kit.getClazz().newInstance();
+            this.player.getInventory().setItem(8, new ItemBuilder(iKit.getKitMaterial())
+                    .setName("§8● §a" + iKit.getKitName())
+                    .setLore(iKit.getKitDescription()).toItemStack());
+            this.scoreboardHandler.updateBoard(this.player, "§8● §6" + iKit.getKitName(), "kit", "§6");
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
-    public Kit getSelectedKit() {
-
-        return CaptureTheFlag.getInstance().getKitHandler().getSelectedKit().get(player);
-
+    public Class<? extends IKit> getSelectedKit() {
+        return this.captureTheFlag.getData().getSelectedKit().get(this.player).getClazz();
     }
 
     public void setKitItems() {
-
-        Color dyeColor = null;
-
-        if (getTeam().equals(Teams.RED)) {
-            dyeColor = Color.RED;
-        } else if (getTeam().equals(Teams.BLUE)) {
-            dyeColor = Color.BLUE;
+        try {
+            IKit iKit = (this.data.getSelectedKit().get(this.player) != null)
+                    ? this.data.getSelectedKit().get(this.player).getClazz().newInstance()
+                    : ArcherKit.class.newInstance();
+            iKit.setKitInventory(this.player);
+        } catch (InstantiationException | IllegalAccessException ignored) {
+            this.player.sendMessage(this.captureTheFlag.getPrefix() + "§cEin Fehler ist aufgetreten! Du erhälst keine Kit-Items");
         }
-
-        if (getSelectedKit() == null) {
-
-            ItemStack helmet = new ItemBuilder(Material.LEATHER_HELMET).setLeatherArmorColor(dyeColor).toItemStack();
-            ItemStack chestplate = new ItemBuilder(Material.LEATHER_CHESTPLATE).setLeatherArmorColor(dyeColor).toItemStack();
-            ItemStack leggins = new ItemBuilder(Material.LEATHER_LEGGINGS).setLeatherArmorColor(dyeColor).toItemStack();
-            ItemStack boots = new ItemBuilder(Material.LEATHER_BOOTS).setLeatherArmorColor(dyeColor).toItemStack();
-
-            ItemStack sword = new ItemStack(Material.STONE_SWORD);
-            ItemStack bow = new ItemStack(Material.BOW);
-            ItemStack arrow = new ItemStack(Material.ARROW, 16);
-
-            player.getInventory().addItem(sword, bow, arrow);
-            player.getInventory().setHelmet(helmet);
-            player.getInventory().setChestplate(chestplate);
-            player.getInventory().setLeggings(leggins);
-            player.getInventory().setBoots(boots);
-
-            return;
-
-        }
-
-        switch (getSelectedKit()) {
-
-            case TANK:
-
-                ItemStack helmet = new ItemBuilder(Material.IRON_HELMET).toItemStack();
-                ItemStack chestplate = new ItemBuilder(Material.IRON_CHESTPLATE).toItemStack();
-                ItemStack leggins = new ItemBuilder(Material.IRON_LEGGINGS).toItemStack();
-                ItemStack boots = new ItemBuilder(Material.IRON_BOOTS).toItemStack();
-
-                ItemStack sword = new ItemStack(Material.STONE_SWORD);
-
-                player.getInventory().addItem(sword);
-                player.getInventory().setHelmet(helmet);
-                player.getInventory().setChestplate(chestplate);
-                player.getInventory().setLeggings(leggins);
-                player.getInventory().setBoots(boots);
-
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0, true, false));
-
-                break;
-
-            case ARCHER:
-
-                helmet = new ItemBuilder(Material.LEATHER_HELMET).setLeatherArmorColor(dyeColor).toItemStack();
-                chestplate = new ItemBuilder(Material.LEATHER_CHESTPLATE).setLeatherArmorColor(dyeColor).toItemStack();
-                leggins = new ItemBuilder(Material.LEATHER_LEGGINGS).setLeatherArmorColor(dyeColor).toItemStack();
-                boots = new ItemBuilder(Material.LEATHER_BOOTS).setLeatherArmorColor(dyeColor).toItemStack();
-
-                sword = new ItemBuilder(Material.WOOD_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).toItemStack();
-                ItemStack bow = new ItemBuilder(Material.BOW).addEnchant(Enchantment.ARROW_INFINITE, 1).addEnchant(Enchantment.ARROW_DAMAGE, 1).toItemStack();
-                ItemStack arrow = new ItemStack(Material.ARROW, 1);
-
-                player.getInventory().addItem(sword, bow);
-                player.getInventory().setItem(8, arrow);
-
-                player.getInventory().setHelmet(helmet);
-                player.getInventory().setChestplate(chestplate);
-                player.getInventory().setLeggings(leggins);
-                player.getInventory().setBoots(boots);
-
-                break;
-
-            case PYRO:
-
-                helmet = new ItemBuilder(Material.LEATHER_HELMET).setLeatherArmorColor(dyeColor).toItemStack();
-                chestplate = new ItemBuilder(Material.LEATHER_CHESTPLATE).setLeatherArmorColor(dyeColor).toItemStack();
-                leggins = new ItemBuilder(Material.LEATHER_LEGGINGS).setLeatherArmorColor(dyeColor).toItemStack();
-                boots = new ItemBuilder(Material.LEATHER_BOOTS).setLeatherArmorColor(dyeColor).toItemStack();
-
-                sword = new ItemBuilder(Material.GOLD_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).addEnchant(Enchantment.FIRE_ASPECT, 1).toItemStack();
-
-                player.getInventory().addItem(sword);
-
-                player.getInventory().setHelmet(helmet);
-                player.getInventory().setChestplate(chestplate);
-                player.getInventory().setLeggings(leggins);
-                player.getInventory().setBoots(boots);
-
-                break;
-
-            case MEDIC:
-
-                helmet = new ItemBuilder(Material.LEATHER_HELMET).setLeatherArmorColor(dyeColor).toItemStack();
-                chestplate = new ItemBuilder(Material.LEATHER_CHESTPLATE).setLeatherArmorColor(dyeColor).toItemStack();
-                leggins = new ItemBuilder(Material.LEATHER_LEGGINGS).setLeatherArmorColor(dyeColor).toItemStack();
-                boots = new ItemBuilder(Material.LEATHER_BOOTS).setLeatherArmorColor(dyeColor).toItemStack();
-
-                sword = new ItemBuilder(Material.IRON_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).toItemStack();
-
-                ItemStack regPotion = new ItemBuilder(Material.POTION, 2).setColor(16417).toItemStack();
-                ItemStack healPotion = new ItemBuilder(Material.POTION, 4).setColor(16453).toItemStack();
-                ItemStack goldenApple = new ItemBuilder(Material.GOLDEN_APPLE).toItemStack();
-
-                player.getInventory().addItem(sword, healPotion, regPotion, goldenApple);
-
-                player.getInventory().setHelmet(helmet);
-                player.getInventory().setChestplate(chestplate);
-                player.getInventory().setLeggings(leggins);
-                player.getInventory().setBoots(boots);
-
-
-                break;
-
-        }
-
     }
 
-    @Deprecated
-    public void setInventory() {
-
-        Color dyeColor = null;
-
-        if (getTeam().equals(Teams.RED)) {
-            dyeColor = Color.RED;
-        } else if (getTeam().equals(Teams.BLUE)) {
-            dyeColor = Color.BLUE;
-        }
-
-        ItemStack helmet = new ItemBuilder(Material.LEATHER_HELMET).setLeatherArmorColor(dyeColor).toItemStack();
-        ItemStack chestplate = new ItemBuilder(Material.LEATHER_CHESTPLATE).setLeatherArmorColor(dyeColor).toItemStack();
-        ItemStack leggins = new ItemBuilder(Material.LEATHER_LEGGINGS).setLeatherArmorColor(dyeColor).toItemStack();
-        ItemStack boots = new ItemBuilder(Material.LEATHER_BOOTS).setLeatherArmorColor(dyeColor).toItemStack();
-
-        ItemStack sword = new ItemStack(Material.STONE_SWORD);
-        ItemStack bow = new ItemStack(Material.BOW);
-        ItemStack pickaxe = new ItemStack(Material.IRON_PICKAXE);
-        ItemStack axe = new ItemStack(Material.IRON_AXE);
-        ItemStack wood = new ItemStack(Material.LOG, 32);
-        ItemStack planks = new ItemStack(Material.WOOD, 64);
-        ItemStack goldenApple = new ItemStack(Material.GOLDEN_APPLE, 12);
-        ItemStack arrow = new ItemStack(Material.ARROW, 16);
-
-        player.getInventory().addItem(sword, bow, pickaxe, axe, goldenApple, arrow, wood, wood, planks, planks);
-        player.getInventory().setHelmet(helmet);
-        player.getInventory().setChestplate(chestplate);
-        player.getInventory().setLeggings(leggins);
-        player.getInventory().setBoots(boots);
-
-
+    public void createPlayerData() {
+        new CaptureTheFlagDatabase().createPlayerData(this.player);
     }
 
+    public int getRankingPosition() {
+        List<Document> documents = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().find()
+                .sort(Sorts.descending("gamesWon")).into(Lists.newArrayList());
+
+        for (Document document : documents) {
+            if (document.getString("_id").equalsIgnoreCase(this.player.getUniqueId().toString())) {
+                return documents.indexOf(document) + 1;
+            }
+        }
+
+        return -1;
+    }
+
+    public void saveStats() {
+        Bukkit.getScheduler().runTaskAsynchronously(this.captureTheFlag, () -> {
+            Document ctfDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().
+                    find(new Document("_id", this.player.getUniqueId().toString())).first();
+            Document networkDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getUserCollection().
+                    find(new Document("_id", this.player.getUniqueId().toString())).first();
+
+            Stats stats = this.data.getCachedStats().get(this.player);
+
+            if (stats == null) {
+                return;
+            }
+
+            if (networkDocument == null) {
+                return;
+            }
+
+            Document toUpdate = new Document();
+            toUpdate.append("kills", stats.getKills())
+                    .append("deaths", stats.getDeaths())
+                    .append("gamesPlayed", stats.getGamesPlayed())
+                    .append("gamesWon", stats.getGamesWon());
+
+            Bson statsUpdateOperation = new Document("$set", toUpdate);
+            this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().updateOne(ctfDocument , statsUpdateOperation);
+
+            long onlineTimeInMillis;
+
+            try {
+                onlineTimeInMillis = (long) networkDocument.get("onlinetime");
+            } catch (Exception ignored) {
+                onlineTimeInMillis = Integer.toUnsignedLong((Integer) networkDocument.get("onlinetime"));
+            }
+
+            long timePlayed = System.currentTimeMillis() - this.captureTheFlag.getData().getPlayTime()
+                    .get(this.player.getUniqueId());
+            long added = timePlayed + onlineTimeInMillis;
+            Document document = new Document("onlinetime", added);
+            Bson updateOperation = new Document("$set", document);
+            this.captureTheFlag.getCrimxAPI().getMongoDB().getUserCollection().updateOne(networkDocument, updateOperation);
+        });
+    }
+
+    public void saveObjectInDocument(String key, Object value, Document gamemodeDocument) {
+        Document document = new Document(key, value);
+        Bson updateOperation = new Document("$set", document);
+
+        this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().updateOne(gamemodeDocument, updateOperation);
+    }
+
+    public void saveKitToDatabase() {
+        Document ctfDocument = this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().
+                find(new Document("_id", this.player.getUniqueId().toString())).first();
+        this.saveObjectInDocument("selectedKit", this.data.getSelectedKit().get(this.player).name(), ctfDocument);
+    }
 }

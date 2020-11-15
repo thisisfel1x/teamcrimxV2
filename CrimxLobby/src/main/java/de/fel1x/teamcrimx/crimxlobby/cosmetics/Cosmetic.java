@@ -7,6 +7,7 @@ import de.fel1x.teamcrimx.crimxlobby.cosmetics.dropTrails.SnowShoeTrail;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.gadgets.FireworkGadget;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.gadgets.FunGunGadget;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.HeartShoeCosmetic;
+import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.LibraryShoeCosmetic;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.NoteShoeCosmetic;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.WitchShoeCosmetic;
 
@@ -15,6 +16,7 @@ public enum Cosmetic {
     HEART_SHOE(HeartShoeCosmetic.class, CosmeticCategory.TRAILS),
     NOTE_SHOE(NoteShoeCosmetic.class, CosmeticCategory.TRAILS),
     SPELL_SHOE(WitchShoeCosmetic.class, CosmeticCategory.TRAILS),
+    LIBRARY_SHOE(LibraryShoeCosmetic.class, CosmeticCategory.TRAILS),
     CLOCK_TRAIL(RolexShoeTrail.class, CosmeticCategory.TRAILS),
     DIAMOND_TRAIL(MoneyShoeTrail.class, CosmeticCategory.TRAILS),
     SNOW_TRAIL(SnowShoeTrail.class, CosmeticCategory.TRAILS),
@@ -24,8 +26,8 @@ public enum Cosmetic {
     FIREWORK(FireworkGadget.class, CosmeticCategory.GADGETS);
 
 
-    private Class<? extends ICosmetic> cosmeticClass;
-    private CosmeticCategory cosmeticCategory;
+    private final Class<? extends ICosmetic> cosmeticClass;
+    private final CosmeticCategory cosmeticCategory;
 
     Cosmetic(Class<? extends ICosmetic> cosmeticClass, CosmeticCategory cosmeticCategory) {
         this.cosmeticClass = cosmeticClass;
@@ -33,10 +35,10 @@ public enum Cosmetic {
     }
 
     public Class<? extends ICosmetic> getCosmeticClass() {
-        return cosmeticClass;
+        return this.cosmeticClass;
     }
 
     public CosmeticCategory getCosmeticCategory() {
-        return cosmeticCategory;
+        return this.cosmeticCategory;
     }
 }

@@ -12,13 +12,20 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class RespawnListener implements Listener {
 
+    private final CaptureTheFlag captureTheFlag;
+
+    public RespawnListener(CaptureTheFlag captureTheFlag) {
+        this.captureTheFlag = captureTheFlag;
+        this.captureTheFlag.getPluginManager().registerEvents(this, this.captureTheFlag);
+    }
+
     @EventHandler
     public void on(PlayerRespawnEvent event) {
 
         Player player = event.getPlayer();
         GamePlayer gamePlayer = new GamePlayer(player);
 
-        Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
+        Gamestate gamestate = this.captureTheFlag.getGamestateHandler().getGamestate();
 
         switch (gamestate) {
 
@@ -28,7 +35,7 @@ public class RespawnListener implements Listener {
                 if (gamePlayer.isPlayer()) {
 
                     event.setRespawnLocation(gamePlayer.getRespawnLocation());
-                    player.playSound(player.getLocation(), Sound.WOLF_HURT, 20, 15);
+                    player.playSound(player.getLocation(), Sound.ENTITY_WOLF_HURT, 20, 15);
                     gamePlayer.setKitItems();
 
                 } else {

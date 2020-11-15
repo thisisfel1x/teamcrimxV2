@@ -26,7 +26,7 @@ public class WebTrapperKit implements IKit {
 
     @Override
     public Material getKitMaterial() {
-        return Material.WEB;
+        return Material.COBWEB;
     }
 
     @Override

@@ -23,6 +23,8 @@ public enum Kit {
     SOUPER(SouperKit.class),
     FARMER(FarmerKit.class),
     ENDER_MAN(EnderPearlKit.class),
+    VALORANT(ValorantKit.class),
+    ELYTRA(ElytraKit.class),
 
     // USER-SPECIFIC KIT's
     TORNADO(TornadoKit.class),
@@ -30,7 +32,10 @@ public enum Kit {
     TANK(TankKit.class),
     TURTLE(TurtleKit.class),
     CSGO(CSGOKit.class),
-    DUMP(DumpKit.class);
+    DUMP(DumpKit.class),
+    NUTS(NutsKit.class);
+
+    // TESTING
 
     private Class<? extends IKit> clazz;
 
@@ -39,7 +44,7 @@ public enum Kit {
     }
 
     public Class<? extends IKit> getClazz() {
-        return clazz;
+        return this.clazz;
     }
 
     public void setClazz(Class<? extends IKit> clazz) {

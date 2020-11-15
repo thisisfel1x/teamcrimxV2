@@ -10,19 +10,19 @@ import java.util.*;
 
 public class Data {
 
-    private List<UUID> builders;
+    private final List<UUID> builders;
 
-    private Map<UUID, NPC> playerNPCs;
-    private Map<UUID, Integer> playerHiderState;
-    private Map<UUID, Document> playerMongoDocument;
-    private Map<UUID, Document> playerMongoNetworkDocument;
-    private Map<UUID, LobbyDatabasePlayer> lobbyDatabasePlayer;
+    private final Map<UUID, NPC> playerNPCs;
+    private final Map<UUID, Integer> playerHiderState;
+    private final Map<UUID, Document> playerMongoDocument;
+    private final Map<UUID, Document> playerMongoNetworkDocument;
+    private final Map<UUID, LobbyDatabasePlayer> lobbyDatabasePlayer;
 
-    private Map<UUID, JumpAndRunPlayer> jumpAndRunPlayers;
-    private List<UUID> jumpers;
+    private final Map<UUID, JumpAndRunPlayer> jumpAndRunPlayers;
+    private final List<UUID> jumpers;
 
-    private Map<UUID, ICosmetic> cosmetic;
-    private Map<UUID, Float> hueMap;
+    private final Map<UUID, ICosmetic> cosmetic;
+    private final Map<UUID, Float> hueMap;
 
     public Data() {
 
@@ -44,42 +44,42 @@ public class Data {
     }
 
     public List<UUID> getBuilders() {
-        return builders;
+        return this.builders;
     }
 
     public Map<UUID, NPC> getPlayerNPCs() {
-        return playerNPCs;
+        return this.playerNPCs;
     }
 
     public Map<UUID, Integer> getPlayerHiderState() {
-        return playerHiderState;
+        return this.playerHiderState;
     }
 
     public Map<UUID, Document> getPlayerMongoDocument() {
-        return playerMongoDocument;
+        return this.playerMongoDocument;
     }
 
     public Map<UUID, Document> getPlayerMongoNetworkDocument() {
-        return playerMongoNetworkDocument;
+        return this.playerMongoNetworkDocument;
     }
 
     public Map<UUID, LobbyDatabasePlayer> getLobbyDatabasePlayer() {
-        return lobbyDatabasePlayer;
+        return this.lobbyDatabasePlayer;
     }
 
     public Map<UUID, JumpAndRunPlayer> getJumpAndRunPlayers() {
-        return jumpAndRunPlayers;
+        return this.jumpAndRunPlayers;
     }
 
     public List<UUID> getJumpers() {
-        return jumpers;
+        return this.jumpers;
     }
 
     public Map<UUID, ICosmetic> getCosmetic() {
-        return cosmetic;
+        return this.cosmetic;
     }
 
     public Map<UUID, Float> getHueMap() {
-        return hueMap;
+        return this.hueMap;
     }
 }

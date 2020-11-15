@@ -16,8 +16,6 @@ public class IdleTimer implements ITimer {
 
         if (!this.running) {
 
-            Bukkit.getScheduler().cancelTasks(this.mlgWars);
-
             this.mlgWars.getGamestateHandler().setGamestate(Gamestate.IDLE);
             this.running = true;
 
@@ -35,7 +33,7 @@ public class IdleTimer implements ITimer {
     public void stop() {
         if (this.running) {
             this.running = false;
-            Bukkit.getScheduler().cancelTask(taskId);
+            Bukkit.getScheduler().cancelTask(this.taskId);
         }
 
     }

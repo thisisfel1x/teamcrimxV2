@@ -26,12 +26,12 @@ public class SouperKit implements IKit {
 
     @Override
     public Material getKitMaterial() {
-        return Material.MUSHROOM_SOUP;
+        return Material.MUSHROOM_STEW;
     }
 
     @Override
     public void setKitInventory(Player player) {
-        player.getInventory().setItem(0, new ItemBuilder(Material.MONSTER_EGG)
+        player.getInventory().setItem(0, new ItemBuilder(Material.MOOSHROOM_SPAWN_EGG)
                 .setName("§8● §cPilzkuh")
                 .setColor(96)
                 .addGlow()

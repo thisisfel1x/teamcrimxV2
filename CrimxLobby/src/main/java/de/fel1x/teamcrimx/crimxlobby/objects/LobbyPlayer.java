@@ -1,7 +1,5 @@
 package de.fel1x.teamcrimx.crimxlobby.objects;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
@@ -22,7 +20,6 @@ import de.fel1x.teamcrimx.crimxlobby.minigames.jumpandrun.JumpAndRunPlayer;
 import de.fel1x.teamcrimx.crimxlobby.minigames.watermlg.WaterMlgHandler;
 import net.jitse.npclib.api.NPC;
 import net.jitse.npclib.api.skin.Skin;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.*;
@@ -32,16 +29,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
-import java.util.UUID;
 
 public class LobbyPlayer {
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
     Player player;
-
     CrimxLobby crimxLobby = CrimxLobby.getInstance();
     private final WaterMlgHandler waterMlgHandler = this.crimxLobby.getWaterMlgHandler();
     Data data = this.crimxLobby.getData();
@@ -49,6 +45,16 @@ public class LobbyPlayer {
     LobbyDatabase lobbyDatabase = new LobbyDatabase();
     Document lobbyDocument;
     Document networkDocument;
+    private final Material[] woolTypes = {
+            Material.WHITE_WOOL, Material.ORANGE_WOOL, Material.MAGENTA_WOOL, Material.LIGHT_BLUE_WOOL, Material.YELLOW_WOOL,
+            Material.LIME_WOOL, Material.PINK_WOOL, Material.GRAY_WOOL, Material.LIGHT_GRAY_WOOL, Material.CYAN_WOOL,
+            Material.PURPLE_WOOL, Material.BLUE_WOOL, Material.GREEN_WOOL, Material.RED_WOOL
+    };
+    private final Material[] concreteTypes = {
+            Material.WHITE_CONCRETE, Material.ORANGE_CONCRETE, Material.MAGENTA_CONCRETE, Material.LIGHT_BLUE_CONCRETE, Material.YELLOW_CONCRETE,
+            Material.LIME_CONCRETE, Material.PINK_CONCRETE, Material.GRAY_CONCRETE, Material.LIGHT_GRAY_CONCRETE, Material.CYAN_CONCRETE,
+            Material.PURPLE_CONCRETE, Material.BLUE_CONCRETE, Material.GREEN_CONCRETE, Material.RED_CONCRETE
+    };
 
     public LobbyPlayer(Player player) {
         this.player = player;
@@ -80,40 +86,32 @@ public class LobbyPlayer {
 
         this.crimxLobby.getLobbyScoreboard().updateBoard(player, String.format("§8● §e%s Coins", coins), "coins", "§e");
         this.crimxLobby.getLobbyScoreboard().updateBoard(player, "§8● §6" + this.getOnlineTimeForScoreboard(), "playtime", "§6");
-
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            this.setSubtitle(onlinePlayer, this.player.getUniqueId(), "&e" + coins + " Coins");
-
-            coinsAPI = new CoinsAPI(onlinePlayer.getUniqueId());
-            this.setSubtitle(this.player, onlinePlayer.getUniqueId(), "&e" + coinsAPI.getCoins() + " Coins");
-
-        }
     }
 
     public ICloudPlayer getCloudPlayer() {
-        return this.playerManager.getOnlinePlayer(player.getUniqueId());
+        return this.playerManager.getOnlinePlayer(this.player.getUniqueId());
     }
 
     public boolean isInBuild() {
-        return data.getBuilders().contains(player.getUniqueId());
+        return this.data.getBuilders().contains(this.player.getUniqueId());
     }
 
     public void activateBuild() {
 
-        data.getBuilders().add(player.getUniqueId());
+        this.data.getBuilders().add(this.player.getUniqueId());
 
         this.cleanUpPlayer();
         this.player.setGameMode(GameMode.CREATIVE);
 
-        player.sendMessage(crimxLobby.getPrefix() + "§7Du bist nun im Baumodus");
+        this.player.sendMessage(this.crimxLobby.getPrefix() + "§7Du bist nun im Baumodus");
 
     }
 
     public void removeFromBuild() {
 
-        data.getBuilders().remove(player.getUniqueId());
+        this.data.getBuilders().remove(this.player.getUniqueId());
 
-        player.sendMessage(crimxLobby.getPrefix() + "§7Du bist nun nicht mehr im Baumodus");
+        this.player.sendMessage(this.crimxLobby.getPrefix() + "§7Du bist nun nicht mehr im Baumodus");
 
         this.setLobbyInventory();
 
@@ -149,13 +147,12 @@ public class LobbyPlayer {
 
         boolean hasPermission = this.player.hasPermission("crimxlobby.vip");
 
-        this.player.getInventory().setItem(0, new ItemBuilder(Material.GREEN_RECORD).setName("§8● §aTeleporter").toItemStack());
-        this.player.getInventory().setItem(1, new ItemBuilder(Material.INK_SACK, 1)
-                .setColor(this.getPlayerHiderItemData())
+        this.player.getInventory().setItem(0, new ItemBuilder(Material.MUSIC_DISC_CAT).setName("§8● §aTeleporter").toItemStack());
+        this.player.getInventory().setItem(1, new ItemBuilder(this.getPlayerHiderItemData(), 1)
                 .setName(this.getPlayerHiderDisplayName()).toItemStack());
         this.player.getInventory().setItem(3, new ItemBuilder(Material.FISHING_ROD).setName("§8● §bEnterhaken").setUnbreakable().toItemStack());
-        this.player.getInventory().setItem(5, new ItemBuilder(Material.STORAGE_MINECART).setName("§8● §eCosmetics").toItemStack());
-        this.player.getInventory().setItem(7, new ItemBuilder(Material.DIODE).setName("§8● §cEinstellungen").toItemStack());
+        this.player.getInventory().setItem(5, new ItemBuilder(Material.CHEST_MINECART).setName("§8● §eCosmetics").toItemStack());
+        this.player.getInventory().setItem(7, new ItemBuilder(Material.REPEATER).setName("§8● §cEinstellungen").toItemStack());
         this.player.getInventory().setItem(8, new ItemBuilder(Material.NETHER_STAR).addGlow().setName("§8● §6Lobby Minispiele").toItemStack());
 
         if (hasPermission) {
@@ -196,34 +193,30 @@ public class LobbyPlayer {
 
         this.crimxLobby.getData().getPlayerNPCs().put(this.player.getUniqueId(), playerNPC);
 
-        Bukkit.getScheduler().runTaskLater(this.crimxLobby, () -> this.crimxLobby.forceEmote(this.player, playerNPC.getUniqueId(), 4), 100L);
-
     }
 
     public void updatePlayerHiderState() {
 
         // STATES: 0: all shown, 1: vip shown, 2: nobody shown
-        int state = this.data.getPlayerHiderState().get(player.getUniqueId());
-
+        int state = this.data.getPlayerHiderState().get(this.player.getUniqueId());
         state++;
 
         if (state == 1) {
-            this.player.getInventory().getItem(1).setDurability((short) 5);
             Bukkit.getOnlinePlayers().forEach(loop -> {
                 if (!loop.hasPermission("crimxlobby.vip")) {
-                    this.player.hidePlayer(loop);
+                    this.player.hidePlayer(this.crimxLobby, loop);
                 }
             });
         } else if (state == 2) {
-            this.player.getInventory().getItem(1).setDurability((short) 1);
-            Bukkit.getOnlinePlayers().forEach(loop -> this.player.hidePlayer(loop));
+            Bukkit.getOnlinePlayers().forEach(loop -> this.player.hidePlayer(this.crimxLobby, loop));
         } else {
             state = 0;
-            this.player.getInventory().getItem(1).setDurability((short) 10);
-            Bukkit.getOnlinePlayers().forEach(loop -> this.player.showPlayer(loop));
+            Bukkit.getOnlinePlayers().forEach(loop -> this.player.showPlayer(this.crimxLobby, loop));
         }
 
-        this.data.getPlayerHiderState().put(player.getUniqueId(), state);
+        this.data.getPlayerHiderState().put(this.player.getUniqueId(), state);
+
+        this.player.getInventory().getItem(1).setType(this.getPlayerHiderItemData());
         this.setPlayerHiderDisplayName();
 
     }
@@ -249,23 +242,23 @@ public class LobbyPlayer {
         }
     }
 
-    public int getPlayerHiderItemData() {
+    public Material getPlayerHiderItemData() {
 
-        int state = this.data.getPlayerHiderState().get(player.getUniqueId());
+        int state = this.data.getPlayerHiderState().get(this.player.getUniqueId());
 
         if (state == 1) {
-            return 5;
+            return Material.PURPLE_DYE;
         } else if (state == 2) {
-            return 1;
+            return Material.RED_DYE;
         } else {
-            return 10;
+            return Material.LIME_DYE;
         }
 
     }
 
     public void setPlayerHiderDisplayName() {
 
-        int state = this.data.getPlayerHiderState().get(player.getUniqueId());
+        int state = this.data.getPlayerHiderState().get(this.player.getUniqueId());
 
         ItemStack itemStack = this.player.getInventory().getItem(1);
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -276,6 +269,7 @@ public class LobbyPlayer {
             itemMeta.setDisplayName("§8● §7Du siehst §ckeinen Spieler");
         } else {
             itemMeta.setDisplayName("§8● §7Du siehst §aalle Spieler");
+            this.player.playEffect(EntityEffect.WITCH_MAGIC);
         }
 
         itemStack.setItemMeta(itemMeta);
@@ -284,7 +278,7 @@ public class LobbyPlayer {
 
     public String getPlayerHiderDisplayName() {
 
-        int state = this.data.getPlayerHiderState().get(player.getUniqueId());
+        int state = this.data.getPlayerHiderState().get(this.player.getUniqueId());
 
         if (state == 1) {
             return "§8● §7Du siehst §5nur VIPs";
@@ -326,7 +320,7 @@ public class LobbyPlayer {
     }
 
     public void createPlayerData() {
-        this.lobbyDatabase.createPlayerData(player);
+        this.lobbyDatabase.createPlayerData(this.player);
     }
 
     public void saveNewLocation() {
@@ -337,7 +331,8 @@ public class LobbyPlayer {
                 .append("lastLocationY", this.player.getLocation().getY())
                 .append("lastLocationZ", this.player.getLocation().getZ())
                 .append("lastLocationPitch", this.player.getLocation().getPitch())
-                .append("lastLocationYaw", this.player.getLocation().getYaw());
+                .append("lastLocationYaw", this.player.getLocation().getYaw())
+                .append("playerhiderState", this.data.getPlayerHiderState().get(this.player.getUniqueId()));
 
         Bson updateOperation = new Document("$set", toUpdate);
         this.crimxLobby.getCrimxAPI().getMongoDB().getLobbyCollection().updateOne(this.lobbyDocument, updateOperation);
@@ -347,19 +342,19 @@ public class LobbyPlayer {
     public void initPlayerHider() {
 
         int state = this.lobbyDocument.getInteger("playerhiderState");
-        this.data.getPlayerHiderState().put(player.getUniqueId(), state);
+        this.data.getPlayerHiderState().put(this.player.getUniqueId(), state);
 
     }
 
     public void loadMongoDocument() {
         Document found = this.crimxLobby.getCrimxAPI().getMongoDB().getLobbyCollection().
-                find(new Document("_id", player.getUniqueId().toString())).first();
+                find(new Document("_id", this.player.getUniqueId().toString())).first();
 
         Document foundNetwork = this.crimxLobby.getCrimxAPI().getMongoDB().getUserCollection().
-                find(new Document("_id", player.getUniqueId().toString())).first();
+                find(new Document("_id", this.player.getUniqueId().toString())).first();
 
-        this.crimxLobby.getData().getPlayerMongoDocument().put(player.getUniqueId(), found);
-        this.crimxLobby.getData().getPlayerMongoNetworkDocument().put(player.getUniqueId(), foundNetwork);
+        this.crimxLobby.getData().getPlayerMongoDocument().put(this.player.getUniqueId(), found);
+        this.crimxLobby.getData().getPlayerMongoNetworkDocument().put(this.player.getUniqueId(), foundNetwork);
 
         this.lobbyDocument = found;
         this.networkDocument = foundNetwork;
@@ -370,18 +365,11 @@ public class LobbyPlayer {
 
         this.data.getLobbyDatabasePlayer().put(this.player.getUniqueId(), new LobbyDatabasePlayer(hotbarSoundEnabled, spawnAtLastLocation, lastReward));
 
-        CoinsAPI coinsAPI = new CoinsAPI(this.player.getUniqueId());
-        int coins = coinsAPI.getCoins();
-
-        Bukkit.getOnlinePlayers().forEach(loopPlayer -> {
-            if (loopPlayer.hasMetadata("labymod")) {
-                boolean labyMod = loopPlayer.getMetadata("labymod").get(0).asBoolean();
-                if (labyMod) {
-                    this.setSubtitle(loopPlayer, this.player.getUniqueId(), "&e" + coins + " Coins");
-                }
+        for (Cosmetic cosmetic : Cosmetic.values()) {
+            if(this.getObjectFromMongoDocument(cosmetic.name(), MongoDBCollection.LOBBY) == null) {
+                this.saveObjectInDocument(cosmetic.name(), false, MongoDBCollection.LOBBY);
             }
-
-        });
+        }
 
     }
 
@@ -408,8 +396,6 @@ public class LobbyPlayer {
             case USERS:
                 this.crimxLobby.getCrimxAPI().getMongoDB().getUserCollection().updateOne(this.networkDocument, updateOperation);
         }
-
-
     }
 
     public void startJumpAndRun() {
@@ -418,7 +404,6 @@ public class LobbyPlayer {
         Random random = new Random();
 
         int height = random.nextInt(20) + 10;
-        int woolColor = random.nextInt(15);
 
         ArrayList<Location> possibleJumps = new ArrayList<>();
 
@@ -435,7 +420,7 @@ public class LobbyPlayer {
 
         Block startBlock = possibleJumps.get(random.nextInt(possibleJumps.size())).getBlock();
 
-        int y = random.nextInt(1);
+        int y = 0;
         Block nextBlock = possibleJumps.get(random.nextInt(possibleJumps.size())).getBlock();
 
         boolean notOk = nextBlock.getX() == startBlock.getX() + 1 || nextBlock.getX() == startBlock.getX() - 1
@@ -450,25 +435,17 @@ public class LobbyPlayer {
         }
 
         if (startBlock.getType().equals(Material.AIR)) {
-
-            startBlock.setType(Material.STAINED_CLAY);
-            startBlock.setData((byte) woolColor);
-
+            startBlock.setType(Arrays.asList(this.concreteTypes).get(random.nextInt(this.concreteTypes.length)), true);
         } else {
-
-            player.sendMessage(this.crimxLobby.getPrefix() + "§cEs konnte kein passender Start gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
+            this.player.sendMessage(this.crimxLobby.getPrefix() + "§cEs konnte kein passender Start gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
             return;
-
         }
 
         if (nextBlock.getType().equals(Material.AIR)) {
-
-            nextBlock.setType(Material.WOOL);
-            nextBlock.setData((byte) woolColor);
-
+            nextBlock.setType(Arrays.asList(this.woolTypes).get(random.nextInt(this.woolTypes.length)), true);
         } else {
 
-            player.sendMessage(this.crimxLobby.getPrefix() + "§cEs konnte kein passender Sprung gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
+            this.player.sendMessage(this.crimxLobby.getPrefix() + "§cEs konnte kein passender Sprung gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
             startBlock.setType(Material.AIR);
             return;
 
@@ -476,15 +453,15 @@ public class LobbyPlayer {
 
         this.player.getInventory().clear();
 
-        player.teleport(startBlock.getLocation().clone().add(0, 2, 0));
-        player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 2, 4);
+        this.player.teleport(startBlock.getLocation().clone().add(0, 2, 0));
+        this.player.playSound(this.player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 2, 4);
 
-        player.getInventory().setItem(4, new ItemBuilder(Material.INK_SACK, 1, (byte) 1).setName("§cAbbrechen").toItemStack());
+        this.player.getInventory().setItem(4, new ItemBuilder(Material.RED_DYE, 1).setName("§cAbbrechen").toItemStack());
 
-        JumpAndRunPlayer jumpAndRunPlayer = new JumpAndRunPlayer(player, woolColor, null, startBlock, nextBlock, possibleJumps);
+        JumpAndRunPlayer jumpAndRunPlayer = new JumpAndRunPlayer(this.player, 0, null, startBlock, nextBlock, possibleJumps);
 
-        this.data.getJumpAndRunPlayers().put(player.getUniqueId(), jumpAndRunPlayer);
-        this.data.getJumpers().add(player.getUniqueId());
+        this.data.getJumpAndRunPlayers().put(this.player.getUniqueId(), jumpAndRunPlayer);
+        this.data.getJumpers().add(this.player.getUniqueId());
 
     }
 
@@ -499,8 +476,7 @@ public class LobbyPlayer {
         jumpAndRunPlayer.getLastBlock().setType(Material.AIR);
 
         jumpAndRunPlayer.setCurrentBlock(jumpAndRunPlayer.getNextBlock());
-        jumpAndRunPlayer.getCurrentBlock().setType(Material.STAINED_CLAY);
-        jumpAndRunPlayer.getCurrentBlock().setData((byte) jumpAndRunPlayer.getWoolColor());
+        jumpAndRunPlayer.getCurrentBlock().setType(Arrays.asList(this.concreteTypes).get(random.nextInt(this.concreteTypes.length)), true);
 
         location = jumpAndRunPlayer.getCurrentBlock().getLocation();
 
@@ -537,12 +513,9 @@ public class LobbyPlayer {
         }
 
         if (nextBlock.getType().equals(Material.AIR)) {
-
-            nextBlock.setType(Material.WOOL);
-            nextBlock.setData((byte) jumpAndRunPlayer.getWoolColor());
+            nextBlock.setType(Arrays.asList(this.woolTypes).get(random.nextInt(this.woolTypes.length)), true);
 
             jumpAndRunPlayer.setNextBlock(nextBlock);
-
         } else {
 
             int c = 0;
@@ -556,14 +529,12 @@ public class LobbyPlayer {
 
             if (nextBlock.getType().equals(Material.AIR)) {
 
-                nextBlock.setType(Material.WOOL);
-                nextBlock.setData((byte) jumpAndRunPlayer.getWoolColor());
-
+                nextBlock.setType(Arrays.asList(this.woolTypes).get(random.nextInt(this.woolTypes.length)), true);
                 jumpAndRunPlayer.setNextBlock(nextBlock);
 
             } else {
 
-                player.sendMessage("§cEs konnte kein passender Sprung gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
+                this.player.sendMessage("§cEs konnte kein passender Sprung gefunden werden! Bitte gehe zu einer offenen Stelle und versuche es erneut");
                 this.endJumpAndRun();
 
             }
@@ -580,34 +551,34 @@ public class LobbyPlayer {
 
         this.player.getInventory().clear();
 
-        this.data.getJumpers().remove(player.getUniqueId());
+        this.data.getJumpers().remove(this.player.getUniqueId());
         this.setLobbyInventory();
 
-        this.data.getJumpAndRunPlayers().get(player.getUniqueId()).getCurrentBlock().setType(Material.AIR);
-        this.data.getJumpAndRunPlayers().get(player.getUniqueId()).getNextBlock().setType(Material.AIR);
+        this.data.getJumpAndRunPlayers().get(this.player.getUniqueId()).getCurrentBlock().setType(Material.AIR);
+        this.data.getJumpAndRunPlayers().get(this.player.getUniqueId()).getNextBlock().setType(Material.AIR);
 
-        this.data.getJumpAndRunPlayers().remove(player.getUniqueId());
+        this.data.getJumpAndRunPlayers().remove(this.player.getUniqueId());
 
     }
 
     public boolean isInWaterMLG() {
-        return this.waterMlgHandler.getWaterMlgPlayers().contains(player);
+        return this.waterMlgHandler.getWaterMlgPlayers().contains(this.player);
     }
 
     public void startWaterMLG() {
 
         int height = new Random().nextInt(15) + 5;
 
-        player.closeInventory();
+        this.player.closeInventory();
 
-        player.setVelocity(player.getVelocity().setY(height));
+        this.player.setVelocity(this.player.getVelocity().setY(height));
 
         this.cleanUpPlayer();
-        player.getInventory().setItem(3, new ItemBuilder(Material.WATER_BUCKET).setName("§9Wassereimer").toItemStack());
-        player.getInventory().setItem(5, new ItemBuilder(Material.INK_SACK, 1, (byte) 1).setName("§cAbbrechen").toItemStack());
+        this.player.getInventory().setItem(3, new ItemBuilder(Material.WATER_BUCKET).setName("§9Wassereimer").toItemStack());
+        this.player.getInventory().setItem(5, new ItemBuilder(Material.RED_DYE, 1).setName("§cAbbrechen").toItemStack());
 
-        this.waterMlgHandler.getWaterMlgPlayers().add(player);
-        this.waterMlgHandler.getFailed().put(player, false);
+        this.waterMlgHandler.getWaterMlgPlayers().add(this.player);
+        this.waterMlgHandler.getFailed().put(this.player, false);
 
     }
 
@@ -615,12 +586,12 @@ public class LobbyPlayer {
 
         this.cleanUpPlayer();
         this.setLobbyInventory();
-        this.waterMlgHandler.getWaterMlgPlayers().remove(player);
+        this.waterMlgHandler.getWaterMlgPlayers().remove(this.player);
 
     }
 
     public boolean isMlgFailed() {
-        return this.waterMlgHandler.getFailed().get(player);
+        return this.waterMlgHandler.getFailed().get(this.player);
     }
 
     public void unlockCosmetic(Cosmetic cosmetic) {
@@ -633,49 +604,27 @@ public class LobbyPlayer {
             int required = cosmetic.getCosmeticClass().newInstance().getCosmeticCost();
 
             if (coins >= required) {
-                player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast erfolgreich §a" + iCosmetic.getCosmeticName() + " §7freigeschalten");
-                player.playSound(player.getLocation(), Sound.LEVEL_UP, 2, 0.5f);
-                CosmeticInventory.COSMETICS_INVENTORY.open(player);
+                this.player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast erfolgreich §a" + iCosmetic.getCosmeticName() + " §7freigeschalten");
+                this.player.playSound(this.player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2, 0.5f);
+                CosmeticInventory.COSMETICS_INVENTORY.open(this.player);
 
                 coinsAPI.removeCoins(required);
                 this.saveObjectInDocument(cosmetic.name(), true, MongoDBCollection.LOBBY);
 
             } else {
-                player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
-                player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast nicht genügend Coins!");
-                player.closeInventory();
+                this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
+                this.player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast nicht genügend Coins!");
+                this.player.closeInventory();
             }
 
         } catch (InstantiationException | IllegalAccessException e) {
-            player.closeInventory();
-            player.playSound(player.getLocation(), Sound.NOTE_BASS, 2, 0.5f);
-            player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
+            this.player.closeInventory();
+            this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
+            this.player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
         }
     }
 
-    public void setSubtitle(Player receiver, UUID subtitlePlayer, String value) {
-        // List of all subtitles
-        JsonArray array = new JsonArray();
-
-        // Add subtitle
-        JsonObject subtitle = new JsonObject();
-        subtitle.addProperty("uuid", subtitlePlayer.toString());
-
-        // Optional: Size of the subtitle
-        subtitle.addProperty("size", 1.1d); // Range is 0.8 - 1.6 (1.6 is Minecraft default)
-
-        // no value = remove the subtitle
-        if (value != null)
-            subtitle.addProperty("value", value);
-
-        // You can set multiple subtitles in one packet
-        array.add(subtitle);
-
-        // Send to LabyMod using the API
-        LabyModPlugin.getInstance().sendServerMessage(receiver, "account_subtitle", array);
-    }
-
     public void setScoreboard() {
-        this.crimxLobby.getLobbyScoreboard().setGameScoreboard(player);
+        this.crimxLobby.getLobbyScoreboard().setGameScoreboard(this.player);
     }
 }

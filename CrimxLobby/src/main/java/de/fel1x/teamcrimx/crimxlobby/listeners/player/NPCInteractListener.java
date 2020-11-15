@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 
 public class NPCInteractListener implements Listener {
 
-    private CrimxLobby crimxLobby;
+    private final CrimxLobby crimxLobby;
 
     public NPCInteractListener(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;

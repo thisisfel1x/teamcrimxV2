@@ -3,11 +3,10 @@ package de.fel1x.teamcrimx.crimxapi.objects;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
-import de.fel1x.teamcrimx.crimxapi.utils.ColorUtil;
 import de.fel1x.teamcrimx.crimxapi.utils.Skin;
+import net.md_5.bungee.api.ChatColor;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.bukkit.ChatColor;
 
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
@@ -34,9 +33,11 @@ public class CrimxPlayer {
 
     public boolean checkIfPlayerExistsInCollection(UUID uuid, @Nullable MongoDBCollection mongoDBCollection) {
         if (mongoDBCollection == null) {
-            return Arrays.stream(MongoDBCollection.values()).allMatch(collection -> this.crimxAPI.getMongoDB().getNetworkDatabase().getCollection(collection.getName()).countDocuments(new Document("_id", uuid.toString())) > 0);
+            return Arrays.stream(MongoDBCollection.values()).allMatch(collection -> this.crimxAPI.getMongoDB()
+                    .getNetworkDatabase().getCollection(collection.getName()).countDocuments(new Document("_id", uuid.toString())) > 0);
         } else {
-            return this.crimxAPI.getMongoDB().getNetworkDatabase().getCollection(mongoDBCollection.getName()).countDocuments(new Document("_id", uuid.toString())) > 0;
+            return this.crimxAPI.getMongoDB().getNetworkDatabase().getCollection(mongoDBCollection.getName())
+                    .countDocuments(new Document("_id", uuid.toString())) > 0;
         }
     }
 
@@ -111,8 +112,12 @@ public class CrimxPlayer {
                 StringBuilder chatHeadString = new StringBuilder();
                 for (int j = 0; j < image.getWidth(); j++) {
                     Color color = new Color(image.getRGB(j, i));
-                    ChatColor chatColor = ColorUtil.fromRGB(color.getRed(), color.getGreen(), color.getBlue());
+                    /* ChatColor chatColor = ColorUtil.fromRGB(color.getRed(), color.getGreen(), color.getBlue());
+                    chatHeadString.append(chatColor).append("⬛"); */
+
+                    ChatColor chatColor = ChatColor.of(color);
                     chatHeadString.append(chatColor).append("⬛");
+
                 }
                 toReturn[i] = chatHeadString.toString();
             }

@@ -12,10 +12,17 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class DamageListener implements Listener {
 
+    private final CaptureTheFlag captureTheFlag;
+
+    public DamageListener(CaptureTheFlag captureTheFlag) {
+        this.captureTheFlag = captureTheFlag;
+        this.captureTheFlag.getPluginManager().registerEvents(this, this.captureTheFlag);
+    }
+
     @EventHandler
     public void on(EntityDamageByEntityEvent event) {
 
-        Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
+        Gamestate gamestate = this.captureTheFlag.getGamestateHandler().getGamestate();
 
         if (!gamestate.equals(Gamestate.INGAME)) {
             event.setCancelled(true);
@@ -49,7 +56,7 @@ public class DamageListener implements Listener {
                         return;
                     }
 
-                    CaptureTheFlag.getInstance().getData().getLastHit().put(victim, damager);
+                    this.captureTheFlag.getData().getLastHit().put(victim, damager);
 
                 }
             }
@@ -79,14 +86,14 @@ public class DamageListener implements Listener {
             return;
         }
 
-        CaptureTheFlag.getInstance().getData().getLastHit().put(victim, damager);
+        this.captureTheFlag.getData().getLastHit().put(victim, damager);
 
     }
 
     @EventHandler
     public void on(EntityDamageEvent event) {
 
-        Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
+        Gamestate gamestate = this.captureTheFlag.getGamestateHandler().getGamestate();
 
         if (!gamestate.equals(Gamestate.INGAME)) {
             event.setCancelled(true);

@@ -28,7 +28,7 @@ public class LobbyTimer implements ITimer {
             this.running = true;
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
-                switch (countdown) {
+                switch (this.countdown) {
                     case 60:
                     case 50:
                     case 40:
@@ -41,14 +41,14 @@ public class LobbyTimer implements ITimer {
                     case 2:
                     case 1:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Die Runde startet in §e"
-                                + (countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
-                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.NOTE_BASS, 2f, 3f));
+                                + (this.countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
+                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2f, 3f));
                         break;
 
                     case 0:
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§aDie Runde beginnt!");
                         Bukkit.getOnlinePlayers().forEach(player -> {
-                            player.playSound(player.getLocation(), Sound.LEVEL_UP, 3f, 5f);
+                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 3f, 5f);
                             player.setLevel(0);
                             player.setExp(0);
                         });
@@ -63,8 +63,8 @@ public class LobbyTimer implements ITimer {
 
                 if (this.countdown >= 1) {
                     Bukkit.getOnlinePlayers().forEach(current -> {
-                        current.setLevel(countdown);
-                        current.setExp((float) countdown / (float) 60);
+                        current.setLevel(this.countdown);
+                        current.setExp((float) this.countdown / (float) 60);
                     });
                 }
 
@@ -79,7 +79,7 @@ public class LobbyTimer implements ITimer {
     @Override
     public void stop() {
         if (this.running) {
-            Bukkit.getScheduler().cancelTask(taskId);
+            Bukkit.getScheduler().cancelTask(this.taskId);
             this.running = false;
             this.setCountdown(60);
             this.mlgWars.setLobbyCountdown(60);
@@ -92,7 +92,7 @@ public class LobbyTimer implements ITimer {
     }
 
     public int getCountdown() {
-        return countdown;
+        return this.countdown;
     }
 
     public void setCountdown(int countdown) {

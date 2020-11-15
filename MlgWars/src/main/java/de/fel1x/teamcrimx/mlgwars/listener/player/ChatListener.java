@@ -16,7 +16,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public ChatListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
@@ -28,7 +28,7 @@ public class ChatListener implements Listener {
 
         Player player = event.getPlayer();
         GamePlayer gamePlayer = new GamePlayer(player);
-        Gamestate currentState = mlgWars.getGamestateHandler().getGamestate();
+        Gamestate currentState = this.mlgWars.getGamestateHandler().getGamestate();
 
         IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(player.getUniqueId());
 
@@ -59,7 +59,7 @@ public class ChatListener implements Listener {
                     this.mlgWars.getData().getPlayerGg().put(player.getUniqueId(), true);
 
                     player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast §e" + coins + " Coins §7erhalten!");
-                    player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 1.75f);
+                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 1.75f);
 
                     CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
                     coinsAPI.addCoins(coins);

@@ -12,7 +12,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class EntityInteractListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public EntityInteractListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;

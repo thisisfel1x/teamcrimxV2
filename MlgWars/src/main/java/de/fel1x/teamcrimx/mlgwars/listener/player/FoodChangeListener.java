@@ -10,7 +10,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 public class FoodChangeListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public FoodChangeListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;

@@ -7,7 +7,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 public final class CrimxBungee extends Plugin {
 
     private static CrimxBungee instance;
-    private String prefix = "§eCrimx§lBungee §8» §r";
+    private final String prefix = "§eCrimx§lBungee §8» §r";
     private CrimxAPI crimxAPI;
 
     public static CrimxBungee getInstance() {
@@ -32,6 +32,6 @@ public final class CrimxBungee extends Plugin {
     }
 
     public CrimxAPI getCrimxAPI() {
-        return crimxAPI;
+        return this.crimxAPI;
     }
 }

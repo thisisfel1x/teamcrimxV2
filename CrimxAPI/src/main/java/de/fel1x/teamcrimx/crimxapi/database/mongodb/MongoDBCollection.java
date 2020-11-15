@@ -4,7 +4,9 @@ public enum MongoDBCollection {
 
     USERS("users"),
     LOBBY("lobby"),
-    MLGWARS("mlgwars");
+    MLGWARS("mlgwars"),
+    CAPTURE_THE_FLAG("capturetheflag"),
+    BINGO("bingo");
 
     String name;
 
@@ -13,6 +15,6 @@ public enum MongoDBCollection {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 }

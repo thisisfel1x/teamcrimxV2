@@ -11,7 +11,7 @@ public class GamestateHandler {
     }
 
     public Gamestate getGamestate() {
-        return gamestate;
+        return this.gamestate;
     }
 
     public void setGamestate(Gamestate gamestate) {

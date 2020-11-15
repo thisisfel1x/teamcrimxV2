@@ -4,6 +4,7 @@ import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.Data;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
 import de.fel1x.capturetheflag.gamestate.Gamestate;
+import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -11,9 +12,40 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
+import java.util.Arrays;
+
 public class BlockBreakListener implements Listener {
 
-    Data data = CaptureTheFlag.getInstance().getData();
+    private final CaptureTheFlag captureTheFlag;
+    private final Data data;
+
+    private final Material[] allowedBlocksToBreak = {
+            Material.GRASS,
+            Material.DANDELION,
+            Material.POPPY,
+            Material.BLUE_ORCHID,
+            Material.ALLIUM,
+            Material.AZURE_BLUET,
+            Material.RED_TULIP,
+            Material.ORANGE_TULIP,
+            Material.WHITE_TULIP,
+            Material.PINK_TULIP,
+            Material.OXEYE_DAISY,
+            Material.CORNFLOWER,
+            Material.LILAC,
+            Material.ROSE_BUSH,
+            Material.PEONY,
+            Material.TALL_GRASS,
+            Material.LARGE_FERN,
+            Material.FIRE
+    };
+
+    public BlockBreakListener(CaptureTheFlag captureTheFlag) {
+        this.captureTheFlag = captureTheFlag;
+        this.data = this.captureTheFlag.getData();
+
+        this.captureTheFlag.getPluginManager().registerEvents(this, this.captureTheFlag);
+    }
 
     @EventHandler
     public void on(BlockBreakEvent event) {
@@ -23,7 +55,7 @@ public class BlockBreakListener implements Listener {
         Player player = event.getPlayer();
         GamePlayer gamePlayer = new GamePlayer(player);
 
-        Gamestate gamestate = CaptureTheFlag.getInstance().getGamestateHandler().getGamestate();
+        Gamestate gamestate = this.captureTheFlag.getGamestateHandler().getGamestate();
 
         if (!gamestate.equals(Gamestate.INGAME)) {
             event.setCancelled(true);
@@ -39,18 +71,22 @@ public class BlockBreakListener implements Listener {
             event.setCancelled(true);
         }
 
-        if (data.getBlueSpawnCuboid().contains(block) || data.getRedSpawnCuboid().contains(block)) {
+        if (this.data.getBlueSpawnCuboid().contains(block) || this.data.getRedSpawnCuboid().contains(block)) {
             player.sendMessage("§cDu darfst nicht im Spawnbereich abbauen!");
             event.setCancelled(true);
             return;
         }
 
-        if (!CaptureTheFlag.getInstance().getData().getPlacedBlocks().contains(block)) {
+        if (Arrays.stream(this.allowedBlocksToBreak).anyMatch(stream -> stream == block.getType())) {
+            return;
+        }
+
+        if (!this.data.getPlacedBlocks().contains(block)) {
             event.setCancelled(true);
             return;
         }
 
-        CaptureTheFlag.getInstance().getData().getPlacedBlocks().remove(block);
+        this.data.getPlacedBlocks().remove(block);
 
     }
 

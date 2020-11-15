@@ -1,8 +1,8 @@
 package de.fel1x.teamcrimx.crimxlobby.cosmetics;
 
 import org.bukkit.Color;
-import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 public interface ICosmetic {
@@ -15,7 +15,7 @@ public interface ICosmetic {
 
     Color getLeatherShoeColor();
 
-    Effect getWalkEffect();
+    Particle getWalkEffect();
 
     int getCosmeticCost();
 

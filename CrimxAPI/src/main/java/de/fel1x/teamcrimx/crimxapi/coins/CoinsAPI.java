@@ -14,7 +14,7 @@ public class CoinsAPI {
 
     public CoinsAPI(UUID uuid) {
 
-        this.playerNetworkDocument = crimxAPI.getMongoDB().getUserCollection().
+        this.playerNetworkDocument = this.crimxAPI.getMongoDB().getUserCollection().
                 find(new Document("_id", uuid.toString())).first();
 
     }

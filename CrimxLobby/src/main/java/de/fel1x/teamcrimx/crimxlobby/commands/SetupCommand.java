@@ -2,7 +2,6 @@ package de.fel1x.teamcrimx.crimxlobby.commands;
 
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.manager.SpawnManager;
-import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,8 +10,8 @@ import org.bukkit.entity.Player;
 
 public class SetupCommand implements CommandExecutor {
 
-    private CrimxLobby crimxLobby;
-    private SpawnManager spawnManager;
+    private final CrimxLobby crimxLobby;
+    private final SpawnManager spawnManager;
 
     public SetupCommand(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;
@@ -27,13 +26,12 @@ public class SetupCommand implements CommandExecutor {
         if (!(commandSender instanceof Player)) return false;
 
         Player player = (Player) commandSender;
-        LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
         if (!player.hasPermission("crimxlobby.setup")) return false;
 
         if (args.length == 0) {
 
-            player.sendMessage(crimxLobby.getPrefix() + "§cNutze /setup <setspawn>|<setspawnnpc>|<mlgwars>|<mlgwarsnpc> etc.");
+            player.sendMessage(this.crimxLobby.getPrefix() + "§cNutze /setup <setspawn>|<setspawnnpc>|<mlgwars>|<mlgwarsnpc> etc.");
 
         } else if (args.length == 1) {
 

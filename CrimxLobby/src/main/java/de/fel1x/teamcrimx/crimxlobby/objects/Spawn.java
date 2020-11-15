@@ -22,7 +22,7 @@ public enum Spawn {
     }
 
     public Location getPlayerSpawn() {
-        return playerSpawn;
+        return this.playerSpawn;
     }
 
     public void setPlayerSpawn(Location playerSpawn) {
@@ -30,7 +30,7 @@ public enum Spawn {
     }
 
     public Location getNpcSpawn() {
-        return npcSpawn;
+        return this.npcSpawn;
     }
 
     public void setNpcSpawn(Location npcSpawn) {

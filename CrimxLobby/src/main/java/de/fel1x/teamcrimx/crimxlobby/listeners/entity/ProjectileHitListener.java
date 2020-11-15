@@ -1,13 +1,8 @@
 package de.fel1x.teamcrimx.crimxlobby.listeners.entity;
 
 import de.fel1x.teamcrimx.crimxapi.utils.InstantFirework;
-import de.fel1x.teamcrimx.crimxapi.utils.ParticleUtils;
-import de.fel1x.teamcrimx.crimxapi.utils.Particles;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
@@ -16,11 +11,8 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class ProjectileHitListener implements Listener {
 
-    private CrimxLobby crimxLobby;
-
     public ProjectileHitListener(CrimxLobby crimxLobby) {
-        this.crimxLobby = crimxLobby;
-        this.crimxLobby.getPluginManager().registerEvents(this, this.crimxLobby);
+        crimxLobby.getPluginManager().registerEvents(this, crimxLobby);
     }
 
     @EventHandler
@@ -31,10 +23,10 @@ public class ProjectileHitListener implements Listener {
 
         if (entity instanceof Snowball) {
             if (entity.hasMetadata("funGun")) {
-                ParticleUtils.display(Particles.LAVA, 1.3f, 1f, 1.3f, location, 16);
-                ParticleUtils.display(Particles.CLOUD, 1.3f, 1f, 1.3f, location, 16);
-                ParticleUtils.display(Particles.HEART, 0.8f, 0.8f, 0.8f, location, 20);
-                location.getWorld().playSound(location, Sound.CAT_PURREOW, 3f, 0.75f);
+                entity.getWorld().spawnParticle(Particle.HEART, location, 4);
+                entity.getWorld().spawnParticle(Particle.LAVA, location, 4);
+                entity.getWorld().spawnParticle(Particle.SNOWBALL, location, 4);
+                location.getWorld().playSound(location, Sound.ENTITY_CAT_PURREOW, 3f, 0.75f);
             } else if (entity.hasMetadata("firework")) {
                 new InstantFirework(FireworkEffect.builder().withColor(Color.GREEN, Color.RED, Color.BLUE, Color.YELLOW,
                         Color.AQUA, Color.ORANGE, Color.PURPLE, Color.MAROON, Color.FUCHSIA)

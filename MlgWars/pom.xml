@@ -56,10 +56,6 @@
 
     <repositories>
         <repository>
-            <id>spigotmc-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
@@ -67,27 +63,33 @@
             <id>releases</id>
             <url>https://repo.cloudnetservice.eu/repository/releases/</url>
         </repository>
+        <repository>
+            <id>md_5-public</id>
+            <url>http://repo.md-5.net/content/groups/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper</artifactId>
+            <version>1.16.3-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>fr.minuskube.inv</groupId>
             <artifactId>smart-invs</artifactId>
             <version>1.2.7</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>LATEST</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.fel1x.teamcrimx</groupId>
-            <artifactId>CrimxAPI</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
+
 
         <!--  cloudnet driver for plugins and modules -->
         <dependency>
@@ -134,16 +136,17 @@
         <dependency>
             <groupId>LibsDisguises</groupId>
             <artifactId>LibsDisguises</artifactId>
-            <version>8.6.7</version>
-            <scope>system</scope>
-            <systemPath>C:/Users/Felix/Downloads/LibsDisguises 8.6.7.jar</systemPath>
+            <version>LATEST</version>
+            <scope>provided</scope>
         </dependency>
+
         <dependency>
-            <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>4.5.0</version>
-            <scope>system</scope>
-            <systemPath>C:/Users/Felix/Downloads/ProtocolLib(2).jar</systemPath>
+            <groupId>de.fel1x.teamcrimx</groupId>
+            <artifactId>CrimxAPI</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
+
+
     </dependencies>
 </project>

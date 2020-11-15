@@ -2,12 +2,14 @@ package de.fel1x.capturetheflag.inventories;
 
 import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.gameplayer.GamePlayer;
-import de.fel1x.capturetheflag.kits.Kit;
-import de.fel1x.capturetheflag.utils.ItemBuilder;
+import de.fel1x.capturetheflag.kit.IKit;
+import de.fel1x.capturetheflag.kit.Kit;
+import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class KitSelector implements InventoryProvider {
@@ -20,29 +22,41 @@ public class KitSelector implements InventoryProvider {
             .manager(CaptureTheFlag.getInstance().getInventoryManager())
             .build();
 
+    private final CaptureTheFlag captureTheFlag = CaptureTheFlag.getInstance();
+
     @Override
     public void init(Player player, InventoryContents contents) {
 
         int i = 0;
 
         for (Kit kit : Kit.values()) {
+            if (kit == Kit.NONE) continue;
 
-            contents.set(0, i, ClickableItem.of(new ItemBuilder(kit.getMaterial()).setName(kit.getName()).setLore(kit.getDescription()).toItemStack(), event -> {
+            try {
+                IKit iKit = kit.getClazz().newInstance();
 
-                if (!(event.getWhoClicked() instanceof Player)) return;
+                contents.set(0, i, ClickableItem.of(new ItemBuilder(iKit.getKitMaterial())
+                        .setName("§8● §e" + iKit.getKitName())
+                        .setLore(iKit.getKitDescription()).toItemStack(), event -> {
 
-                Player clickedPlayer = (Player) event.getWhoClicked();
-                GamePlayer gamePlayer = new GamePlayer(clickedPlayer);
+                    if (!(event.getWhoClicked() instanceof Player)) return;
 
-                gamePlayer.selectKit(kit);
+                    Player clickedPlayer = (Player) event.getWhoClicked();
+                    GamePlayer gamePlayer = new GamePlayer(clickedPlayer);
 
-            }));
+                    gamePlayer.selectKit(kit);
+                    player.sendMessage(this.captureTheFlag.getPrefix() + "§7Du hast das §e"
+                            + iKit.getKitName() + "-Kit §7ausgewählt!");
+                    player.closeInventory();
+                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 5, 0.5f);
+                }));
 
-            i++;
-
+                i++;
+            } catch (InstantiationException | IllegalAccessException exception) {
+                player.sendMessage(this.captureTheFlag.getPrefix() + "§cEs trat ein Fehler auf!");
+                exception.printStackTrace();
+            }
         }
-
-
     }
 
     @Override

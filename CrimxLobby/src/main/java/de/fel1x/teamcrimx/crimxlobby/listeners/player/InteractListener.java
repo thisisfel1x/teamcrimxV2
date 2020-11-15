@@ -3,7 +3,6 @@ package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import de.fel1x.teamcrimx.crimxlobby.inventories.CosmeticInventory;
-import de.fel1x.teamcrimx.crimxlobby.inventories.MinigameInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.NavigatorInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.SettingsInventory;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
@@ -19,7 +18,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class InteractListener implements Listener {
 
-    private CrimxLobby crimxLobby;
+    private final CrimxLobby crimxLobby;
 
     public InteractListener(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;
@@ -55,11 +54,11 @@ public class InteractListener implements Listener {
 
             if (event.hasItem()) {
                 switch (item.getType()) {
-                    case GREEN_RECORD:
+                    case MUSIC_DISC_CAT:
                         NavigatorInventory.NAVIGATOR_INVENTORY.open(player);
                         break;
 
-                    case INK_SACK:
+                    case RED_DYE:
                         if (lobbyPlayer.isInJumpAndRun()) {
                             lobbyPlayer.endJumpAndRun();
                         } else if (lobbyPlayer.isInWaterMLG()) {
@@ -69,16 +68,24 @@ public class InteractListener implements Listener {
                         }
                         break;
 
-                    case STORAGE_MINECART:
+
+                    case LIME_DYE:
+                    case PURPLE_DYE:
+                        lobbyPlayer.updatePlayerHiderState();
+                        break;
+
+
+                    case CHEST_MINECART:
                         CosmeticInventory.COSMETICS_INVENTORY.open(player);
                         break;
 
-                    case DIODE:
+                    case REPEATER:
                         SettingsInventory.SETTINGS_INVENTORY.open(player);
                         break;
 
                     case NETHER_STAR:
-                        MinigameInventory.MINIGAME_INVENTORY.open(player);
+                        //MinigameInventory.MINIGAME_INVENTORY.open(player);
+                        player.sendMessage(this.crimxLobby.getPrefix() + "§7Dieses Feature wird noch auf die 1.16 geupdatet!");
                         break;
 
                     case BLAZE_ROD:
@@ -121,7 +128,7 @@ public class InteractListener implements Listener {
                         player.setMetadata("gadgetDelay", new FixedMetadataValue(this.crimxLobby,
                                 System.currentTimeMillis() + (1000 * 5)));
 
-                        if (iCosmetic.getCosmeticMaterial() == Material.FIREWORK) {
+                        if (iCosmetic.getCosmeticMaterial() == Material.FIREWORK_ROCKET) {
                             Snowball snowball = player.launchProjectile(Snowball.class);
                             snowball.setMetadata("firework", new FixedMetadataValue(this.crimxLobby, true));
                         }

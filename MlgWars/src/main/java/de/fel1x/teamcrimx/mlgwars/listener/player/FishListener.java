@@ -16,7 +16,7 @@ import org.bukkit.util.Vector;
 
 public class FishListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public FishListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
@@ -46,9 +46,6 @@ public class FishListener implements Listener {
                         Location from = player.getLocation();
                         Location to = event.getHook().getLocation();
 
-                        from.setY(from.getY() + 0.5D);
-                        player.teleport(from);
-
                         double g = -0.08D;
                         double t = to.distance(from);
                         double v_x = (1.0D + 0.07D * t) * (to.getX() - from.getX()) / t;
@@ -61,7 +58,7 @@ public class FishListener implements Listener {
                         v.setZ(v_z);
                         player.setVelocity(v);
 
-                        player.playSound(player.getLocation(), Sound.ENDERDRAGON_WINGS, 3.0F, 2.0F);
+                        player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 3.0F, 2.0F);
                     }
                 }
             }

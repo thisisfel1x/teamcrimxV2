@@ -3,16 +3,17 @@ package de.fel1x.teamcrimx.mlgwars.listener.player;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
+import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 
 public class PickUpListener implements Listener {
 
-    private MlgWars mlgWars;
+    private final MlgWars mlgWars;
 
     public PickUpListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
@@ -20,9 +21,11 @@ public class PickUpListener implements Listener {
     }
 
     @EventHandler
-    public void on(PlayerPickupItemEvent event) {
+    public void on(EntityPickupItemEvent event) {
 
-        Player player = event.getPlayer();
+        if (!(event.getEntity() instanceof Player)) return;
+
+        Player player = (Player) event.getEntity();
         GamePlayer gamePlayer = new GamePlayer(player);
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
@@ -43,12 +46,10 @@ public class PickUpListener implements Listener {
                     return;
                 }
 
-                switch (gamePlayer.getSelectedKit()) {
-                    case EXPLODER:
-                        event.getItem().setItemStack(new ItemBuilder(Material.TNT, 16)
-                                .setName("§8● §bExplosives TNT")
-                                .setLore("§7Explosiver geht es fast gar", "§7nicht mehr! (wirklich explosiv!)").toItemStack());
-                        break;
+                if (gamePlayer.getSelectedKit() == Kit.EXPLODER) {
+                    event.getItem().setItemStack(new ItemBuilder(Material.TNT, 16)
+                            .setName("§8● §bExplosives TNT")
+                            .setLore("§7Explosiver geht es fast gar", "§7nicht mehr! (wirklich explosiv!)").toItemStack());
                 }
         }
     }

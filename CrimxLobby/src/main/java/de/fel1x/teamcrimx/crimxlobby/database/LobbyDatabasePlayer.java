@@ -13,7 +13,7 @@ public class LobbyDatabasePlayer {
     }
 
     public boolean isHotbarSoundEnabled() {
-        return hotbarSoundEnabled;
+        return this.hotbarSoundEnabled;
     }
 
     public void setHotbarSoundEnabled(boolean hotbarSoundEnabled) {
@@ -21,7 +21,7 @@ public class LobbyDatabasePlayer {
     }
 
     public boolean isSpawnAtLastLocation() {
-        return spawnAtLastLocation;
+        return this.spawnAtLastLocation;
     }
 
     public void setSpawnAtLastLocation(boolean spawnAtLastLocation) {
@@ -29,7 +29,7 @@ public class LobbyDatabasePlayer {
     }
 
     public long getLastReward() {
-        return lastReward;
+        return this.lastReward;
     }
 
     public void setLastReward(long lastReward) {

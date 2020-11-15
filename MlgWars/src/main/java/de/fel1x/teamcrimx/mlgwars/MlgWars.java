@@ -37,7 +37,6 @@ import java.util.stream.StreamSupport;
 public final class MlgWars extends JavaPlugin {
 
     private static MlgWars instance;
-    private final String prefix = "§eMlgWars §8● §r";
     private CrimxAPI crimxAPI;
 
     private boolean inSetup;
@@ -100,11 +99,11 @@ public final class MlgWars extends JavaPlugin {
 
         this.allMaterials = new ArrayList<>(Arrays.asList(Material.values()));
 
+        this.getServer().getScheduler().runTaskLater(this, () -> this.setMotd(mapName), 60L);
+
     }
 
     private String selectMap() {
-
-        MapHandler mapHandler = new MapHandler();
 
         File[] files = new File("plugins/MlgWars/maps").listFiles();
         Random rand = new Random();
@@ -116,7 +115,14 @@ public final class MlgWars extends JavaPlugin {
         }
 
         File file = files[rand.nextInt(files.length)];
-        String name = FilenameUtils.removeExtension(file.getName());
+
+        return FilenameUtils.removeExtension(file.getName());
+
+    }
+
+    private void setMotd(String name) {
+
+        MapHandler mapHandler = new MapHandler();
 
         Size size;
 
@@ -124,15 +130,12 @@ public final class MlgWars extends JavaPlugin {
             size = mapHandler.getSize(name);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return;
         }
 
         BukkitCloudNetHelper.setApiMotd(name + " " + size.getName());
         BukkitCloudNetHelper.setMaxPlayers(size.getSize());
         BridgeHelper.updateServiceInfo();
-
-        return name;
-
     }
 
     private void registerListener() {
@@ -150,6 +153,9 @@ public final class MlgWars extends JavaPlugin {
         new ToggleFlyListener(this);
         new InventoryClickListener(this);
         new RespawnListener(this);
+        new PlayerSwapItemListener(this);
+        new ToggleFlightListener(this);
+        new AreaEffectCloudListener(this);
 
         // ENTITY
         new DamageListener(this);
@@ -206,23 +212,24 @@ public final class MlgWars extends JavaPlugin {
     }
 
     public String getPrefix() {
+        String prefix = "§eMlgWars §8● §r";
         return prefix;
     }
 
     public Data getData() {
-        return date;
+        return this.date;
     }
 
     public PluginManager getPluginManager() {
-        return pluginManager;
+        return this.pluginManager;
     }
 
     public GamestateHandler getGamestateHandler() {
-        return gamestateHandler;
+        return this.gamestateHandler;
     }
 
     public ITimer getiTimer() {
-        return iTimer;
+        return this.iTimer;
     }
 
     public void setiTimer(ITimer iTimer) {
@@ -230,7 +237,7 @@ public final class MlgWars extends JavaPlugin {
     }
 
     public boolean isInSetup() {
-        return inSetup;
+        return this.inSetup;
     }
 
     public void setInSetup(boolean inSetup) {
@@ -238,7 +245,7 @@ public final class MlgWars extends JavaPlugin {
     }
 
     public boolean isNoMap() {
-        return noMap;
+        return this.noMap;
     }
 
     public void setNoMap(boolean noMap) {
@@ -246,19 +253,19 @@ public final class MlgWars extends JavaPlugin {
     }
 
     public InventoryManager getInventoryManager() {
-        return inventoryManager;
+        return this.inventoryManager;
     }
 
     public CrimxAPI getCrimxAPI() {
-        return crimxAPI;
+        return this.crimxAPI;
     }
 
     public WorldLoader getWorldLoader() {
-        return worldLoader;
+        return this.worldLoader;
     }
 
     public int getLobbyCountdown() {
-        return lobbyCountdown;
+        return this.lobbyCountdown;
     }
 
     public void setLobbyCountdown(int lobbyCountdown) {
@@ -266,7 +273,7 @@ public final class MlgWars extends JavaPlugin {
     }
 
     public int getTeamSize() {
-        return teamSize;
+        return this.teamSize;
     }
 
     public void setTeamSize(int teamSize) {
@@ -274,10 +281,10 @@ public final class MlgWars extends JavaPlugin {
     }
 
     public ArrayList<Material> getAllMaterials() {
-        return allMaterials;
+        return this.allMaterials;
     }
 
     public boolean isLabor() {
-        return labor;
+        return this.labor;
     }
 }

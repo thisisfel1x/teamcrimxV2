@@ -39,7 +39,8 @@ public class MoveListener implements Listener {
 
             if (!iCosmetic.dropItem() && !iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()) {
                 if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
-                    player.getWorld().playEffect(player.getLocation(), iCosmetic.getWalkEffect(), 0);
+                    player.getWorld().spawnParticle(iCosmetic.getWalkEffect(),
+                            player.getLocation().clone().add(0, 0.5, 0), iCosmetic.effectData());
                 }
             } else if (!iCosmetic.dropItem() && iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()) {
                 if ((player.getLocation().clone().subtract(0, 1, 0).getBlock().getType() != Material.AIR
@@ -53,26 +54,26 @@ public class MoveListener implements Listener {
                 }
             } else if (iCosmetic.dropItem() && !iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()) {
                 Item item = player.getWorld().dropItem(player.getLocation(), new ItemStack(iCosmetic.itemToDrop()));
-                Bukkit.getScheduler().runTaskLater(this.crimxLobby, item::remove, 20 * 5L);
+                Bukkit.getScheduler().runTaskLater(this.crimxLobby, item::remove, 20 * 2L);
             }
 
         }
 
         if (lobbyPlayer.isInJumpAndRun()) {
 
-            JumpAndRunPlayer jumpAndRunPlayer = crimxLobby.getData().getJumpAndRunPlayers().get(player.getUniqueId());
+            JumpAndRunPlayer jumpAndRunPlayer = this.crimxLobby.getData().getJumpAndRunPlayers().get(player.getUniqueId());
 
             Block block = player.getLocation().clone().add(0, -1, 0).getBlock();
 
-            if (block.getType() == Material.WOOL && block.getData() == jumpAndRunPlayer.getWoolColor()) {
+            if (block.getType() == Material.LEGACY_WOOL) {
 
-                player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 7, 9);
+                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 7, 9);
                 lobbyPlayer.generateNextJump();
 
             } else if (event.getTo().getY() < jumpAndRunPlayer.getCurrentBlock().getY()) {
 
                 lobbyPlayer.endJumpAndRun();
-                player.playSound(player.getLocation(), Sound.ANVIL_LAND, 5, 8);
+                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 5, 8);
 
             }
         }

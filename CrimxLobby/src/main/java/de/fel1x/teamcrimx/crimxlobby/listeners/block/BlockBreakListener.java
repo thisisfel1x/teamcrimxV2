@@ -9,11 +9,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 public class BlockBreakListener implements Listener {
 
-    private CrimxLobby crimxLobby;
-
     public BlockBreakListener(CrimxLobby crimxLobby) {
-        this.crimxLobby = crimxLobby;
-        this.crimxLobby.getPluginManager().registerEvents(this, this.crimxLobby);
+        crimxLobby.getPluginManager().registerEvents(this, crimxLobby);
     }
 
     @EventHandler

@@ -7,11 +7,8 @@ import net.md_5.bungee.event.EventHandler;
 
 public class JoinListener implements Listener {
 
-    private CrimxBungee crimxBungee;
-
     public JoinListener(CrimxBungee crimxBungee) {
-        this.crimxBungee = crimxBungee;
-        this.crimxBungee.getProxy().getPluginManager().registerListener(this.crimxBungee, this);
+        crimxBungee.getProxy().getPluginManager().registerListener(crimxBungee, this);
     }
 
     @EventHandler

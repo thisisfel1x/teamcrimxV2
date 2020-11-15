@@ -23,7 +23,7 @@ public class MinigameInventory implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
 
-        contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName(" ").toItemStack()));
+        contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
 
         contents.set(1, 3, ClickableItem.of(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTY4YWI4MWRlZDMxZGZkMWFkNzIyYTI4YTZmYWQwYjVlZWRmZDczNmU4NzU3YjBjMWU1Y2ZmNjU0MTc5Yjc4In19fQ==")
                 .setName("§8» §aWaterMLG").toItemStack(), event -> {
