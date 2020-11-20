@@ -36,7 +36,6 @@ public class ChatListener implements Listener {
         Gamestate gamestate = this.captureTheFlag.getGamestateHandler().getGamestate();
 
         if (gamestate.equals(Gamestate.LOBBY) || gamestate.equals(Gamestate.ENDING)) {
-
             IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(player.getUniqueId());
 
             if (iPermissionUser == null) return;
@@ -44,6 +43,27 @@ public class ChatListener implements Listener {
             IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(iPermissionUser);
 
             event.setFormat(ChatColor.translateAlternateColorCodes('&', permissionGroup.getDisplay()) + player.getName() + " §8» §f" + event.getMessage());
+
+            if (gamestate.equals(Gamestate.ENDING)) {
+                String message = event.getMessage().toLowerCase();
+                if (message.equalsIgnoreCase("gg")
+                        || message.equalsIgnoreCase("bg")) {
+
+                    int coins = (message.equalsIgnoreCase("gg") ? 10 : -10);
+
+                    if (!this.captureTheFlag.getData().getPlayerGG().get(player.getUniqueId())) {
+                        this.captureTheFlag.getData().getPlayerGG().put(player.getUniqueId(), true);
+
+                        player.sendMessage(this.captureTheFlag.getPrefix() + "§7Du hast §e" + coins + " Coins §7erhalten!");
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 1.75f);
+
+                        Bukkit.getScheduler().runTaskAsynchronously(this.captureTheFlag, () -> {
+                            CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
+                            coinsAPI.addCoins(coins);
+                        });
+                    }
+                }
+            }
         } else {
             if (this.data.getSpectators().contains(player)) {
 
@@ -74,32 +94,8 @@ public class ChatListener implements Listener {
 
                     if (split != null) event.setFormat("§7[@all] " + player.getDisplayName() + " §8» §f" + split[1]);
                 }
-
             }
         }
-
-        if (gamestate.equals(Gamestate.ENDING)) {
-            String message = event.getMessage().toLowerCase();
-            if (message.equalsIgnoreCase("gg")
-                    || message.equalsIgnoreCase("bg")) {
-
-                int coins = (message.equalsIgnoreCase("gg") ? 10 : -10);
-
-                if (!this.captureTheFlag.getData().getPlayerGG().get(player.getUniqueId())) {
-                    this.captureTheFlag.getData().getPlayerGG().put(player.getUniqueId(), true);
-
-                    player.sendMessage(this.captureTheFlag.getPrefix() + "§7Du hast §e" + coins + " Coins §7erhalten!");
-                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 1.75f);
-
-                    Bukkit.getScheduler().runTaskAsynchronously(this.captureTheFlag, () -> {
-                        CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
-                        coinsAPI.addCoins(coins);
-                    });
-
-                }
-            }
-        }
-
     }
 
 }
