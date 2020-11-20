@@ -13,10 +13,11 @@ import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.WitchShoeCosmetic;
 
 public enum Cosmetic {
 
-    HEART_SHOE(HeartShoeCosmetic.class, CosmeticCategory.TRAILS),
-    NOTE_SHOE(NoteShoeCosmetic.class, CosmeticCategory.TRAILS),
-    SPELL_SHOE(WitchShoeCosmetic.class, CosmeticCategory.TRAILS),
-    LIBRARY_SHOE(LibraryShoeCosmetic.class, CosmeticCategory.TRAILS),
+    HEART_SHOE(HeartShoeCosmetic.class, CosmeticCategory.BOOTS),
+    NOTE_SHOE(NoteShoeCosmetic.class, CosmeticCategory.BOOTS),
+    SPELL_SHOE(WitchShoeCosmetic.class, CosmeticCategory.BOOTS),
+    LIBRARY_SHOE(LibraryShoeCosmetic.class, CosmeticCategory.BOOTS),
+
     CLOCK_TRAIL(RolexShoeTrail.class, CosmeticCategory.TRAILS),
     DIAMOND_TRAIL(MoneyShoeTrail.class, CosmeticCategory.TRAILS),
     SNOW_TRAIL(SnowShoeTrail.class, CosmeticCategory.TRAILS),

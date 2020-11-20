@@ -12,7 +12,7 @@ public class LibraryShoeCosmetic implements ICosmetic {
 
     @Override
     public String getCosmeticName() {
-        return "Bibliothekar";
+        return "§fBibliothekar";
     }
 
     @Override
