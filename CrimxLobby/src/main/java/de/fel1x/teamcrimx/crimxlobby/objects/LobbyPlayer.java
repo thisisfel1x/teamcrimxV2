@@ -1,5 +1,9 @@
 package de.fel1x.teamcrimx.crimxlobby.objects;
 
+import com.github.juliarn.npc.NPC;
+import com.github.juliarn.npc.SpawnCustomizer;
+import com.github.juliarn.npc.modifier.MetadataModifier;
+import com.github.juliarn.npc.profile.Profile;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
@@ -18,8 +22,6 @@ import de.fel1x.teamcrimx.crimxlobby.inventories.CosmeticInventory;
 import de.fel1x.teamcrimx.crimxlobby.manager.SpawnManager;
 import de.fel1x.teamcrimx.crimxlobby.minigames.jumpandrun.JumpAndRunPlayer;
 import de.fel1x.teamcrimx.crimxlobby.minigames.watermlg.WaterMlgHandler;
-import net.jitse.npclib.api.NPC;
-import net.jitse.npclib.api.skin.Skin;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.*;
@@ -27,11 +29,9 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
 public class LobbyPlayer {
 
@@ -178,21 +178,8 @@ public class LobbyPlayer {
         return this.data.getCosmetic().get(this.player.getUniqueId());
     }
 
+    @Deprecated
     public void spawnPersonalNPC() {
-
-        CrimxPlayer crimxPlayer = new CrimxPlayer(this.getCloudPlayer());
-
-        String[] values = crimxPlayer.getPlayerSkin();
-
-        NPC playerNPC = this.crimxLobby.getNpcLib().createNPC(Collections.singletonList("§a§lDein Profil"));
-        playerNPC.setSkin(new Skin(values[0], values[1]));
-        playerNPC.setLocation(new Location(Bukkit.getWorlds().get(0), -168.5, 65, 138.5, -90.5f, 10.6f));
-
-        playerNPC.create();
-        playerNPC.show(this.player);
-
-        this.crimxLobby.getData().getPlayerNPCs().put(this.player.getUniqueId(), playerNPC);
-
     }
 
     public void updatePlayerHiderState() {

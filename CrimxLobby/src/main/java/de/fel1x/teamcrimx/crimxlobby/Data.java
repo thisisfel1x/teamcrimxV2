@@ -3,7 +3,6 @@ package de.fel1x.teamcrimx.crimxlobby;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import de.fel1x.teamcrimx.crimxlobby.database.LobbyDatabasePlayer;
 import de.fel1x.teamcrimx.crimxlobby.minigames.jumpandrun.JumpAndRunPlayer;
-import net.jitse.npclib.api.NPC;
 import org.bson.Document;
 
 import java.util.*;
@@ -12,7 +11,6 @@ public class Data {
 
     private final List<UUID> builders;
 
-    private final Map<UUID, NPC> playerNPCs;
     private final Map<UUID, Integer> playerHiderState;
     private final Map<UUID, Document> playerMongoDocument;
     private final Map<UUID, Document> playerMongoNetworkDocument;
@@ -28,7 +26,6 @@ public class Data {
 
         this.builders = new ArrayList<>();
 
-        this.playerNPCs = new HashMap<>();
         this.playerHiderState = new HashMap<>();
 
         this.playerMongoDocument = new HashMap<>();
@@ -45,10 +42,6 @@ public class Data {
 
     public List<UUID> getBuilders() {
         return this.builders;
-    }
-
-    public Map<UUID, NPC> getPlayerNPCs() {
-        return this.playerNPCs;
     }
 
     public Map<UUID, Integer> getPlayerHiderState() {
