@@ -37,9 +37,12 @@ public class CosmeticInventory implements InventoryProvider {
         contents.set(1, 1, ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
         contents.set(2, 1, ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
         contents.set(3, 1, ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
+        contents.set(1, 7, ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
+        contents.set(2, 7, ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
+        contents.set(3, 7, ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
 
         contents.set(1, 0, ClickableItem.of(new ItemBuilder(Material.HONEYCOMB)
-                .setLeatherArmorColor(Color.SILVER).setName("§8» §aBoots").toItemStack(), event -> this.updateInventory(player, CosmeticCategory.BOOTS, contents)));
+                .setName("§8» §aBoots").toItemStack(), event -> this.updateInventory(player, CosmeticCategory.BOOTS, contents)));
 
         contents.set(2, 0, ClickableItem.of(new ItemBuilder(Material.TURTLE_EGG)
                 .setName("§8» §bTrails").toItemStack(), event -> this.updateInventory(player, CosmeticCategory.TRAILS, contents)));
@@ -50,10 +53,20 @@ public class CosmeticInventory implements InventoryProvider {
         contents.set(4, 3, ClickableItem.empty(new ItemBuilder(Material.GOLD_NUGGET)
                 .setName("§7Coins §8» §a§l" + (int) lobbyPlayer.getObjectFromMongoDocument("coins", MongoDBCollection.USERS)).toItemStack()));
 
+        contents.set(1, 8, ClickableItem.of(new ItemBuilder(Material.PHANTOM_MEMBRANE)
+                .setName("§8» §dKöpfe").toItemStack(), event -> this.updateInventory(player, CosmeticCategory.HEADS, contents)));
+
+        contents.set(2, 8, ClickableItem.empty(new ItemBuilder(Material.SADDLE)
+                .setName("§8» §9Pets §c(soon)").toItemStack()));
+        contents.set(3, 8, ClickableItem.empty(new ItemBuilder(Material.OAK_SIGN)
+                .setName("§8» §4Siegesanimationen §c(soon)").toItemStack()));
+
         contents.set(4, 5, ClickableItem.of(new ItemBuilder(Material.BARRIER).setName("§8» §cCosmetics entfernen").toItemStack(), event -> {
             CrimxLobby.getInstance().getData().getCosmetic().remove(player.getUniqueId());
             CrimxLobby.getInstance().getData().getHueMap().remove(player.getUniqueId());
             player.getInventory().setArmorContents(null);
+            int slotToRemove = (player.hasPermission("crimxlobby.vip") ? 2 : 4);
+            player.getInventory().setItem(slotToRemove, new ItemStack(Material.AIR));
             lobbyPlayer.saveObjectInDocument("selectedCosmetic", null,
                     MongoDBCollection.LOBBY);
         }));
@@ -118,7 +131,7 @@ public class CosmeticInventory implements InventoryProvider {
 
             slot++;
 
-            if (slot == 8) {
+            if (slot == 6) {
                 slot = 2;
                 row++;
             }
@@ -127,7 +140,7 @@ public class CosmeticInventory implements InventoryProvider {
 
     private void clear(InventoryContents inventoryContents) {
         for(int row = 1; row < 4; row++) {
-            for(int slot = 2; slot < 8; slot++) {
+            for(int slot = 2; slot < 7; slot++) {
                 if(inventoryContents.get(row, slot).isPresent()) {
                     inventoryContents.set(row, slot, ClickableItem.empty(null));
                 }

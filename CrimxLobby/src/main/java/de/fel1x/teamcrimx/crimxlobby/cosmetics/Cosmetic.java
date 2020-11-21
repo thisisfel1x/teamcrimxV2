@@ -6,12 +6,19 @@ import de.fel1x.teamcrimx.crimxlobby.cosmetics.dropTrails.RolexShoeTrail;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.dropTrails.SnowShoeTrail;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.gadgets.FireworkGadget;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.gadgets.FunGunGadget;
+import de.fel1x.teamcrimx.crimxlobby.cosmetics.heads.FlowerHead;
+import de.fel1x.teamcrimx.crimxlobby.cosmetics.heads.GlassHead;
+import de.fel1x.teamcrimx.crimxlobby.cosmetics.heads.SlimeHead;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.HeartShoeCosmetic;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.LibraryShoeCosmetic;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.NoteShoeCosmetic;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.WitchShoeCosmetic;
 
 public enum Cosmetic {
+
+    FLOWER_HEAD(FlowerHead.class, CosmeticCategory.HEADS),
+    SLIME_HEAD(SlimeHead.class, CosmeticCategory.HEADS),
+    GLASS_HEAD(GlassHead.class, CosmeticCategory.HEADS),
 
     HEART_SHOE(HeartShoeCosmetic.class, CosmeticCategory.BOOTS),
     NOTE_SHOE(NoteShoeCosmetic.class, CosmeticCategory.BOOTS),

@@ -49,8 +49,7 @@ public class MoveListener implements Listener {
                         && player.getLocation().subtract(0, 1, 0).getBlock().getType().isBlock()) {
                     Block old = player.getLocation().getBlock();
                     player.getLocation().getBlock().setType(Material.SNOW);
-
-                    Bukkit.getScheduler().runTaskLater(this.crimxLobby, () -> old.setType(Material.AIR), 20 * 5L);
+                    Bukkit.getScheduler().runTaskLater(this.crimxLobby, () -> old.setType(Material.AIR), 20 * 3L);
                 }
             } else if (iCosmetic.dropItem() && !iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()) {
                 Item item = player.getWorld().dropItem(player.getLocation(), new ItemStack(iCosmetic.itemToDrop()));

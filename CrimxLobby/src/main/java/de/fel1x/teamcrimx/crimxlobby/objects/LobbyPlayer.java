@@ -178,10 +178,6 @@ public class LobbyPlayer {
         return this.data.getCosmetic().get(this.player.getUniqueId());
     }
 
-    @Deprecated
-    public void spawnPersonalNPC() {
-    }
-
     public void updatePlayerHiderState() {
 
         // STATES: 0: all shown, 1: vip shown, 2: nobody shown
