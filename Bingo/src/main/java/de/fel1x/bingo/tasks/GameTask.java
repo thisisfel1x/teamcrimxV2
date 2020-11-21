@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class GameTask implements IBingoTask {
 
@@ -101,9 +102,7 @@ public class GameTask implements IBingoTask {
 
     public ArrayList<BingoTeam> getTopTeams() {
 
-        ArrayList<BingoTeam> teams = new ArrayList<>(Arrays.asList(BingoTeam.values()));
-
-        teams.sort((o1, o2) -> {
+        ArrayList<BingoTeam> teams = Arrays.stream(BingoTeam.values()).filter(team -> !team.isEmpty()).sorted((o1, o2) -> {
 
             int i1 = o1.getDoneItemsSize();
             int i2 = o2.getDoneItemsSize();
@@ -116,7 +115,7 @@ public class GameTask implements IBingoTask {
 
             return 0;
 
-        });
+        }).collect(Collectors.toCollection(ArrayList::new));
 
         Collections.reverse(teams);
 
