@@ -7,27 +7,27 @@ import de.fel1x.teamcrimx.crimxlobby.cosmetics.pets.IPet;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.entity.Bee;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Sheep;
 
-public class SheepPet implements ICosmetic, IPet {
+public class BeePet implements ICosmetic, IPet {
 
     @Override
     public String getCosmeticName() {
-        return "§fSchaf";
+        return "§eBiene";
     }
 
     @Override
     public String[] getCosmeticDescription() {
         return new String[] {
-                "", "§fMäh? Näh!"
+                "", "§eEs wird klebrig"
         };
     }
 
     @Override
     public Material getCosmeticMaterial() {
-        return Material.SHEEP_SPAWN_EGG;
+        return Material.HONEY_BOTTLE;
     }
 
     @Override
@@ -52,10 +52,10 @@ public class SheepPet implements ICosmetic, IPet {
 
     @Override
     public void startTrail(Player player) {
-        Sheep sheep = (Sheep) player.getWorld()
-                .spawnEntity(player.getLocation().clone().add(0, 0, 1), EntityType.SHEEP);
-        sheep.setCustomName("Schaf von " + this.getCustomNameByPlayer(player));
-        CrimxLobby.getInstance().getData().getPlayerPet().put(player.getUniqueId(), sheep);
+        Bee bee = (Bee) player.getWorld()
+                .spawnEntity(player.getLocation().clone().add(0, 0, 1), EntityType.BEE);
+        bee.setCustomName("§eBiene von " + this.getCustomNameByPlayer(player));
+        CrimxLobby.getInstance().getData().getPlayerPet().put(player.getUniqueId(), bee);
     }
 
     @Override
@@ -82,4 +82,5 @@ public class SheepPet implements ICosmetic, IPet {
     public String getCustomNameByPlayer(Player player) {
         return player.getDisplayName();
     }
+
 }

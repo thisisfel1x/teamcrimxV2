@@ -21,7 +21,9 @@ public class DamageListener implements Listener {
     @EventHandler
     public void on(EntityDamageEvent event) {
 
-        if (!(event.getEntity() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)) {
+            event.setCancelled(true);
+        }
 
         Player player = (Player) event.getEntity();
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);

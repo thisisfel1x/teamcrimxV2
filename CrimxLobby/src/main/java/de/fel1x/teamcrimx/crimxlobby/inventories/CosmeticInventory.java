@@ -66,6 +66,10 @@ public class CosmeticInventory implements InventoryProvider {
             CrimxLobby.getInstance().getData().getCosmetic().remove(player.getUniqueId());
             CrimxLobby.getInstance().getData().getHueMap().remove(player.getUniqueId());
             player.getInventory().setArmorContents(null);
+            if(CrimxLobby.getInstance().getData().getPlayerPet().containsKey(player.getUniqueId())) {
+                CrimxLobby.getInstance().getData().getPlayerPet().get(player.getUniqueId()).remove();
+                CrimxLobby.getInstance().getData().getPlayerPet().remove(player.getUniqueId());
+            }
             int slotToRemove = (player.hasPermission("crimxlobby.vip") ? 2 : 4);
             player.getInventory().setItem(slotToRemove, new ItemStack(Material.AIR));
             lobbyPlayer.saveObjectInDocument("selectedCosmetic", null,
@@ -119,6 +123,10 @@ public class CosmeticInventory implements InventoryProvider {
                                 int slotToRemove = (player.hasPermission("crimxlobby.vip") ? 2 : 4);
                                 player.getInventory().setItem(slotToRemove, new ItemStack(Material.AIR));
                                 player.closeInventory();
+                                if(CrimxLobby.getInstance().getData().getPlayerPet().containsKey(player.getUniqueId())) {
+                                    CrimxLobby.getInstance().getData().getPlayerPet().get(player.getUniqueId()).remove();
+                                    CrimxLobby.getInstance().getData().getPlayerPet().remove(player.getUniqueId());
+                                }
                                 iCosmetic.startTrail(player);
                                 lobbyPlayer.saveObjectInDocument("selectedCosmetic", cosmetic.name(),
                                         MongoDBCollection.LOBBY);

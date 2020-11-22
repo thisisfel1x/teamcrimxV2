@@ -10,7 +10,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class QuitListener implements Listener {
 
+    private final CrimxLobby crimxLobby;
+
     public QuitListener(CrimxLobby crimxLobby) {
+        this.crimxLobby = crimxLobby;
         crimxLobby.getPluginManager().registerEvents(this, crimxLobby);
     }
 
@@ -23,6 +26,11 @@ public class QuitListener implements Listener {
         event.setQuitMessage(null);
 
         lobbyPlayer.saveNewLocation();
+
+        if(this.crimxLobby.getData().getPlayerPet().containsKey(player.getUniqueId())) {
+            this.crimxLobby.getData().getPlayerPet().get(player.getUniqueId()).remove();
+            this.crimxLobby.getData().getPlayerPet().remove(player.getUniqueId());
+        }
 
         if (lobbyPlayer.isInBuild()) {
             lobbyPlayer.removeFromBuild();

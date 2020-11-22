@@ -131,9 +131,9 @@ public final class CrimxLobby extends JavaPlugin {
         World world = lobby.getWorld();
         world.setSpawnLocation((int) lobby.getX(), (int) lobby.getY(), (int) lobby.getZ());
         world.setDifficulty(Difficulty.PEACEFUL);
-        world.setGameRuleValue("doMobSpawning", "false");
-        world.setGameRuleValue("doMobLoot", "false");
-        world.setGameRuleValue("doWeatherCycle", "false");
+        world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+        world.setGameRule(GameRule.DO_MOB_LOOT, false);
+        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         world.setStorm(false);
         world.setThunderDuration(0);
         world.setThundering(false);
@@ -192,8 +192,7 @@ public final class CrimxLobby extends JavaPlugin {
             this.data.getPlayerPet().forEach((uuid, entity) -> {
                 Player owner = Bukkit.getPlayer(uuid);
 
-                if(owner == null || !owner.isOnline()) {
-                    this.data.getPlayerPet().remove(uuid);
+                if(owner == null || !owner.isOnline() || entity.isDead()) {
                     return;
                 }
 
@@ -201,6 +200,11 @@ public final class CrimxLobby extends JavaPlugin {
                     entity.getPathfinder().moveTo(owner.getLocation().clone()
                             .add(this.random.nextBoolean() ? 1 : -1, 0, this.random.nextBoolean() ? 1 : -1));
                     Bukkit.broadcastMessage("pathfinding " + owner.getName() + " distance > 10");
+                    if(owner.getLocation().getY() > entity.getLocation().getY() + 3) {
+                        entity.teleport(owner.getLocation().
+                                add(this.random.nextBoolean() ? 1 : -1, 0, this.random.nextBoolean() ? 1 : -1));
+                        entity.getPathfinder().stopPathfinding();
+                    }
                 }
 
             });
