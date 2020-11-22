@@ -56,8 +56,9 @@ public class CosmeticInventory implements InventoryProvider {
         contents.set(1, 8, ClickableItem.of(new ItemBuilder(Material.PHANTOM_MEMBRANE)
                 .setName("§8» §dKöpfe").toItemStack(), event -> this.updateInventory(player, CosmeticCategory.HEADS, contents)));
 
-        contents.set(2, 8, ClickableItem.empty(new ItemBuilder(Material.SADDLE)
-                .setName("§8» §9Pets §c(soon)").toItemStack()));
+        contents.set(2, 8, ClickableItem.of(new ItemBuilder(Material.SADDLE)
+                .setName("§8» §9Pets").toItemStack(), event -> this.updateInventory(player, CosmeticCategory.PETS, contents)));;
+
         contents.set(3, 8, ClickableItem.empty(new ItemBuilder(Material.OAK_SIGN)
                 .setName("§8» §4Siegesanimationen §c(soon)").toItemStack()));
 

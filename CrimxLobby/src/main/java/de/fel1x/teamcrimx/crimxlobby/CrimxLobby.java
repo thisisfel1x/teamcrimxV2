@@ -1,5 +1,6 @@
 package de.fel1x.teamcrimx.crimxlobby;
 
+import com.destroystokyo.paper.entity.Pathfinder;
 import com.github.juliarn.npc.NPC;
 import com.github.juliarn.npc.NPCPool;
 import com.github.juliarn.npc.modifier.MetadataModifier;
@@ -28,6 +29,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 public final class CrimxLobby extends JavaPlugin {
@@ -44,6 +46,7 @@ public final class CrimxLobby extends JavaPlugin {
     private WaterMlgHandler waterMlgHandler;
     private LobbyScoreboard lobbyScoreboard;
     private NPC lobbyNpc;
+    private final Random random = new Random();
 
     public static CrimxLobby getInstance() {
         return instance;
@@ -186,6 +189,22 @@ public final class CrimxLobby extends JavaPlugin {
         })), 0L, 3L);
 
         Bukkit.getScheduler().runTaskTimer(this, () -> {
+            this.data.getPlayerPet().forEach((uuid, entity) -> {
+                Player owner = Bukkit.getPlayer(uuid);
+
+                if(owner == null || !owner.isOnline()) {
+                    this.data.getPlayerPet().remove(uuid);
+                    return;
+                }
+
+                if(owner.getLocation().distanceSquared(entity.getLocation()) > 10) {
+                    entity.getPathfinder().moveTo(owner.getLocation().clone()
+                            .add(this.random.nextBoolean() ? 1 : -1, 0, this.random.nextBoolean() ? 1 : -1));
+                    Bukkit.broadcastMessage("pathfinding " + owner.getName() + " distance > 10");
+                }
+
+            });
+
             Bukkit.getOnlinePlayers().forEach(player -> Actionbar.sendActionbar(player, actionBarMessages.get(this.actionBarCount).replace('&', '§')));
 
             this.actionbarTimer++;
