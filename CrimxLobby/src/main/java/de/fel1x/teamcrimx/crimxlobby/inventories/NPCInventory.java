@@ -32,7 +32,7 @@ public class NPCInventory implements InventoryProvider {
             .manager(CrimxLobby.getInstance().getInventoryManager())
             .build();
 
-    CrimxLobby crimxLobby = CrimxLobby.getInstance();
+    final CrimxLobby crimxLobby = CrimxLobby.getInstance();
 
     @Override
     public void init(Player player, InventoryContents contents) {

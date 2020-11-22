@@ -15,8 +15,8 @@ import org.bukkit.util.Vector;
 
 public class FishingHookListener implements Listener {
 
-    CrimxLobby crimxLobby;
-    Data data;
+    final CrimxLobby crimxLobby;
+    final Data data;
 
     public FishingHookListener(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;

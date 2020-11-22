@@ -1,46 +1,45 @@
-package de.fel1x.teamcrimx.crimxlobby.cosmetics.trails;
+package de.fel1x.teamcrimx.crimxlobby.cosmetics.pets.pet;
 
-import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
-import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.CosmeticType;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
+import de.fel1x.teamcrimx.crimxlobby.cosmetics.pets.IPet;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
-public class LibraryShoeCosmetic implements ICosmetic {
+public class SheepPet implements ICosmetic, IPet {
 
     @Override
     public String getCosmeticName() {
-        return "§fBibliothekar";
+        return "Schaf";
     }
 
     @Override
     public String[] getCosmeticDescription() {
         return new String[] {
-                "", "§7Steigere deine IQ"
+                "", "§fMäh? Näh!"
         };
     }
 
     @Override
     public Material getCosmeticMaterial() {
-        return Material.LEATHER_BOOTS;
+        return Material.SHEEP_SPAWN_EGG;
     }
 
     @Override
     public Color getLeatherShoeColor() {
-        return Color.fromRGB(139, 69, 19);
+        return null;
     }
 
     @Override
     public Particle getWalkEffect() {
-        return Particle.ENCHANTMENT_TABLE;
+        return null;
     }
 
     @Override
     public int getCosmeticCost() {
-        return 2000;
+        return 1000;
     }
 
     @Override
@@ -50,13 +49,12 @@ public class LibraryShoeCosmetic implements ICosmetic {
 
     @Override
     public void startTrail(Player player) {
-        CrimxLobby.getInstance().getData().getCosmetic().put(player.getUniqueId(), this);
-        this.updateInventory(player);
+
     }
 
     @Override
     public CosmeticType cosmeticType() {
-        return CosmeticType.TRAIL;
+        return null;
     }
 
     @Override
@@ -66,7 +64,16 @@ public class LibraryShoeCosmetic implements ICosmetic {
 
     @Override
     public void updateInventory(Player player) {
-        player.getInventory().setBoots(new ItemBuilder(this.getCosmeticMaterial())
-                .setName(this.getCosmeticName()).setLeatherArmorColor(this.getLeatherShoeColor()).toItemStack());
+
+    }
+
+    @Override
+    public String getCustomName() {
+        return null;
+    }
+
+    @Override
+    public String getCustomNameByPlayer(Player player) {
+        return player.getDisplayName();
     }
 }

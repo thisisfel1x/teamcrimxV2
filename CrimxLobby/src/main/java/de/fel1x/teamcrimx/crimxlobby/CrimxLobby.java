@@ -201,8 +201,7 @@ public final class CrimxLobby extends JavaPlugin {
     }
 
     public String getPrefix() {
-        String prefix = "§aCrimx§lLobby §8● §r";
-        return prefix;
+        return "§aCrimx§lLobby §8● §r";
     }
 
     public CrimxAPI getCrimxAPI() {

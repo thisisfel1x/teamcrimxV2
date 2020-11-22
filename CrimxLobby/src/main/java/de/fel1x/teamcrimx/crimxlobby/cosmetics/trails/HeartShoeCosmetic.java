@@ -2,6 +2,7 @@ package de.fel1x.teamcrimx.crimxlobby.cosmetics.trails;
 
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
+import de.fel1x.teamcrimx.crimxlobby.cosmetics.CosmeticType;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -53,24 +54,8 @@ public class HeartShoeCosmetic implements ICosmetic {
         this.updateInventory(player);
     }
 
-    @Override
-    public boolean dropItem() {
-        return false;
-    }
-
-    @Override
-    public boolean playerBlock() {
-        return false;
-    }
-
-    @Override
-    public boolean armor() {
-        return false;
-    }
-
-    @Override
-    public boolean gadget() {
-        return false;
+    public CosmeticType cosmeticType() {
+        return CosmeticType.TRAIL;
     }
 
     @Override

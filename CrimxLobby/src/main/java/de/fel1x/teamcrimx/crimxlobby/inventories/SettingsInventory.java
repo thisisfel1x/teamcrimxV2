@@ -21,7 +21,7 @@ public class SettingsInventory implements InventoryProvider {
             .manager(CrimxLobby.getInstance().getInventoryManager())
             .build();
 
-    CrimxLobby crimxLobby = CrimxLobby.getInstance();
+    final CrimxLobby crimxLobby = CrimxLobby.getInstance();
 
     boolean defaultSpawn;
     boolean hotbarSound;

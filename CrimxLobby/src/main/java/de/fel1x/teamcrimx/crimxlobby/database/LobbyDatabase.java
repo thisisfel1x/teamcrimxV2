@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
 
 public class LobbyDatabase {
 
-    CrimxLobby crimxLobby = CrimxLobby.getInstance();
-    CrimxAPI crimxAPI = this.crimxLobby.getCrimxAPI();
-    MongoDB mongoDB = this.crimxAPI.getMongoDB();
+    final CrimxLobby crimxLobby = CrimxLobby.getInstance();
+    final CrimxAPI crimxAPI = this.crimxLobby.getCrimxAPI();
+    final MongoDB mongoDB = this.crimxAPI.getMongoDB();
 
     public void createPlayerData(Player player) {
 

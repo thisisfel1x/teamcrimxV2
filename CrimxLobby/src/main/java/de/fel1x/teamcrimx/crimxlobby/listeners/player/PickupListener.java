@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 public class PickupListener implements Listener {
 
-    CrimxLobby crimxLobby;
+    final CrimxLobby crimxLobby;
 
     public PickupListener(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;

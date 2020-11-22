@@ -9,6 +9,7 @@ import de.fel1x.teamcrimx.crimxlobby.cosmetics.gadgets.FunGunGadget;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.heads.FlowerHead;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.heads.GlassHead;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.heads.SlimeHead;
+import de.fel1x.teamcrimx.crimxlobby.cosmetics.pets.pet.SheepPet;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.HeartShoeCosmetic;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.LibraryShoeCosmetic;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.NoteShoeCosmetic;
@@ -31,8 +32,9 @@ public enum Cosmetic {
 
     RGB_ARMOR(RainbowArmor.class, CosmeticCategory.GADGETS),
     FUNGUN(FunGunGadget.class, CosmeticCategory.GADGETS),
-    FIREWORK(FireworkGadget.class, CosmeticCategory.GADGETS);
+    FIREWORK(FireworkGadget.class, CosmeticCategory.GADGETS),
 
+    SHEEP_PET(SheepPet.class, CosmeticCategory.PETS);
 
     private final Class<? extends ICosmetic> cosmeticClass;
     private final CosmeticCategory cosmeticCategory;

@@ -37,12 +37,12 @@ public class LobbyPlayer {
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
-    Player player;
-    CrimxLobby crimxLobby = CrimxLobby.getInstance();
+    final Player player;
+    final CrimxLobby crimxLobby = CrimxLobby.getInstance();
     private final WaterMlgHandler waterMlgHandler = this.crimxLobby.getWaterMlgHandler();
-    Data data = this.crimxLobby.getData();
+    final Data data = this.crimxLobby.getData();
     SpawnManager spawnManager = this.crimxLobby.getSpawnManager();
-    LobbyDatabase lobbyDatabase = new LobbyDatabase();
+    final LobbyDatabase lobbyDatabase = new LobbyDatabase();
     Document lobbyDocument;
     Document networkDocument;
     private final Material[] woolTypes = {
