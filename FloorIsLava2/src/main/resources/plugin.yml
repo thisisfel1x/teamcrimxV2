@@ -1,0 +1,14 @@
+name: FloorIsLava
+version: 1.0-SNAPSHOT
+main: de.fel1x.teamcrimx.floorislava.FloorIsLava
+api-version: 1.16
+authors: [ fel1x ]
+description: Escape the rising lava
+website: teamcrimx.de
+
+commands:
+  start:
+    description: Start the game
+
+  stats:
+    description: Check your stats

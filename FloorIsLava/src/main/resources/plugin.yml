@@ -1,7 +1,0 @@
-name: FloorIsLava
-version: ${project.version}
-main: de.fel1x.teamcrimx.floorislava.FloorIsLava
-api-version: 1.16
-authors: [ fel1x ]
-description: Pay attention to the rising lava!
-website: teamcrimx.de

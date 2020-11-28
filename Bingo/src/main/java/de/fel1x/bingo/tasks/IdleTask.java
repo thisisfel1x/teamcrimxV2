@@ -7,8 +7,8 @@ import org.bukkit.Bukkit;
 
 public class IdleTask implements IBingoTask {
 
-    Bingo bingo = Bingo.getInstance();
-    int taskId = 0;
+    private final Bingo bingo = Bingo.getInstance();
+    private int taskId = 0;
 
     boolean isRunning = false;
 
