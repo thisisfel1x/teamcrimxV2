@@ -8,6 +8,7 @@ import de.fel1x.teamcrimx.floorislava.gamehandler.Gamestate;
 import de.fel1x.teamcrimx.floorislava.utils.ArmorstandStatsLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -31,7 +32,12 @@ public class PreGameTask implements IFloorIsLavaTask {
             ArrayList<Location> spawns = ArmorstandStatsLoader.getCirclePoints(this.floorIsLava.getWorldSpawnLocation(), 20.0D, 12);
             int counter = 0;
             for (Player player : this.floorIsLava.getData().getPlayers()) {
-                player.teleport(spawns.get(counter).getWorld().getHighestBlockAt(spawns.get(0)).getLocation());
+                Location spawnLocation = spawns.get(counter).getWorld().getHighestBlockAt(spawns.get(0)).getLocation();
+                if(spawnLocation.getBlock().getType() == Material.WATER) {
+                    spawnLocation.getBlock().setType(Material.GLASS);
+                    spawnLocation.clone().add(0, 1, 0);
+                }
+                player.teleport(spawnLocation.toCenterLocation());
                 counter++;
             }
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.floorIsLava, () -> {
@@ -63,7 +69,7 @@ public class PreGameTask implements IFloorIsLavaTask {
                             player.sendTitle(Title.builder()
                                     .title("§a§lGO").fadeIn(0).stay(40).fadeOut(10).build());
                         });
-                        this.floorIsLava.startTimerByClass(RisingTask.class);
+                        this.floorIsLava.startTimerByClass(FarmingTask.class);
                         break;
                 }
                 this.timer--;

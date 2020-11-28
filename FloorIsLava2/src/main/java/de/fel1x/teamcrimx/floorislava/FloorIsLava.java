@@ -106,10 +106,10 @@ public final class FloorIsLava extends JavaPlugin {
         waitingLobby.setGameRule(GameRule.DO_MOB_LOOT, Boolean.FALSE);
         waitingLobby.getEntities().forEach(Entity::remove);
         WorldBorder worldBorder = this.worldSpawnLocation.getWorld().getWorldBorder();
-        worldBorder.setCenter(this.spawnLocation);
+        worldBorder.setCenter(this.worldSpawnLocation);
         worldBorder.setSize(50.0D);
-        worldBorder.setWarningDistance(5);
         worldBorder.setDamageAmount(1.0D);
+        this.worldSpawnLocation.getWorld().setDifficulty(Difficulty.NORMAL);
     }
 
     private void setMotdAndUpdate() {

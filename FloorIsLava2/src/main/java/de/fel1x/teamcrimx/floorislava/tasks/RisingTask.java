@@ -16,7 +16,7 @@ public class RisingTask implements IFloorIsLavaTask {
 
     private Location topLeft;
 
-    private final Title pvpTitle = Title.builder().title("§a§l⚔ PVP ⚔").subtitle("§aaktiviert").fadeIn(10).stay(60).fadeOut(10).build();
+    private final Title pvpTitle = Title.builder().title("§7⚔ §aPVP §7⚔").subtitle("§aaktiviert").fadeIn(10).stay(60).fadeOut(10).build();
 
     private boolean isRunning = false;
 

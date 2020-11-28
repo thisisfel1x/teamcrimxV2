@@ -20,10 +20,11 @@ public class FarmingTask implements IFloorIsLavaTask {
     private final Random random = new Random();
     private int taskId = 0;
     private int timer = 0;
-    private int farmingTime = 300;
+    private int farmingTime = 60;
     private boolean isRunning = false;
+    private boolean generateNewEvent = true;
     private BossBar bossBar;
-    private int eventTimer = this.random.nextInt(120) + 60;
+    private int eventTimer = this.random.nextInt(30) + 40;
 
     private double timeToGo = this.eventTimer;
 
@@ -42,19 +43,21 @@ public class FarmingTask implements IFloorIsLavaTask {
             }
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.floorIsLava, () -> {
                 Gamestate gamestate = this.floorIsLava.getGamestateHandler().getGamestate();
-                this.bossBar.setColor(getColor(this.eventTimer));
-                this.bossBar.setProgress(this.eventTimer / this.timeToGo);
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                     onlinePlayer.sendActionBar("§7Verbleibende Zeit §8● §a" + this.formatSeconds(this.farmingTime));
                 }
-                if (this.eventTimer > 0)
+                if (this.eventTimer > 0 && this.generateNewEvent)
+                    this.bossBar.setColor(getColor(this.eventTimer));
+                    this.bossBar.setProgress(this.eventTimer / this.timeToGo);
                     this.bossBar.setTitle(String.format("§7Nächstes Event in §e%s",
                             (this.eventTimer == 1) ? "einer Sekunde" : ((this.eventTimer <= 60) ? (this.eventTimer + " Sekunden") : String.format("%02d:%02d",
                                     this.eventTimer / 60, this.eventTimer % 60))));
-                if (this.eventTimer == 0 && this.farmingTime > 40) {
-                    this.eventTimer = this.random.nextInt(10) + 25;
+                if (this.eventTimer == 0 && this.farmingTime > 40 && this.generateNewEvent) {
+                    this.eventTimer = this.random.nextInt(30) + 40;
                     if(this.eventTimer >= this.farmingTime - 20) {
-                        this.eventTimer = this.farmingTime - 20;
+                       this.generateNewEvent = false;
+                       this.bossBar.setTitle("§7Bereitet euch vor!");
+                       return;
                     }
                     this.timeToGo = this.eventTimer;
                     try {
@@ -73,7 +76,9 @@ public class FarmingTask implements IFloorIsLavaTask {
                 }
 
                 this.timer++;
-                this.eventTimer--;
+                if(this.generateNewEvent) {
+                    this.eventTimer--;
+                }
                 this.farmingTime--;
             }, 0L, 20L);
         }
