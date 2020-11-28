@@ -35,6 +35,7 @@ public final class FloorIsLava extends JavaPlugin {
     private PluginManager pluginManager;
     private ArrayList<Entity> fallingAnvils;
     private CrimxAPI crimxAPI;
+    private boolean pvpEnabled = false;
 
     private Location spawnLocation;
     private InventoryManager inventoryManager;
@@ -140,6 +141,14 @@ public final class FloorIsLava extends JavaPlugin {
         return StreamSupport.stream(this.crimxAPI.getMongoDB().getFloorIsLavaCollection().find()
                 .sort(Sorts.descending("gamesWon")).limit(limit).spliterator(), false)
                 .collect(Collectors.toList());
+    }
+
+    public boolean isPvpEnabled() {
+        return this.pvpEnabled;
+    }
+
+    public void setPvpEnabled(boolean pvpEnabled) {
+        this.pvpEnabled = pvpEnabled;
     }
 
     public ArrayList<Entity> getFallingAnvils() {

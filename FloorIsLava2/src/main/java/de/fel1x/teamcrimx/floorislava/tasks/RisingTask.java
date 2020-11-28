@@ -1,11 +1,10 @@
 package de.fel1x.teamcrimx.floorislava.tasks;
 
+import com.destroystokyo.paper.Title;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 public class RisingTask implements IFloorIsLavaTask {
     private final FloorIsLava floorIsLava = FloorIsLava.getInstance();
@@ -16,6 +15,8 @@ public class RisingTask implements IFloorIsLavaTask {
     private Location bottomRight;
 
     private Location topLeft;
+
+    private final Title pvpTitle = Title.builder().title("§a§l⚔ PVP ⚔").subtitle("§aaktiviert").fadeIn(10).stay(60).fadeOut(10).build();
 
     private boolean isRunning = false;
 
@@ -39,6 +40,13 @@ public class RisingTask implements IFloorIsLavaTask {
                                 Block block = Bukkit.getWorlds().get(0).getBlockAt(new Location(world, x, y, z));
                                 block.setType(Material.LAVA, false);
                             }
+                        }
+                    }
+                    if(this.height == 40) {
+                        this.floorIsLava.setPvpEnabled(true);
+                        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                            onlinePlayer.sendTitle(this.pvpTitle);
+                            onlinePlayer.playSound(onlinePlayer.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 2f, 1.5f);
                         }
                     }
                     this.height++;

@@ -20,6 +20,7 @@ public class FarmingTask implements IFloorIsLavaTask {
     private final Random random = new Random();
     private int taskId = 0;
     private int timer = 0;
+    private int farmingTime = 300;
     private boolean isRunning = false;
     private BossBar bossBar;
     private int eventTimer = this.random.nextInt(120) + 60;
@@ -43,12 +44,18 @@ public class FarmingTask implements IFloorIsLavaTask {
                 Gamestate gamestate = this.floorIsLava.getGamestateHandler().getGamestate();
                 this.bossBar.setColor(getColor(this.eventTimer));
                 this.bossBar.setProgress(this.eventTimer / this.timeToGo);
+                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                    onlinePlayer.sendActionBar("§7Verbleibende Zeit §8● §a" + this.formatSeconds(this.farmingTime));
+                }
                 if (this.eventTimer > 0)
                     this.bossBar.setTitle(String.format("§7Nächstes Event in §e%s",
                             (this.eventTimer == 1) ? "einer Sekunde" : ((this.eventTimer <= 60) ? (this.eventTimer + " Sekunden") : String.format("%02d:%02d",
                                     this.eventTimer / 60, this.eventTimer % 60))));
-                if (this.eventTimer == 0) {
-                    this.eventTimer = this.random.nextInt(120) + 60;
+                if (this.eventTimer == 0 && this.farmingTime > 40) {
+                    this.eventTimer = this.random.nextInt(10) + 25;
+                    if(this.eventTimer >= this.farmingTime - 20) {
+                        this.eventTimer = this.farmingTime - 20;
+                    }
                     this.timeToGo = this.eventTimer;
                     try {
                         ILavaScenario lavaScenario = this.scenarios.get(this.random.nextInt(this.scenarios.size())).newInstance();
@@ -58,10 +65,16 @@ public class FarmingTask implements IFloorIsLavaTask {
                         e.printStackTrace();
                     }
                 }
-                if ((gamestate == Gamestate.RISING || gamestate == Gamestate.FARMING) && Bukkit.getOnlinePlayers().isEmpty())
+                if(this.farmingTime == 0) {
+                    this.floorIsLava.startTimerByClass(RisingTask.class);
+                }
+                if ((gamestate == Gamestate.RISING || gamestate == Gamestate.FARMING) && Bukkit.getOnlinePlayers().isEmpty()) {
                     Bukkit.getServer().shutdown();
+                }
+
                 this.timer++;
                 this.eventTimer--;
+                this.farmingTime--;
             }, 0L, 20L);
         }
     }

@@ -18,6 +18,11 @@ public class DamageListener implements Listener {
     @EventHandler
     public void on(EntityDamageByEntityEvent event) {
         Gamestate gamestate = this.floorIsLava.getGamestateHandler().getGamestate();
+        if(!this.floorIsLava.isPvpEnabled()) {
+            event.setCancelled(true);
+            return;
+        }
+
         if (gamestate != Gamestate.FARMING && gamestate != Gamestate.RISING) {
             event.setCancelled(true);
         } else if (gamestate == Gamestate.FARMING &&
@@ -28,6 +33,11 @@ public class DamageListener implements Listener {
 
     @EventHandler
     public void on(EntityDamageEvent event) {
+        if(!this.floorIsLava.isPvpEnabled()) {
+            event.setCancelled(true);
+            return;
+        }
+
         Gamestate gamestate = this.floorIsLava.getGamestateHandler().getGamestate();
         if (gamestate != Gamestate.FARMING && gamestate != Gamestate.RISING) {
             event.setCancelled(true);
