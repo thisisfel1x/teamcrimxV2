@@ -6,6 +6,7 @@ import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.floorislava.commands.StartCommand;
 import de.fel1x.teamcrimx.floorislava.commands.StatsCommand;
+import de.fel1x.teamcrimx.floorislava.commands.TestCommand;
 import de.fel1x.teamcrimx.floorislava.gamehandler.GamestateHandler;
 import de.fel1x.teamcrimx.floorislava.listener.block.BlockBreakListener;
 import de.fel1x.teamcrimx.floorislava.listener.block.BlockPlaceListener;
@@ -36,6 +37,10 @@ public final class FloorIsLava extends JavaPlugin {
     private ArrayList<Entity> fallingAnvils;
     private CrimxAPI crimxAPI;
     private boolean pvpEnabled = false;
+
+    public static final String ATTENTION = "⚠";
+    public static final String SAVE = "✔";
+    public static final String DOT = "●";
 
     private Location spawnLocation;
     private InventoryManager inventoryManager;
@@ -75,6 +80,7 @@ public final class FloorIsLava extends JavaPlugin {
     private void registerCommands() {
         new StartCommand(this);
         new StatsCommand(this);
+        new TestCommand(this);
     }
 
     private void registerListener() {
@@ -159,6 +165,9 @@ public final class FloorIsLava extends JavaPlugin {
         return this.worldSpawnLocation;
     }
 
+    /**
+    Returns the waiting hub spawn location
+     */
     public Location getSpawnLocation() {
         return this.spawnLocation;
     }

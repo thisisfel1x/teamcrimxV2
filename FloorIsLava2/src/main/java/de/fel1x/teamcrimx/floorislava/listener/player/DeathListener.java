@@ -2,6 +2,8 @@ package de.fel1x.teamcrimx.floorislava.listener.player;
 
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
 import de.fel1x.teamcrimx.floorislava.gamehandler.Gamestate;
+import de.fel1x.teamcrimx.floorislava.gameplayer.GamePlayer;
+import de.fel1x.teamcrimx.floorislava.utils.WinDetection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,8 +25,11 @@ public class DeathListener implements Listener {
         if (gamestate != Gamestate.RISING) {
             event.setDeathMessage(null);
         } else {
+            GamePlayer gamePlayer = new GamePlayer(player);
+            gamePlayer.setSpectator();
             event.setDeathMessage(String.format("%s§7Der Spieler §a%s §7ist gestorben", this.floorIsLava
                     .getPrefix(), player.getDisplayName()));
+            new WinDetection();
         }
     }
 }

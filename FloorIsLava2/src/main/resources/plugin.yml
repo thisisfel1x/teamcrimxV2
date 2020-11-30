@@ -12,3 +12,6 @@ commands:
 
   stats:
     description: Check your stats
+
+  test:
+    description: nothing

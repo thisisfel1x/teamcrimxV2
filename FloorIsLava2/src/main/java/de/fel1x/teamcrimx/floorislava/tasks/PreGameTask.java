@@ -37,7 +37,7 @@ public class PreGameTask implements IFloorIsLavaTask {
                     spawnLocation.getBlock().setType(Material.GLASS);
                     spawnLocation.clone().add(0, 1, 0);
                 }
-                player.teleport(spawnLocation.toCenterLocation());
+                player.teleport(spawnLocation.toCenterLocation().clone().subtract(0, 0.5, 0));
                 counter++;
             }
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.floorIsLava, () -> {

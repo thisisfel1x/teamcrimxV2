@@ -48,7 +48,7 @@ public class FarmingTask implements IFloorIsLavaTask {
                 }
                 if (this.eventTimer > 0 && this.generateNewEvent)
                     this.bossBar.setColor(getColor(this.eventTimer));
-                    this.bossBar.setProgress(this.eventTimer / this.timeToGo);
+                    this.bossBar.setProgress((this.eventTimer / this.timeToGo >= 0 ? this.eventTimer / this.timeToGo : 0));
                     this.bossBar.setTitle(String.format("§7Nächstes Event in §e%s",
                             (this.eventTimer == 1) ? "einer Sekunde" : ((this.eventTimer <= 60) ? (this.eventTimer + " Sekunden") : String.format("%02d:%02d",
                                     this.eventTimer / 60, this.eventTimer % 60))));

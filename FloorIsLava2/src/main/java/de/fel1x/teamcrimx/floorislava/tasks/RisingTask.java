@@ -2,21 +2,24 @@ package de.fel1x.teamcrimx.floorislava.tasks;
 
 import com.destroystokyo.paper.Title;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
+import de.fel1x.teamcrimx.floorislava.utils.scoreboard.GameScoreboard;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class RisingTask implements IFloorIsLavaTask {
     private final FloorIsLava floorIsLava = FloorIsLava.getInstance();
+    private final GameScoreboard scoreboard = new GameScoreboard();
     private final int increasePerRise = 1;
+    private final String save = String.format("§a%s §8%s §7Du bist §asicher!", FloorIsLava.SAVE, FloorIsLava.DOT);
+    private final String notSave = String.format("§c%s §8%s §7Du bist §cnicht sicher!", FloorIsLava.ATTENTION, FloorIsLava.DOT);
     private final Location spawnLocation = this.floorIsLava.getWorldSpawnLocation();
     private int delay = 5;
     private int height = 0;
     private Location bottomRight;
-
     private Location topLeft;
 
-    private final Title pvpTitle = Title.builder().title("§7⚔ §aPVP §7⚔").subtitle("§aaktiviert").fadeIn(10).stay(60).fadeOut(10).build();
+    private final Title pvpTitle = Title.builder().title("§7『§aPVP§7§7』").subtitle("§aaktiviert").fadeIn(10).stay(60).fadeOut(10).build();
 
     private boolean isRunning = false;
 
@@ -52,6 +55,20 @@ public class RisingTask implements IFloorIsLavaTask {
                     this.height++;
                     this.delay = 5;
                 }
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    int height = (int) player.getLocation().getY();
+
+                    this.scoreboard.updateBoard(player, "                                   ", "attention", "");
+
+                    if(height > this.height + 1) {
+                        this.scoreboard.updateBoard(player, this.save, "attention", "§a");
+                    } else {
+                        this.scoreboard.updateBoard(player, this.notSave, "attention", "§c");
+                    }
+
+                    this.scoreboard.updateBoard(player, String.format("§8%s §e%s Sekunde(n)", FloorIsLava.DOT, this.delay),
+                            "countdown", "§e");
+                });
                 this.delay--;
             }, 0L, 20L);
         }

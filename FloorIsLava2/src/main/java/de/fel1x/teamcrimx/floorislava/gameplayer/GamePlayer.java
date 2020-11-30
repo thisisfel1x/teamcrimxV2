@@ -3,12 +3,16 @@ package de.fel1x.teamcrimx.floorislava.gameplayer;
 import com.google.common.collect.Lists;
 import com.mongodb.client.model.Sorts;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.ext.bridge.node.CloudNetBridgeModule;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
+import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
+import de.dytanic.cloudnet.ext.cloudperms.node.CloudNetCloudPermissionsModule;
 import de.fel1x.teamcrimx.floorislava.Data;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
 import de.fel1x.teamcrimx.floorislava.database.FloorIsLavaDatabase;
 import de.fel1x.teamcrimx.floorislava.database.Stats;
+import de.fel1x.teamcrimx.floorislava.utils.scoreboard.GameScoreboard;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -18,11 +22,9 @@ import java.util.List;
 
 public class GamePlayer {
     private final FloorIsLava floorIsLava = FloorIsLava.getInstance();
-
     private final Data data = this.floorIsLava.getData();
-
     private final Player player;
-
+    private final GameScoreboard gameScoreboard = new GameScoreboard();
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
     public GamePlayer(Player player) {
@@ -46,9 +48,12 @@ public class GamePlayer {
     }
 
     public void setSpectator() {
-        this.player.setGameMode(GameMode.SPECTATOR);
+        this.player.setGameMode(GameMode.ADVENTURE);
+        this.player.setAllowFlight(true);
+        this.player.setFlying(true);
         addToSpectators();
         this.data.getPlayers().forEach(gamePlayers -> gamePlayers.hidePlayer(this.floorIsLava, this.player));
+        this.data.getSpectators().forEach(spectator -> this.player.showPlayer(this.floorIsLava, spectator));
     }
 
     public void fetchPlayerData() {
@@ -140,5 +145,10 @@ public class GamePlayer {
         Document document = new Document(key, value);
         Document document1 = new Document("$set", document);
         this.floorIsLava.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().updateOne(gamemodeDocument, document1);
+    }
+
+    public void setScoreboard() {
+        this.gameScoreboard.setGameScoreboard(this.player);
+        BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(this.player);
     }
 }

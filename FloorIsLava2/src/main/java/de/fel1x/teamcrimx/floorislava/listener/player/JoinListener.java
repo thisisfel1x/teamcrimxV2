@@ -33,6 +33,7 @@ public class JoinListener implements Listener {
         int neededPlayers = 3 - this.floorIsLava.getData().getPlayers().size();
         player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(18.0D);
         this.floorIsLava.getData().getPlayerGG().put(player.getUniqueId(), Boolean.FALSE);
+        gamePlayer.setScoreboard();
         switch (gamestate) {
             case IDLE:
             case LOBBY:
