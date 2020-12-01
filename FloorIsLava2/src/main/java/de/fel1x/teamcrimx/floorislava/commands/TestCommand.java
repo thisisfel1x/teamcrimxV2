@@ -30,7 +30,7 @@ public class TestCommand implements CommandExecutor {
             return false;
         }
 
-        LootDrop lootDrop = new LootDrop(player.getLocation(), Material.valueOf(args[0])).build();
+        LootDrop lootDrop = new LootDrop(this.floorIsLava, player.getLocation(), Material.valueOf(args[0])).build();
         player.sendMessage("§aspawned!");
 
         return true;
