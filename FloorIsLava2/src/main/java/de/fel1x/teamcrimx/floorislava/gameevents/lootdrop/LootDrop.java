@@ -10,18 +10,16 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.function.Consumer;
 
 public class LootDrop {
 
-    private FloorIsLava floorIsLava;
-    private Location origin;
+    private final FloorIsLava floorIsLava;
+    private final Location origin;
     private LootDropTier lootDropTier = LootDropTier.TIER_1;
     private double speed = 1.0;
     private Material blockType;
@@ -124,9 +122,5 @@ public class LootDrop {
                 .trail(true).withFade(Color.GREEN, Color.RED, Color.BLUE, Color.YELLOW,
                         Color.AQUA, Color.ORANGE, Color.PURPLE, Color.MAROON, Color.FUCHSIA)
                 .build(), dropLocation.clone().add(0, 0.5, 0));
-
-
     }
-
-
 }

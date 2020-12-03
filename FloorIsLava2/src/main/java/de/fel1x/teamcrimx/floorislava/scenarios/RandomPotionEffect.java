@@ -19,7 +19,7 @@ public class RandomPotionEffect implements ILavaScenario {
     public void execute() {
         PotionEffectType[] potionEffectTypes = PotionEffectType.values();
         this.data.getPlayers().forEach(player -> {
-            player.addPotionEffect(new PotionEffect(potionEffectTypes[this.random.nextInt(potionEffectTypes.length)], (this.random.nextInt(30) + 45) * 20, this.random.nextInt(2)));
+            player.addPotionEffect(new PotionEffect(potionEffectTypes[this.random.nextInt(potionEffectTypes.length)], (this.random.nextInt(10) + 10) * 20, this.random.nextInt(2)));
             player.sendMessage(this.floorIsLava.getPrefix() + "§7Du hast einen §ezufälligen Effekt §7erhalten!");
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0F, 0.5F);
         });

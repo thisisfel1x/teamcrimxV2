@@ -1,7 +1,9 @@
 package de.fel1x.teamcrimx.floorislava.tasks;
 
 import com.destroystokyo.paper.Title;
+import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
+import de.fel1x.teamcrimx.floorislava.gamehandler.Gamestate;
 import de.fel1x.teamcrimx.floorislava.utils.scoreboard.GameScoreboard;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -20,23 +22,48 @@ public class RisingTask implements IFloorIsLavaTask {
     private Location topLeft;
 
     private final Title pvpTitle = Title.builder().title("§7『§aPVP§7§7』").subtitle("§aaktiviert").fadeIn(10).stay(60).fadeOut(10).build();
+    private final Title infoTitle = Title.builder().title("§4Achtung").subtitle("§cDie Lava steigt!").fadeIn(10).stay(60).fadeOut(10).build();
 
     private boolean isRunning = false;
 
     private int taskId;
+    private int heightToGo;
 
     public void start() {
         if (!this.isRunning) {
             this.isRunning = true;
+            this.heightToGo = Bukkit.getWorlds().get(0).getHighestBlockYAt(this.floorIsLava.getWorldSpawnLocation());
+            this.floorIsLava.getGamestateHandler().setGamestate(Gamestate.RISING);
             int size = 50;
             this.bottomRight = this.spawnLocation.clone().subtract(size / 2.0D, this.height, size / 2.0D);
             this.topLeft = this.spawnLocation.clone().add(size / 2.0D, this.height, size / 2.0D);
+
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                player.sendTitle(this.infoTitle);
+                player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SHOOT, 2f, 0.75f);
+            });
+
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.floorIsLava, () -> {
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    int height = (int) player.getLocation().getY();
+                    this.scoreboard.updateBoard(player, "                                   ", "attention", "");
+
+                    if (height > this.height + 2) {
+                        this.scoreboard.updateBoard(player, this.save, "attention", "§a");
+                    } else {
+                        this.scoreboard.updateBoard(player, this.notSave, "attention", "§c");
+                    }
+
+                    this.scoreboard.updateBoard(player, String.format("§8%s §e%s", FloorIsLava.DOT,
+                            this.delay == 0 ? "§cJetzt!" : this.delay + " §e" + (this.delay > 1 ? "Sekunden" : "Sekunde")),
+                            "countdown", "§e");
+                });
+
                 if (this.delay == 0) {
                     World world = this.bottomRight.getWorld();
                     this.bottomRight.setY(this.height);
                     this.topLeft.setY((this.height + 1));
-                    Bukkit.broadcastMessage("rise");
+
                     for (int x = this.bottomRight.getBlockX(); x <= this.topLeft.getBlockX(); x++) {
                         for (int y = this.bottomRight.getBlockY(); y <= this.topLeft.getBlockY(); y++) {
                             for (int z = this.bottomRight.getBlockZ(); z <= this.topLeft.getBlockZ(); z++) {
@@ -45,7 +72,7 @@ public class RisingTask implements IFloorIsLavaTask {
                             }
                         }
                     }
-                    if(this.height == 40) {
+                    if(this.height == this.heightToGo) {
                         this.floorIsLava.setPvpEnabled(true);
                         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                             onlinePlayer.sendTitle(this.pvpTitle);
@@ -55,20 +82,6 @@ public class RisingTask implements IFloorIsLavaTask {
                     this.height++;
                     this.delay = 5;
                 }
-                Bukkit.getOnlinePlayers().forEach(player -> {
-                    int height = (int) player.getLocation().getY();
-
-                    this.scoreboard.updateBoard(player, "                                   ", "attention", "");
-
-                    if(height > this.height + 1) {
-                        this.scoreboard.updateBoard(player, this.save, "attention", "§a");
-                    } else {
-                        this.scoreboard.updateBoard(player, this.notSave, "attention", "§c");
-                    }
-
-                    this.scoreboard.updateBoard(player, String.format("§8%s §e%s Sekunde(n)", FloorIsLava.DOT, this.delay),
-                            "countdown", "§e");
-                });
                 this.delay--;
             }, 0L, 20L);
         }
