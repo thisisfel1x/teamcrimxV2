@@ -4,15 +4,18 @@ import de.fel1x.teamcrimx.crimxapi.utils.InstantFirework;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
 import de.fel1x.teamcrimx.floorislava.utils.ArmorstandStatsLoader;
 import org.bukkit.*;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.function.Consumer;
 
 public class LootDrop {
@@ -95,17 +98,33 @@ public class LootDrop {
                     }
                 });
 
-                fallingChest.getLocation().getBlock().setType(Material.CHEST);
-
-                Bukkit.broadcastMessage(String.format("%s§7Ein §aLootdrop (%s, %s) §7ist gelandet!",
-                        this.floorIsLava.getPrefix(), fallingChest.getLocation().getBlockX(),
-                        fallingChest.getLocation().getBlockZ()));
-
-                new InstantFirework(FireworkEffect.builder().withColor(Color.GREEN).flicker(true).build(),
-                        fallingChest.getLocation());
+                this.finishLootDrop(fallingChest.getLocation().toCenterLocation());
                 bukkitTask.cancel();
             }
         }, 0L, 0L);
+
+    }
+
+    private void finishLootDrop(Location dropLocation) {
+        dropLocation.getBlock().setType(Material.CHEST);
+
+        Chest chest = (Chest) dropLocation.getBlock().getState();
+        chest.getBlockInventory().setItem(new Random().nextInt(chest.getBlockInventory().getSize() - 1), new ItemStack(Material.COCOA_BEANS, 3));
+        chest.getBlockInventory().setItem(new Random().nextInt(chest.getBlockInventory().getSize() - 1), new ItemStack(Material.WATER_BUCKET));
+        chest.getBlockInventory().setItem(new Random().nextInt(chest.getBlockInventory().getSize() - 1), new ItemStack(Material.SANDSTONE, 37));
+
+        chest.setCustomName("§aLootdrop");
+
+        Bukkit.broadcastMessage(String.format("%s§7Ein §aLootdrop (%s, %s) §7ist gelandet!",
+                this.floorIsLava.getPrefix(), dropLocation.getBlockX(),
+                dropLocation.getBlockZ()));
+
+        new InstantFirework(FireworkEffect.builder().withColor(Color.GREEN, Color.RED, Color.BLUE, Color.YELLOW,
+                Color.AQUA, Color.ORANGE, Color.PURPLE, Color.MAROON, Color.FUCHSIA)
+                .trail(true).withFade(Color.GREEN, Color.RED, Color.BLUE, Color.YELLOW,
+                        Color.AQUA, Color.ORANGE, Color.PURPLE, Color.MAROON, Color.FUCHSIA)
+                .build(), dropLocation.clone().add(0, 0.5, 0));
+
 
     }
 
