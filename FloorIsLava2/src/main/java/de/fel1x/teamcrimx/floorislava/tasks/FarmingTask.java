@@ -1,10 +1,14 @@
 package de.fel1x.teamcrimx.floorislava.tasks;
 
+import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
+import de.fel1x.teamcrimx.floorislava.gameevents.lootdrop.LootDrop;
 import de.fel1x.teamcrimx.floorislava.gamehandler.Gamestate;
 import de.fel1x.teamcrimx.floorislava.scenarios.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
@@ -22,6 +26,7 @@ public class FarmingTask implements IFloorIsLavaTask {
     private int taskId = 0;
     private int bossBarTimer;
     private int farmingTime = 60;
+    private int lootDropTime = this.random.nextInt(10) + this.farmingTime - 40;
     private boolean isRunning = false;
     private boolean generateNewEvent = true;
     private BossBar bossBar;
@@ -91,6 +96,18 @@ public class FarmingTask implements IFloorIsLavaTask {
                     this.floorIsLava.startTimerByClass(RisingTask.class);
                 }
 
+                if(this.lootDropTime == 0) {
+                    this.lootDropTime = this.random.nextInt(20) + 10;
+
+                    Location randomLocation = this.floorIsLava.getLootDropCuboid().getBlocks()
+                            .get(this.random.nextInt(this.floorIsLava.getLootDropCuboid().getBlocks().size())).getLocation();
+                    randomLocation.setY(120);
+                    new LootDrop(this.floorIsLava, randomLocation, Material.BARREL).build();
+
+                    Bukkit.broadcastMessage(this.floorIsLava.getPrefix() + "§7Ein §aLootdrop §7ist gespawnt!");
+                }
+
+                this.lootDropTime--;
                 this.bossBarTimer--;
                 this.farmingTime--;
             }, 0L, 20L);

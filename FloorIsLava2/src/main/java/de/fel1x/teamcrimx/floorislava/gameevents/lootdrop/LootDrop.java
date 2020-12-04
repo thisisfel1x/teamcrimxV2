@@ -97,7 +97,7 @@ public class LootDrop {
 
         for(double radius = 3; radius >= 0; radius-=0.75) {
             double finalHeight = height;
-            ArmorstandStatsLoader.getCirclePoints(this.origin.clone().add(0, 2, 0), radius == 0 ? 0.1 : radius, amount).forEach(location -> {
+            ArmorstandStatsLoader.getCirclePoints(this.origin.clone().add(0, 1.5, 0), radius == 0 ? 0.1 : radius, amount).forEach(location -> {
                 Chicken chicken = (Chicken) world.spawnEntity(location.clone().add(0, finalHeight, 0), EntityType.CHICKEN);
                 chicken.setLeashHolder(fallingChest);
                 chicken.setSilent(true);
@@ -111,7 +111,7 @@ public class LootDrop {
             Vector toSet = new Vector(0, -0.05, 0);
             fallingChest.setVelocity(toSet);
             chickens.forEach(chicken -> {
-                chicken.setVelocity(new Vector(0, -0.08, 0));
+                chicken.setVelocity(new Vector(0, -0.09, 0));
                 if(chicken.isOnGround()) {
                     chicken.remove();
                     chicken.getLocation().getNearbyEntitiesByType(Item.class, 2).forEach(item -> {

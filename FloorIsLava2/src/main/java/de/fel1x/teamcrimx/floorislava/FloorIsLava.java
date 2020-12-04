@@ -4,6 +4,7 @@ import com.mongodb.client.model.Sorts;
 import de.dytanic.cloudnet.ext.bridge.BridgeHelper;
 import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
+import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
 import de.fel1x.teamcrimx.floorislava.commands.StartCommand;
 import de.fel1x.teamcrimx.floorislava.commands.StatsCommand;
 import de.fel1x.teamcrimx.floorislava.commands.TestCommand;
@@ -43,6 +44,7 @@ public final class FloorIsLava extends JavaPlugin {
     public static final String DOT = "●";
 
     private Location spawnLocation;
+    private Cuboid lootDropCuboid;
     private InventoryManager inventoryManager;
     private IFloorIsLavaTask floorIsLavaTask;
 
@@ -63,15 +65,22 @@ public final class FloorIsLava extends JavaPlugin {
         this.pluginManager = Bukkit.getPluginManager();
         this.inventoryManager = new InventoryManager(this);
         this.inventoryManager.init();
-        registerCommands();
-        registerListener();
+        this.registerCommands();
+        this.registerListener();
         this.worldSpawnLocation = Bukkit.getWorlds().get(0).getSpawnLocation();
-        setupWorlds();
+        this.setupWorlds();
+        this.initCuboid();
         new ArmorstandStatsLoader(this);
         this.gamestateHandler = new GamestateHandler();
         this.floorIsLavaTask = new IdleTask();
         this.floorIsLavaTask.start();
         Bukkit.getScheduler().runTaskLater(this, this::setMotdAndUpdate, 2L);
+    }
+
+    private void initCuboid() {
+        int size = 50;
+        this.lootDropCuboid = new Cuboid(this.worldSpawnLocation.clone().subtract(size / 2.0D, 0, size / 2.0D),
+        this.worldSpawnLocation.clone().add(size / 2.0D, 0, size / 2.0D));
     }
 
     public void onDisable() {
@@ -147,6 +156,10 @@ public final class FloorIsLava extends JavaPlugin {
         return StreamSupport.stream(this.crimxAPI.getMongoDB().getFloorIsLavaCollection().find()
                 .sort(Sorts.descending("gamesWon")).limit(limit).spliterator(), false)
                 .collect(Collectors.toList());
+    }
+
+    public Cuboid getLootDropCuboid() {
+        return this.lootDropCuboid;
     }
 
     public boolean isPvpEnabled() {
