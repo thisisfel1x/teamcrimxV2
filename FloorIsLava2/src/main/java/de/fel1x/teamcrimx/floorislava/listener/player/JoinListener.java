@@ -51,7 +51,7 @@ public class JoinListener implements Listener {
                 player.teleport(this.floorIsLava.getSpawnLocation());
                 break;
         }
-        if (this.floorIsLava.getData().getPlayers().size() >= neededPlayers && gamestate
+        if (this.floorIsLava.getData().getPlayers().size() >= 3 && gamestate
                 .equals(Gamestate.IDLE))
             this.floorIsLava.startTimerByClass(LobbyTask.class);
     }

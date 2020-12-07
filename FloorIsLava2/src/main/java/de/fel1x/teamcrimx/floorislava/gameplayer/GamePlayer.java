@@ -51,7 +51,8 @@ public class GamePlayer {
         this.player.setGameMode(GameMode.ADVENTURE);
         this.player.setAllowFlight(true);
         this.player.setFlying(true);
-        addToSpectators();
+        this.addToSpectators();
+        this.removeFromInGamePlayers();
         this.data.getPlayers().forEach(gamePlayers -> gamePlayers.hidePlayer(this.floorIsLava, this.player));
         this.data.getSpectators().forEach(spectator -> this.player.showPlayer(this.floorIsLava, spectator));
     }

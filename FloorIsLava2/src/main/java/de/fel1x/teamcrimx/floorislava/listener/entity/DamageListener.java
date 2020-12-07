@@ -3,6 +3,7 @@ package de.fel1x.teamcrimx.floorislava.listener.entity;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
 import de.fel1x.teamcrimx.floorislava.gamehandler.Gamestate;
 import de.fel1x.teamcrimx.floorislava.gameplayer.GamePlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,11 +36,7 @@ public class DamageListener implements Listener {
                 }
                 break;
             case RISING:
-                if(victim instanceof Player && !this.floorIsLava.isPvpEnabled()
-                        && (event.getCause() != EntityDamageEvent.DamageCause.FALL
-                        || event.getCause() != EntityDamageEvent.DamageCause.LAVA)) {
-                    event.setCancelled(true);
-                } else if(victim instanceof Player && damager instanceof Player
+                if(victim instanceof Player && damager instanceof Player
                         && this.floorIsLava.isPvpEnabled()) {
                     Player victimPlayer = (Player) victim;
                     Player damagerPlayer = (Player) damager;
@@ -54,6 +51,7 @@ public class DamageListener implements Listener {
 
                     if(victimGamePlayer.isSpectator()) {
                         event.setCancelled(true);
+                        return;
                     }
                 }
                 break;
@@ -78,11 +76,6 @@ public class DamageListener implements Listener {
                 }
                 break;
             case RISING:
-                if (event.getEntity() instanceof Player && !this.floorIsLava.isPvpEnabled()
-                        && (event.getCause() != EntityDamageEvent.DamageCause.FALL
-                        || event.getCause() != EntityDamageEvent.DamageCause.LAVA)) {
-                    event.setCancelled(true);
-                }
                 break;
         }
     }

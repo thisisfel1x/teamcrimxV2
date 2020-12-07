@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.floorislava.gamehandler.Gamestate;
 import de.fel1x.teamcrimx.floorislava.gameplayer.GamePlayer;
 import de.fel1x.teamcrimx.floorislava.tasks.EndingTask;
 import de.fel1x.teamcrimx.floorislava.tasks.IdleTask;
+import de.fel1x.teamcrimx.floorislava.utils.WinDetection;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,6 +31,7 @@ public class QuitListener implements Listener {
             case IDLE:
             case LOBBY:
                 event.setQuitMessage(this.floorIsLava.getPrefix() + "§a" + player.getName() + " §7hat das Spiel verlassen");
+                gamePlayer.removeFromInGamePlayers();
                 break;
             case FARMING:
             case RISING:
@@ -43,6 +45,7 @@ public class QuitListener implements Listener {
                 }
                 if (Bukkit.getOnlinePlayers().isEmpty())
                     Bukkit.getServer().shutdown();
+                new WinDetection();
                 break;
             case PREGAME:
                 if (gamePlayer.isPlayer())
@@ -54,7 +57,7 @@ public class QuitListener implements Listener {
                 event.setQuitMessage(this.floorIsLava.getPrefix() + "§a" + player.getName() + " §7hat das Spiel verlassen");
                 break;
         }
-        if (this.floorIsLava.getData().getPlayers().size() < neededPlayers && gamestate
+        if (this.floorIsLava.getData().getPlayers().size() < 3 && gamestate
                 .equals(Gamestate.LOBBY))
             this.floorIsLava.startTimerByClass(IdleTask.class);
     }

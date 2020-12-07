@@ -35,7 +35,7 @@ public class AnvilRain implements ILavaScenario {
                             AnvilRain.this.floorIsLava.getFallingAnvils().add(fallingBlock);
                         }
                     }
-                    if (this.timer == 10)
+                    if (this.timer == 5)
                         cancel();
                     this.timer++;
                 }

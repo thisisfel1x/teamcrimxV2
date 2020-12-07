@@ -23,15 +23,15 @@ public class BlockTransformListener implements Listener {
         if (event.getEntity() instanceof org.bukkit.entity.FallingBlock &&
                 this.floorIsLava.getFallingAnvils().contains(entity)) {
             event.getBlock().setType(Material.AIR);
-            entity.remove();
             event.getBlock().getDrops().clear();
             event.setCancelled(true);
+            entity.remove();
             event.getEntity().getNearbyEntities(0.0D, 1.0D, 0.0D).forEach(nearbyEntities -> {
                 if (!(nearbyEntities instanceof Player))
                     return;
                 Player player = (Player) nearbyEntities;
                 if (!player.isDead()) {
-                    player.setHealth(player.getHealth() - 4.0D);
+                    player.setHealth(player.getHealth() - 1.0D);
                     Bukkit.broadcastMessage(this.floorIsLava.getPrefix() + player.getDisplayName() + " §7wurde von einem Amboss zerquetscht");
                 }
             });
