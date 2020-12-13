@@ -10,6 +10,7 @@ import de.fel1x.teamcrimx.floorislava.commands.StatsCommand;
 import de.fel1x.teamcrimx.floorislava.commands.TestCommand;
 import de.fel1x.teamcrimx.floorislava.gamehandler.GamestateHandler;
 import de.fel1x.teamcrimx.floorislava.listener.block.BlockBreakListener;
+import de.fel1x.teamcrimx.floorislava.listener.block.BlockFromToListener;
 import de.fel1x.teamcrimx.floorislava.listener.block.BlockPlaceListener;
 import de.fel1x.teamcrimx.floorislava.listener.block.BlockTransformListener;
 import de.fel1x.teamcrimx.floorislava.listener.entity.DamageListener;
@@ -45,6 +46,8 @@ public final class FloorIsLava extends JavaPlugin {
 
     private Location spawnLocation;
     private Cuboid lootDropCuboid;
+    private Cuboid areaCuboid;
+
     private InventoryManager inventoryManager;
     private IFloorIsLavaTask floorIsLavaTask;
 
@@ -74,13 +77,15 @@ public final class FloorIsLava extends JavaPlugin {
         this.gamestateHandler = new GamestateHandler();
         this.floorIsLavaTask = new IdleTask();
         this.floorIsLavaTask.start();
-        Bukkit.getScheduler().runTaskLater(this, this::setMotdAndUpdate, 2L);
+        Bukkit.getScheduler().runTaskLater(this, this::setMotdAndUpdate, 2);
     }
 
     private void initCuboid() {
         int size = 50;
         this.lootDropCuboid = new Cuboid(this.worldSpawnLocation.clone().subtract(size / 2.0D, 0, size / 2.0D),
         this.worldSpawnLocation.clone().add(size / 2.0D, 0, size / 2.0D));
+        this.areaCuboid = new Cuboid(this.worldSpawnLocation.clone().subtract(size / 2.0D, 0, size / 2.0D),
+                this.worldSpawnLocation.clone().add(size / 2.0D, 256, size / 2.0D));
     }
 
     public void onDisable() {
@@ -108,6 +113,7 @@ public final class FloorIsLava extends JavaPlugin {
         new BlockPlaceListener(this);
         new DamageListener(this);
         new EntityTargetListener(this);
+        new BlockFromToListener(this);
     }
 
     private void setupWorlds() {
@@ -156,6 +162,10 @@ public final class FloorIsLava extends JavaPlugin {
         return StreamSupport.stream(this.crimxAPI.getMongoDB().getFloorIsLavaCollection().find()
                 .sort(Sorts.descending("gamesWon")).limit(limit).spliterator(), false)
                 .collect(Collectors.toList());
+    }
+
+    public Cuboid getAreaCuboid() {
+        return this.areaCuboid;
     }
 
     public Cuboid getLootDropCuboid() {
