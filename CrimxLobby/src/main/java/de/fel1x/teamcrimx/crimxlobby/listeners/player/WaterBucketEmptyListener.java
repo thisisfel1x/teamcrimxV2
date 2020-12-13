@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 
 public class WaterBucketEmptyListener implements Listener {
 
-    CrimxLobby crimxLobby;
+    final CrimxLobby crimxLobby;
 
     public WaterBucketEmptyListener(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;

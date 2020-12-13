@@ -67,17 +67,13 @@
             <id>releases</id>
             <url>https://repo.cloudnetservice.eu/repository/releases/</url>
         </repository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
-            <artifactId>paper</artifactId>
-            <version>1.16.3-R0.1-SNAPSHOT</version>
+            <artifactId>paper-api</artifactId>
+            <version>1.16.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -87,22 +83,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.juliarn</groupId>
-            <artifactId>npc-lib</artifactId>
-            <version>2.3-RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>fr.minuskube.inv</groupId>
             <artifactId>smart-invs</artifactId>
             <version>1.2.7</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.jitse</groupId>
-            <artifactId>npclib-api</artifactId>
-            <version>2.9-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
 
         <!--  cloudnet driver for plugins and modules -->
@@ -145,6 +129,11 @@
             <artifactId>cloudnet-cloudperms</artifactId>
             <version>3.3.0-RELEASE</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.juliarn</groupId>
+            <artifactId>npc-lib</artifactId>
+            <version>2.4-RELEASE</version>
         </dependency>
     </dependencies>
 </project>

@@ -23,13 +23,7 @@ public interface ICosmetic {
 
     void startTrail(Player player);
 
-    boolean dropItem();
-
-    boolean playerBlock();
-
-    boolean armor();
-
-    boolean gadget();
+    CosmeticType cosmeticType();
 
     Material itemToDrop();
 

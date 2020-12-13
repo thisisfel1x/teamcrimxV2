@@ -8,7 +8,11 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -311,4 +315,15 @@ public class ItemBuilder {
         return this;
 
     }
+
+    public ItemBuilder setPotionEffect(PotionType potionEffectType) {
+        if(this.is.getType() == Material.SPLASH_POTION
+                || this.is.getType() == Material.POTION || this.is.getType() == Material.TIPPED_ARROW) {
+            PotionMeta potionMeta = (PotionMeta) this.is.getItemMeta();
+            potionMeta.setBasePotionData(new PotionData(potionEffectType));
+            this.is.setItemMeta(potionMeta);
+        }
+        return this;
+    }
+
 }

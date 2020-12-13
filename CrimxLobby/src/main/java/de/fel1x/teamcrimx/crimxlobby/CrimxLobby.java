@@ -1,6 +1,10 @@
 package de.fel1x.teamcrimx.crimxlobby;
 
+import com.destroystokyo.paper.entity.Pathfinder;
+import com.github.juliarn.npc.NPC;
 import com.github.juliarn.npc.NPCPool;
+import com.github.juliarn.npc.modifier.MetadataModifier;
+import com.github.juliarn.npc.profile.Profile;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.crimxlobby.commands.BuildCommand;
@@ -17,14 +21,16 @@ import de.fel1x.teamcrimx.crimxlobby.minigames.watermlg.WaterMlgHandler;
 import de.fel1x.teamcrimx.crimxlobby.objects.Spawn;
 import de.fel1x.teamcrimx.crimxlobby.scoreboard.LobbyScoreboard;
 import fr.minuskube.inv.InventoryManager;
-import net.jitse.npclib.NPCLib;
 import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 public final class CrimxLobby extends JavaPlugin {
 
@@ -35,11 +41,12 @@ public final class CrimxLobby extends JavaPlugin {
     private CrimxAPI crimxAPI;
     private PluginManager pluginManager;
     private NPCPool npcPool;
-    private NPCLib npcLib;
     private InventoryManager inventoryManager;
     private final SpawnManager spawnManager = new SpawnManager();
     private WaterMlgHandler waterMlgHandler;
     private LobbyScoreboard lobbyScoreboard;
+    private NPC lobbyNpc;
+    private final Random random = new Random();
 
     public static CrimxLobby getInstance() {
         return instance;
@@ -61,7 +68,6 @@ public final class CrimxLobby extends JavaPlugin {
         this.data = new Data();
 
         this.npcPool = new NPCPool(this, 125, 25, 40);
-        this.npcLib = new NPCLib(this);
 
         this.inventoryManager = new InventoryManager(this);
         this.inventoryManager.init();
@@ -74,9 +80,23 @@ public final class CrimxLobby extends JavaPlugin {
         this.registerListener();
 
         this.loadWorld();
+        
+        this.spawnNpc();
 
         this.runMainScheduler();
 
+    }
+
+    private void spawnNpc() {
+        this.lobbyNpc = new NPC.Builder(new Profile(UUID.randomUUID(), "§a§lDein Profil",
+                Collections.singletonList(new Profile.Property("textures",
+                        "ewogICJ0aW1lc3RhbXAiIDogMTYwNTk1MzY1ODEzMiwKICAicHJvZmlsZUlkIiA6ICJhYTZhNDA5NjU4YTk0MDIwYmU3OGQwN2JkMzVlNTg5MyIsCiAgInByb2ZpbGVOYW1lIiA6ICJiejE0IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzc2MjA2NjliZmY3MTJhYWE3OGQzMGQ5ZGNjNTU5MDYxMWU2YzEwZjIzY2Q2YWQ1MTc1Zjc1N2RlYTA1YWU3NjgiCiAgICB9CiAgfQp9",
+                        "A0UUTGQgMlEeSEYc5H/mYn8GjKsq2fd4X+2mPnszJHRWH3GhO01QU7fO/HSHcccronEb1eWQPgkqCD6rtXWslh7nubKvORJZcBiVpOWTNpjJsDZH57XOghdKsDWp79jTUMM3AaY8irRMC8SlXdMK9RM8uMPofb0FgrHaMUI4D8vTpPEvEZXbyhEpuuCKs3Psb1BBu130x3xm7w1kGKOoyQYSZ1CE9JdYAGF3FOCeAsmGohpO6KMtGsrWJ/wR1lExzbAjlp5vPtMXpqpsQoCTEldtiZ8gxB8bU+5ms5FYxbIUy1I7N5YYcpNUFiBEwWbFHIkzYt5KoQEXZ2P3mTOgJsjyUlKxlDJOQRDeNZuuNMZDiuqL7JGrtSKNRkCwGAE+Pr91YOAjhymzL7t/Hhn9V6i6198HrDDXZzZqm9ebc6Y7bdSSTHtSDWYXD80B0CgGUyMTS9g0h8qN6rFN6taMxEeBxBuI8Hpj5ERchrqT9xhJzOapcQJEf59l60h2BcDjDJJxefq4N6hvvGPL+t1H/D/bPN5eF7HYJKSz/y/lpJutqWJfnolhoxTf7Qy0XPp7BNQxOFdDOqujLb0haPxpcBCrhgzd/QXUlcpYpMC9zov3jqL5muXg6aXTDkEU2UlLDhPNEXolM2nbvG55WXNvpe3ulbVBbCs3PQDi7bsdLb0="))))
+                .lookAtPlayer(true)
+                .imitatePlayer(true)
+                .location(new Location(Bukkit.getWorlds().get(0), -168.5, 64, 138.5))
+                .spawnCustomizer((npc1, player) -> npc1.metadata().queue(MetadataModifier.EntityMetadata.SKIN_LAYERS, true).send())
+                .build(this.npcPool);
     }
 
     @Override
@@ -111,9 +131,9 @@ public final class CrimxLobby extends JavaPlugin {
         World world = lobby.getWorld();
         world.setSpawnLocation((int) lobby.getX(), (int) lobby.getY(), (int) lobby.getZ());
         world.setDifficulty(Difficulty.PEACEFUL);
-        world.setGameRuleValue("doMobSpawning", "false");
-        world.setGameRuleValue("doMobLoot", "false");
-        world.setGameRuleValue("doWeatherCycle", "false");
+        world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+        world.setGameRule(GameRule.DO_MOB_LOOT, false);
+        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         world.setStorm(false);
         world.setThunderDuration(0);
         world.setThundering(false);
@@ -169,6 +189,28 @@ public final class CrimxLobby extends JavaPlugin {
         })), 0L, 3L);
 
         Bukkit.getScheduler().runTaskTimer(this, () -> {
+            this.data.getPlayerPet().forEach((uuid, entity) -> {
+                Player owner = Bukkit.getPlayer(uuid);
+
+                if(owner == null || !owner.isOnline() || entity.isDead()) {
+                    return;
+                }
+
+                double distance = owner.getLocation().distanceSquared(entity.getLocation());
+
+                if(distance > 10) {
+                    //Bukkit.broadcastMessage("pathfinding " + owner.getName() + " distance > 10");
+                    entity.getPathfinder().moveTo(owner.getLocation().clone()
+                            .add(this.random.nextBoolean() ? 1 : -1, 0, this.random.nextBoolean() ? 1 : -1));
+                    if(owner.getLocation().getY() > entity.getLocation().getY() + 3 || distance > 150) {
+                        entity.teleport(owner.getLocation().
+                                add(this.random.nextBoolean() ? 1 : -1, 0, this.random.nextBoolean() ? 1 : -1));
+                        entity.getPathfinder().stopPathfinding();
+                    }
+                }
+
+            });
+
             Bukkit.getOnlinePlayers().forEach(player -> Actionbar.sendActionbar(player, actionBarMessages.get(this.actionBarCount).replace('&', '§')));
 
             this.actionbarTimer++;
@@ -184,8 +226,7 @@ public final class CrimxLobby extends JavaPlugin {
     }
 
     public String getPrefix() {
-        String prefix = "§aCrimx§lLobby §8● §r";
-        return prefix;
+        return "§aCrimx§lLobby §8● §r";
     }
 
     public CrimxAPI getCrimxAPI() {
@@ -204,10 +245,6 @@ public final class CrimxLobby extends JavaPlugin {
         return this.npcPool;
     }
 
-    public NPCLib getNpcLib() {
-        return this.npcLib;
-    }
-
     public InventoryManager getInventoryManager() {
         return this.inventoryManager;
     }
@@ -222,5 +259,9 @@ public final class CrimxLobby extends JavaPlugin {
 
     public LobbyScoreboard getLobbyScoreboard() {
         return this.lobbyScoreboard;
+    }
+
+    public NPC getLobbyNpc() {
+        return this.lobbyNpc;
     }
 }

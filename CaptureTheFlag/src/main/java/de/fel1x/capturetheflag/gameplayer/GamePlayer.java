@@ -93,6 +93,7 @@ public class GamePlayer {
             }
 
         });
+        this.data.getPlayerGG().put(this.player.getUniqueId(), false);
     }
 
     public void cleanupTeams() {

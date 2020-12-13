@@ -1,9 +1,9 @@
 package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 
+import com.github.juliarn.npc.NPC;
+import com.github.juliarn.npc.event.PlayerNPCInteractEvent;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.inventories.NPCInventory;
-import net.jitse.npclib.api.NPC;
-import net.jitse.npclib.api.events.NPCInteractEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,14 +19,12 @@ public class NPCInteractListener implements Listener {
     }
 
     @EventHandler
-    public void on(NPCInteractEvent event) {
+    public void on(PlayerNPCInteractEvent event) {
 
         NPC npc = event.getNPC();
-        Player player = event.getWhoClicked();
+        Player player = event.getPlayer();
 
-        NPC playerNpc = this.crimxLobby.getData().getPlayerNPCs().get(player.getUniqueId());
-
-        if (npc.getId().equalsIgnoreCase(playerNpc.getId())) {
+        if(npc.getEntityId() == this.crimxLobby.getLobbyNpc().getEntityId()) {
             NPCInventory.NPC_INVENTORY.open(player);
         }
 

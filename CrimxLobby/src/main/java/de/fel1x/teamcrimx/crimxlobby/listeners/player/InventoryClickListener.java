@@ -24,7 +24,5 @@ public class InventoryClickListener implements Listener {
         if (!lobbyPlayer.isInBuild()) {
             event.setCancelled(true);
         }
-
     }
-
 }

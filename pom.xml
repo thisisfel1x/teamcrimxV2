@@ -17,6 +17,7 @@
         <module>CrimxBungee</module>
         <module>CaptureTheFlag</module>
         <module>MlgWars</module>
+        <module>FloorIsLava2</module>
     </modules>
 
 </project>

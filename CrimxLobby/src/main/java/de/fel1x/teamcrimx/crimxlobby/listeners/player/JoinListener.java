@@ -7,7 +7,10 @@ import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Bee;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -52,8 +55,6 @@ public class JoinListener implements Listener {
 
         lobbyPlayer.setScoreboard();
         BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
-
-        lobbyPlayer.spawnPersonalNPC();
 
         boolean vipPerms = player.hasPermission("crimxlobby.vip");
         int playerState = this.crimxLobby.getData().getPlayerHiderState().get(player.getUniqueId());

@@ -18,8 +18,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class MoveListener implements Listener {
 
-    CrimxLobby crimxLobby;
-    Data data;
+    final CrimxLobby crimxLobby;
+    final Data data;
 
     public MoveListener(CrimxLobby crimxLobby) {
         this.crimxLobby = crimxLobby;
@@ -37,26 +37,30 @@ public class MoveListener implements Listener {
         if (lobbyPlayer.getSelectedCosmetic() != null) {
             ICosmetic iCosmetic = lobbyPlayer.getSelectedCosmetic();
 
-            if (!iCosmetic.dropItem() && !iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()) {
-                if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
-                    player.getWorld().spawnParticle(iCosmetic.getWalkEffect(),
-                            player.getLocation().clone().add(0, 0.5, 0), iCosmetic.effectData());
-                }
-            } else if (!iCosmetic.dropItem() && iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()) {
-                if ((player.getLocation().clone().subtract(0, 1, 0).getBlock().getType() != Material.AIR
-                        || player.getLocation().clone().subtract(0, 1, 0).getBlock().getType() != Material.SNOW)
-                        && player.getLocation().getBlock().getType() == Material.AIR
-                        && player.getLocation().subtract(0, 1, 0).getBlock().getType().isBlock()) {
-                    Block old = player.getLocation().getBlock();
-                    player.getLocation().getBlock().setType(Material.SNOW);
+            switch (iCosmetic.cosmeticType()) {
+                case TRAIL:
+                    if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
+                        player.getWorld().spawnParticle(iCosmetic.getWalkEffect(),
+                                player.getLocation().clone().add(0, 0.5, 0), iCosmetic.effectData());
+                    }
+                    break;
 
-                    Bukkit.getScheduler().runTaskLater(this.crimxLobby, () -> old.setType(Material.AIR), 20 * 5L);
-                }
-            } else if (iCosmetic.dropItem() && !iCosmetic.playerBlock() && !iCosmetic.armor() && !iCosmetic.gadget()) {
-                Item item = player.getWorld().dropItem(player.getLocation(), new ItemStack(iCosmetic.itemToDrop()));
-                Bukkit.getScheduler().runTaskLater(this.crimxLobby, item::remove, 20 * 2L);
+                case BLOCK_TRAIL:
+                    if ((player.getLocation().clone().subtract(0, 1, 0).getBlock().getType() != Material.AIR
+                            || player.getLocation().clone().subtract(0, 1, 0).getBlock().getType() != Material.SNOW)
+                            && player.getLocation().getBlock().getType() == Material.AIR
+                            && player.getLocation().subtract(0, 1, 0).getBlock().getType().isBlock()) {
+                        Block old = player.getLocation().getBlock();
+                        player.getLocation().getBlock().setType(Material.SNOW);
+                        Bukkit.getScheduler().runTaskLater(this.crimxLobby, () -> old.setType(Material.AIR), 20 * 3L);
+                    }
+                    break;
+
+                case DROP_TRAIL:
+                    Item item = player.getWorld().dropItem(player.getLocation(), new ItemStack(iCosmetic.itemToDrop()));
+                    Bukkit.getScheduler().runTaskLater(this.crimxLobby, item::remove, 20 * 2L);
+                    break;
             }
-
         }
 
         if (lobbyPlayer.isInJumpAndRun()) {

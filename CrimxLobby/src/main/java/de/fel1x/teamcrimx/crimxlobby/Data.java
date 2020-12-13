@@ -3,8 +3,10 @@ package de.fel1x.teamcrimx.crimxlobby;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import de.fel1x.teamcrimx.crimxlobby.database.LobbyDatabasePlayer;
 import de.fel1x.teamcrimx.crimxlobby.minigames.jumpandrun.JumpAndRunPlayer;
-import net.jitse.npclib.api.NPC;
 import org.bson.Document;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 
 import java.util.*;
 
@@ -12,7 +14,6 @@ public class Data {
 
     private final List<UUID> builders;
 
-    private final Map<UUID, NPC> playerNPCs;
     private final Map<UUID, Integer> playerHiderState;
     private final Map<UUID, Document> playerMongoDocument;
     private final Map<UUID, Document> playerMongoNetworkDocument;
@@ -22,13 +23,13 @@ public class Data {
     private final List<UUID> jumpers;
 
     private final Map<UUID, ICosmetic> cosmetic;
+    private final Map<UUID, Mob> playerPet;
     private final Map<UUID, Float> hueMap;
 
     public Data() {
 
         this.builders = new ArrayList<>();
 
-        this.playerNPCs = new HashMap<>();
         this.playerHiderState = new HashMap<>();
 
         this.playerMongoDocument = new HashMap<>();
@@ -39,16 +40,13 @@ public class Data {
         this.jumpers = new ArrayList<>();
 
         this.cosmetic = new HashMap<>();
+        this.playerPet = new HashMap<>();
         this.hueMap = new HashMap<>();
 
     }
 
     public List<UUID> getBuilders() {
         return this.builders;
-    }
-
-    public Map<UUID, NPC> getPlayerNPCs() {
-        return this.playerNPCs;
     }
 
     public Map<UUID, Integer> getPlayerHiderState() {
@@ -81,5 +79,9 @@ public class Data {
 
     public Map<UUID, Float> getHueMap() {
         return this.hueMap;
+    }
+
+    public Map<UUID, Mob> getPlayerPet() {
+        return this.playerPet;
     }
 }
