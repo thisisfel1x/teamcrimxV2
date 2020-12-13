@@ -201,6 +201,5 @@ public class LootDrop {
 
             chestInv.setItem(this.random.nextInt(chestInv.getSize()), is); // Set the item in the chest to a random place (which is not taken).
         }
-
     }
 }

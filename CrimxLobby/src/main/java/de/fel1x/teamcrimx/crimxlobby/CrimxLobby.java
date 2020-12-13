@@ -199,7 +199,7 @@ public final class CrimxLobby extends JavaPlugin {
                 double distance = owner.getLocation().distanceSquared(entity.getLocation());
 
                 if(distance > 10) {
-                    Bukkit.broadcastMessage("pathfinding " + owner.getName() + " distance > 10");
+                    //Bukkit.broadcastMessage("pathfinding " + owner.getName() + " distance > 10");
                     entity.getPathfinder().moveTo(owner.getLocation().clone()
                             .add(this.random.nextBoolean() ? 1 : -1, 0, this.random.nextBoolean() ? 1 : -1));
                     if(owner.getLocation().getY() > entity.getLocation().getY() + 3 || distance > 150) {
