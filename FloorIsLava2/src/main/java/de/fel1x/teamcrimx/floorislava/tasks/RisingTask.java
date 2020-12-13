@@ -81,8 +81,9 @@ public class RisingTask implements IFloorIsLavaTask {
                     }
                     this.height++;
                     this.delay = 5;
+                } else {
+                    this.delay--;
                 }
-                this.delay--;
             }, 0L, 20L);
         }
     }

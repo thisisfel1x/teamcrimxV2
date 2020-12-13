@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
 import de.fel1x.teamcrimx.floorislava.utils.ArmorstandStatsLoader;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
@@ -65,7 +66,7 @@ public class LootDrop {
 
     public LootDrop(@NotNull FloorIsLava floorIsLava,@NotNull Location origin, Material material) {
         this.floorIsLava = floorIsLava;
-        this.origin = origin;
+        this.origin = origin.toCenterLocation();
         this.blockType = material;
     }
 
@@ -86,11 +87,20 @@ public class LootDrop {
 
     private void startDrop(Material material) {
         World world = this.origin.getWorld();
+        Block finalBlock = world.getHighestBlockAt(this.origin);
 
         FallingBlock fallingChest = world.spawnFallingBlock(this.origin, Bukkit.createBlockData(material));
         fallingChest.setDropItem(false);
         fallingChest.setGlowing(true);
         ArrayList<Chicken> chickens = new ArrayList<>();
+
+        if(finalBlock.isLiquid()) {
+            finalBlock.setType(Material.RED_CONCRETE);
+            finalBlock.getLocation().clone().add(1, 0, 0).getBlock().setType(Material.RED_CONCRETE);
+            finalBlock.getLocation().clone().add(-1, 0, 0).getBlock().setType(Material.RED_CONCRETE);
+            finalBlock.getLocation().clone().add(0, 0, 1).getBlock().setType(Material.RED_CONCRETE);
+            finalBlock.getLocation().clone().add(0, 0, -1).getBlock().setType(Material.RED_CONCRETE);
+        }
 
         int amount = 21;
         double height = 0;
@@ -121,7 +131,8 @@ public class LootDrop {
                     });
                 }
             });
-            if(fallingChest.isOnGround()) {
+            if(fallingChest.isOnGround()
+                    || fallingChest.getLocation().clone().subtract(0, 1, 0).getBlock().isLiquid()) {
                 fallingChest.remove();
 
                 chickens.forEach(chicken -> {

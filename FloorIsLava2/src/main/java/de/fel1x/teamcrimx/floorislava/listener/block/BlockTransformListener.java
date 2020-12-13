@@ -4,6 +4,7 @@ import de.fel1x.teamcrimx.floorislava.FloorIsLava;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,23 +20,25 @@ public class BlockTransformListener implements Listener {
 
     @EventHandler
     public void on(EntityChangeBlockEvent event) {
-        Entity entity = event.getEntity();
+        /* Entity entity = event.getEntity();
         if (event.getEntity() instanceof org.bukkit.entity.FallingBlock &&
                 this.floorIsLava.getFallingAnvils().contains(entity)) {
             event.getBlock().setType(Material.AIR);
-            event.getBlock().getDrops().clear();
             event.setCancelled(true);
-            entity.remove();
-            event.getEntity().getNearbyEntities(0.0D, 1.0D, 0.0D).forEach(nearbyEntities -> {
-                if (!(nearbyEntities instanceof Player))
-                    return;
-                Player player = (Player) nearbyEntities;
-                if (!player.isDead()) {
-                    player.setHealth(player.getHealth() - 1.0D);
-                    Bukkit.broadcastMessage(this.floorIsLava.getPrefix() + player.getDisplayName() + " §7wurde von einem Amboss zerquetscht");
+            event.getEntity().getNearbyEntities(2.0D, 1.0D, 2.0D).forEach(nearbyEntities -> {
+                if (nearbyEntities instanceof Player) {
+                    Player player = (Player) nearbyEntities;
+                    if (!player.isDead()) {
+                        player.setHealth(player.getHealth() - 1.0D);
+                        Bukkit.broadcastMessage(this.floorIsLava.getPrefix() + player.getDisplayName() + " §7wurde von einem Amboss zerquetscht");
+                    }
+                } else if(nearbyEntities instanceof FallingBlock) {
+                    if(entity.hasMetadata("custom")) {
+                        entity.remove();
+                    }
                 }
             });
             this.floorIsLava.getFallingAnvils().remove(entity);
-        }
+        } */
     }
 }

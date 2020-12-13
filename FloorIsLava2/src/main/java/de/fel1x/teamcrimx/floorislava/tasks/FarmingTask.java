@@ -21,7 +21,7 @@ import java.util.Random;
 
 public class FarmingTask implements IFloorIsLavaTask {
     private final FloorIsLava floorIsLava = FloorIsLava.getInstance();
-    private final List<Class<? extends ILavaScenario>> scenarios = Arrays.asList(AnvilRain.class, EnderGamesTeleport.class, InventoryShuffle.class, RandomPotionEffect.class);
+    private final List<Class<? extends ILavaScenario>> scenarios = Arrays.asList(EnderGamesTeleport.class, InventoryShuffle.class, RandomPotionEffect.class);
     private final Random random = new Random();
     private int taskId = 0;
     private int bossBarTimer;
@@ -101,7 +101,8 @@ public class FarmingTask implements IFloorIsLavaTask {
 
                     Location randomLocation = this.floorIsLava.getLootDropCuboid().getBlocks()
                             .get(this.random.nextInt(this.floorIsLava.getLootDropCuboid().getBlocks().size())).getLocation();
-                    randomLocation.setY(120);
+                    int highestBlock = randomLocation.getWorld().getHighestBlockYAt(randomLocation);
+                    randomLocation.setY(highestBlock + 40);
                     new LootDrop(this.floorIsLava, randomLocation, Material.BARREL).build();
 
                     Bukkit.broadcastMessage(this.floorIsLava.getPrefix() + "§7Ein §aLootdrop §7ist gespawnt!");

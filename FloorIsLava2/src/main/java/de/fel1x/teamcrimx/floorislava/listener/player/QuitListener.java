@@ -27,16 +27,21 @@ public class QuitListener implements Listener {
         Gamestate gamestate = this.floorIsLava.getGamestateHandler().getGamestate();
         event.setQuitMessage(null);
         int neededPlayers = 3 - this.floorIsLava.getData().getPlayers().size();
+        gamePlayer.removeFromInGamePlayers();
+        gamePlayer.removeFromSpectators();
         switch (gamestate) {
             case IDLE:
             case LOBBY:
                 event.setQuitMessage(this.floorIsLava.getPrefix() + "§a" + player.getName() + " §7hat das Spiel verlassen");
-                gamePlayer.removeFromInGamePlayers();
                 break;
             case FARMING:
             case RISING:
                 if (gamePlayer.isPlayer()) {
                     event.setQuitMessage(this.floorIsLava.getPrefix() + "§a" + player.getName() + " §7hat das Spiel verlassen");
+                    int remainingPlayers = this.floorIsLava.getData().getPlayers().size();
+                    if(remainingPlayers > 1) {
+                        Bukkit.broadcastMessage(this.floorIsLava.getPrefix() + "§a" + remainingPlayers + " Spieler verbleibend");
+                    }
                     gamePlayer.saveStats();
                 }
                 if (this.floorIsLava.getData().getPlayers().isEmpty() && !Bukkit.getOnlinePlayers().isEmpty()) {

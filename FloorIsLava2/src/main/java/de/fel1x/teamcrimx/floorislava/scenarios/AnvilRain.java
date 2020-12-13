@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
@@ -32,6 +33,7 @@ public class AnvilRain implements ILavaScenario {
                         if (blockToChange.getType() == Material.AIR || blockToChange.getType() == Material.CAVE_AIR) {
                             FallingBlock fallingBlock = blockToChange.getLocation().getWorld().spawnFallingBlock(blockToChange.getLocation(),
                                     Bukkit.createBlockData(Material.ANVIL));
+                            fallingBlock.setMetadata("custom", new FixedMetadataValue(AnvilRain.this.floorIsLava, true));
                             AnvilRain.this.floorIsLava.getFallingAnvils().add(fallingBlock);
                         }
                     }
