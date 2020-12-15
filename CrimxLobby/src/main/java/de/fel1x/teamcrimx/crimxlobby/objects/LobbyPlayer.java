@@ -164,7 +164,7 @@ public class LobbyPlayer {
             Cosmetic selectedCosmetic = Cosmetic.valueOf((String) this.getObjectFromMongoDocument("selectedCosmetic", MongoDBCollection.LOBBY));
             ICosmetic iCosmetic = selectedCosmetic.getCosmeticClass().newInstance();
 
-            iCosmetic.startTrail(this.player);
+            Bukkit.getScheduler().runTaskLater(this.crimxLobby, () -> iCosmetic.startTrail(this.player), 10L);
 
         } catch (Exception ignored) {
             //this.player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten");

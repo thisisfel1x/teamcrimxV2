@@ -17,6 +17,8 @@ public class SpawnManager {
 
     public void saveLocation(Location location, String root, Player player) {
 
+        location = location.toCenterLocation();
+
         this.config.set(root + ".World", location.getWorld().getName());
         this.config.set(root + ".X", location.getX());
         this.config.set(root + ".Y", location.getY());

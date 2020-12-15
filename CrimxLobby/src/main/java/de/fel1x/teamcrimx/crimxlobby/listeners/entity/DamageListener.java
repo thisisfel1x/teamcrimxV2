@@ -23,6 +23,7 @@ public class DamageListener implements Listener {
 
         if (!(event.getEntity() instanceof Player)) {
             event.setCancelled(true);
+            return;
         }
 
         Player player = (Player) event.getEntity();

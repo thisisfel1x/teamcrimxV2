@@ -55,6 +55,7 @@ public class BeePet implements ICosmetic, IPet {
         Bee bee = (Bee) player.getWorld()
                 .spawnEntity(player.getLocation().clone().add(0, 0, 1), EntityType.BEE);
         bee.setCustomName("§eBiene von " + this.getCustomNameByPlayer(player));
+        bee.setCollidable(false);
         CrimxLobby.getInstance().getData().getPlayerPet().put(player.getUniqueId(), bee);
     }
 

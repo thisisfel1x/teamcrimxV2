@@ -38,7 +38,16 @@ public class InteractListener implements Listener {
             return;
         }
 
+        if(item == null) {
+            return;
+        }
+
         if (event.hasItem() && item.getType() == Material.FISHING_ROD) {
+            return;
+        }
+
+        if(action == Action.PHYSICAL && item.getType() == Material.FARMLAND) {
+            event.setCancelled(true);
             return;
         }
 
