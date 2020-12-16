@@ -4,6 +4,7 @@ import com.github.juliarn.npc.NPC;
 import com.github.juliarn.npc.event.PlayerNPCInteractEvent;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.inventories.NPCInventory;
+import de.fel1x.teamcrimx.crimxlobby.inventories.PerksInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,6 +27,8 @@ public class NPCInteractListener implements Listener {
 
         if(npc.getEntityId() == this.crimxLobby.getLobbyNpc().getEntityId()) {
             NPCInventory.NPC_INVENTORY.open(player);
+        } else if(npc.getEntityId() == this.crimxLobby.getPerksNpc().getEntityId()) {
+            PerksInventory.PERKS_INVENTORY.open(player);
         }
 
     }

@@ -13,6 +13,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class PreGameTask implements IFloorIsLavaTask {
     private final FloorIsLava floorIsLava = FloorIsLava.getInstance();
@@ -33,10 +34,10 @@ public class PreGameTask implements IFloorIsLavaTask {
             int counter = 0;
             for (Player player : this.floorIsLava.getData().getPlayers()) {
                 Location spawnLocation = spawns.get(counter).getWorld().getHighestBlockAt(spawns.get(0)).getLocation();
-                if(spawnLocation.getBlock().getType() == Material.WATER) {
-                    spawnLocation.getBlock().setType(Material.GLASS);
-                    spawnLocation.clone().add(0, 1, 0);
-                }
+                spawnLocation.getBlock().setType(player.hasMetadata("block") ?
+                                (Material) Objects.requireNonNull(player.getMetadata("block").get(0).value())
+                        : Material.GLASS);
+                spawnLocation.clone().add(0, 1, 0);
                 player.teleport(spawnLocation.toCenterLocation().clone().subtract(0, 0.5, 0));
                 counter++;
             }

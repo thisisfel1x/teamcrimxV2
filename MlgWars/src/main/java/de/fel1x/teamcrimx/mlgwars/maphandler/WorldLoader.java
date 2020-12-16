@@ -71,10 +71,10 @@ public class WorldLoader {
         world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
         world.setGameRule(GameRule.DO_MOB_LOOT, false);
         world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-        world.setStorm(false);
-        world.setThunderDuration(0);
-        world.setThundering(false);
-        world.setTime(1200);
+        //world.setStorm(false);
+        //world.setThunderDuration(0);
+        //world.setThundering(false);
+        //world.setTime(1200);
 
         Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§aAusgewählte Map: " + this.mapName);
 

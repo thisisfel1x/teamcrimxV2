@@ -37,6 +37,7 @@ public class JoinListener implements Listener {
         switch (gamestate) {
             case IDLE:
             case LOBBY:
+                gamePlayer.loadSelectedPerks();
                 gamePlayer.addToInGamePlayers();
                 player.teleport(this.floorIsLava.getSpawnLocation());
                 event.setJoinMessage(this.floorIsLava.getPrefix() + "§a" + player.getDisplayName() + " §7hat das Spiel betreten");

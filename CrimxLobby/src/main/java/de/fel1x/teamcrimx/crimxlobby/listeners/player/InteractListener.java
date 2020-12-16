@@ -46,7 +46,8 @@ public class InteractListener implements Listener {
             return;
         }
 
-        if(action == Action.PHYSICAL && item.getType() == Material.FARMLAND) {
+        if(action == Action.PHYSICAL
+                && player.getLocation().clone().subtract(0, 1, 0).getBlock().getType() == Material.FARMLAND) {
             event.setCancelled(true);
             return;
         }
