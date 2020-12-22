@@ -43,8 +43,6 @@ public class GameScoreboard {
         for (BingoTeam bingoTeam : BingoTeam.values()) {
             if(bingoTeam.isEmpty()) continue;
 
-            Bukkit.broadcastMessage(bingoTeam.getName());
-
             String color = Utils.getChatColor(bingoTeam.getColor()).toString();
 
             Team team = this.gameScoreboard.registerNewTeam("00" + counter + bingoTeam.getName());

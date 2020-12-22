@@ -24,9 +24,11 @@ public class PreGameTask implements IBingoTask {
     private boolean isRunning = false;
 
     private final String[] commandInfo = {
-            "§e§lWichtige Commands:",
-            "§a/items §8● §7Liste alle Items auf",
-            "§a/backpack §7oder §a/bp §8● §7Öffne den Team-Backpack"
+            " ",
+            this.bingo.getPrefix() + "§e§lWichtige Commands:",
+            this.bingo.getPrefix() + "§a/items §8● §7Liste alle Items auf",
+            this.bingo.getPrefix() + "§a/backpack §7oder §a/bp §8● §7Öffne den Team-Backpack",
+            " "
     };
 
     @Override
@@ -106,7 +108,7 @@ public class PreGameTask implements IBingoTask {
                             //int z = this.random.nextInt(20) * (this.random.nextBoolean() ? -1 : 1);
 
                             player.setVelocity(player.getEyeLocation().getDirection().setY(10)
-                                    .multiply(3));
+                                    .multiply(10));
 
                             player.setGameMode(GameMode.SURVIVAL);
 
