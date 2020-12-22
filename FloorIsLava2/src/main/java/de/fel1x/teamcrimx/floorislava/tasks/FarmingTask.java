@@ -25,8 +25,8 @@ public class FarmingTask implements IFloorIsLavaTask {
     private final Random random = new Random();
     private int taskId = 0;
     private int bossBarTimer;
-    private int farmingTime = 60;
-    private int lootDropTime = this.random.nextInt(10) + this.farmingTime - 40;
+    private int farmingTime = 60 * 5;
+    private int lootDropTime = this.random.nextInt(10) + 40;
     private boolean isRunning = false;
     private boolean generateNewEvent = true;
     private BossBar bossBar;
@@ -49,7 +49,7 @@ public class FarmingTask implements IFloorIsLavaTask {
             /*
             Generates a random time for the scenario task
              */
-            this.bossBarTimer = this.random.nextInt(20) + 30;
+            this.bossBarTimer = this.random.nextInt(20) + 40;
             this.timeToGo = this.bossBarTimer;
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.floorIsLava, () -> {
@@ -97,7 +97,7 @@ public class FarmingTask implements IFloorIsLavaTask {
                 }
 
                 if(this.lootDropTime == 0) {
-                    this.lootDropTime = this.random.nextInt(20) + 10;
+                    this.lootDropTime = this.random.nextInt(20) + 50;
 
                     Location randomLocation = this.floorIsLava.getLootDropCuboid().getBlocks()
                             .get(this.random.nextInt(this.floorIsLava.getLootDropCuboid().getBlocks().size())).getLocation();
@@ -108,8 +108,8 @@ public class FarmingTask implements IFloorIsLavaTask {
                     Bukkit.broadcastMessage(this.floorIsLava.getPrefix() + "§7Ein §aLootdrop §7ist gespawnt!");
                 }
 
-                this.lootDropTime--;
-                this.bossBarTimer--;
+                if(this.lootDropTime != 0) this.lootDropTime--;
+                if(this.bossBarTimer != 0) this.bossBarTimer--;
                 this.farmingTime--;
             }, 0L, 20L);
         }

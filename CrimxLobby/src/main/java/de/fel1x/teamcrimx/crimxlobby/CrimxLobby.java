@@ -1,8 +1,8 @@
 package de.fel1x.teamcrimx.crimxlobby;
 
-import com.destroystokyo.paper.entity.Pathfinder;
 import com.github.juliarn.npc.NPC;
 import com.github.juliarn.npc.NPCPool;
+import com.github.juliarn.npc.modifier.AnimationModifier;
 import com.github.juliarn.npc.modifier.MetadataModifier;
 import com.github.juliarn.npc.profile.Profile;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
@@ -46,6 +46,7 @@ public final class CrimxLobby extends JavaPlugin {
     private WaterMlgHandler waterMlgHandler;
     private LobbyScoreboard lobbyScoreboard;
     private NPC lobbyNpc;
+    private NPC perksNpc;
     private final Random random = new Random();
 
     public static CrimxLobby getInstance() {
@@ -61,6 +62,8 @@ public final class CrimxLobby extends JavaPlugin {
         if (!this.getConfig().contains("actionbar")) {
             this.saveDefaultConfig();
         }
+
+        Bukkit.createWorld(new WorldCreator("lobbywinter"));
 
         this.crimxAPI = CrimxAPI.getInstance();
 
@@ -88,14 +91,23 @@ public final class CrimxLobby extends JavaPlugin {
     }
 
     private void spawnNpc() {
-        this.lobbyNpc = new NPC.Builder(new Profile(UUID.randomUUID(), "§a§lDein Profil",
+        this.lobbyNpc = new NPC.Builder(new Profile(UUID.randomUUID(), "§aDein Profil",
                 Collections.singletonList(new Profile.Property("textures",
                         "ewogICJ0aW1lc3RhbXAiIDogMTYwNTk1MzY1ODEzMiwKICAicHJvZmlsZUlkIiA6ICJhYTZhNDA5NjU4YTk0MDIwYmU3OGQwN2JkMzVlNTg5MyIsCiAgInByb2ZpbGVOYW1lIiA6ICJiejE0IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzc2MjA2NjliZmY3MTJhYWE3OGQzMGQ5ZGNjNTU5MDYxMWU2YzEwZjIzY2Q2YWQ1MTc1Zjc1N2RlYTA1YWU3NjgiCiAgICB9CiAgfQp9",
                         "A0UUTGQgMlEeSEYc5H/mYn8GjKsq2fd4X+2mPnszJHRWH3GhO01QU7fO/HSHcccronEb1eWQPgkqCD6rtXWslh7nubKvORJZcBiVpOWTNpjJsDZH57XOghdKsDWp79jTUMM3AaY8irRMC8SlXdMK9RM8uMPofb0FgrHaMUI4D8vTpPEvEZXbyhEpuuCKs3Psb1BBu130x3xm7w1kGKOoyQYSZ1CE9JdYAGF3FOCeAsmGohpO6KMtGsrWJ/wR1lExzbAjlp5vPtMXpqpsQoCTEldtiZ8gxB8bU+5ms5FYxbIUy1I7N5YYcpNUFiBEwWbFHIkzYt5KoQEXZ2P3mTOgJsjyUlKxlDJOQRDeNZuuNMZDiuqL7JGrtSKNRkCwGAE+Pr91YOAjhymzL7t/Hhn9V6i6198HrDDXZzZqm9ebc6Y7bdSSTHtSDWYXD80B0CgGUyMTS9g0h8qN6rFN6taMxEeBxBuI8Hpj5ERchrqT9xhJzOapcQJEf59l60h2BcDjDJJxefq4N6hvvGPL+t1H/D/bPN5eF7HYJKSz/y/lpJutqWJfnolhoxTf7Qy0XPp7BNQxOFdDOqujLb0haPxpcBCrhgzd/QXUlcpYpMC9zov3jqL5muXg6aXTDkEU2UlLDhPNEXolM2nbvG55WXNvpe3ulbVBbCs3PQDi7bsdLb0="))))
                 .lookAtPlayer(true)
                 .imitatePlayer(true)
-                .location(new Location(Bukkit.getWorlds().get(0), -168.5, 64, 138.5))
+                .location(new Location(Bukkit.getWorld("lobbywinter"),18.5, 13, -29.5))
                 .spawnCustomizer((npc1, player) -> npc1.metadata().queue(MetadataModifier.EntityMetadata.SKIN_LAYERS, true).send())
+                .build(this.npcPool);
+        this.perksNpc = new NPC.Builder(new Profile(UUID.randomUUID(), "§ePerks",
+                Collections.singleton(new Profile.Property("textures",
+                        "eyJ0aW1lc3RhbXAiOjE1ODU3NDMzODM2ODcsInByb2ZpbGVJZCI6IjkxZmUxOTY4N2M5MDQ2NTZhYTFmYzA1OTg2ZGQzZmU3IiwicHJvZmlsZU5hbWUiOiJoaGphYnJpcyIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWU1YmQ2ZDVjOWQ1NDM0ODc1MTZjYzNmY2FiNDczNWUxZGFlMjEyYzM5MjdhYjllNDBlNmFlM2U1OWI5NThhYSJ9fX0=",
+                        "amJcsYzBIKpdlkKnwDNJ9iI0jMh675fmxQkRtKXquQk1xMFUy7wlsOBnNI6qHH5aNWKnKbq+eID6u3XHe3fcbEShCQyMtydyMzdYjyro5LWl9XkRs3LhbQDUllnJmoG6sIeCNHZ+VAqDLeHh0ahhSqHhg9C+4831C71uCoL2ah1+mPh7GA9CAnyp09ZZ3t1eHW9fvwwVMiDONgZjB2LLom6QW+rMHV3eltQojhkulniomKEApPi0qKvr97X6FKYznysNEw51jsw1ndkRVfNgF4DBEWwoC4yYw3MTYOFpjcCn0t3NLFwRus9wInjciD2jM1W/tPZKFltSdhT98PH7H2uQCq/+/uXgrwCnhZaGRqKSjAcqKaLjCd2EmfVLmMkmEGVOe04H3zmJCbA0IhdU2R2EHbMMoyZJxkLW1RwGayn+OHF7Cdmnemd1nIVFhdqE3kjf8SKhqsHRpnD7biqkIkazNsZa2W4bp00yBwHssEBOmZQt/VAzh1bRTn5lmiQ1HSrUzPTMdQ/z3dSSwkAu0FPwFtEGTvtDQOKlBWSST/lMUQ+wcOKkAKK5QX8l0s5nxPUBpHt5mpt0Ezea37av41UY/ZkuQ3s3nlUOGe8QjzYUNo8mkBvV93+r81CFoAODmQmH2bvLyb7RvW4a/mXW1BDsOw0zuqUrAT2m7oEmehM="))))
+                .lookAtPlayer(true)
+                .imitatePlayer(true)
+                .spawnCustomizer((npc, player) -> npc.metadata().queue(MetadataModifier.EntityMetadata.SKIN_LAYERS, true).send())
+                .location(new Location(Bukkit.getWorld("lobbywinter"), 16.5, 13, -27.5))
                 .build(this.npcPool);
     }
 
@@ -117,28 +129,22 @@ public final class CrimxLobby extends JavaPlugin {
 
         if (lobby == null) {
             Bukkit.getConsoleSender().sendMessage("§cKein Spawn gesetzt!");
-            return;
         } else {
-            Bukkit.createWorld(new WorldCreator(lobby.getWorld().getName()));
+            lobby.getWorld().getEntities().forEach(entity -> {
+                if (!(entity instanceof ArmorStand)) {
+                    entity.remove();
+                }
+            });
+
+            World world = lobby.getWorld();
+            world.setSpawnLocation((int) lobby.getX(), (int) lobby.getY(), (int) lobby.getZ());
+            world.setDifficulty(Difficulty.PEACEFUL);
+            world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+            world.setGameRule(GameRule.DO_MOB_LOOT, false);
+            world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+            world.setTime(14000);
         }
-
-        lobby.getWorld().getEntities().forEach(entity -> {
-            if (!(entity instanceof ArmorStand)) {
-                entity.remove();
-            }
-        });
-
-        World world = lobby.getWorld();
-        world.setSpawnLocation((int) lobby.getX(), (int) lobby.getY(), (int) lobby.getZ());
-        world.setDifficulty(Difficulty.PEACEFUL);
-        world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
-        world.setGameRule(GameRule.DO_MOB_LOOT, false);
-        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-        world.setStorm(false);
-        world.setThunderDuration(0);
-        world.setThundering(false);
-        world.setTime(1200);
-
     }
 
     private void registerListener() {
@@ -223,6 +229,10 @@ public final class CrimxLobby extends JavaPlugin {
             }
         }, 0L, 20L);
 
+    }
+
+    public NPC getPerksNpc() {
+        return this.perksNpc;
     }
 
     public String getPrefix() {

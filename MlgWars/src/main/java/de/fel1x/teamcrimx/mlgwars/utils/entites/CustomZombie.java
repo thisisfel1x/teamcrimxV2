@@ -1,8 +1,8 @@
 package de.fel1x.teamcrimx.mlgwars.utils.entites;
 
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.entity.LivingEntity;
 
 import java.lang.reflect.Field;
@@ -66,9 +66,9 @@ public class CustomZombie extends EntityZombie {
         }
 
         private static void addToMaps(Class clazz, String name, int id) {
-            ((Map) getPrivateField("c", net.minecraft.server.v1_16_R2.EntityTypes.class, null)).put(name, clazz);
-            ((Map) getPrivateField("d", net.minecraft.server.v1_16_R2.EntityTypes.class, null)).put(clazz, name);
-            ((Map) getPrivateField("f", net.minecraft.server.v1_16_R2.EntityTypes.class, null)).put(clazz, id);
+            ((Map) getPrivateField("c", net.minecraft.server.v1_16_R3.EntityTypes.class, null)).put(name, clazz);
+            ((Map) getPrivateField("d", net.minecraft.server.v1_16_R3.EntityTypes.class, null)).put(clazz, name);
+            ((Map) getPrivateField("f", net.minecraft.server.v1_16_R3.EntityTypes.class, null)).put(clazz, id);
         }
     }
 

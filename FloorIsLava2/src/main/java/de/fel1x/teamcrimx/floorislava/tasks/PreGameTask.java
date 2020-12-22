@@ -3,6 +3,7 @@ package de.fel1x.teamcrimx.floorislava.tasks;
 import com.destroystokyo.paper.Title;
 import de.dytanic.cloudnet.ext.bridge.BridgeHelper;
 import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
+import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
 import de.fel1x.teamcrimx.floorislava.gamehandler.Gamestate;
 import de.fel1x.teamcrimx.floorislava.utils.ArmorstandStatsLoader;
@@ -10,9 +11,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class PreGameTask implements IFloorIsLavaTask {
     private final FloorIsLava floorIsLava = FloorIsLava.getInstance();
@@ -33,12 +36,16 @@ public class PreGameTask implements IFloorIsLavaTask {
             int counter = 0;
             for (Player player : this.floorIsLava.getData().getPlayers()) {
                 Location spawnLocation = spawns.get(counter).getWorld().getHighestBlockAt(spawns.get(0)).getLocation();
-                if(spawnLocation.getBlock().getType() == Material.WATER) {
-                    spawnLocation.getBlock().setType(Material.GLASS);
-                    spawnLocation.clone().add(0, 1, 0);
-                }
+                spawnLocation.getBlock().setType(player.hasMetadata("block") ?
+                                (Material) Objects.requireNonNull(player.getMetadata("block").get(0).value())
+                        : Material.GLASS);
+                spawnLocation.clone().add(0, 1, 0);
                 player.teleport(spawnLocation.toCenterLocation().clone().subtract(0, 0.5, 0));
                 counter++;
+                player.getInventory().addItem(
+                        new ItemBuilder(Material.STONE_PICKAXE).addEnchant(Enchantment.DIG_SPEED, 1).setUnbreakable().toItemStack(),
+                        new ItemBuilder(Material.STONE_AXE).addEnchant(Enchantment.DIG_SPEED, 1).setUnbreakable().toItemStack()
+                );
             }
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.floorIsLava, () -> {
                 switch (this.timer) {

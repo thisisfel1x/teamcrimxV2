@@ -40,8 +40,8 @@ public class WorldLoader {
             lobbyWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
             lobbyWorld.setGameRule(GameRule.DO_MOB_SPAWNING, false);
             lobbyWorld.setThundering(false);
-            lobbyWorld.setStorm(false);
-            lobbyWorld.setTime(8000);
+            //lobbyWorld.setStorm(false);
+            //lobbyWorld.setTime(8000);
 
             gameWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
             gameWorld.setGameRule(GameRule.DO_MOB_SPAWNING, false);

@@ -167,6 +167,7 @@ public final class Bingo extends JavaPlugin {
         waitingLobby.setGameRule(GameRule.DO_MOB_LOOT, false);
 
         waitingLobby.getEntities().forEach(Entity::remove);
+
     }
 
     private void registerListener() {

@@ -17,13 +17,19 @@ import java.util.Random;
 
 public class PreGameTask implements IBingoTask {
 
-    Bingo bingo = Bingo.getInstance();
-    int taskId = 0;
-    int timer = 15;
+    private final Bingo bingo = Bingo.getInstance();
+    private int taskId = 0;
+    private int timer = 20;
 
-    boolean isRunning = false;
+    private boolean isRunning = false;
 
-    Random random = new Random();
+    private final String[] commandInfo = {
+            " ",
+            this.bingo.getPrefix() + "§e§lWichtige Commands:",
+            this.bingo.getPrefix() + "§a/items §8● §7Liste alle Items auf",
+            this.bingo.getPrefix() + "§a/backpack §7oder §a/bp §8● §7Öffne den Team-Backpack",
+            " "
+    };
 
     @Override
     public void start() {
@@ -37,6 +43,7 @@ public class PreGameTask implements IBingoTask {
 
             this.bingo.getData().getPlayers().forEach(player -> {
                 player.teleport(new Location(Bukkit.getWorlds().get(0), 0.5, 125, 0.5));
+                player.getInventory().clear();
                 BingoPlayer bingoPlayer = new BingoPlayer(player);
                 if (bingoPlayer.getTeam() == null) {
                     for (BingoTeam bingoTeam : BingoTeam.values()) {
@@ -56,9 +63,16 @@ public class PreGameTask implements IBingoTask {
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.bingo, () -> {
 
                 switch (this.timer) {
+                    case 20:
+                        for (String string : this.commandInfo) {
+                            Bukkit.broadcastMessage(string);
+                        }
+                        break;
+
                     case 15:
                     case 10:
                     case 5:
+                    case 4:
                     case 3:
                     case 2:
                     case 1:
@@ -72,8 +86,6 @@ public class PreGameTask implements IBingoTask {
                             player.sendTitle(Title.builder()
                                     .title(((this.timer == 3) ? "§a§l" : ((this.timer == 2) ? "§e§l" : "§c§l")) + this.timer)
                                     .fadeIn(10).stay(20).fadeOut(10).build());
-
-                            player.getInventory().clear();
 
                         });
 
@@ -91,11 +103,11 @@ public class PreGameTask implements IBingoTask {
                             player.sendTitle(Title.builder()
                                     .title("§a§lGO").fadeIn(0).stay(40).fadeOut(10).build());
 
-                            int x = this.random.nextInt(20) * (this.random.nextBoolean() ? -1 : 1);
-                            int z = this.random.nextInt(20) * (this.random.nextBoolean() ? -1 : 1);
+                            //int x = this.random.nextInt(20) * (this.random.nextBoolean() ? -1 : 1);
+                            //int z = this.random.nextInt(20) * (this.random.nextBoolean() ? -1 : 1);
 
-                            player.setVelocity(player.getVelocity().setY(10)
-                                    .setX(x).setZ(z));
+                            player.setVelocity(player.getEyeLocation().getDirection().setY(10)
+                                    .multiply(10));
 
                             player.setGameMode(GameMode.SURVIVAL);
 

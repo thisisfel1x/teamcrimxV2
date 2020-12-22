@@ -16,7 +16,9 @@ import de.fel1x.teamcrimx.floorislava.utils.scoreboard.GameScoreboard;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.List;
 
@@ -151,5 +153,20 @@ public class GamePlayer {
     public void setScoreboard() {
         this.gameScoreboard.setGameScoreboard(this.player);
         BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(this.player);
+    }
+
+    public void loadSelectedPerks() {
+        Bukkit.getScheduler().runTaskAsynchronously(this.floorIsLava, () -> {
+            Document lavaDocument = this.floorIsLava.getCrimxAPI().getMongoDB().getFloorIsLavaCollection().find(new Document("_id", this.player.getUniqueId().toString())).first();
+            if(lavaDocument == null) {
+                this.createPlayerData();
+            } else {
+                String toGet = lavaDocument.getString("blockType");
+                if(toGet != null) {
+                    Material glass = Material.valueOf(toGet);
+                    this.player.setMetadata("block", new FixedMetadataValue(this.floorIsLava, glass));
+                }
+            }
+        });
     }
 }

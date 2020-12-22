@@ -77,7 +77,7 @@ public class NavigatorInventory implements InventoryProvider {
 
         }));
 
-        contents.set(2, 1, ClickableItem.of(new ItemBuilder(Material.IRON_PICKAXE).setName("§8» §e§lMasterBuilders").toItemStack(), event -> {
+        contents.set(2, 2, ClickableItem.of(new ItemBuilder(Material.BAMBOO).setName("§8» §a§lBingo").toItemStack(), event -> {
 
             if (!(event.getWhoClicked() instanceof Player)) return;
             event.setCancelled(true);
@@ -87,22 +87,6 @@ public class NavigatorInventory implements InventoryProvider {
 
             player.closeInventory();
             lobbyPlayer.teleport(Spawn.MASTERBUILDERS);
-
-            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.5f, 1.25f);
-            player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, null);
-
-        }));
-
-        contents.set(2, 2, ClickableItem.of(new ItemBuilder(Material.RED_BED).setName("§8» §b§lBedWars & Training").toItemStack(), event -> {
-
-            if (!(event.getWhoClicked() instanceof Player)) return;
-            event.setCancelled(true);
-
-            Player playerWhoClicked = (Player) event.getWhoClicked();
-            LobbyPlayer lobbyPlayer = new LobbyPlayer(playerWhoClicked);
-
-            player.closeInventory();
-            lobbyPlayer.teleport(Spawn.BEDWARS);
 
             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.5f, 1.25f);
             player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, null);
@@ -124,8 +108,6 @@ public class NavigatorInventory implements InventoryProvider {
             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.5f, 1.25f);
 
         }));
-
-        contents.set(2, 7, ClickableItem.empty(new ItemBuilder(Material.ARMOR_STAND).setName("§c§o§kabdefghijklmnop").toItemStack()));
 
     }
 

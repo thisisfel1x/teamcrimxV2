@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
+import de.fel1x.teamcrimx.crimxlobby.objects.Spawn;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Bee;
@@ -30,8 +31,6 @@ public class JoinListener implements Listener {
         Player player = event.getPlayer();
 
         event.setJoinMessage(null);
-
-        player.teleport(new Location(player.getWorld(), -164, 64, 142));
 
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
         CrimxPlayer crimxPlayer = new CrimxPlayer(lobbyPlayer.getCloudPlayer());

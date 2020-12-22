@@ -83,6 +83,7 @@ public class NPCInventory implements InventoryProvider {
             }
 
             contents.set(1, 5, ClickableItem.of(itemBuilder.toItemStack(), event -> {
+                player.closeInventory();
                 if (canGet) {
                     player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast §a100 Coins §7durch die tägliche Belohnung erhalten!");
                     this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setLastReward(System.currentTimeMillis());
@@ -97,8 +98,6 @@ public class NPCInventory implements InventoryProvider {
                     player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast bereits deine tägliche Belohnung abgeholt!");
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
                 }
-
-                player.closeInventory();
 
             }));
 

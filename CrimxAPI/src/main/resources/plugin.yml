@@ -11,3 +11,9 @@ commands:
     description: Brodcast a joinme
   coins:
     description: Get and manage your coins
+  suggest:
+    description: Suggest a new feature!
+    aliases: [suggestion, vorschlag]
+  bug:
+     description: Report a bug
+     aliases: [bugreport]

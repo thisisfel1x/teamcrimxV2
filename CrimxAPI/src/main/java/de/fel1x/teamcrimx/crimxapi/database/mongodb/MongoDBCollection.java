@@ -7,7 +7,9 @@ public enum MongoDBCollection {
     MLGWARS("mlgwars"),
     CAPTURE_THE_FLAG("capturetheflag"),
     BINGO("bingo"),
-    FLOOR_IS_LAVA("floorislava");
+    FLOOR_IS_LAVA("floorislava"),
+    SUGGESTIONS("suggestions"),
+    BUGS("bugs");
 
     String name;
 
