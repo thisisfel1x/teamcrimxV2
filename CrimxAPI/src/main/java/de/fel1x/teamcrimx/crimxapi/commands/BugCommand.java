@@ -37,11 +37,11 @@ public class BugCommand implements CommandExecutor {
         long lastSuggestion = player.hasMetadata("bug") ? player.getMetadata("bug").get(0).asLong() : 0;
 
         if(lastSuggestion > currentTime) {
-            player.sendMessage(this.crimxAPI.getPrefix() + "§cBitte warte noch einen Moment bevor du auf diesem Server den nächsten Bugreport einreichst!");
+            player.sendMessage(this.crimxAPI.getBugreportPrefix() + "§cBitte warte noch einen Moment bevor du auf diesem Server den nächsten Bugreport einreichst!");
             return false;
         } else {
             if(args.length == 0) {
-                player.sendMessage(this.crimxAPI.getPrefix() + "§7Bitte beschreibe das Problem etwas genauer!");
+                player.sendMessage(this.crimxAPI.getBugreportPrefix() + "§7Bitte beschreibe das Problem etwas genauer!");
                 return false;
             } else {
                 player.setMetadata("bug", new FixedMetadataValue(this.crimxSpigotAPI, currentTime + 1000 * 60));
@@ -54,7 +54,7 @@ public class BugCommand implements CommandExecutor {
                 ICloudPlayer cloudPlayer = this.crimxAPI.getPlayerManager().getOnlinePlayer(player.getUniqueId());
 
                 if(cloudPlayer.getConnectedService() == null) {
-                    player.sendMessage(this.crimxAPI.getPrefix() + "§cEin Fehler ist aufgetreten!");
+                    player.sendMessage(this.crimxAPI.getBugreportPrefix() + "§cEin Fehler ist aufgetreten!");
                     return false;
                 }
 
@@ -71,7 +71,7 @@ public class BugCommand implements CommandExecutor {
                 Bukkit.getScheduler().runTaskAsynchronously(this.crimxSpigotAPI,
                         () -> this.crimxAPI.getMongoDB().getBugCollection().insertOne(suggestion));
 
-                player.sendMessage(this.crimxAPI.getPrefix() + "§aDein Bugreport wurde erfolgreich eingereicht!");
+                player.sendMessage(this.crimxAPI.getBugreportPrefix() + "§aDein Bugreport wurde erfolgreich eingereicht!");
             }
 
         }

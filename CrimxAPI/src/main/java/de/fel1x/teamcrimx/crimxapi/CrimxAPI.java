@@ -29,8 +29,15 @@ public final class CrimxAPI {
     }
 
     public String getPrefix() {
-        String prefix = "§bteamcrimx§lDE §8● §r";
-        return prefix;
+        return "§bteamcrimx§lDE §8● §r";
+    }
+
+    public String getSuggestionPrefix() {
+        return "§aVorschläge §8● §r";
+    }
+
+    public String getBugreportPrefix() {
+        return "§cBugreport §8● §r";
     }
 
     public MongoDB getMongoDB() {

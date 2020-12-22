@@ -37,11 +37,11 @@ public class SuggestCommand implements CommandExecutor {
         long lastSuggestion = player.hasMetadata("lastSuggestion") ? player.getMetadata("lastSuggestion").get(0).asLong() : 0;
 
         if(lastSuggestion > currentTime) {
-            player.sendMessage(this.crimxAPI.getPrefix() + "§cBitte warte noch einen Moment bevor du auf diesem Server den nächsten Vorschlag einreichst!");
+            player.sendMessage(this.crimxAPI.getSuggestionPrefix() + "§cBitte warte noch einen Moment bevor du auf diesem Server den nächsten Vorschlag einreichst!");
             return false;
         } else {
             if(args.length == 0) {
-                player.sendMessage(this.crimxAPI.getPrefix() + "§7Bitte beschreibe deine Idee etwas genauer!");
+                player.sendMessage(this.crimxAPI.getSuggestionPrefix() + "§7Bitte beschreibe deine Idee etwas genauer!");
                 return false;
             } else {
                 player.setMetadata("lastSuggestion", new FixedMetadataValue(this.crimxSpigotAPI, currentTime + 1000 * 60));
@@ -54,7 +54,7 @@ public class SuggestCommand implements CommandExecutor {
                 ICloudPlayer cloudPlayer = this.crimxAPI.getPlayerManager().getOnlinePlayer(player.getUniqueId());
 
                 if(cloudPlayer.getConnectedService() == null) {
-                    player.sendMessage(this.crimxAPI.getPrefix() + "§cEin Fehler ist aufgetreten!");
+                    player.sendMessage(this.crimxAPI.getSuggestionPrefix() + "§cEin Fehler ist aufgetreten!");
                     return false;
                 }
 
@@ -71,7 +71,7 @@ public class SuggestCommand implements CommandExecutor {
                 Bukkit.getScheduler().runTaskAsynchronously(this.crimxSpigotAPI,
                         () -> this.crimxAPI.getMongoDB().getSuggestionsCollection().insertOne(suggestion));
 
-                player.sendMessage(this.crimxAPI.getPrefix() + "§aDein Vorschlag wurde erfolgreich eingereicht!");
+                player.sendMessage(this.crimxAPI.getSuggestionPrefix() + "§aDein Vorschlag wurde erfolgreich eingereicht!");
             }
 
         }
