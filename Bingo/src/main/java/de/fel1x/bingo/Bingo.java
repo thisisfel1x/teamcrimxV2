@@ -168,8 +168,6 @@ public final class Bingo extends JavaPlugin {
 
         waitingLobby.getEntities().forEach(Entity::remove);
 
-        Bukkit.getWorlds().get(0).setDifficulty(Difficulty.NORMAL);
-
     }
 
     private void registerListener() {

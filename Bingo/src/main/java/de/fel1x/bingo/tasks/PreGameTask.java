@@ -38,6 +38,10 @@ public class PreGameTask implements IBingoTask {
             BukkitCloudNetHelper.changeToIngame();
             BridgeHelper.updateServiceInfo();
 
+            for (World world : Bukkit.getWorlds()) {
+                world.setDifficulty(Difficulty.NORMAL);
+            }
+
             this.isRunning = true;
             this.bingo.getGamestateHandler().setGamestate(Gamestate.PREGAME);
 
