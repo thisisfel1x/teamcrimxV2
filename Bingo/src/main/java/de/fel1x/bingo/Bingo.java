@@ -167,6 +167,9 @@ public final class Bingo extends JavaPlugin {
         waitingLobby.setGameRule(GameRule.DO_MOB_LOOT, false);
 
         waitingLobby.getEntities().forEach(Entity::remove);
+
+        Bukkit.getWorlds().get(0).setDifficulty(Difficulty.NORMAL);
+
     }
 
     private void registerListener() {
