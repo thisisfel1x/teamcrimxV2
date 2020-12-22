@@ -1,8 +1,10 @@
 package de.fel1x.teamcrimx.crimxapi.support;
 
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
+import de.fel1x.teamcrimx.crimxapi.commands.BugCommand;
 import de.fel1x.teamcrimx.crimxapi.commands.CoinsCommand;
 import de.fel1x.teamcrimx.crimxapi.commands.JoinMeCommand;
+import de.fel1x.teamcrimx.crimxapi.commands.SuggestCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,6 +19,9 @@ public class CrimxSpigotAPI extends JavaPlugin {
 
         getCommand("coins").setExecutor(new CoinsCommand());
         getCommand("joinme").setExecutor(new JoinMeCommand());
+
+        new SuggestCommand(this);
+        new BugCommand(this);
 
         Bukkit.getConsoleSender().sendMessage("§aLoaded CrimxAPI v1 by fel1x");
 

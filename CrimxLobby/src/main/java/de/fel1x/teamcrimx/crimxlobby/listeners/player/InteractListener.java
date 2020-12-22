@@ -7,6 +7,7 @@ import de.fel1x.teamcrimx.crimxlobby.inventories.NavigatorInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.SettingsInventory;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.Material;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
