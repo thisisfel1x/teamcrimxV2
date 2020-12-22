@@ -43,7 +43,9 @@ public class LootDrop {
             new ItemStack(Material.BAKED_POTATO, this.random.nextInt(5) + 2),
             new ItemStack(Material.COOKED_MUTTON, this.random.nextInt(5) + 2),
             new ItemStack(Material.COOKIE, this.random.nextInt(5) + 2),
+            new ItemStack(Material.TNT, this.random.nextInt(3) + 2),
             new ItemStack(Material.CAKE),
+            new ItemStack(Material.ENDER_PEARL),
 
             // STUFF
             new ItemStack(Material.OAK_SAPLING, this.random.nextInt(2) + 1),
@@ -179,7 +181,7 @@ public class LootDrop {
 
         boolean[] chosen = new boolean[chest.getBlockInventory().getSize()]; // This checks which slots are already taken in the inventory.
 
-        int loot = this.random.nextInt(3);
+        int loot = this.random.nextInt(3) + 2;
         for (int i = 0; i < (3 + loot); i++) {
 
             Inventory chestInv = chest.getBlockInventory();

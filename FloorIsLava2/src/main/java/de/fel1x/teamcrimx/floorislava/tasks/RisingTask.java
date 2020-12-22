@@ -1,7 +1,6 @@
 package de.fel1x.teamcrimx.floorislava.tasks;
 
 import com.destroystokyo.paper.Title;
-import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
 import de.fel1x.teamcrimx.floorislava.gamehandler.Gamestate;
 import de.fel1x.teamcrimx.floorislava.utils.scoreboard.GameScoreboard;
@@ -15,6 +14,7 @@ public class RisingTask implements IFloorIsLavaTask {
     private final int increasePerRise = 1;
     private final String save = String.format("§a%s §8%s §7Du bist §asicher!", FloorIsLava.SAVE, FloorIsLava.DOT);
     private final String notSave = String.format("§c%s §8%s §7Du bist §cnicht sicher!", FloorIsLava.ATTENTION, FloorIsLava.DOT);
+    private final Title notSaveTitle = new Title.Builder().title(" ").subtitle("§cDu bist nicht sicher").fadeIn(0).stay(30).fadeOut(10).build();
     private final Location spawnLocation = this.floorIsLava.getWorldSpawnLocation();
     private int delay = 5;
     private int height = 0;
@@ -52,6 +52,7 @@ public class RisingTask implements IFloorIsLavaTask {
                         this.scoreboard.updateBoard(player, this.save, "attention", "§a");
                     } else {
                         this.scoreboard.updateBoard(player, this.notSave, "attention", "§c");
+                        player.sendTitle(this.notSaveTitle);
                     }
 
                     this.scoreboard.updateBoard(player, String.format("§8%s §e%s", FloorIsLava.DOT,

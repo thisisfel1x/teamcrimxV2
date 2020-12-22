@@ -28,6 +28,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -86,6 +87,7 @@ public final class FloorIsLava extends JavaPlugin {
         this.worldSpawnLocation.clone().add(size / 2.0D, 0, size / 2.0D));
         this.areaCuboid = new Cuboid(this.worldSpawnLocation.clone().subtract(size / 2.0D, 0, size / 2.0D),
                 this.worldSpawnLocation.clone().add(size / 2.0D, 256, size / 2.0D));
+        Collections.shuffle(this.lootDropCuboid.getBlocks());
     }
 
     public void onDisable() {
