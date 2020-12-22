@@ -38,15 +38,12 @@ public class PreGameTask implements IBingoTask {
             BukkitCloudNetHelper.changeToIngame();
             BridgeHelper.updateServiceInfo();
 
-            for (World world : Bukkit.getWorlds()) {
-                world.setDifficulty(Difficulty.NORMAL);
-            }
-
             this.isRunning = true;
             this.bingo.getGamestateHandler().setGamestate(Gamestate.PREGAME);
 
             this.bingo.getData().getPlayers().forEach(player -> {
                 player.teleport(new Location(Bukkit.getWorlds().get(0), 0.5, 125, 0.5));
+                player.getInventory().clear();
                 BingoPlayer bingoPlayer = new BingoPlayer(player);
                 if (bingoPlayer.getTeam() == null) {
                     for (BingoTeam bingoTeam : BingoTeam.values()) {
@@ -89,8 +86,6 @@ public class PreGameTask implements IBingoTask {
                             player.sendTitle(Title.builder()
                                     .title(((this.timer == 3) ? "§a§l" : ((this.timer == 2) ? "§e§l" : "§c§l")) + this.timer)
                                     .fadeIn(10).stay(20).fadeOut(10).build());
-
-                            player.getInventory().clear();
 
                         });
 
