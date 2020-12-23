@@ -46,7 +46,7 @@ public class QuitListener implements Listener {
                 break;
 
             case INGAME:
-                if(bingoPlayer.isPlayer()) {
+                if (bingoPlayer.isPlayer()) {
                     event.setQuitMessage(this.bingo.getPrefix() + "§a" + player.getName() + " §7hat das Spiel verlassen");
                     bingoPlayer.saveStats();
                 }
@@ -58,7 +58,7 @@ public class QuitListener implements Listener {
                 break;
 
             case PREGAME:
-                if(bingoPlayer.isPlayer()) {
+                if (bingoPlayer.isPlayer()) {
                     event.setQuitMessage(this.bingo.getPrefix() + "§a" + player.getName() + " §7hat das Spiel verlassen");
                 }
                 break;

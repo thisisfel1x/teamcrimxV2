@@ -37,7 +37,7 @@ public class PreGameTask implements IFloorIsLavaTask {
             for (Player player : this.floorIsLava.getData().getPlayers()) {
                 Location spawnLocation = spawns.get(counter).getWorld().getHighestBlockAt(spawns.get(0)).getLocation();
                 spawnLocation.getBlock().setType(player.hasMetadata("block") ?
-                                (Material) Objects.requireNonNull(player.getMetadata("block").get(0).value())
+                        (Material) Objects.requireNonNull(player.getMetadata("block").get(0).value())
                         : Material.GLASS);
                 spawnLocation.clone().add(0, 1, 0);
                 player.teleport(spawnLocation.toCenterLocation().clone().subtract(0, 0.5, 0));

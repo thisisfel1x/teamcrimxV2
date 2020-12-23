@@ -8,11 +8,9 @@ import de.fel1x.capturetheflag.CaptureTheFlag;
 import de.fel1x.capturetheflag.filehandler.SpawnHandler;
 import de.fel1x.capturetheflag.utils.particles.ParticleEffects;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
-import de.fel1x.teamcrimx.crimxapi.utils.ParticleUtils;
 import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.block.Sign;
-import org.bukkit.block.Skull;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EquipmentSlot;
@@ -26,6 +24,7 @@ public class WorldLoader {
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry()
             .getFirstService(IPlayerManager.class);
+    int count;
 
     public WorldLoader() {
 
@@ -103,11 +102,11 @@ public class WorldLoader {
         ArmorStand armorStandTop1 = null, armorStandTop2 = null, armorStandTop3 = null;
 
         for (ArmorStand armorStand : near.getNearbyEntitiesByType(ArmorStand.class, 10)) {
-            if(armorStand.getItem(EquipmentSlot.HAND).getType() == Material.TNT) {
+            if (armorStand.getItem(EquipmentSlot.HAND).getType() == Material.TNT) {
                 armorStandTop1 = armorStand;
-            } else if(armorStand.getItem(EquipmentSlot.HAND).getType() == Material.GRASS_BLOCK) {
+            } else if (armorStand.getItem(EquipmentSlot.HAND).getType() == Material.GRASS_BLOCK) {
                 armorStandTop2 = armorStand;
-            } else if(armorStand.getItem(EquipmentSlot.HAND).getType() == Material.IRON_SWORD) {
+            } else if (armorStand.getItem(EquipmentSlot.HAND).getType() == Material.IRON_SWORD) {
                 armorStandTop3 = armorStand;
             }
         }
@@ -170,8 +169,6 @@ public class WorldLoader {
         }
     }
 
-    int count;
-
     private void runMainTask(Location location, Location location1, Location location2) {
         ArrayList<Location> armorStand1 = ParticleEffects.getCirclePoints(location, 0.7, 20);
         ArrayList<Location> armorStand2 = ParticleEffects.getCirclePoints(location1, 0.7, 20);
@@ -180,16 +177,16 @@ public class WorldLoader {
         this.count = 0;
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(CaptureTheFlag.getInstance(), () -> {
-            armorStand1.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand1.get(this.count), 2,
-                    new Particle.DustOptions(Color.fromRGB(255,165,0), 1));
-            armorStand2.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand2.get(this.count), 2,
-                    new Particle.DustOptions(Color.fromRGB(211,211,211), 1));
-            armorStand3.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand3.get(this.count), 2,
+            armorStand1.get(this.count).getWorld().spawnParticle(Particle.REDSTONE, armorStand1.get(this.count), 2,
+                    new Particle.DustOptions(Color.fromRGB(255, 165, 0), 1));
+            armorStand2.get(this.count).getWorld().spawnParticle(Particle.REDSTONE, armorStand2.get(this.count), 2,
+                    new Particle.DustOptions(Color.fromRGB(211, 211, 211), 1));
+            armorStand3.get(this.count).getWorld().spawnParticle(Particle.REDSTONE, armorStand3.get(this.count), 2,
                     new Particle.DustOptions(Color.fromRGB(205, 127, 50), 1));
 
             this.count++;
 
-            if(this.count > 19) {
+            if (this.count > 19) {
                 this.count = 0;
             }
         }, 0L, 0L);

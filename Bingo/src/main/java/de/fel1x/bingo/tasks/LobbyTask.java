@@ -75,11 +75,11 @@ public class LobbyTask implements IBingoTask {
 
     }
 
-    public void setCountdown(int countdown) {
-        this.countdown = countdown;
-    }
-
     public int getCountdown() {
         return this.countdown;
+    }
+
+    public void setCountdown(int countdown) {
+        this.countdown = countdown;
     }
 }

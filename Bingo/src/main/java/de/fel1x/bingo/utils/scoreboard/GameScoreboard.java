@@ -41,7 +41,7 @@ public class GameScoreboard {
         int counter = 1;
 
         for (BingoTeam bingoTeam : BingoTeam.values()) {
-            if(bingoTeam.isEmpty()) continue;
+            if (bingoTeam.isEmpty()) continue;
 
             String color = Utils.getChatColor(bingoTeam.getColor()).toString();
 
@@ -99,7 +99,7 @@ public class GameScoreboard {
             BingoPlayer bingoPlayer = new BingoPlayer(gamePlayer);
             BingoTeam bingoTeam = bingoPlayer.getTeam();
 
-            if(bingoTeam != null) {
+            if (bingoTeam != null) {
                 Team bingoScoreboardTeam = this.scoreboardTeams.get(bingoTeam);
                 if (!bingoScoreboardTeam.hasEntry(gamePlayer.getName())) {
                     bingoScoreboardTeam.addEntry(gamePlayer.getName());
@@ -119,7 +119,7 @@ public class GameScoreboard {
                 scoreboardTeam.removeEntry(player.getName());
             }
         });
-        if(this.spectatorTeam.hasEntry(player.getName())) {
+        if (this.spectatorTeam.hasEntry(player.getName())) {
             this.spectatorTeam.removeEntry(player.getName());
         }
     }

@@ -13,7 +13,7 @@ public class EffectShoeCosmetic implements ICosmetic {
 
     @Override
     public String getCosmeticName() {
-        return "§9Wasserschuhe";
+        return "§9Splashchuhe";
     }
 
     @Override

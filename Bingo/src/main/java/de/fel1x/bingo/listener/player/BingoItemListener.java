@@ -61,7 +61,7 @@ public class BingoItemListener implements Listener {
                         .fadeOut(10)
                         .build());
 
-                if(bingoPlayer.isPlayer()) {
+                if (bingoPlayer.isPlayer()) {
                     bingoPlayer.saveStats();
                 }
 

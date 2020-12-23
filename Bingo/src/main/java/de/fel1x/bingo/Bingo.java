@@ -38,10 +38,9 @@ import java.util.stream.StreamSupport;
 public final class Bingo extends JavaPlugin {
 
     public static Bingo instance;
+    private final String prefix = "§aBingo §8● §r";
     ArrayList<Entity> fallingGlassBlocks, fallingAnvils;
     private CrimxAPI crimxAPI;
-
-    private final String prefix = "§aBingo §8● §r";
     private String formattedBiomeName;
 
     private PluginManager pluginManager;
@@ -129,14 +128,14 @@ public final class Bingo extends JavaPlugin {
     private void setMotdAndUpdate() {
 
         String unformatted = new Location(Bukkit.getWorlds().get(0), 0.5, 125, 0.5).getChunk()
-                .getChunkSnapshot(false, true,false)
+                .getChunkSnapshot(false, true, false)
                 .getBiome(0, 125, 0).name();
         String unformattedIgnoredLength = unformatted.replace("_", " ");
         String formattedIgnoredLength = WordUtils.capitalizeFully(unformattedIgnoredLength);
 
         String formatted;
 
-        if(formattedIgnoredLength.length() > 10) {
+        if (formattedIgnoredLength.length() > 10) {
             formatted = formattedIgnoredLength.substring(0, 8) + "...";
         } else {
             formatted = formattedIgnoredLength;
@@ -157,7 +156,7 @@ public final class Bingo extends JavaPlugin {
         World waitingLobby = Bukkit.createWorld(new WorldCreator("Wartelobby"));
         this.spawnLocation = new Location(waitingLobby, -23.5, 5, 51.5, -149, -1.1f);
 
-        if(waitingLobby == null) {
+        if (waitingLobby == null) {
             return;
         }
 

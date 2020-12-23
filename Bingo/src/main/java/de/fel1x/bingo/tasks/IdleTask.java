@@ -8,9 +8,8 @@ import org.bukkit.Bukkit;
 public class IdleTask implements IBingoTask {
 
     private final Bingo bingo = Bingo.getInstance();
-    private int taskId = 0;
-
     boolean isRunning = false;
+    private int taskId = 0;
 
     @Override
     public void start() {

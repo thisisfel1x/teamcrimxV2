@@ -17,7 +17,7 @@ public class BlockFromToListener implements Listener {
     @EventHandler
     public void on(BlockFromToEvent event) {
 
-        if(!this.floorIsLava.getAreaCuboid().contains(event.getToBlock())) {
+        if (!this.floorIsLava.getAreaCuboid().contains(event.getToBlock())) {
             event.setCancelled(true);
         }
 

@@ -63,7 +63,7 @@ public class JoinListener implements Listener {
 
                 this.bingo.getData().getPlayers().forEach(players -> this.bingo.getLobbyScoreboard().updateBoard(players,
                         String.format("§8● §a%s§8/§c%s",
-                        this.bingo.getData().getPlayers().size(), BingoTeam.RED.getTeamSize() * 6),
+                                this.bingo.getData().getPlayers().size(), BingoTeam.RED.getTeamSize() * 6),
                         "players", "§a"));
 
                 break;

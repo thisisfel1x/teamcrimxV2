@@ -30,8 +30,8 @@ public class Tornado {
 
         class VortexBlock {
 
-            public boolean removable = true;
             private final Entity entity;
+            public boolean removable = true;
             private float ticker_vertical = 0.0f;
             private float ticker_horisontal = (float) (Math.random() * 2 * Math.PI);
 

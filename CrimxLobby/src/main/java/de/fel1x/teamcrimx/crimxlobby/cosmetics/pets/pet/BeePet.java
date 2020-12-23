@@ -20,7 +20,7 @@ public class BeePet implements ICosmetic, IPet {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§eEs wird klebrig"
         };
     }

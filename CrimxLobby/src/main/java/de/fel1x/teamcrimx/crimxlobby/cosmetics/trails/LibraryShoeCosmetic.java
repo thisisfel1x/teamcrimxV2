@@ -18,7 +18,7 @@ public class LibraryShoeCosmetic implements ICosmetic {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§7Steigere deine IQ"
         };
     }

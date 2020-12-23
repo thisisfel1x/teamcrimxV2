@@ -39,7 +39,7 @@ public class QuitListener implements Listener {
                 if (gamePlayer.isPlayer()) {
                     event.setQuitMessage(this.floorIsLava.getPrefix() + "§a" + player.getName() + " §7hat das Spiel verlassen");
                     int remainingPlayers = this.floorIsLava.getData().getPlayers().size();
-                    if(remainingPlayers > 1) {
+                    if (remainingPlayers > 1) {
                         Bukkit.broadcastMessage(this.floorIsLava.getPrefix() + "§a" + remainingPlayers + " Spieler verbleibend");
                     }
                     gamePlayer.saveStats();

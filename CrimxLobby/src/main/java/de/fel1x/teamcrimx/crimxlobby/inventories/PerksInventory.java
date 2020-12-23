@@ -6,7 +6,6 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.apache.commons.lang.WordUtils;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -54,21 +53,21 @@ public class PerksInventory implements InventoryProvider {
                             .setName(WordUtils.capitalizeFully(glassType.name().replace('_', ' ')))
                             .toItemStack(),
                     inventoryClickEvent -> {
-                player.closeInventory();
-                player.sendMessage(CrimxLobby.getInstance().getPrefix() + "§7Du nutzt nun §a"
-                        + WordUtils.capitalizeFully(glassType.name().replace('_', ' ')) + " §7als Startblock");
-                Bukkit.getScheduler().runTaskAsynchronously(this.crimxLobby, () -> {
-                    Document playerDocument = this.crimxLobby.getCrimxAPI().getMongoDB().getFloorIsLavaCollection().
-                            find(new Document("_id", player.getUniqueId().toString())).first();
-                    if(playerDocument != null) {
-                    Document toUpdate = new Document("blockType", glassType.name());
-                    Bson updateOperation = new Document("$set", toUpdate);
-                    this.crimxLobby.getCrimxAPI().getMongoDB().getFloorIsLavaCollection().updateOne(playerDocument, updateOperation);
-                    }
-                });
-            }));
+                        player.closeInventory();
+                        player.sendMessage(CrimxLobby.getInstance().getPrefix() + "§7Du nutzt nun §a"
+                                + WordUtils.capitalizeFully(glassType.name().replace('_', ' ')) + " §7als Startblock");
+                        Bukkit.getScheduler().runTaskAsynchronously(this.crimxLobby, () -> {
+                            Document playerDocument = this.crimxLobby.getCrimxAPI().getMongoDB().getFloorIsLavaCollection().
+                                    find(new Document("_id", player.getUniqueId().toString())).first();
+                            if (playerDocument != null) {
+                                Document toUpdate = new Document("blockType", glassType.name());
+                                Bson updateOperation = new Document("$set", toUpdate);
+                                this.crimxLobby.getCrimxAPI().getMongoDB().getFloorIsLavaCollection().updateOne(playerDocument, updateOperation);
+                            }
+                        });
+                    }));
             slot++;
-            if(slot > 8) {
+            if (slot > 8) {
                 slot = 0;
                 row++;
             }

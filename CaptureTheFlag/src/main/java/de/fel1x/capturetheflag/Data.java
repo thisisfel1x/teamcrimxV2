@@ -13,8 +13,6 @@ import java.util.*;
 
 public class Data {
 
-    Location redSpawnLocation;
-    Location blueSpawnLocation;
     private final List<Player> players;
     private final List<Player> spectators;
     private final Map<Player, Player> lastHit;
@@ -22,13 +20,15 @@ public class Data {
     private final Map<Player, Stats> cachedStats;
     private final Map<UUID, Boolean> playerGG;
     private final Map<UUID, Long> playTime;
+    private final List<Block> placedBlocks;
+    private final Cuboid redSpawnCuboid;
+    private final Cuboid blueSpawnCuboid;
+    Location redSpawnLocation;
+    Location blueSpawnLocation;
     private Player redFlagHolder;
     private Location redFlagBaseLocation;
     private Player blueFlagHolder;
     private Location blueFlagBaseLocation;
-    private final List<Block> placedBlocks;
-    private final Cuboid redSpawnCuboid;
-    private final Cuboid blueSpawnCuboid;
 
     public Data() {
 

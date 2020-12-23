@@ -3,11 +3,9 @@ package de.fel1x.teamcrimx.floorislava.gameplayer;
 import com.google.common.collect.Lists;
 import com.mongodb.client.model.Sorts;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
-import de.dytanic.cloudnet.ext.bridge.node.CloudNetBridgeModule;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
-import de.dytanic.cloudnet.ext.cloudperms.node.CloudNetCloudPermissionsModule;
 import de.fel1x.teamcrimx.floorislava.Data;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
 import de.fel1x.teamcrimx.floorislava.database.FloorIsLavaDatabase;
@@ -158,11 +156,11 @@ public class GamePlayer {
     public void loadSelectedPerks() {
         Bukkit.getScheduler().runTaskAsynchronously(this.floorIsLava, () -> {
             Document lavaDocument = this.floorIsLava.getCrimxAPI().getMongoDB().getFloorIsLavaCollection().find(new Document("_id", this.player.getUniqueId().toString())).first();
-            if(lavaDocument == null) {
+            if (lavaDocument == null) {
                 this.createPlayerData();
             } else {
                 String toGet = lavaDocument.getString("blockType");
-                if(toGet != null) {
+                if (toGet != null) {
                     Material glass = Material.valueOf(toGet);
                     this.player.setMetadata("block", new FixedMetadataValue(this.floorIsLava, glass));
                 }

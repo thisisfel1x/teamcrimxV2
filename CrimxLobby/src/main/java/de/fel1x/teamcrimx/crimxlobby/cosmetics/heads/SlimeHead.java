@@ -18,7 +18,7 @@ public class SlimeHead implements ICosmetic {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§aSchleimige Angelegenheit...."
         };
     }

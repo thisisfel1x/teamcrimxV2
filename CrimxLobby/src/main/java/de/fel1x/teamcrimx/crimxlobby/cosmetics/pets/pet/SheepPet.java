@@ -20,7 +20,7 @@ public class SheepPet implements ICosmetic, IPet {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§fMäh? Näh!"
         };
     }

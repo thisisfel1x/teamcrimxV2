@@ -21,6 +21,7 @@ public class StatsArmorstand {
 
     private final Bingo bingo;
     private final Location[] signs;
+    int count;
 
     public StatsArmorstand(Bingo bingo) {
         this.bingo = bingo;
@@ -78,11 +79,11 @@ public class StatsArmorstand {
         ArmorStand armorStandTop1 = null, armorStandTop2 = null, armorStandTop3 = null;
 
         for (ArmorStand armorStand : near.getNearbyEntitiesByType(ArmorStand.class, 10)) {
-            if(armorStand.getItem(EquipmentSlot.HAND).getType() == Material.TNT) {
+            if (armorStand.getItem(EquipmentSlot.HAND).getType() == Material.TNT) {
                 armorStandTop1 = armorStand;
-            } else if(armorStand.getItem(EquipmentSlot.HAND).getType() == Material.GRASS_BLOCK) {
+            } else if (armorStand.getItem(EquipmentSlot.HAND).getType() == Material.GRASS_BLOCK) {
                 armorStandTop2 = armorStand;
-            } else if(armorStand.getItem(EquipmentSlot.HAND).getType() == Material.IRON_SWORD) {
+            } else if (armorStand.getItem(EquipmentSlot.HAND).getType() == Material.IRON_SWORD) {
                 armorStandTop3 = armorStand;
             }
         }
@@ -140,8 +141,6 @@ public class StatsArmorstand {
         }
     }
 
-    int count;
-
     private void runMainTask(Location location, Location location1, Location location2) {
         ArrayList<Location> armorStand1 = this.getCirclePoints(location, 0.7, 20);
         ArrayList<Location> armorStand2 = this.getCirclePoints(location1, 0.7, 20);
@@ -150,16 +149,16 @@ public class StatsArmorstand {
         this.count = 0;
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this.bingo, () -> {
-            armorStand1.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand1.get(this.count), 2,
-                    new Particle.DustOptions(Color.fromRGB(255,165,0), 1));
-            armorStand2.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand2.get(this.count), 2,
-                    new Particle.DustOptions(Color.fromRGB(211,211,211), 1));
-            armorStand3.get(this.count).getWorld().spawnParticle(Particle.REDSTONE,  armorStand3.get(this.count), 2,
+            armorStand1.get(this.count).getWorld().spawnParticle(Particle.REDSTONE, armorStand1.get(this.count), 2,
+                    new Particle.DustOptions(Color.fromRGB(255, 165, 0), 1));
+            armorStand2.get(this.count).getWorld().spawnParticle(Particle.REDSTONE, armorStand2.get(this.count), 2,
+                    new Particle.DustOptions(Color.fromRGB(211, 211, 211), 1));
+            armorStand3.get(this.count).getWorld().spawnParticle(Particle.REDSTONE, armorStand3.get(this.count), 2,
                     new Particle.DustOptions(Color.fromRGB(205, 127, 50), 1));
 
             this.count++;
 
-            if(this.count > 19) {
+            if (this.count > 19) {
                 this.count = 0;
             }
         }, 0L, 0L);

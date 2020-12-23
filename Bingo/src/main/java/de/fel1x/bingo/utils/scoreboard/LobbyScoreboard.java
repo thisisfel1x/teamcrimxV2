@@ -100,7 +100,7 @@ public class LobbyScoreboard {
             BingoPlayer bingoPlayer = new BingoPlayer(gamePlayer);
             BingoTeam bingoTeam = bingoPlayer.getTeam();
 
-            if(bingoTeam != null) {
+            if (bingoTeam != null) {
                 Team bingoScoreboardTeam = this.scoreboardTeams.get(bingoTeam);
                 if (!bingoScoreboardTeam.hasEntry(gamePlayer.getName())) {
                     bingoScoreboardTeam.addEntry(gamePlayer.getName());

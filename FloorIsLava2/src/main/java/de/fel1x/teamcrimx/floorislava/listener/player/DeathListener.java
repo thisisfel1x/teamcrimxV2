@@ -31,7 +31,7 @@ public class DeathListener implements Listener {
             event.setDeathMessage(String.format("%s§7Der Spieler §a%s §7ist gestorben", this.floorIsLava
                     .getPrefix(), player.getDisplayName()));
             int remainingPlayers = this.floorIsLava.getData().getPlayers().size();
-            if(remainingPlayers > 1) {
+            if (remainingPlayers > 1) {
                 Bukkit.broadcastMessage(this.floorIsLava.getPrefix() + "§a" + remainingPlayers + " Spieler verbleibend");
             }
             new WinDetection();

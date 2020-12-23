@@ -3,7 +3,6 @@ package de.fel1x.teamcrimx.floorislava.listener.entity;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
 import de.fel1x.teamcrimx.floorislava.gamehandler.Gamestate;
 import de.fel1x.teamcrimx.floorislava.gameplayer.GamePlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,16 +26,19 @@ public class DamageListener implements Listener {
         Entity victim = event.getEntity();
 
         switch (gamestate) {
-            case IDLE: case LOBBY: case PREGAME: case ENDING:
+            case IDLE:
+            case LOBBY:
+            case PREGAME:
+            case ENDING:
                 event.setCancelled(true);
                 break;
             case FARMING:
-                if(victim instanceof Player) {
+                if (victim instanceof Player) {
                     event.setCancelled(true);
                 }
                 break;
             case RISING:
-                if(victim instanceof Player && damager instanceof Player
+                if (victim instanceof Player && damager instanceof Player
                         && this.floorIsLava.isPvpEnabled()) {
                     Player victimPlayer = (Player) victim;
                     Player damagerPlayer = (Player) damager;
@@ -44,12 +46,12 @@ public class DamageListener implements Listener {
                     GamePlayer victimGamePlayer = new GamePlayer(victimPlayer);
                     GamePlayer damagerGamePlayer = new GamePlayer(damagerPlayer);
 
-                    if(damagerGamePlayer.isSpectator()) {
+                    if (damagerGamePlayer.isSpectator()) {
                         event.setCancelled(true);
                         return;
                     }
 
-                    if(victimGamePlayer.isSpectator()) {
+                    if (victimGamePlayer.isSpectator()) {
                         event.setCancelled(true);
                         return;
                     }

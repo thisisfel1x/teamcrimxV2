@@ -13,16 +13,9 @@ import org.bukkit.*;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.util.Vector;
 
-import java.util.Random;
-
 public class PreGameTask implements IBingoTask {
 
     private final Bingo bingo = Bingo.getInstance();
-    private int taskId = 0;
-    private int timer = 20;
-
-    private boolean isRunning = false;
-
     private final String[] commandInfo = {
             " ",
             this.bingo.getPrefix() + "§e§lWichtige Commands:",
@@ -30,6 +23,9 @@ public class PreGameTask implements IBingoTask {
             this.bingo.getPrefix() + "§a/backpack §7oder §a/bp §8● §7Öffne den Team-Backpack",
             " "
     };
+    private int taskId = 0;
+    private int timer = 20;
+    private boolean isRunning = false;
 
     @Override
     public void start() {

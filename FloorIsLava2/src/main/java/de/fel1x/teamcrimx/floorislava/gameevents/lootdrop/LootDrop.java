@@ -26,11 +26,7 @@ public class LootDrop {
 
     private final FloorIsLava floorIsLava;
     private final Location origin;
-    private LootDropTier lootDropTier = LootDropTier.TIER_1;
-    private double speed = 1.0;
-    private Material blockType;
     private final Random random = new Random();
-
     private final ItemStack[] lootDropItemsTierOne = {
             // BLOCKS
             new ItemStack(Material.SANDSTONE, this.random.nextInt(20) + 20),
@@ -65,14 +61,17 @@ public class LootDrop {
             new ItemBuilder(Material.SPLASH_POTION).setPotionEffect(PotionType.INVISIBILITY).toItemStack(),
             new ItemBuilder(Material.SPLASH_POTION).setPotionEffect(PotionType.FIRE_RESISTANCE).toItemStack(),
     };
+    private LootDropTier lootDropTier = LootDropTier.TIER_1;
+    private double speed = 1.0;
+    private Material blockType;
 
-    public LootDrop(@NotNull FloorIsLava floorIsLava,@NotNull Location origin, Material material) {
+    public LootDrop(@NotNull FloorIsLava floorIsLava, @NotNull Location origin, Material material) {
         this.floorIsLava = floorIsLava;
         this.origin = origin.toCenterLocation();
         this.blockType = material;
     }
 
-    public LootDrop lootDropTier( @NotNull LootDropTier lootDropTier) {
+    public LootDrop lootDropTier(@NotNull LootDropTier lootDropTier) {
         this.lootDropTier = lootDropTier;
         return this;
     }
@@ -96,7 +95,7 @@ public class LootDrop {
         fallingChest.setGlowing(true);
         ArrayList<Chicken> chickens = new ArrayList<>();
 
-        if(finalBlock.isLiquid()) {
+        if (finalBlock.isLiquid()) {
             finalBlock.setType(Material.RED_CONCRETE);
             finalBlock.getLocation().clone().add(1, 0, 0).getBlock().setType(Material.RED_CONCRETE);
             finalBlock.getLocation().clone().add(-1, 0, 0).getBlock().setType(Material.RED_CONCRETE);
@@ -107,7 +106,7 @@ public class LootDrop {
         int amount = 21;
         double height = 0;
 
-        for(double radius = 3; radius >= 0; radius-=0.75) {
+        for (double radius = 3; radius >= 0; radius -= 0.75) {
             double finalHeight = height;
             ArmorstandStatsLoader.getCirclePoints(this.origin.clone().add(0, 1.5, 0), radius == 0 ? 0.1 : radius, amount).forEach(location -> {
                 Chicken chicken = (Chicken) world.spawnEntity(location.clone().add(0, finalHeight, 0), EntityType.CHICKEN);
@@ -115,8 +114,8 @@ public class LootDrop {
                 chicken.setSilent(true);
                 chickens.add(chicken);
             });
-            amount-= 5;
-            height+= radius <= 1.5 ? 0.25 : 0.5;
+            amount -= 5;
+            height += radius <= 1.5 ? 0.25 : 0.5;
         }
 
         Bukkit.getScheduler().runTaskTimer(FloorIsLava.getInstance(), bukkitTask -> {
@@ -124,16 +123,16 @@ public class LootDrop {
             fallingChest.setVelocity(toSet);
             chickens.forEach(chicken -> {
                 chicken.setVelocity(new Vector(0, -0.09, 0));
-                if(chicken.isOnGround()) {
+                if (chicken.isOnGround()) {
                     chicken.remove();
                     chicken.getLocation().getNearbyEntitiesByType(Item.class, 2).forEach(item -> {
-                        if(item.getItemStack().getType() == Material.LEAD) {
+                        if (item.getItemStack().getType() == Material.LEAD) {
                             item.remove();
                         }
                     });
                 }
             });
-            if(fallingChest.isOnGround()
+            if (fallingChest.isOnGround()
                     || fallingChest.getLocation().clone().subtract(0, 1, 0).getBlock().isLiquid()) {
                 fallingChest.remove();
 
@@ -143,7 +142,7 @@ public class LootDrop {
                 });
 
                 chickens.get(0).getLocation().getNearbyEntitiesByType(Item.class, 7, 2).forEach(item -> {
-                    if(item.getItemStack().getType() == Material.LEAD) {
+                    if (item.getItemStack().getType() == Material.LEAD) {
                         item.remove();
                     }
                 });

@@ -1,11 +1,6 @@
 package de.fel1x.teamcrimx.floorislava.listener.block;
 
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
