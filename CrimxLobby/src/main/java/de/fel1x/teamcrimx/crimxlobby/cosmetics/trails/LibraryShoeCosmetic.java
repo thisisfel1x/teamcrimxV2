@@ -40,7 +40,7 @@ public class LibraryShoeCosmetic implements ICosmetic {
 
     @Override
     public int getCosmeticCost() {
-        return 2000;
+        return 1000;
     }
 
     @Override

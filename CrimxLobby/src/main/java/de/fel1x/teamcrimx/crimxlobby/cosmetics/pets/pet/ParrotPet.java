@@ -43,7 +43,7 @@ public class ParrotPet implements ICosmetic, IPet {
 
     @Override
     public int getCosmeticCost() {
-        return 0;
+        return 1000;
     }
 
     @Override

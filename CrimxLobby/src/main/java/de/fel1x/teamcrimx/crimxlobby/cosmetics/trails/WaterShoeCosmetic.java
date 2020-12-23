@@ -1,4 +1,4 @@
-package de.fel1x.teamcrimx.crimxlobby.cosmetics.dropTrails;
+package de.fel1x.teamcrimx.crimxlobby.cosmetics.trails;
 
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
@@ -9,31 +9,31 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
-public class SnowShoeTrail implements ICosmetic {
+public class WaterShoeCosmetic implements ICosmetic {
 
     @Override
     public String getCosmeticName() {
-        return "§fSchneemann";
+        return "§bWasserschuhe";
     }
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[]{"", "§fBrrrr... kalt!", ""};
+        return new String[]{"", "§bPlitsch Platsch", ""};
     }
 
     @Override
     public Material getCosmeticMaterial() {
-        return Material.SNOW_BLOCK;
+        return Material.LEATHER_BOOTS;
     }
 
     @Override
     public Color getLeatherShoeColor() {
-        return Color.WHITE;
+        return Color.AQUA;
     }
 
     @Override
     public Particle getWalkEffect() {
-        return null;
+        return Particle.WATER_BUBBLE;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class SnowShoeTrail implements ICosmetic {
 
     @Override
     public int effectData() {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class SnowShoeTrail implements ICosmetic {
 
     @Override
     public CosmeticType cosmeticType() {
-        return CosmeticType.BLOCK_TRAIL;
+        return CosmeticType.TRAIL;
     }
 
     @Override
@@ -64,7 +64,8 @@ public class SnowShoeTrail implements ICosmetic {
 
     @Override
     public void updateInventory(Player player) {
-        player.getInventory().setBoots(new ItemBuilder(Material.LEATHER_BOOTS)
+        player.getInventory().setBoots(new ItemBuilder(this.getCosmeticMaterial())
                 .setName(this.getCosmeticName()).setLeatherArmorColor(this.getLeatherShoeColor()).toItemStack());
     }
+
 }

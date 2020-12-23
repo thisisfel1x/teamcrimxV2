@@ -40,7 +40,7 @@ public class HeartShoeCosmetic implements ICosmetic {
 
     @Override
     public int getCosmeticCost() {
-        return 2500;
+        return 1000;
     }
 
     @Override
