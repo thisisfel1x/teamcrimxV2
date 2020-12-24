@@ -9,16 +9,16 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
-public class EffectShoeCosmetic implements ICosmetic {
+public class HoneyShoeCosmetic implements ICosmetic {
 
     @Override
     public String getCosmeticName() {
-        return "§9Splashchuhe";
+        return "§eHonigschuhe";
     }
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[]{"", "§9Wasser marsch", ""};
+        return new String[]{"", "§eKlebrige Angelegenheit", ""};
     }
 
     @Override
@@ -28,12 +28,12 @@ public class EffectShoeCosmetic implements ICosmetic {
 
     @Override
     public Color getLeatherShoeColor() {
-        return Color.BLUE;
+        return Color.YELLOW;
     }
 
     @Override
     public Particle getWalkEffect() {
-        return Particle.WATER_SPLASH;
+        return Particle.DRIPPING_HONEY;
     }
 
     @Override

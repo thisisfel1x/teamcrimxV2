@@ -1,5 +1,8 @@
 package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 
+import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.driver.permission.IPermissionGroup;
+import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
@@ -48,7 +51,16 @@ public class JoinListener implements Listener {
         lobbyPlayer.teleportToSpawn();
 
         lobbyPlayer.setScoreboard();
-        BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
+        BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player, player1 -> {
+            IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(player1.getUniqueId());
+            IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(permissionUser);
+
+            if(player1.getName().equalsIgnoreCase("_fxl1x")) {
+                permissionGroup.setSuffix(" §7[§eCRIMX§7]");
+            }
+
+            return permissionGroup;
+        });
 
         boolean vipPerms = player.hasPermission("crimxlobby.vip");
         int playerState = this.crimxLobby.getData().getPlayerHiderState().get(player.getUniqueId());

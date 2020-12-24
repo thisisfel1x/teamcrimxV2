@@ -24,7 +24,7 @@ public enum Cosmetic {
     NOTE_SHOE(NoteShoeCosmetic.class, CosmeticCategory.BOOTS),
     SPELL_SHOE(WitchShoeCosmetic.class, CosmeticCategory.BOOTS),
     LIBRARY_SHOE(LibraryShoeCosmetic.class, CosmeticCategory.BOOTS),
-    EFFECT_SHOE(EffectShoeCosmetic.class, CosmeticCategory.BOOTS),
+    HONEY_SHOE(HoneyShoeCosmetic.class, CosmeticCategory.BOOTS),
     HAPPY_SHOE(HappinessShoeCosmetic.class, CosmeticCategory.BOOTS),
     WATER_SHOE(WaterShoeCosmetic.class, CosmeticCategory.BOOTS),
 
