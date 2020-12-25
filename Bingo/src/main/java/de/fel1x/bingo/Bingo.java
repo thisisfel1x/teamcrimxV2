@@ -104,7 +104,7 @@ public final class Bingo extends JavaPlugin {
 
         Bukkit.getConsoleSender().sendMessage(this.prefix + "§aThe plugin was successfully enabled!");
 
-        this.getServer().getScheduler().runTaskLater(this, this::setMotdAndUpdate, 10);
+        this.getServer().getScheduler().runTaskLater(this, this::setMotdAndUpdate, 1L);
 
     }
 

@@ -13,10 +13,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameScoreboard {
 
@@ -124,23 +122,48 @@ public class GameScoreboard {
         }
     }
 
-    public void updateIngameScoreboard(ArrayList<BingoTeam> sortedTeams, Player player) {
+    public void updateIngameScoreboard(Player player) {
         this.i = 1;
-        sortedTeams.forEach(bingoTeam -> {
+        this.getTopTeams().forEach(bingoTeam -> {
             this.updateBoard(player,
                     String.format("§7Team %s%s §8» §a%s§8/§c9", Utils.getChatColor(bingoTeam.getColor()),
                             bingoTeam.getName(), bingoTeam.getDoneItemsSize()),
-                    "top" + (this.i));
+                    "00" + this.i + bingoTeam.getName());
+            //player.sendMessage(bingoTeam.getName() + " " + bingoTeam.getDoneItemsSize());
             this.i++;
         });
     }
 
     public void updateBoard(Player player, String value, String score) {
         if (player.getScoreboard().getTeam("top1") != null) {
+            player.sendMessage("update");
             Objects.requireNonNull(player.getScoreboard().getTeam(score)).setPrefix(value);
         } else {
             setGameScoreboard(player);
             updateBoard(player, value, score);
         }
+    }
+
+    public ArrayList<BingoTeam> getTopTeams() {
+
+        ArrayList<BingoTeam> teams = Arrays.stream(BingoTeam.values()).filter(team -> !team.isEmpty()).sorted((o1, o2) -> {
+
+            int i1 = o1.getDoneItemsSize();
+            int i2 = o2.getDoneItemsSize();
+
+            if (i1 > i2) {
+                return 1;
+            } else if (i1 < i2) {
+                return -1;
+            }
+
+            return 0;
+
+        }).collect(Collectors.toCollection(ArrayList::new));
+
+        Collections.reverse(teams);
+
+        return teams;
+
     }
 }

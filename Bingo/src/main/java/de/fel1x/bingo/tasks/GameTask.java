@@ -34,6 +34,8 @@ public class GameTask implements IBingoTask {
     @Override
     public void start() {
 
+        Bukkit.getScheduler().cancelTasks(this.bingo);
+
         this.bossBar = this.bingo.getServer().createBossBar(String.format("§7Nächstes Event in §e%s Sekunden", this.eventTimer),
                 BarColor.GREEN, BarStyle.SEGMENTED_20, BarFlag.DARKEN_SKY);
         this.bossBar.removeFlag(BarFlag.DARKEN_SKY);
@@ -61,7 +63,6 @@ public class GameTask implements IBingoTask {
                 }
 
                 Bukkit.getOnlinePlayers().forEach(player -> {
-                    this.bingo.getGameScoreboard().updateIngameScoreboard(this.getTopTeams(), player);
                     player.sendActionBar("§7Vergangene Zeit: §e§l" + this.formatSeconds(this.timer));
                 });
 
@@ -97,29 +98,6 @@ public class GameTask implements IBingoTask {
             Bukkit.getScheduler().cancelTask(this.taskId);
 
         }
-
-    }
-
-    public ArrayList<BingoTeam> getTopTeams() {
-
-        ArrayList<BingoTeam> teams = Arrays.stream(BingoTeam.values()).filter(team -> !team.isEmpty()).sorted((o1, o2) -> {
-
-            int i1 = o1.getDoneItemsSize();
-            int i2 = o2.getDoneItemsSize();
-
-            if (i1 > i2) {
-                return 1;
-            } else if (i1 < i2) {
-                return -1;
-            }
-
-            return 0;
-
-        }).collect(Collectors.toCollection(ArrayList::new));
-
-        Collections.reverse(teams);
-
-        return teams;
 
     }
 

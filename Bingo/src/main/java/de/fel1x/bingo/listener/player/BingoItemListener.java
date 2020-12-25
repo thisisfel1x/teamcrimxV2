@@ -38,6 +38,10 @@ public class BingoItemListener implements Listener {
         BingoTeam bingoTeam = event.getTeam();
         boolean allDone = Arrays.stream(bingoTeam.getDoneItems()).allMatch(val -> val);
 
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            this.bingo.getGameScoreboard().updateIngameScoreboard(player);
+        }
+
         if (allDone) {
 
             this.bingo.startTimerByClass(EndingTask.class);

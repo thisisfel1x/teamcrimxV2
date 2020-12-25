@@ -14,6 +14,9 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class PreGameTask implements IBingoTask {
 
     private final Bingo bingo = Bingo.getInstance();
@@ -116,11 +119,13 @@ public class PreGameTask implements IBingoTask {
                             float y = -3.0F + (float) (Math.random() * 6.0D + 1.0D);
                             float z = -2.0F + (float) (Math.random() * 4.0D + 1.0D);
 
-                            FallingBlock fallingBlock = block.getWorld().spawnFallingBlock(block.getLocation(), block.getBlockData());
+                            if(ThreadLocalRandom.current().nextBoolean() && new Random().nextBoolean()) {
+                                FallingBlock fallingBlock = block.getWorld().spawnFallingBlock(block.getLocation(), block.getBlockData());
 
-                            fallingBlock.setVelocity(new Vector(x, y, z));
-                            fallingBlock.setDropItem(false);
-                            fallingBlock.setMetadata("falling", new FixedMetadataValue(this.bingo, true));
+                                fallingBlock.setVelocity(new Vector(x, y, z));
+                                fallingBlock.setDropItem(false);
+                                fallingBlock.setMetadata("falling", new FixedMetadataValue(this.bingo, true));
+                            }
 
                             block.setType(Material.AIR);
 

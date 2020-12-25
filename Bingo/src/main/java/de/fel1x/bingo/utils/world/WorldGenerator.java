@@ -1,19 +1,17 @@
 package de.fel1x.bingo.utils.world;
 
 import de.fel1x.bingo.Bingo;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class WorldGenerator {
 
-    Material[] glassTypes = {
+    private final Material[] glassTypes = {
 
             Material.WHITE_STAINED_GLASS,
             Material.ORANGE_STAINED_GLASS,
@@ -42,7 +40,19 @@ public class WorldGenerator {
         World world = Bukkit.getWorlds().get(0);
         Cuboid spawnCuboid = new Cuboid(world, -20, 120, -20, 20, 120, 20);
 
-        world.setSpawnLocation(new Location(world, 0.5, 121, 0.5));
+        Location spawnLocation = new Location(world, 0.5, 121, 0.5);
+
+        world.setSpawnLocation(spawnLocation);
+
+        Chunk worldSpawnLocationChunk = spawnLocation.getChunk();
+
+        for(int i = worldSpawnLocationChunk.getX() - 15; i < worldSpawnLocationChunk.getX() + 15; i++) {
+            for(int j = worldSpawnLocationChunk.getZ() - 15; j < worldSpawnLocationChunk.getZ() + 15; j++) {
+                Chunk current = world.getChunkAt(i, j);
+                current.load(true);
+                Bukkit.getConsoleSender().sendMessage(Bingo.getInstance().getPrefix() + "Loading Chunk " + current.getX() + " " + current.getZ());
+            }
+        }
 
         for (int i = spawnCuboid.getLowerX(); i < spawnCuboid.getUpperX(); i++) {
             for (int j = spawnCuboid.getLowerZ(); j < spawnCuboid.getUpperZ(); j++) {
@@ -81,10 +91,10 @@ public class WorldGenerator {
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Bingo.getInstance(),
                 () -> this.blocks.forEach(block -> {
-                    if (random.nextBoolean() && !random.nextBoolean()) {
+                    if (random.nextBoolean() && !random.nextBoolean() && ThreadLocalRandom.current().nextBoolean()) {
                         block.setType(this.glassTypes[random.nextInt(this.glassTypes.length)]);
                     }
-                }), 0L, 20L);
+                }), 0L, 20L * 2);
 
     }
 
