@@ -45,13 +45,9 @@ public class BlockTransformListener implements Listener {
 
                 this.bingo.getFallingAnvils().remove(entity);
 
-            } else if (this.bingo.getFallingGlassBlocks().contains(entity)) {
-
+            } else if (entity.hasMetadata("falling")) {
                 event.setCancelled(true);
-
                 event.getBlock().setType(Material.AIR);
-                this.bingo.getFallingGlassBlocks().remove(entity);
-
             }
 
         }

@@ -27,7 +27,7 @@ public class GameTask implements IBingoTask {
 
     private BossBar bossBar;
 
-    private Random random = new Random();
+    private final Random random = new Random();
     private int eventTimer = this.random.nextInt(120) + 60;
     private double timeToGo = this.eventTimer;
 
