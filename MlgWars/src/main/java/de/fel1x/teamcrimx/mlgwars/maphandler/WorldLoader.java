@@ -175,7 +175,7 @@ public class WorldLoader {
                 ItemStack skullOwner = new ItemBuilder(Material.PLAYER_HEAD)
                         .setSkullOwner(name).toItemStack();
 
-                ArmorStand toSet = current == 1 ? armorStandTop1 : current == 2 ? armorStandTop2 : armorStandTop3;
+                ArmorStand toSet = (current == 1) ? armorStandTop1 : ((current == 2) ? armorStandTop2 : armorStandTop3);
                 toSet.getItem(EquipmentSlot.HEAD).setItemMeta(skullOwner.getItemMeta());
 
                 IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement()

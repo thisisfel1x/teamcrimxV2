@@ -14,15 +14,6 @@ public class CustomZombie extends EntityZombie {
     public CustomZombie(org.bukkit.World world) {
         super(((CraftWorld) world).getHandle());
 
-        List goalB = (List) getPrivateField("b", PathfinderGoalSelector.class, this.goalSelector);
-        goalB.clear();
-        List goalC = (List) getPrivateField("c", PathfinderGoalSelector.class, this.goalSelector);
-        goalC.clear();
-        List targetB = (List) getPrivateField("b", PathfinderGoalSelector.class, this.targetSelector);
-        targetB.clear();
-        List targetC = (List) getPrivateField("c", PathfinderGoalSelector.class, this.targetSelector);
-        targetC.clear();
-
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));

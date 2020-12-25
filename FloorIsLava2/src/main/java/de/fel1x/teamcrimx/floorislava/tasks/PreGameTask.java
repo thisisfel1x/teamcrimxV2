@@ -44,7 +44,8 @@ public class PreGameTask implements IFloorIsLavaTask {
                 counter++;
                 player.getInventory().addItem(
                         new ItemBuilder(Material.STONE_PICKAXE).addEnchant(Enchantment.DIG_SPEED, 1).setUnbreakable().toItemStack(),
-                        new ItemBuilder(Material.STONE_AXE).addEnchant(Enchantment.DIG_SPEED, 1).setUnbreakable().toItemStack()
+                        new ItemBuilder(Material.STONE_AXE).addEnchant(Enchantment.DIG_SPEED, 1).setUnbreakable().toItemStack(),
+                        new ItemBuilder(Material.COOKED_MUTTON, 8).toItemStack()
                 );
             }
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.floorIsLava, () -> {
