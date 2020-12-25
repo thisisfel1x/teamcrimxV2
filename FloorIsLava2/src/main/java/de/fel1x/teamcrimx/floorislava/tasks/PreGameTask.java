@@ -35,7 +35,7 @@ public class PreGameTask implements IFloorIsLavaTask {
             ArrayList<Location> spawns = ArmorstandStatsLoader.getCirclePoints(this.floorIsLava.getWorldSpawnLocation(), 20.0D, 12);
             int counter = 0;
             for (Player player : this.floorIsLava.getData().getPlayers()) {
-                Location spawnLocation = spawns.get(counter).getWorld().getHighestBlockAt(spawns.get(0)).getLocation();
+                Location spawnLocation = spawns.get(counter).getWorld().getHighestBlockAt(spawns.get(counter)).getLocation();
                 spawnLocation.getBlock().setType(player.hasMetadata("block") ?
                         (Material) Objects.requireNonNull(player.getMetadata("block").get(0).value())
                         : Material.GLASS);
