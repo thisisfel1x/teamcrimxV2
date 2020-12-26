@@ -273,7 +273,7 @@ public class InteractListener implements Listener {
                             Location location = block.getLocation();
 
                             Tornado.spawnTornado(MlgWars.getInstance(), location, block.getType(), block.getData(),
-                                    null, 0.6, 250, 20 * 20, true, true);
+                                    null, 0.6, 50, 20 * 10, true, true);
 
                             location.getWorld().strikeLightning(location.clone().add(1, 0, 0));
                             location.getWorld().strikeLightning(location.clone().add(-1, 0, 0));
@@ -618,7 +618,7 @@ public class InteractListener implements Listener {
                                     }
                                 };
 
-                                bukkitRunnable.runTaskTimer(this.mlgWars, 0L, 1L);
+                                bukkitRunnable.runTaskTimer(this.mlgWars, 0L, 5L);
                                 this.data.getCsgoTasks().get(player.getUniqueId()).add(bukkitRunnable);
 
                             } else if (interactedMaterial == Material.FIRE_CHARGE
@@ -630,7 +630,7 @@ public class InteractListener implements Listener {
                                 Fireball fireball = player.launchProjectile(Fireball.class);
                                 fireball.setMetadata("moli", new FixedMetadataValue(this.mlgWars, true));
 
-                            } else if (interactedMaterial == Material.FIREWORK_STAR
+                            } /* else if (interactedMaterial == Material.FIREWORK_STAR
                                     && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8● §7Smoke")) {
 
                                 event.setCancelled(true);
@@ -647,7 +647,7 @@ public class InteractListener implements Listener {
                                             new InstantFirework(FireworkEffect.builder()
                                                     .withColor(Color.WHITE, Color.YELLOW, Color.GRAY).build(),
                                                     item.getLocation().clone().add(0, 0.5, 0));
-                                            new SmokeGrenade(InteractListener.this.mlgWars, item.getLocation(), 10, item.getWorld());
+                                            //new SmokeGrenade(InteractListener.this.mlgWars, item.getLocation(), 10, item.getWorld());
                                         }
 
                                         if (item.isOnGround() || item.getLocation().getY() < 0 || item.isDead() || !item.isValid()) {
@@ -657,9 +657,9 @@ public class InteractListener implements Listener {
                                         }
                                     }
                                 };
-                                bukkitRunnable.runTaskTimer(this.mlgWars, 0L, 1L);
+                                bukkitRunnable.runTaskTimer(this.mlgWars, 0L, 5L);
                                 this.data.getCsgoTasks().get(player.getUniqueId()).add(bukkitRunnable);
-                            }
+                            } */
                             break;
                         case VALORANT:
                             if (interactedMaterial == Material.SPECTRAL_ARROW) {
@@ -673,7 +673,7 @@ public class InteractListener implements Listener {
                                 });
 
                                 Bukkit.getScheduler().runTaskLater(this.mlgWars,
-                                        () -> this.data.getPlayers().forEach(ingamePlayer -> ingamePlayer.setGlowing(false)), 100L);
+                                        () -> this.data.getPlayers().forEach(ingamePlayer -> ingamePlayer.setGlowing(false)), 20 * 10L);
                             }
                             break;
 

@@ -51,6 +51,11 @@ public class GamePlayer {
         this.player.setGameMode(GameMode.ADVENTURE);
         this.player.setAllowFlight(true);
         this.player.setFlying(true);
+        this.player.getInventory().clear();
+        this.player.setHealth(20);
+        this.player.setFoodLevel(20);
+        this.player.setLevel(0);
+        this.player.setExp(0);
         this.addToSpectators();
         this.removeFromInGamePlayers();
         this.data.getPlayers().forEach(gamePlayers -> gamePlayers.hidePlayer(this.floorIsLava, this.player));

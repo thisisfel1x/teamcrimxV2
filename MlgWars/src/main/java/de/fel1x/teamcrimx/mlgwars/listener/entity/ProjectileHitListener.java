@@ -117,10 +117,9 @@ public class ProjectileHitListener implements Listener {
 
                 for (Player player : snowball.getWorld().getNearbyPlayers(snowball.getLocation(), 5, 5)
                         .stream().filter(player -> !player.equals(snowball.getShooter())).collect(Collectors.toList())) {
-                    player.setLastDamage(5D);
 
                     Vector vector = player.getVelocity();
-                    vector.add(new Vector(2, 2, 2));
+                    vector.multiply(2).setY(5).multiply(2);
                     player.setVelocity(vector);
                 }
             }

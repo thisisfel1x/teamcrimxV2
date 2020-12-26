@@ -10,6 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Random;
 
 public class PickUpListener implements Listener {
 
@@ -46,10 +49,11 @@ public class PickUpListener implements Listener {
                     return;
                 }
 
-                if (gamePlayer.getSelectedKit() == Kit.EXPLODER) {
-                    event.getItem().setItemStack(new ItemBuilder(Material.TNT, 16)
-                            .setName("§8● §bExplosives TNT")
-                            .setLore("§7Explosiver geht es fast gar", "§7nicht mehr! (wirklich explosiv!)").toItemStack());
+                if (gamePlayer.getSelectedKit() == Kit.DUMP) {
+                    event.getItem()
+                            .setItemStack(new ItemStack(this.mlgWars.getAllMaterials()
+                                    .get(new Random().nextInt(this.mlgWars.getAllMaterials().size())),
+                                    event.getItem().getItemStack().getAmount()));
                 }
         }
     }
