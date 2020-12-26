@@ -51,12 +51,12 @@ public class GameScoreboard {
 
             this.scoreboardTeams.put(bingoTeam, team);
 
-            objective.getScore(String.format("§7Team %s%s §8» §a%s§8/§c9", Utils.getChatColor(bingoTeam.getColor()),
-                    bingoTeam.getName(), bingoTeam.getDoneItemsSize()))
-                    .setScore(counter);
-
             Team top = this.gameScoreboard.registerNewTeam("top" + counter);
             top.addEntry("§" + counter);
+            top.setPrefix(String.format("§7Team %s%s §8» §a%s§8/§c9", Utils.getChatColor(bingoTeam.getColor()),
+                    bingoTeam.getName(), bingoTeam.getDoneItemsSize()));
+
+            objective.getScore("§" + counter).setScore(counter);
 
             counter++;
         }
@@ -128,7 +128,7 @@ public class GameScoreboard {
             this.updateBoard(player,
                     String.format("§7Team %s%s §8» §a%s§8/§c9", Utils.getChatColor(bingoTeam.getColor()),
                             bingoTeam.getName(), bingoTeam.getDoneItemsSize()),
-                    "00" + this.i + bingoTeam.getName());
+                    "top" + (this.i));
             //player.sendMessage(bingoTeam.getName() + " " + bingoTeam.getDoneItemsSize());
             this.i++;
         });
@@ -137,7 +137,7 @@ public class GameScoreboard {
     public void updateBoard(Player player, String value, String score) {
         if (player.getScoreboard().getTeam("top1") != null) {
             player.sendMessage("update");
-            Objects.requireNonNull(player.getScoreboard().getTeam(score)).setPrefix(value);
+            player.getScoreboard().getTeam(score).setPrefix(value);
         } else {
             setGameScoreboard(player);
             updateBoard(player, value, score);
