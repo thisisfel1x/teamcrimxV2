@@ -66,6 +66,7 @@ public class WinDetection {
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             GamePlayer gamePlayer = new GamePlayer(player);
+                            gamePlayer.removeFromSpectators();
                             gamePlayer.cleanUpOnJoin();
                             gamePlayer.teleport(Spawns.LOBBY);
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 0.5f);
@@ -102,6 +103,7 @@ public class WinDetection {
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             GamePlayer gamePlayer = new GamePlayer(player);
+                            gamePlayer.removeFromSpectators();
                             gamePlayer.cleanUpOnJoin();
                             gamePlayer.teleport(Spawns.LOBBY);
                             if (DisguiseAPI.isDisguised(player)) {
@@ -126,6 +128,7 @@ public class WinDetection {
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             GamePlayer gamePlayer = new GamePlayer(player);
+                            gamePlayer.removeFromSpectators();
                             gamePlayer.cleanUpOnJoin();
                             gamePlayer.teleport(Spawns.LOBBY);
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 0.5f);
@@ -195,6 +198,7 @@ public class WinDetection {
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             GamePlayer gamePlayer = new GamePlayer(player);
+                            gamePlayer.removeFromSpectators();
                             gamePlayer.cleanUpOnJoin();
                             gamePlayer.teleport(Spawns.LOBBY);
                             if (DisguiseAPI.isDisguised(player)) {

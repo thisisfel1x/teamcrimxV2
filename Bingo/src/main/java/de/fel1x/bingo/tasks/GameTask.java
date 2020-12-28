@@ -1,27 +1,26 @@
 package de.fel1x.bingo.tasks;
 
+import com.destroystokyo.paper.Title;
 import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
-import de.fel1x.bingo.objects.BingoTeam;
 import de.fel1x.bingo.scenarios.IBingoScenario;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class GameTask implements IBingoTask {
 
     private final Bingo bingo = Bingo.getInstance();
     private int taskId = 0;
     private int timer = 0;
+
+    private final Title title = Title.builder().title("§aGo").subtitle("§aViel Glück!").fadeIn(0).stay(40).fadeOut(10).build();
 
     private boolean isRunning = false;
 
@@ -50,6 +49,9 @@ public class GameTask implements IBingoTask {
             for (Player player : this.bingo.getData().getPlayers()) {
                 this.bingo.getData().getPlayTime().put(player.getUniqueId(), System.currentTimeMillis());
                 this.bingo.getData().getCachedStats().get(player).increaseGamesByOne();
+
+                player.sendTitle(this.title);
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 0.2f);
             }
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.bingo, () -> {
@@ -62,9 +64,7 @@ public class GameTask implements IBingoTask {
                                     String.format("%02d:%02d", this.eventTimer / 60, this.eventTimer % 60)))));
                 }
 
-                Bukkit.getOnlinePlayers().forEach(player -> {
-                    player.sendActionBar("§7Vergangene Zeit: §e§l" + this.formatSeconds(this.timer));
-                });
+                Bukkit.getOnlinePlayers().forEach(player -> player.sendActionBar("§fVergangene Zeit §8● §e" + this.formatSeconds(this.timer)));
 
                 if (this.eventTimer == 0) {
                     this.eventTimer = this.random.nextInt(120) + 60;
@@ -74,7 +74,7 @@ public class GameTask implements IBingoTask {
                         IBingoScenario bingoScenario = this.bingo.startRandomScenario()
                                 .get(this.random.nextInt(this.bingo.startRandomScenario().size())).newInstance();
                         bingoScenario.execute();
-                        this.bossBar.setTitle("§7Event §8» §a§l" + bingoScenario.getName());
+                        this.bossBar.setTitle("§7Event §8● §a§l" + bingoScenario.getName());
                     } catch (InstantiationException | IllegalAccessException e) {
                         e.printStackTrace();
                     }
@@ -82,7 +82,11 @@ public class GameTask implements IBingoTask {
                 }
 
                 this.timer++;
-                this.eventTimer--;
+
+                if(this.eventTimer > 0) {
+                    this.eventTimer--;
+                }
+
 
             }, 0L, 20L);
         }
@@ -96,6 +100,8 @@ public class GameTask implements IBingoTask {
 
             this.isRunning = false;
             Bukkit.getScheduler().cancelTask(this.taskId);
+
+            this.bossBar.removeAll();
 
         }
 

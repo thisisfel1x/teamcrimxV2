@@ -11,8 +11,8 @@ import java.util.Collections;
 
 public class InventoryShuffle implements IBingoScenario {
 
-    Bingo bingo = Bingo.getInstance();
-    Data data = this.bingo.getData();
+    private final Bingo bingo = Bingo.getInstance();
+    private final Data data = this.bingo.getData();
 
     @Override
     public void execute() {

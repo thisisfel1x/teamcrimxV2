@@ -13,19 +13,23 @@ import de.fel1x.bingo.listener.block.BlockTransformListener;
 import de.fel1x.bingo.listener.entity.DamageListener;
 import de.fel1x.bingo.listener.entity.EntityTargetListener;
 import de.fel1x.bingo.listener.player.*;
+import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.scenarios.IBingoScenario;
 import de.fel1x.bingo.tasks.IBingoTask;
 import de.fel1x.bingo.tasks.IdleTask;
+import de.fel1x.bingo.utils.ItemBuilder;
 import de.fel1x.bingo.utils.scoreboard.GameScoreboard;
 import de.fel1x.bingo.utils.scoreboard.LobbyScoreboard;
-import de.fel1x.bingo.utils.world.StatsArmorstand;
-import de.fel1x.bingo.utils.world.WorldGenerator;
+import de.fel1x.bingo.utils.world.ArmorstandStatsLoader;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import fr.minuskube.inv.InventoryManager;
 import org.apache.commons.lang.WordUtils;
 import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
@@ -39,9 +43,14 @@ public final class Bingo extends JavaPlugin {
 
     public static Bingo instance;
     private final String prefix = "§aBingo §8● §r";
-    ArrayList<Entity> fallingGlassBlocks, fallingAnvils;
+    private final int teamSize = 2;
     private CrimxAPI crimxAPI;
     private String formattedBiomeName;
+
+    private final ItemStack bingoItemsQuickAccess = new ItemBuilder(Material.COMMAND_BLOCK_MINECART)
+            .setName("§8● §aItems")
+            .addGlow()
+            .toItemStack();
 
     private PluginManager pluginManager;
     private Data data;
@@ -49,7 +58,6 @@ public final class Bingo extends JavaPlugin {
     private GamestateHandler gamestateHandler;
     private ItemGenerator itemGenerator;
     private InventoryManager inventoryManager;
-    private WorldGenerator worldGenerator;
 
     private LobbyScoreboard lobbyScoreboard;
     private GameScoreboard gameScoreboard;
@@ -76,9 +84,7 @@ public final class Bingo extends JavaPlugin {
         this.crimxAPI = new CrimxAPI();
 
         this.setupWorlds();
-
-        this.fallingGlassBlocks = new ArrayList<>();
-        this.fallingAnvils = new ArrayList<>();
+        this.preLoadChunks();
 
         this.pluginManager = Bukkit.getPluginManager();
 
@@ -95,9 +101,7 @@ public final class Bingo extends JavaPlugin {
         this.registerListener();
         this.registerCommands();
 
-        this.worldGenerator = new WorldGenerator();
-
-        new StatsArmorstand(this);
+        new ArmorstandStatsLoader(this);
 
         this.bingoTask = new IdleTask();
         this.bingoTask.start();
@@ -106,6 +110,23 @@ public final class Bingo extends JavaPlugin {
 
         this.getServer().getScheduler().runTaskLater(this, this::setMotdAndUpdate, 1L);
 
+    }
+
+    private void preLoadChunks() {
+
+        World world = Bukkit.getWorlds().get(0);
+        Location spawnLocation = new Location(world, 0.5, 121, 0.5);
+
+        world.setSpawnLocation(spawnLocation);
+        Chunk worldSpawnLocationChunk = spawnLocation.getChunk();
+
+        for(int i = worldSpawnLocationChunk.getX() - 20; i < worldSpawnLocationChunk.getX() + 21; i++) {
+            for (int j = worldSpawnLocationChunk.getZ() - 20; j < worldSpawnLocationChunk.getZ() + 21; j++) {
+                Chunk current = world.getChunkAt(i, j);
+                current.load(true);
+                Bukkit.getConsoleSender().sendMessage(Bingo.getInstance().getPrefix() + "Loading Chunk " + current.getX() + " " + current.getZ());
+            }
+        }
     }
 
     @Override
@@ -125,6 +146,27 @@ public final class Bingo extends JavaPlugin {
 
     }
 
+    public Inventory getBingoInventory(BingoPlayer bingoPlayer) {
+        Inventory inventory = Bukkit.createInventory(null, InventoryType.DISPENSER, this.getPrefix() + "§7§lItems");
+
+        for (int i = 0; i < this.itemGenerator.getPossibleItems().size(); i++) {
+
+            ItemStack item = new ItemBuilder(this.itemGenerator.getPossibleItems().get(i).getMaterial())
+                    .setLore("", "§7Schwierigkeit: §b§l" + this.itemGenerator.getPossibleItems().get(i).getBingoDifficulty().name(), "").toItemStack();
+
+            if (bingoPlayer.isPlayer() && bingoPlayer.getTeam() != null) {
+                boolean done = bingoPlayer.getTeam().getDoneItems()[i];
+
+                if (done) {
+                    item = new ItemBuilder(Material.BARRIER)
+                            .setName("§a§l✔ §r§8- §7Bereits gefunden!").toItemStack();
+                }
+            }
+            inventory.setItem(i, item);
+        }
+        return inventory;
+    }
+
     private void setMotdAndUpdate() {
 
         String unformatted = new Location(Bukkit.getWorlds().get(0), 0.5, 125, 0.5).getChunk()
@@ -135,8 +177,8 @@ public final class Bingo extends JavaPlugin {
 
         String formatted;
 
-        if (formattedIgnoredLength.length() > 10) {
-            formatted = formattedIgnoredLength.substring(0, 8) + "...";
+        if (formattedIgnoredLength.length() > 12) {
+            formatted = formattedIgnoredLength.substring(0, 10) + "...";
         } else {
             formatted = formattedIgnoredLength;
         }
@@ -175,7 +217,9 @@ public final class Bingo extends JavaPlugin {
         new JoinListener(this);
         new QuitListener(this);
         new PickupListener(this);
+        new DropListener(this);
         new InteractListener(this);
+        new MoveListener(this);
         new BingoItemListener(this);
         new InventoryClickListener(this);
         new FoodListener(this);
@@ -283,19 +327,15 @@ public final class Bingo extends JavaPlugin {
         this.bingoTask = bingoTask;
     }
 
-    public WorldGenerator getWorldGenerator() {
-        return this.worldGenerator;
-    }
-
-    public ArrayList<Entity> getFallingGlassBlocks() {
-        return this.fallingGlassBlocks;
-    }
-
     public LobbyScoreboard getLobbyScoreboard() {
         return this.lobbyScoreboard;
     }
 
-    public ArrayList<Entity> getFallingAnvils() {
-        return this.fallingAnvils;
+    public int getTeamSize() {
+        return teamSize;
+    }
+
+    public ItemStack getBingoItemsQuickAccess() {
+        return this.bingoItemsQuickAccess;
     }
 }

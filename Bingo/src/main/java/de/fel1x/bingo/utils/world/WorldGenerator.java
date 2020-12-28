@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+@Deprecated
 public class WorldGenerator {
 
     private final Material[] glassTypes = {

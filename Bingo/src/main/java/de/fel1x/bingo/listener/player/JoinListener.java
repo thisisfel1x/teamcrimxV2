@@ -56,8 +56,8 @@ public class JoinListener implements Listener {
                 bingoPlayer.addToPlayers();
                 event.setJoinMessage(this.bingo.getPrefix() + "§a" + player.getDisplayName() + " §7hat das Spiel betreten");
 
-                player.getInventory().setItem(0, new ItemBuilder(Material.RED_BED)
-                        .setName("§8» §a§lWähle dein Team").toItemStack());
+                player.getInventory().setItem(0, new ItemBuilder(Material.CHEST_MINECART)
+                        .setName("§8● §aWähle dein Team").toItemStack());
 
                 player.teleport(this.bingo.getSpawnLocation());
 
@@ -69,9 +69,14 @@ public class JoinListener implements Listener {
                 break;
 
             case INGAME:
+            case PREGAME:
                 bingoPlayer.addToSpectators();
                 bingoPlayer.activateSpectatorMode();
 
+                break;
+
+            case ENDING:
+                player.teleportAsync(this.bingo.getSpawnLocation());
                 break;
 
         }

@@ -35,11 +35,9 @@ public class InteractListener implements Listener {
 
             case IDLE:
             case LOBBY:
-
-                if (event.getMaterial().equals(Material.RED_BED)
-                        && Objects.requireNonNull(event.getItem()).getItemMeta().getDisplayName()
-                        .equalsIgnoreCase("§8» §a§lWähle dein Team")
-                        && (event.getAction().equals(Action.RIGHT_CLICK_AIR))) {
+                if (event.getMaterial().equals(Material.CHEST_MINECART)
+                        && (event.getAction() == Action.RIGHT_CLICK_AIR
+                        || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 
                     TeamSelectorInventory.TEAM_SELECTOR.open(player);
                     return;
@@ -63,17 +61,25 @@ public class InteractListener implements Listener {
                     if (event.getMaterial().equals(Material.COMPASS)
                             && Objects.requireNonNull(event.getItem()).getItemMeta().getDisplayName()
                             .equalsIgnoreCase("§7Spieler beoabachten")
-                            && (event.getAction().equals(Action.RIGHT_CLICK_AIR))) {
+                            && (event.getAction() == Action.RIGHT_CLICK_AIR
+                            || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 
                         SpectatorCompassInventory.INVENTORY.open(player);
                         return;
 
                     }
                 }
-
                 break;
+        }
 
-
+        if(gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
+            if(event.hasItem()) {
+                if(event.getItem() == null) return;
+                if(event.getItem().equals(this.bingo.getBingoItemsQuickAccess())) {
+                    player.openInventory(this.bingo.getBingoInventory(new BingoPlayer(player)));
+                    event.setCancelled(true);
+                }
+            }
         }
 
     }

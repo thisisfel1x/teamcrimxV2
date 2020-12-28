@@ -63,9 +63,6 @@ public class PreGameTask implements IFloorIsLavaTask {
                             player.sendTitle(Title.builder()
                                     .title(((this.timer == 3) ? "§a§l" : ((this.timer == 2) ? "§e§l" : "§c§l")) + this.timer)
                                     .fadeIn(10).stay(20).fadeOut(10).build());
-
-                            player.getInventory().clear();
-
                         });
                         break;
                     case 0:

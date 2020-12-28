@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class StatsArmorstand {
+public class ArmorstandStatsLoader {
 
     private final Bingo bingo;
     private final Location[] signs;
     int count;
 
-    public StatsArmorstand(Bingo bingo) {
+    public ArmorstandStatsLoader(Bingo bingo) {
         this.bingo = bingo;
 
         this.signs = new Location[]{
@@ -164,7 +164,7 @@ public class StatsArmorstand {
         }, 0L, 0L);
     }
 
-    private ArrayList<Location> getCirclePoints(Location center, double radius, int amount) {
+    public static ArrayList<Location> getCirclePoints(Location center, double radius, int amount) {
         World world = center.getWorld();
         double increment = (2 * Math.PI) / amount;
 

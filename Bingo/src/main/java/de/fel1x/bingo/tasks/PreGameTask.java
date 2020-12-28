@@ -9,13 +9,16 @@ import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.objects.BingoTeam;
 import de.fel1x.bingo.utils.Utils;
 import de.fel1x.bingo.utils.scoreboard.GameScoreboard;
-import org.bukkit.*;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.util.Vector;
+import de.fel1x.bingo.utils.world.ArmorstandStatsLoader;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
 
 public class PreGameTask implements IBingoTask {
 
@@ -41,9 +44,26 @@ public class PreGameTask implements IBingoTask {
             this.isRunning = true;
             this.bingo.getGamestateHandler().setGamestate(Gamestate.PREGAME);
 
-            this.bingo.getData().getPlayers().forEach(player -> {
-                player.teleport(new Location(Bukkit.getWorlds().get(0), 0.5, 125, 0.5));
+            Location worldSpawnLocation = new Location(Bukkit.getWorlds().get(0), 0, 0, 0);
+            int y = worldSpawnLocation.getWorld().getHighestBlockYAt(0, 0);
+            worldSpawnLocation.setY(y);
+
+            ArrayList<Location> spawns = ArmorstandStatsLoader
+                    .getCirclePoints(worldSpawnLocation,20, 6 * this.bingo.getTeamSize());
+
+            Collections.shuffle(spawns);
+
+            int counter = 0;
+
+            for (Player player : this.bingo.getData().getPlayers()) {
                 player.getInventory().clear();
+                player.getInventory().setItem(8, this.bingo.getBingoItemsQuickAccess());
+                Location spawnLocation = spawns.get(counter).getWorld().getHighestBlockAt(spawns.get(counter)).getLocation();
+                spawnLocation.getBlock().setType(player.hasMetadata("block") ?
+                        (Material) Objects.requireNonNull(player.getMetadata("block").get(0).value())
+                        : Material.GLASS);
+                spawnLocation.clone().add(0, 1, 0);
+                player.teleport(spawnLocation.toCenterLocation().clone().subtract(0, 0.5, 0));
                 BingoPlayer bingoPlayer = new BingoPlayer(player);
                 if (bingoPlayer.getTeam() == null) {
                     for (BingoTeam bingoTeam : BingoTeam.values()) {
@@ -55,7 +75,9 @@ public class PreGameTask implements IBingoTask {
                         }
                     }
                 }
-            });
+                counter++;
+            }
+
 
             this.bingo.setGameScoreboard(new GameScoreboard());
             this.bingo.getData().getPlayers().forEach(player -> this.bingo.getGameScoreboard().setGameScoreboard(player));
@@ -96,43 +118,6 @@ public class PreGameTask implements IBingoTask {
                         Bukkit.getScheduler().cancelTasks(this.bingo);
 
                         this.bingo.getGamestateHandler().setGamestate(Gamestate.INGAME);
-
-                        this.bingo.getData().getPlayers().forEach(player -> {
-
-                            player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.5f, 1.25f);
-                            player.sendTitle(Title.builder()
-                                    .title("§a§lGO").fadeIn(0).stay(40).fadeOut(10).build());
-
-                            //int x = this.random.nextInt(20) * (this.random.nextBoolean() ? -1 : 1);
-                            //int z = this.random.nextInt(20) * (this.random.nextBoolean() ? -1 : 1);
-
-                            player.setVelocity(player.getEyeLocation().getDirection().setY(10)
-                                    .multiply(10));
-
-                            player.setGameMode(GameMode.SURVIVAL);
-
-                        });
-
-                        this.bingo.getWorldGenerator().getBlocks().forEach(block -> {
-
-                            float x = -2.0F + (float) (Math.random() * 4.0D + 1.0D);
-                            float y = -3.0F + (float) (Math.random() * 6.0D + 1.0D);
-                            float z = -2.0F + (float) (Math.random() * 4.0D + 1.0D);
-
-                            if(ThreadLocalRandom.current().nextBoolean() && new Random().nextBoolean()) {
-                                FallingBlock fallingBlock = block.getWorld().spawnFallingBlock(block.getLocation(), block.getBlockData());
-
-                                fallingBlock.setVelocity(new Vector(x, y, z));
-                                fallingBlock.setDropItem(false);
-                                fallingBlock.setMetadata("falling", new FixedMetadataValue(this.bingo, true));
-                            }
-
-                            block.setType(Material.AIR);
-
-                        });
-
-
-                        Bukkit.getWorlds().get(0).getBlockAt(0, 120, 0).setType(Material.AIR);
 
                         this.bingo.startTimerByClass(GameTask.class);
 

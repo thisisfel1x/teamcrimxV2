@@ -53,7 +53,7 @@ public class GameScoreboard {
 
             Team top = this.gameScoreboard.registerNewTeam("top" + counter);
             top.addEntry("§" + counter);
-            top.setPrefix(String.format("§7Team %s%s §8» §a%s§8/§c9", Utils.getChatColor(bingoTeam.getColor()),
+            top.setPrefix(String.format("§7Team %s%s §8● §a%s§8/§c9", Utils.getChatColor(bingoTeam.getColor()),
                     bingoTeam.getName(), bingoTeam.getDoneItemsSize()));
 
             objective.getScore("§" + counter).setScore(counter);
@@ -126,17 +126,15 @@ public class GameScoreboard {
         this.i = 1;
         this.getTopTeams().forEach(bingoTeam -> {
             this.updateBoard(player,
-                    String.format("§7Team %s%s §8» §a%s§8/§c9", Utils.getChatColor(bingoTeam.getColor()),
+                    String.format("§7Team %s%s §8● §a%s§8/§c9", Utils.getChatColor(bingoTeam.getColor()),
                             bingoTeam.getName(), bingoTeam.getDoneItemsSize()),
                     "top" + (this.i));
-            //player.sendMessage(bingoTeam.getName() + " " + bingoTeam.getDoneItemsSize());
             this.i++;
         });
     }
 
     public void updateBoard(Player player, String value, String score) {
         if (player.getScoreboard().getTeam("top1") != null) {
-            player.sendMessage("update");
             player.getScoreboard().getTeam(score).setPrefix(value);
         } else {
             setGameScoreboard(player);
@@ -146,7 +144,7 @@ public class GameScoreboard {
 
     public ArrayList<BingoTeam> getTopTeams() {
 
-        ArrayList<BingoTeam> teams = Arrays.stream(BingoTeam.values()).filter(team -> !team.isEmpty()).sorted((o1, o2) -> {
+        return Arrays.stream(BingoTeam.values()).filter(team -> !team.isEmpty()).sorted((o1, o2) -> {
 
             int i1 = o1.getDoneItemsSize();
             int i2 = o2.getDoneItemsSize();
@@ -160,10 +158,6 @@ public class GameScoreboard {
             return 0;
 
         }).collect(Collectors.toCollection(ArrayList::new));
-
-        Collections.reverse(teams);
-
-        return teams;
 
     }
 }
