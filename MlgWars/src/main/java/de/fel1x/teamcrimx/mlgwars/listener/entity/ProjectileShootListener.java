@@ -42,7 +42,7 @@ public class ProjectileShootListener implements Listener {
                                 tntPrimed.setIsIncendiary(true);
                                 tntPrimed.setTicksLived(5);
                                 tntPrimed.setVelocity(event.getEntity().getVelocity());
-                                event.getEntity().setPassenger(tntPrimed);
+                                event.getEntity().addPassenger(tntPrimed);
                             }, 3L);
                         }
                     }

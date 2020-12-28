@@ -66,7 +66,7 @@ public class WorldLoader {
         lobby.getWorld().getEntities().forEach(Entity::remove);
         World world = lobby.getWorld();
         world.setSpawnLocation((int) lobby.getX(), (int) lobby.getY(), (int) lobby.getZ());
-        world.setDifficulty(Difficulty.EASY);
+        world.setDifficulty(Difficulty.NORMAL);
         world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
         world.setGameRule(GameRule.DO_MOB_LOOT, false);
         world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
@@ -307,9 +307,9 @@ public class WorldLoader {
         World world = spectator.getWorld();
         world.setSpawnLocation((int) spectator.getX(), (int) spectator.getY(), (int) spectator.getZ());
         world.setDifficulty(Difficulty.EASY);
-        world.setGameRuleValue("doMobSpawning", "false");
-        world.setGameRuleValue("doMobLoot", "false");
-        world.setGameRuleValue("doWeatherCycle", "false");
+        world.setGameRule(GameRule.DO_MOB_LOOT, false);
+        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        world.setDifficulty(Difficulty.NORMAL);
         world.setStorm(false);
         world.setThunderDuration(0);
         world.setThundering(false);
