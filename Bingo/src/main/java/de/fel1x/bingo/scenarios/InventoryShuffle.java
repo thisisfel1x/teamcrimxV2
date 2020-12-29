@@ -19,6 +19,8 @@ public class InventoryShuffle implements IBingoScenario {
 
         this.data.getPlayers().forEach(player -> {
 
+            player.getInventory().remove(this.bingo.getBingoItemsQuickAccess());
+
             ItemStack[] inventoryContents = player.getInventory().getContents();
             Collections.shuffle(Arrays.asList(inventoryContents));
 
@@ -26,6 +28,14 @@ public class InventoryShuffle implements IBingoScenario {
 
             player.sendMessage(this.bingo.getPrefix() + "§7Dein Inventar wurde vertauscht");
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
+
+            if(player.getInventory().getItem(8) != null) {
+                ItemStack cache = player.getInventory().getItem(8);
+                player.getInventory().getItem(8).setType(Material.AIR);
+                player.getInventory().addItem(cache);
+            }
+
+            player.getInventory().setItem(8, this.bingo.getBingoItemsQuickAccess());
 
         });
 
