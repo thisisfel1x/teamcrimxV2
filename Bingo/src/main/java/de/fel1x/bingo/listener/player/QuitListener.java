@@ -43,6 +43,7 @@ public class QuitListener implements Listener {
                         String.format("§8● §a%s§8/§c%s",
                                 this.bingo.getData().getPlayers().size(), BingoTeam.RED.getTeamSize() * 6),
                         "players", "§a"));
+                this.bingo.getVotingManager().removeFromAll(player.getUniqueId());
                 break;
 
             case INGAME:

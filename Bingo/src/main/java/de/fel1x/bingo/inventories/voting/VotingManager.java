@@ -38,7 +38,7 @@ public class VotingManager {
         }
     }
 
-    private void removeFromAll(UUID uuid) {
+    public void removeFromAll(UUID uuid) {
         this.getVotingPlayersEasy().remove(uuid);
         this.getVotingPlayersNormal().remove(uuid);
         this.getVotingPlayersHard().remove(uuid);
