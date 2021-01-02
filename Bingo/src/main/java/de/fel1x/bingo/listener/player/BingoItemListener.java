@@ -28,6 +28,13 @@ public class BingoItemListener implements Listener {
     public void on(BingoItemUnlockEvent event) {
 
         BingoTeam bingoTeam = event.getTeam();
+
+        for (Player teamPlayer : bingoTeam.getTeamPlayers()) {
+            this.bingo.getGameScoreboard().updateBoard(teamPlayer,
+                    String.format("§7Items gefunden §8● §a%s§8/§c9", bingoTeam.getDoneItemsSize()),
+                    "items");
+        }
+
         boolean allDone = Arrays.stream(bingoTeam.getDoneItems()).allMatch(val -> val);
 
         for (Player player : Bukkit.getOnlinePlayers()) {

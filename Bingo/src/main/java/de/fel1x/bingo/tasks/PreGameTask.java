@@ -63,7 +63,7 @@ public class PreGameTask implements IBingoTask {
                         (Material) Objects.requireNonNull(player.getMetadata("block").get(0).value())
                         : Material.GLASS);
                 spawnLocation.clone().add(0, 1, 0);
-                player.teleport(spawnLocation.toCenterLocation().clone().subtract(0, 0.5, 0));
+                player.teleportAsync(spawnLocation.toCenterLocation().clone().subtract(0, 0.5, 0));
                 BingoPlayer bingoPlayer = new BingoPlayer(player);
                 if (bingoPlayer.getTeam() == null) {
                     for (BingoTeam bingoTeam : BingoTeam.values()) {
@@ -77,7 +77,6 @@ public class PreGameTask implements IBingoTask {
                 }
                 counter++;
             }
-
 
             this.bingo.setGameScoreboard(new GameScoreboard());
             this.bingo.getData().getPlayers().forEach(player -> this.bingo.getGameScoreboard().setGameScoreboard(player));
@@ -104,10 +103,15 @@ public class PreGameTask implements IBingoTask {
 
                         this.bingo.getData().getPlayers().forEach(player -> {
 
+                            player.setLevel(0);
+                            player.setExp(0f);
+
                             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.75f);
-                            player.sendTitle(Title.builder()
-                                    .title(((this.timer == 3) ? "§a§l" : ((this.timer == 2) ? "§e§l" : "§c§l")) + this.timer)
-                                    .fadeIn(10).stay(20).fadeOut(10).build());
+                            if(this.timer <= 3) {
+                                player.sendTitle(Title.builder()
+                                        .title(((this.timer == 3) ? "§a§l" : ((this.timer == 2) ? "§e§l" : "§c§l")) + this.timer)
+                                        .fadeIn(10).stay(20).fadeOut(10).build());
+                            }
 
                         });
 

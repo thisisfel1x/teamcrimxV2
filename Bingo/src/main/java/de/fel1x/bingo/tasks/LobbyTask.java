@@ -1,15 +1,17 @@
 package de.fel1x.bingo.tasks;
 
+import com.destroystokyo.paper.Title;
 import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
+import de.fel1x.bingo.objects.BingoDifficulty;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
 public class LobbyTask implements IBingoTask {
 
-    Bingo bingo = Bingo.getInstance();
-    int taskId = 0;
-    int countdown = 30;
+    private final Bingo bingo = Bingo.getInstance();
+    private int taskId = 0;
+    private int countdown = 60;
 
     boolean isRunning = false;
 
@@ -36,6 +38,20 @@ public class LobbyTask implements IBingoTask {
                     case 3:
                     case 2:
                     case 1:
+                        if(this.countdown == 10) {
+                            BingoDifficulty bingoDifficulty = this.bingo.getVotingManager().getFinalDifficulty();
+
+                            Bukkit.getScheduler().runTaskAsynchronously(this.bingo, () -> this.bingo.generateItems(bingoDifficulty));
+
+                            Title title = Title.builder()
+                                    .title(bingoDifficulty.getDisplayName())
+                                    .subtitle("§7Ausgewählte Schwierigkeit")
+                                    .fadeIn(10)
+                                    .stay(60)
+                                    .fadeIn(10)
+                                    .build();
+                            this.bingo.getData().getPlayers().forEach(player -> player.sendTitle(title));
+                        }
 
                         Bukkit.broadcastMessage(this.bingo.getPrefix() + "§7Die Runde startet in §e"
                                 + ((this.countdown == 1) ? "einer Sekunde" : this.countdown + " Sekunden"));
@@ -52,6 +68,13 @@ public class LobbyTask implements IBingoTask {
 
                         break;
 
+                }
+
+                if (this.countdown >= 1) {
+                    Bukkit.getOnlinePlayers().forEach(current -> {
+                        current.setLevel(this.countdown);
+                        current.setExp((float) this.countdown / (float) 60);
+                    });
                 }
 
                 this.countdown--;

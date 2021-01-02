@@ -4,7 +4,11 @@ import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.inventories.SpectatorCompassInventory;
 import de.fel1x.bingo.inventories.TeamSelectorInventory;
+import de.fel1x.bingo.inventories.voting.VotingInventory;
+import de.fel1x.bingo.inventories.voting.VotingManager;
 import de.fel1x.bingo.objects.BingoPlayer;
+import de.fel1x.bingo.tasks.LobbyTask;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,16 +39,23 @@ public class InteractListener implements Listener {
 
             case IDLE:
             case LOBBY:
-                if (event.getMaterial().equals(Material.CHEST_MINECART)
-                        && (event.getAction() == Action.RIGHT_CLICK_AIR
-                        || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-
-                    TeamSelectorInventory.TEAM_SELECTOR.open(player);
-                    return;
-
-                }
-
                 event.setCancelled(true);
+
+                if((event.getAction() == Action.RIGHT_CLICK_AIR
+                        || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+                    if (event.getMaterial() == Material.CHEST_MINECART) {
+                        TeamSelectorInventory.TEAM_SELECTOR.open(player);
+                    } else if (event.getMaterial() == Material.PAPER) {
+                        if(this.bingo.getBingoTask() instanceof LobbyTask) {
+                            LobbyTask lobbyTask = (LobbyTask) this.bingo.getBingoTask();
+                            if(lobbyTask.getCountdown() <= 15) {
+                                player.sendMessage(this.bingo.getPrefix() + "§cDu kannst nicht mehr abstimmen!");
+                                return;
+                            }
+                        }
+                        VotingInventory.VOTING_INVENTORY.open(player);
+                    }
+                }
 
                 break;
 

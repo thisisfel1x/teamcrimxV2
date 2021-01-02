@@ -7,12 +7,14 @@ import de.fel1x.bingo.commands.*;
 import de.fel1x.bingo.gamehandler.GamestateHandler;
 import de.fel1x.bingo.generation.ItemGenerator;
 import de.fel1x.bingo.generation.Items;
+import de.fel1x.bingo.inventories.voting.VotingManager;
 import de.fel1x.bingo.listener.block.BlockBreakListener;
 import de.fel1x.bingo.listener.block.BlockPlaceListener;
 import de.fel1x.bingo.listener.block.BlockTransformListener;
 import de.fel1x.bingo.listener.entity.DamageListener;
 import de.fel1x.bingo.listener.entity.EntityTargetListener;
 import de.fel1x.bingo.listener.player.*;
+import de.fel1x.bingo.objects.BingoDifficulty;
 import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.scenarios.IBingoScenario;
 import de.fel1x.bingo.tasks.IBingoTask;
@@ -44,14 +46,12 @@ public final class Bingo extends JavaPlugin {
     public static Bingo instance;
     private final String prefix = "§aBingo §8● §r";
     private final int teamSize = 2;
-    private CrimxAPI crimxAPI;
-    private String formattedBiomeName;
-
     private final ItemStack bingoItemsQuickAccess = new ItemBuilder(Material.COMMAND_BLOCK_MINECART)
             .setName("§8● §aItems")
             .addGlow()
             .toItemStack();
-
+    private CrimxAPI crimxAPI;
+    private String formattedBiomeName;
     private PluginManager pluginManager;
     private Data data;
     private Items items;
@@ -61,6 +61,8 @@ public final class Bingo extends JavaPlugin {
 
     private LobbyScoreboard lobbyScoreboard;
     private GameScoreboard gameScoreboard;
+
+    private VotingManager votingManager;
 
     private IBingoTask bingoTask;
     private Location spawnLocation;
@@ -84,14 +86,16 @@ public final class Bingo extends JavaPlugin {
         this.crimxAPI = new CrimxAPI();
 
         this.setupWorlds();
-        this.preLoadChunks();
+        //this.preLoadChunks();
 
         this.pluginManager = Bukkit.getPluginManager();
 
         this.data = new Data();
         this.items = new Items();
         this.gamestateHandler = new GamestateHandler();
-        this.itemGenerator = new ItemGenerator();
+
+        this.votingManager = new VotingManager(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+                BingoDifficulty.EASY);
 
         this.lobbyScoreboard = new LobbyScoreboard();
 
@@ -113,18 +117,21 @@ public final class Bingo extends JavaPlugin {
     }
 
     private void preLoadChunks() {
-
         World world = Bukkit.getWorlds().get(0);
         Location spawnLocation = new Location(world, 0.5, 121, 0.5);
 
         world.setSpawnLocation(spawnLocation);
         Chunk worldSpawnLocationChunk = spawnLocation.getChunk();
 
-        for(int i = worldSpawnLocationChunk.getX() - 20; i < worldSpawnLocationChunk.getX() + 21; i++) {
-            for (int j = worldSpawnLocationChunk.getZ() - 20; j < worldSpawnLocationChunk.getZ() + 21; j++) {
+        for (int i = worldSpawnLocationChunk.getX() - 60; i < worldSpawnLocationChunk.getX() + 61; i++) {
+            for (int j = worldSpawnLocationChunk.getZ() - 60; j < worldSpawnLocationChunk.getZ() + 61; j++) {
                 Chunk current = world.getChunkAt(i, j);
                 current.load(true);
+                if (i > -4 && i < 4 && j > -4 && j < 4) {
+                    current.setForceLoaded(true);
+                }
                 Bukkit.getConsoleSender().sendMessage(Bingo.getInstance().getPrefix() + "Loading Chunk " + current.getX() + " " + current.getZ());
+
             }
         }
     }
@@ -240,6 +247,10 @@ public final class Bingo extends JavaPlugin {
 
     }
 
+    public void generateItems(BingoDifficulty bingoDifficulty) {
+        this.itemGenerator = new ItemGenerator(bingoDifficulty);
+    }
+
     public void startTimerByClass(Class<?> clazz) {
 
         this.getBingoTask().stop();
@@ -332,10 +343,14 @@ public final class Bingo extends JavaPlugin {
     }
 
     public int getTeamSize() {
-        return teamSize;
+        return this.teamSize;
     }
 
     public ItemStack getBingoItemsQuickAccess() {
         return this.bingoItemsQuickAccess;
+    }
+
+    public VotingManager getVotingManager() {
+        return this.votingManager;
     }
 }

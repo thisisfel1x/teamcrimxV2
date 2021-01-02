@@ -63,6 +63,13 @@ public class GameScoreboard {
 
         objective.getScore("§f").setScore(counter + 1);
 
+        Team yourItems = this.gameScoreboard.registerNewTeam("items");
+        yourItems.addEntry("§e");
+        yourItems.setPrefix("§7Items gefunden §8● §a0§8/§c9");
+
+        objective.getScore("§e").setScore(counter + 2);
+        objective.getScore("§k").setScore(counter + 3);
+
         this.spectatorTeam = this.gameScoreboard.registerNewTeam("00999Spectator");
         this.spectatorTeam.setPrefix("§7§oSpectator §r§8| §7");
         this.spectatorTeam.setDisplayName("§7");

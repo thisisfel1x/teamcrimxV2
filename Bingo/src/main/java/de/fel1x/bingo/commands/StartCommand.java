@@ -25,7 +25,7 @@ public class StartCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission("ctf.start")) return false;
+        if (!player.hasPermission("bingo.start")) return false;
 
         Gamestate gamestate = Bingo.getInstance().getGamestateHandler().getGamestate();
 

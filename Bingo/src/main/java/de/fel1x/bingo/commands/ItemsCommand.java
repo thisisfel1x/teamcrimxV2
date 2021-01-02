@@ -28,6 +28,12 @@ public class ItemsCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
+
+        if(this.bingo.getItemGenerator() == null) {
+            player.sendMessage(this.bingo.getPrefix() + "§cDie Items wurden noch nicht generiert, bitte stimme zuerst über die Schwierigkeit ab!");
+            return false;
+        }
+
         BingoPlayer bingoPlayer = new BingoPlayer(player);
 
         player.openInventory(this.bingo.getBingoInventory(bingoPlayer));

@@ -5,9 +5,9 @@ import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.objects.BingoTeam;
 import de.fel1x.bingo.tasks.LobbyTask;
-import de.fel1x.bingo.utils.ItemBuilder;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
+import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -56,8 +56,9 @@ public class JoinListener implements Listener {
                 bingoPlayer.addToPlayers();
                 event.setJoinMessage(this.bingo.getPrefix() + "§a" + player.getDisplayName() + " §7hat das Spiel betreten");
 
-                player.getInventory().setItem(0, new ItemBuilder(Material.CHEST_MINECART)
-                        .setName("§8● §aWähle dein Team").toItemStack());
+                player.getInventory().addItem(new ItemBuilder(Material.CHEST_MINECART)
+                        .setName("§8● §aWähle dein Team").toItemStack(),
+                        new ItemBuilder(Material.PAPER).setName("§8● §eSchwierigkeitsvoting").toItemStack());
 
                 player.teleport(this.bingo.getSpawnLocation());
 

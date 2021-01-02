@@ -7,9 +7,11 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EnderGamesTeleport implements IBingoScenario {
 
@@ -29,13 +31,16 @@ public class EnderGamesTeleport implements IBingoScenario {
 
         int counter = 0;
 
-        for (Location location : locations.keySet()) {
-            Player playerToTeleport = players.get(counter);
-            playerToTeleport.teleportAsync(location);
+        for (Player player : players) {
+            Location location = new ArrayList<>(locations.keySet()).get(counter);
 
-            playerToTeleport.sendMessage(this.bingo.getPrefix() + "§7Du wurdest mit " + locations.get(location) + " §7getauscht!");
-            playerToTeleport.playSound(playerToTeleport.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 3, 5);
-            playerToTeleport.playEffect(EntityEffect.TELEPORT_ENDER);
+            player.teleportAsync(location);
+
+            player.sendMessage(this.bingo.getPrefix() + "§7Du wurdest mit " + locations.get(location) + " §7getauscht!");
+            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 3, 5);
+            player.playEffect(EntityEffect.TELEPORT_ENDER);
+
+            counter++;
         }
 
     }
