@@ -64,6 +64,8 @@ public class PreGameTask implements IBingoTask {
                         : Material.GLASS);
                 spawnLocation.clone().add(0, 1, 0);
                 player.teleportAsync(spawnLocation.toCenterLocation().clone().subtract(0, 0.5, 0));
+                player.sendTitle(new Title.Builder().title(" ").subtitle("§cDu wirst teleportiert...").fadeIn(10)
+                        .stay(20).fadeOut(10).build());
                 BingoPlayer bingoPlayer = new BingoPlayer(player);
                 if (bingoPlayer.getTeam() == null) {
                     for (BingoTeam bingoTeam : BingoTeam.values()) {

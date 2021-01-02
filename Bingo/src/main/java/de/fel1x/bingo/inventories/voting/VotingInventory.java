@@ -8,6 +8,8 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class VotingInventory implements InventoryProvider {
@@ -29,23 +31,23 @@ public class VotingInventory implements InventoryProvider {
         int column = 2;
 
         for (BingoDifficulty bingoDifficulty : BingoDifficulty.values()) {
+            if(bingoDifficulty == BingoDifficulty.NOT_FORCED) continue;
+
             contents.set(1, column, ClickableItem.of(new ItemBuilder(bingoDifficulty.getMaterial())
                             .setName("§8● " + bingoDifficulty.getDisplayName())
                             .addGlow(this.votingManager.containsPlayer(player.getUniqueId(), bingoDifficulty))
                             .setLore("§7Votes §8● §a" + this.votingManager.getVotesByDifficulty(bingoDifficulty))
                             .toItemStack(),
                     inventoryClickEvent -> {
+                        player.closeInventory();
                         if(this.bingo.getBingoTask() instanceof LobbyTask) {
                             LobbyTask lobbyTask = (LobbyTask) this.bingo.getBingoTask();
                             if(lobbyTask.getCountdown() <= 15) {
-                                player.closeInventory();
                                 player.sendMessage(this.bingo.getPrefix() + "§cDu kannst nicht mehr abstimmen!");
                                 return;
                             }
                         }
                         this.votingManager.addPlayerToDifficulty(player.getUniqueId(), bingoDifficulty);
-
-                        player.closeInventory();
                         player.sendMessage(this.bingo.getPrefix() + " §7Du hast für die Schwierigkeit "
                                 + bingoDifficulty.getDisplayName() + " §7abgestimmt!");
                     }));
@@ -57,6 +59,12 @@ public class VotingInventory implements InventoryProvider {
 
     @Override
     public void update(Player player, InventoryContents contents) {
-
+        if(player.hasPermission("bingo.force")) {
+            contents.set(2, 8, ClickableItem.of(new ItemBuilder(this.votingManager.getForcedBingoDifficulty().getMaterial())
+                            .setName("§8● §cForce Difficulty")
+                            .setLore("" , "§7Aktuelle Schwierigkeit §8● " + this.votingManager.getForcedBingoDifficulty().getDisplayName(), " ")
+                            .toItemStack(),
+                    inventoryClickEvent -> this.votingManager.forceNextDifficulty()));
+        }
     }
 }

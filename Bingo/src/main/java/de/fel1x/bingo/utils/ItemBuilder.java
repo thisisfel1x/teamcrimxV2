@@ -254,7 +254,7 @@ public class ItemBuilder {
             ItemMeta im = this.is.getItemMeta();
             im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             this.is.setItemMeta(im);
-            return this;
+            this.addEnchant(Enchantment.DAMAGE_ARTHROPODS, 1);
         }
         return this;
     }

@@ -86,7 +86,7 @@ public final class Bingo extends JavaPlugin {
         this.crimxAPI = new CrimxAPI();
 
         this.setupWorlds();
-        //this.preLoadChunks();
+        this.preLoadChunks();
 
         this.pluginManager = Bukkit.getPluginManager();
 
@@ -95,7 +95,7 @@ public final class Bingo extends JavaPlugin {
         this.gamestateHandler = new GamestateHandler();
 
         this.votingManager = new VotingManager(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                BingoDifficulty.EASY);
+                BingoDifficulty.NOT_FORCED);
 
         this.lobbyScoreboard = new LobbyScoreboard();
 

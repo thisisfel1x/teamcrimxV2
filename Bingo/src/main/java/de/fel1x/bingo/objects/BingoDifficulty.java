@@ -4,6 +4,7 @@ import org.bukkit.Material;
 
 public enum BingoDifficulty {
 
+    NOT_FORCED(Material.BARRIER, "§eNicht geforced...", -1),
     EASY(Material.GREEN_DYE, "§aEinfach", 0),
     NORMAL(Material.ORANGE_DYE, "§6Normal", 0),
     HARDCORE(Material.RED_DYE, "§cSchwer", 0);

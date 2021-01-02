@@ -20,7 +20,8 @@ public class GameTask implements IBingoTask {
     private int taskId = 0;
     private int timer = 0;
 
-    private final Title title = Title.builder().title("§aGo").subtitle("§aViel Glück!").fadeIn(0).stay(40).fadeOut(10).build();
+    private final Title title = Title.builder().title("§aViel Glück").subtitle("§7Das Spiel beginnt").fadeIn(0)
+            .stay(40).fadeOut(10).build();
 
     private boolean isRunning = false;
 
@@ -85,6 +86,10 @@ public class GameTask implements IBingoTask {
 
                 if(this.eventTimer > 0) {
                     this.eventTimer--;
+                }
+
+                if(Bukkit.getOnlinePlayers().isEmpty()) {
+                    Bukkit.shutdown();
                 }
 
 

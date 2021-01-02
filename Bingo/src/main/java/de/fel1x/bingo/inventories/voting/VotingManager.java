@@ -121,7 +121,8 @@ public class VotingManager {
         BingoDifficulty.NORMAL.setFinalVotingCounts(this.getVotingCountNormal());
         BingoDifficulty.HARDCORE.setFinalVotingCounts(this.getVotingCountHard());
 
-        ArrayList<BingoDifficulty> sorted = Arrays.stream(BingoDifficulty.values()).sorted((o1, o2) -> {
+        ArrayList<BingoDifficulty> sorted = Arrays.stream(BingoDifficulty.values())
+                .filter(bingoDifficulty -> bingoDifficulty != BingoDifficulty.NOT_FORCED).sorted((o1, o2) -> {
 
             int i1 = o1.getFinalVotingCounts();
             int i2 = o2.getFinalVotingCounts();
@@ -139,6 +140,24 @@ public class VotingManager {
         Collections.reverse(sorted);
 
         return sorted.get(0);
+
+    }
+
+    public void forceNextDifficulty() {
+        switch (this.getForcedBingoDifficulty()) {
+            case EASY:
+                this.setForcedBingoDifficulty(BingoDifficulty.NORMAL);
+                break;
+            case NORMAL:
+                this.setForcedBingoDifficulty(BingoDifficulty.HARDCORE);
+                break;
+            case HARDCORE:
+                this.setForcedBingoDifficulty(BingoDifficulty.NOT_FORCED);
+                break;
+            case NOT_FORCED:
+                this.setForcedBingoDifficulty(BingoDifficulty.EASY);
+                break;
+        }
 
     }
 }

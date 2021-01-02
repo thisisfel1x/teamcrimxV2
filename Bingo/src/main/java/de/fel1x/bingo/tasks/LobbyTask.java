@@ -39,7 +39,10 @@ public class LobbyTask implements IBingoTask {
                     case 2:
                     case 1:
                         if(this.countdown == 10) {
-                            BingoDifficulty bingoDifficulty = this.bingo.getVotingManager().getFinalDifficulty();
+                            BingoDifficulty bingoDifficulty = this.bingo.getVotingManager()
+                                    .getForcedBingoDifficulty() == BingoDifficulty.NOT_FORCED
+                                    ? this.bingo.getVotingManager().getFinalDifficulty()
+                                    : this.bingo.getVotingManager().getForcedBingoDifficulty();
 
                             Bukkit.getScheduler().runTaskAsynchronously(this.bingo, () -> this.bingo.generateItems(bingoDifficulty));
 
