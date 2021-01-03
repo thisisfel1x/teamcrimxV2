@@ -3,15 +3,18 @@ package de.fel1x.teamcrimx.crimxapi.clanSystem.clan;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanKickReason;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.database.ClanDatabase;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.exceptions.ClanTagAlreadyTakenException;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanRank;
 import org.bson.Document;
 import org.bukkit.Material;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Clan extends ClanDatabase implements IClan {
+
+    private final ArrayList<IClanPlayer> clanPlayers = new ArrayList<>();
 
     public Clan(CrimxAPI crimxAPI) {
         super(crimxAPI);
@@ -23,33 +26,49 @@ public class Clan extends ClanDatabase implements IClan {
     }
 
     @Override
-    public Collection<? extends IClanPlayer> getClanMembers() {
-        return null;
+    public ArrayList<IClanPlayer> getClanMembers() {
+        return this.clanPlayers;
     }
 
     @Override
     public boolean addPlayerToClan(IClanPlayer iClanPlayer) {
+
+        this.clanPlayers.add(iClanPlayer);
+
         return false;
     }
 
     @Override
     public boolean removePlayerFromClan(IClanPlayer iClanPlayer) {
+
+        this.clanPlayers.remove(iClanPlayer);
+
         return false;
     }
 
     @Override
     public boolean kickPlayerFromClan(IClanPlayer iClanPlayer, ClanKickReason clanKickReason) {
+
+        this.removePlayerFromClan(iClanPlayer);
+
         return false;
     }
 
     @Override
     public boolean isPlayerInClan(IClanPlayer iClanPlayer) {
-        return false;
+        return this.clanPlayers.contains(iClanPlayer);
     }
 
     @Override
     public boolean setNewRank(IClanPlayer iClanPlayer, ClanRank clanRank) {
-        return false;
+        iClanPlayer.setNewRank(clanRank);
+
+        int index = this.clanPlayers.indexOf(iClanPlayer);
+
+        this.clanPlayers.remove(iClanPlayer);
+        this.clanPlayers.add(index, iClanPlayer);
+
+        return true;
     }
 
     @Override
@@ -59,18 +78,20 @@ public class Clan extends ClanDatabase implements IClan {
 
     @Override
     public boolean createClan(String clanName, String clanTag, Material clanItem, IClanPlayer iClanPlayer) {
-        try {
-            Document clanDocument = new Document("_id", UUID.randomUUID().toString())
-                    .append("clanName", clanName)
-                    .append("clanTag", clanTag)
-                    .append("clanItem", clanItem.name())
-                    .append("owner", iClanPlayer.getUUID())
-                    .append("members", this.getClanMembers());
 
-        } catch (Exception exception) {
+        if(this.clanTagAlreadyTaken(clanTag)) {
+            iClanPlayer.sendMessage(String.format("§cEin Clan mit dem gewählten Tag §e(%s) §cexistiert bereits!", clanTag),
+                    true, iClanPlayer.getUUID());
         }
 
-        return false;
+        Document clanDocument = new Document("_id", UUID.randomUUID().toString())
+                .append("clanName", clanName)
+                .append("clanTag", clanTag)
+                .append("clanItem", clanItem.name())
+                .append("owner", iClanPlayer.getUUID())
+                .append("members", this.getClanMembers());
+        this.insertAsync(clanDocument);
+        return true;
     }
 
     @Override

@@ -43,6 +43,10 @@ public final class CrimxAPI {
         return "§cBugreport §8● §r";
     }
 
+    public String getClanPrefix() {
+        return "§4Clan §8● §r";
+    }
+
     public MongoDB getMongoDB() {
         return this.mongoDB;
     }

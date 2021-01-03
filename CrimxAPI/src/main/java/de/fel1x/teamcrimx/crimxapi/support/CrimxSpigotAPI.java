@@ -11,8 +11,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class CrimxSpigotAPI extends JavaPlugin {
 
+    private static CrimxSpigotAPI instance;
+
     @Override
     public void onEnable() {
+
+        instance = this;
 
         Bukkit.getConsoleSender().sendMessage("§eTrying to load CrimxAPI v1 by fel1x");
 
@@ -36,4 +40,7 @@ public class CrimxSpigotAPI extends JavaPlugin {
 
     }
 
+    public static CrimxSpigotAPI getInstance() {
+        return instance;
+    }
 }
