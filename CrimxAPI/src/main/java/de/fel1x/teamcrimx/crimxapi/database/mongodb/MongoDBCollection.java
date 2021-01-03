@@ -9,7 +9,8 @@ public enum MongoDBCollection {
     BINGO("bingo"),
     FLOOR_IS_LAVA("floorislava"),
     SUGGESTIONS("suggestions"),
-    BUGS("bugs");
+    BUGS("bugs"),
+    CLAN("clan");
 
     String name;
 
