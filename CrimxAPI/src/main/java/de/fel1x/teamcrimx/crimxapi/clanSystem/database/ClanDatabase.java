@@ -7,6 +7,7 @@ import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 
+import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 public class ClanDatabase {
@@ -43,5 +44,12 @@ public class ClanDatabase {
 
     public boolean clanTagAlreadyTaken(String clanTag) {
         return StreamSupport.stream(this.clanCollection.find().spliterator(), false).anyMatch(document -> document.getString("clanTag").equalsIgnoreCase(clanTag));
+    }
+
+    public Object getObject(String key, MongoCollection<Document> mongoCollection, UUID uuid) {
+
+        Document found = mongoCollection.find(new Document("_id", uuid)).first();
+        return found != null ? found.get(key) : null;
+
     }
 }

@@ -2,6 +2,7 @@ package de.fel1x.teamcrimx.crimxapi;
 
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.Clan;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.database.ClanDatabase;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDB;
 

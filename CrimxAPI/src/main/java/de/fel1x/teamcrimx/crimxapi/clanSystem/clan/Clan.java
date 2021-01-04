@@ -3,7 +3,6 @@ package de.fel1x.teamcrimx.crimxapi.clanSystem.clan;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanKickReason;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.database.ClanDatabase;
-import de.fel1x.teamcrimx.crimxapi.clanSystem.exceptions.ClanTagAlreadyTakenException;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanRank;
 import org.bson.Document;
@@ -15,9 +14,11 @@ import java.util.UUID;
 public class Clan extends ClanDatabase implements IClan {
 
     private final ArrayList<IClanPlayer> clanPlayers = new ArrayList<>();
+    private final UUID clanUniqueId;
 
-    public Clan(CrimxAPI crimxAPI) {
-        super(crimxAPI);
+    public Clan(UUID clanUniqueId) {
+        super(CrimxAPI.getInstance());
+        this.clanUniqueId = clanUniqueId;
     }
 
     @Override
