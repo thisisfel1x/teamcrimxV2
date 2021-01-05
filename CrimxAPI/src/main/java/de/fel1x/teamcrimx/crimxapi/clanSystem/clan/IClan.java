@@ -31,14 +31,14 @@ public interface IClan {
 
     String getClanName();
 
-    boolean setClanName();
+    boolean setClanName(String newClanName);
 
     String getClanTag();
 
-    boolean setClanTag();
+    boolean setClanTag(String newClanTag);
 
     Material getClanMaterial();
 
-    boolean setClanMaterial();
+    boolean setClanMaterial(Material newClanMaterial);
 
 }

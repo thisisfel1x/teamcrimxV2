@@ -94,6 +94,4 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
         this.playerManager.getPlayerExecutor(playerUniqueId)
                 .sendChatMessage(prefix ? this.crimxAPI.getClanPrefix() + message : message);
     }
-
-
 }

@@ -106,7 +106,7 @@ public class Clan extends ClanDatabase implements IClan {
     }
 
     @Override
-    public boolean setClanName() {
+    public boolean setClanName(String newClanName) {
         return false;
     }
 
@@ -116,7 +116,7 @@ public class Clan extends ClanDatabase implements IClan {
     }
 
     @Override
-    public boolean setClanTag() {
+    public boolean setClanTag(String newClanTag) {
         return false;
     }
 
@@ -126,7 +126,7 @@ public class Clan extends ClanDatabase implements IClan {
     }
 
     @Override
-    public boolean setClanMaterial() {
+    public boolean setClanMaterial(Material newClanMaterial) {
         return false;
     }
 }

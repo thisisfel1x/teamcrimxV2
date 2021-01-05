@@ -17,3 +17,5 @@ commands:
   bug:
     description: Report a bug
     aliases: [ bugreport ]
+  clan:
+    description: Create a clan

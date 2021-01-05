@@ -1,6 +1,7 @@
 package de.fel1x.teamcrimx.crimxapi.support;
 
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.commands.ClanCommand;
 import de.fel1x.teamcrimx.crimxapi.commands.BugCommand;
 import de.fel1x.teamcrimx.crimxapi.commands.CoinsCommand;
 import de.fel1x.teamcrimx.crimxapi.commands.JoinMeCommand;
@@ -27,6 +28,7 @@ public class CrimxSpigotAPI extends JavaPlugin {
 
         new SuggestCommand(this);
         new BugCommand(this);
+        new ClanCommand(this);
 
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
 
