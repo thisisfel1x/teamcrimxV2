@@ -1,6 +1,8 @@
 package de.fel1x.teamcrimx.crimxapi.clanSystem.player;
 
 import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.driver.permission.IPermissionGroup;
+import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
@@ -8,6 +10,9 @@ import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.Clan;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.IClan;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanRank;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.database.ClanDatabase;
+import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
+import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -17,7 +22,9 @@ import java.util.UUID;
 public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializable {
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
+
     private final CrimxAPI crimxAPI = CrimxAPI.getInstance();
+    private final CrimxSpigotAPI crimxSpigotAPI = CrimxSpigotAPI.getInstance();
 
     private final UUID uuid;
 
@@ -30,6 +37,21 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
     public boolean addToClan(UUID clanUniqueId) {
 
         return false;
+    }
+
+    @Override
+    public boolean setClan(UUID clanUniqueId) {
+        if(this.hasClan()) {
+            return false;
+        } else {
+            Bukkit.getScheduler().runTaskAsynchronously(this.crimxSpigotAPI, () -> {
+                Document playerDocument = this.getMongoDB().getUserCollection().find(new Document("_id", this.getUUID().toString())).first();
+                if(playerDocument != null) {
+                    this.insertAsyncInUserCollection("currentClan", clanUniqueId.toString(), playerDocument, MongoDBCollection.USERS);
+                }
+            });
+            return true;
+        }
     }
 
     @Override
@@ -77,6 +99,11 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
     @Override
     public Player getBukkitPlayerByUUID(UUID playerUniqueId) {
         return Bukkit.getPlayer(playerUniqueId);
+    }
+
+    @Override
+    public IPermissionUser getCloudPermissionUser(UUID playerUniqueId) {
+        return CloudNetDriver.getInstance().getPermissionManagement().getUser(playerUniqueId);
     }
 
     @Override

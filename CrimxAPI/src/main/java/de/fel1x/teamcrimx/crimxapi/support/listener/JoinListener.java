@@ -11,5 +11,4 @@ public class JoinListener implements Listener {
     public void on(PlayerJoinEvent event) {
         event.getPlayer().sendMessage(CrimxAPI.getInstance().getPrefix() + "§7Reiche Vorschläge ein oder melde Bugs mit §a/suggest §7& §c/bug");
     }
-
 }

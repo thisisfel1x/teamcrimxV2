@@ -1,5 +1,7 @@
 package de.fel1x.teamcrimx.crimxapi.clanSystem.player;
 
+import de.dytanic.cloudnet.driver.permission.IPermissionUser;
+import de.dytanic.cloudnet.ext.bridge.player.ICloudOfflinePlayer;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.IClan;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanRank;
@@ -11,6 +13,8 @@ import java.util.UUID;
 public interface IClanPlayer {
 
     boolean addToClan(UUID clanUniqueId);
+
+    boolean setClan(UUID clanUniqueId);
 
     boolean removeFromClan(UUID clanUniqueId);
 
@@ -32,9 +36,12 @@ public interface IClanPlayer {
     @Nullable
     Player getBukkitPlayerByUUID(UUID playerUniqueId);
 
+    IPermissionUser getCloudPermissionUser(UUID playerUniqueId);
+
     UUID getUUID();
 
     void setNewRank(ClanRank clanRank);
 
     void sendMessage(String message, boolean prefix, UUID playerUniqueId);
+
 }

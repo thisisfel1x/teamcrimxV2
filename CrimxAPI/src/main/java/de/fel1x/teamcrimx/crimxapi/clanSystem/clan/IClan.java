@@ -1,17 +1,20 @@
 package de.fel1x.teamcrimx.crimxapi.clanSystem.clan;
 
+import de.dytanic.cloudnet.driver.permission.IPermissionUser;
+import de.dytanic.cloudnet.ext.bridge.player.ICloudOfflinePlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanKickReason;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanRank;
 import org.bukkit.Material;
 
 import java.util.Collection;
+import java.util.UUID;
 
 public interface IClan {
 
     int getTotalClanMembers();
 
-    Collection<? extends IClanPlayer> getClanMembers();
+    Collection<UUID> getClanMembers();
 
     boolean addPlayerToClan(IClanPlayer iClanPlayer);
 
@@ -40,5 +43,13 @@ public interface IClan {
     Material getClanMaterial();
 
     boolean setClanMaterial(Material newClanMaterial);
+
+    ICloudOfflinePlayer getOfflinePlayer(UUID playerUniqueId);
+
+    UUID getClanOwner();
+
+    IPermissionUser getCloudPermissionUser(UUID playerUniqueId);
+
+    String getFormattedUserName(UUID playerUniqueId);
 
 }

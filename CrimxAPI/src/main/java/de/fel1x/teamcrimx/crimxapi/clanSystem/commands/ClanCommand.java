@@ -1,21 +1,25 @@
 package de.fel1x.teamcrimx.crimxapi.clanSystem.commands;
 
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.Clan;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.IClan;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ClanCommand implements CommandExecutor, TabCompleter {
@@ -41,13 +45,18 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
         IClanPlayer clanPlayer = new ClanPlayer(player.getUniqueId());
         IClan iClan = clanPlayer.getCurrentClan();
 
+        // /clan create TestClan TEST OAK_LOG
+
         if(args.length > 0) {
             if(args.length == 1) {
                 switch (args[0].toLowerCase()) {
                     case "info":
                         if (clanPlayer.hasClan() && iClan != null) {
-                            player.sendMessage(String.format("%s§7Aktueller Clan: §e%s §7(§6%s)", this.clanPrefix, iClan.getClanName(),
+                            player.sendMessage(String.format("%s§7Aktueller Clan: §e%s §8(§6%s§8)", this.clanPrefix, iClan.getClanName(),
                                     iClan.getClanTag()));
+                            player.sendMessage(String.format("%s§7Mitglieder: §a%s§8/§c20 §8● §7Owner: §5§o%s", this.clanPrefix,
+                                    iClan.getClanMembers().size(), iClan.getFormattedUserName(iClan.getClanOwner())));
+                            player.sendMessage(this.clanPrefix + "§7Nutze §b/clan members§7, um dir alle Clanmitglieder auflisten zu lassen");
                         } else {
                             player.sendMessage(this.clanPrefix + "§7Du bist in keinem Clan! Erstelle einen mit §c/clan create");
                         }
@@ -59,6 +68,45 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                     case "search":
                         player.sendMessage(this.clanPrefix + "§7Suche einen Clan mit einem Tag §o§8(§b/clan search <Tag>§8)§r§7 oder suche nach dem Clan eines Spielers §o§8(§b/clan search <Playername>§8)");
                         break;
+                    case "invite":
+                        player.sendMessage(this.clanPrefix + "§7Laden einen Spieler in deinen Clan ein §o§8(§b/clan invite <Playername>§8)");
+                        break;
+                    case "kick":
+                        player.sendMessage(this.clanPrefix + "§7Kicke einen Spieler aus deinem Clan §o§8(§b/clan kick <Playername>§8)");
+                        break;
+                }
+            } else if(args.length == 4) {
+                if(args[0].equalsIgnoreCase("create")) {
+                    if(clanPlayer.hasClan()) {
+                        player.sendMessage(this.clanPrefix + "§cDu bist bereits in einem Clan!");
+                        return false;
+                    }
+
+                    String clanName = args[1];
+                    String clanTag = args[2];
+
+                    String clanMaterialNotParsed = args[3];
+                    Material clanMaterialParsed;
+
+                    if(clanTag.length() > 5) {
+                        player.sendMessage(this.clanPrefix + "§cDer Clantag ist zu lang. Er darf maximal aus 5 Zeichen bestehen!");
+                        return false;
+                    }
+
+                    try {
+                        clanMaterialParsed = Material.valueOf(clanMaterialNotParsed);
+                    } catch (Exception ignored) {
+                        player.sendMessage(this.clanPrefix + "§cDas Clanmaterial wurde nicht gefunden!");
+                        return false;
+                    }
+
+                    IClan clan = new Clan(UUID.randomUUID());
+                    if(clan.createClan(clanName, clanTag, clanMaterialParsed, clanPlayer)) {
+                        clanPlayer.sendMessage("test", true, player.getUniqueId());
+                    } else {
+                        player.sendMessage(this.clanPrefix + "§cEin Fehler ist aufgetreten!");
+                        return false;
+                    }
                 }
             }
         } else {
@@ -73,9 +121,15 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
         if(args.length > 0) {
             switch (args.length) {
                 case 2:
-                    switch (args[0]) {
-                        case "search":
+                    if (args[0].equalsIgnoreCase("search")) {
+                        return Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).collect(Collectors.toList());
                     }
+                    break;
+                case 4:
+                    if(args[0].equalsIgnoreCase("create")) {
+                        return Arrays.stream(Material.values()).map(Enum::name).collect(Collectors.toList());
+                    }
+                    break;
             }
         }
         return Arrays.asList("create", "info", "search", "invite", "kick");
