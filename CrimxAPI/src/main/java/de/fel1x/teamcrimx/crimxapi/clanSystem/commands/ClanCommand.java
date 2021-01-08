@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -75,6 +76,18 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                         player.sendMessage(this.clanPrefix + "§7Kicke einen Spieler aus deinem Clan §o§8(§b/clan kick <Playername>§8)");
                         break;
                 }
+            } else if(args.length == 2) {
+                switch (args[0].toLowerCase()) {
+                    case "invite":
+                        String playerName = args[1];
+                        try {
+                            iClan.invitePlayer(playerName);
+                            player.sendMessage(this.clanPrefix + "§7Der Spieler §e" + playerName + " wurde erfolgreich eingeladen");
+                        } catch (Exception exception) {
+                            player.sendMessage(this.clanPrefix + "§cEin Fehler ist aufgetreten!");
+                        }
+                }
+
             } else if(args.length == 4) {
                 if(args[0].equalsIgnoreCase("create")) {
                     if(clanPlayer.hasClan()) {

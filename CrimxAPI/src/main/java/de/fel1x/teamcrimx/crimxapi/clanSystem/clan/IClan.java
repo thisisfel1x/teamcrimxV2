@@ -52,4 +52,5 @@ public interface IClan {
 
     String getFormattedUserName(UUID playerUniqueId);
 
+    void invitePlayer(String playerName);
 }

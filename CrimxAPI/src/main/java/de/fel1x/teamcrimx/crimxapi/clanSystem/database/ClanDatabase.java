@@ -9,6 +9,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
 
+import javax.print.Doc;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
 
@@ -52,7 +53,7 @@ public class ClanDatabase {
         Bukkit.getScheduler().runTaskAsynchronously(this.crimxSpigotAPI, () -> this.clanCollection.insertOne(document));
     }
 
-    public void insertAsyncInUserCollection(Document document) {
+    public void insertAsyncInCollection(Document document) {
         Bukkit.getScheduler().runTaskAsynchronously(this.crimxSpigotAPI, () -> this.userCollection.insertOne(document));
     }
 
@@ -65,7 +66,7 @@ public class ClanDatabase {
         return found != null ? found.get(key) : null;
     }
 
-    public boolean insertAsyncInUserCollection(String key, String value, Document playerDocument, MongoDBCollection mongoDBCollection) {
+    public boolean insertAsyncInCollection(String key, String value, Document playerDocument, MongoDBCollection mongoDBCollection) {
         Bson updateOperation = new Document("$set", new Document(key, value));
         if(mongoDBCollection == MongoDBCollection.CLAN) {
             Bukkit.getScheduler().runTaskAsynchronously(this.crimxSpigotAPI, () -> this.clanCollection.updateOne(playerDocument, updateOperation));
@@ -76,5 +77,17 @@ public class ClanDatabase {
         } else {
             return false;
         }
+    }
+
+    public void insertAsyncInCollection(String key, Object value, String id, MongoDBCollection mongoDBCollection) {
+        Bukkit.getScheduler().runTaskAsynchronously(this.crimxSpigotAPI, () -> {
+            Bson updateOperation = new Document("$set", new Document(key, value));
+            MongoCollection<Document> collection = mongoDBCollection == MongoDBCollection.CLAN
+                    ? this.clanCollection : this.userCollection;
+            Document toInsert = collection.find(new Document("_id", id)).first();
+            if(toInsert != null) {
+                collection.updateOne(toInsert, updateOperation);
+            }
+        });
     }
 }

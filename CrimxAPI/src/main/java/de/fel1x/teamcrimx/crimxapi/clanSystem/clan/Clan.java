@@ -3,7 +3,9 @@ package de.fel1x.teamcrimx.crimxapi.clanSystem.clan;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.permission.IPermissionGroup;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
+import de.dytanic.cloudnet.ext.bridge.BaseComponentMessenger;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudOfflinePlayer;
+import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanKickReason;
@@ -11,6 +13,11 @@ import de.fel1x.teamcrimx.crimxapi.clanSystem.database.ClanDatabase;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanRank;
+import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
+import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bson.Document;
 import org.bukkit.Material;
 
@@ -177,5 +184,38 @@ public class Clan extends ClanDatabase implements IClan {
 
         return permissionGroup.getDisplay().replace('&', '§')
                 + this.getCloudPermissionUser(playerUniqueId).getName();
+    }
+
+    @Override
+    public void invitePlayer(String playerName) {
+        ICloudPlayer iCloudPlayer = this.playerManager.getFirstOnlinePlayer(playerName);
+
+        if(iCloudPlayer != null) {
+            BaseComponent[] messageComponent = {
+                    new TextComponent(new ComponentBuilder(CrimxSpigotAPI.getInstance()
+                            + " §7Klicke ").append("§e§l*hier*")
+                            .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/clan ?join=id"))
+                            .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("§eKlicke, um zu joinen")))
+                            .append("§r§7, um dem Clan §e" + this.clanName + " §8(§6" + this.clanTag + "§8) §7zu joinen")
+                            .create())
+            };
+            BaseComponentMessenger.sendMessage(iCloudPlayer, messageComponent);
+        }
+
+        ICloudOfflinePlayer offlinePlayer = this.playerManager.getFirstOfflinePlayer(playerName);
+
+        if(offlinePlayer != null) {
+            IClanPlayer iClanPlayer = new ClanPlayer(offlinePlayer.getUniqueId());
+
+            ArrayList<UUID> playerClanRequests = (ArrayList<UUID>) this.getObject("clanRequests",
+                    this.getMongoDB().getUserCollection(), offlinePlayer.getUniqueId());
+
+            playerClanRequests.add(this.clanUniqueId);
+
+            this.insertAsyncInCollection("clanRequests", playerClanRequests,
+                    offlinePlayer.getUniqueId().toString(), MongoDBCollection.USERS);
+
+        }
+        // TODO: check if online, falls ja message senden, trotzdem immer in db hinterlegen dass er eine request hat, check if player is in clan
     }
 }

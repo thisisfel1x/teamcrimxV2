@@ -1,7 +1,6 @@
 package de.fel1x.teamcrimx.crimxapi.clanSystem.player;
 
 import de.dytanic.cloudnet.driver.CloudNetDriver;
-import de.dytanic.cloudnet.driver.permission.IPermissionGroup;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
@@ -47,7 +46,7 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
             Bukkit.getScheduler().runTaskAsynchronously(this.crimxSpigotAPI, () -> {
                 Document playerDocument = this.getMongoDB().getUserCollection().find(new Document("_id", this.getUUID().toString())).first();
                 if(playerDocument != null) {
-                    this.insertAsyncInUserCollection("currentClan", clanUniqueId.toString(), playerDocument, MongoDBCollection.USERS);
+                    this.insertAsyncInCollection("currentClan", clanUniqueId.toString(), playerDocument, MongoDBCollection.USERS);
                 }
             });
             return true;
