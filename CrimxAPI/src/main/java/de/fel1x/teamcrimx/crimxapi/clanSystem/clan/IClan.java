@@ -44,6 +44,8 @@ public interface IClan {
 
     boolean setClanMaterial(Material newClanMaterial);
 
+    UUID getClanUniqueId();
+
     ICloudOfflinePlayer getOfflinePlayer(UUID playerUniqueId);
 
     UUID getClanOwner();
@@ -52,5 +54,5 @@ public interface IClan {
 
     String getFormattedUserName(UUID playerUniqueId);
 
-    void invitePlayer(String playerName);
+    boolean invitePlayer(String playerName);
 }

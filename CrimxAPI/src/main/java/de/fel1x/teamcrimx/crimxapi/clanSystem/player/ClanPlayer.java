@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializable {
@@ -55,7 +56,9 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
 
     @Override
     public boolean removeFromClan(UUID clanUniqueId) {
-        return false;
+        this.insertAsyncInCollection("currentClan", null, this.getUUID().toString(), MongoDBCollection.USERS);
+        new Clan(clanUniqueId).removePlayerFromClan(this);
+        return true;
     }
 
     @Override
@@ -119,5 +122,18 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
     public void sendMessage(String message, boolean prefix, UUID playerUniqueId) {
         this.playerManager.getPlayerExecutor(playerUniqueId)
                 .sendChatMessage(prefix ? this.crimxAPI.getClanPrefix() + message : message);
+    }
+
+    @Override
+    public void removeClanRequestAndAddToClan(IClan iClan) {
+        this.setClan(iClan.getClanUniqueId());
+
+        ArrayList<UUID> playerClanRequests = (ArrayList<UUID>) this.getObject("clanRequests",
+                this.getMongoDB().getUserCollection(), this.getUUID());
+
+        playerClanRequests.remove(iClan.getClanUniqueId());
+
+        this.insertAsyncInCollection("clanRequests", playerClanRequests,
+                this.getUUID().toString(), MongoDBCollection.USERS);
     }
 }

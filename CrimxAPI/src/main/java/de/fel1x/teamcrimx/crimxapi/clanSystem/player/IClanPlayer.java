@@ -44,4 +44,6 @@ public interface IClanPlayer {
 
     void sendMessage(String message, boolean prefix, UUID playerUniqueId);
 
+    void removeClanRequestAndAddToClan(IClan iClan);
+
 }
