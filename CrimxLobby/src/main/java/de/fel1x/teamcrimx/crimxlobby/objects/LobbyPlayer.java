@@ -116,7 +116,7 @@ public class LobbyPlayer {
 
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
-        this.cleanUpPlayer();
+        lobbyPlayer.cleanUpPlayer();
 
         if ((lobbyPlayer.isInBuild())) {
             lobbyPlayer.removeFromBuild();

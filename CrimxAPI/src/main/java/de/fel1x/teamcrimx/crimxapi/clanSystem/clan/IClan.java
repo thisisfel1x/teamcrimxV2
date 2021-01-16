@@ -20,6 +20,8 @@ public interface IClan {
 
     boolean removePlayerFromClan(IClanPlayer iClanPlayer);
 
+    boolean removePlayerFromClanByName(String playerName);
+
     boolean kickPlayerFromClan(IClanPlayer iClanPlayer, ClanKickReason clanKickReason);
 
     boolean isPlayerInClan(IClanPlayer iClanPlayer);

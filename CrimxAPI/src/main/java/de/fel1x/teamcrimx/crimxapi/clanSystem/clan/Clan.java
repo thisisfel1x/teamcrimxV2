@@ -72,6 +72,10 @@ public class Clan extends ClanDatabase implements IClan {
 
     @Override
     public boolean addPlayerToClan(IClanPlayer iClanPlayer) {
+        if(this.clanPlayers.contains(iClanPlayer.getUUID())) {
+            return false;
+        }
+
         this.clanPlayers.add(iClanPlayer.getUUID());
         this.insertAsyncInCollection("members", this.clanPlayers,
                 this.clanUniqueId.toString(), MongoDBCollection.CLAN);
@@ -84,15 +88,24 @@ public class Clan extends ClanDatabase implements IClan {
         this.clanPlayers.remove(iClanPlayer.getUUID());
         this.insertAsyncInCollection("members", this.clanPlayers,
                 this.clanUniqueId.toString(), MongoDBCollection.CLAN);
+        iClanPlayer.removeFromClan(this.clanUniqueId);
         return true;
     }
 
     @Override
+    public boolean removePlayerFromClanByName(String playerName) {
+        ICloudOfflinePlayer cloudOfflinePlayer = this.playerManager.getFirstOfflinePlayer(playerName);
+        if(cloudOfflinePlayer == null) {
+            return false;
+        }
+
+        IClanPlayer clanPlayer = new ClanPlayer(cloudOfflinePlayer.getUniqueId());
+        return this.removePlayerFromClan(clanPlayer);
+    }
+
+    @Override
     public boolean kickPlayerFromClan(IClanPlayer iClanPlayer, ClanKickReason clanKickReason) {
-
-        this.removePlayerFromClan(iClanPlayer);
-
-        return false;
+        return this.removePlayerFromClan(iClanPlayer);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package de.fel1x.teamcrimx.crimxapi.clanSystem.player;
 
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
-import de.dytanic.cloudnet.ext.bridge.player.ICloudOfflinePlayer;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.IClan;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanRank;
@@ -45,5 +44,7 @@ public interface IClanPlayer {
     void sendMessage(String message, boolean prefix, UUID playerUniqueId);
 
     void removeClanRequestAndAddToClan(IClan iClan);
+
+    void sendMembersList();
 
 }

@@ -17,11 +17,13 @@ import org.bukkit.entity.Player;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.UUID;
 
 public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializable {
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
+    private final String clanPrefix = CrimxAPI.getInstance().getClanPrefix();
 
     private final CrimxAPI crimxAPI = CrimxAPI.getInstance();
     private final CrimxSpigotAPI crimxSpigotAPI = CrimxSpigotAPI.getInstance();
@@ -44,12 +46,7 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
         if(this.hasClan()) {
             return false;
         } else {
-            Bukkit.getScheduler().runTaskAsynchronously(this.crimxSpigotAPI, () -> {
-                Document playerDocument = this.getMongoDB().getUserCollection().find(new Document("_id", this.getUUID().toString())).first();
-                if(playerDocument != null) {
-                    this.insertAsyncInCollection("currentClan", clanUniqueId.toString(), playerDocument, MongoDBCollection.USERS);
-                }
-            });
+            this.insertAsyncInCollection("currentClan", clanUniqueId.toString(), this.getUUID().toString(), MongoDBCollection.USERS);
             return true;
         }
     }
@@ -57,7 +54,6 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
     @Override
     public boolean removeFromClan(UUID clanUniqueId) {
         this.insertAsyncInCollection("currentClan", null, this.getUUID().toString(), MongoDBCollection.USERS);
-        new Clan(clanUniqueId).removePlayerFromClan(this);
         return true;
     }
 
@@ -136,4 +132,28 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
         this.insertAsyncInCollection("clanRequests", playerClanRequests,
                 this.getUUID().toString(), MongoDBCollection.USERS);
     }
+
+    @Override
+    public void sendMembersList() {
+        if(!this.hasClan()) {
+            this.sendMessage("§cDu bist in keinem Clan", true, this.getUUID());
+        } else {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(String.format("%s§7Mitglieder des Clans §e%s §8(§6%s§8)", this.clanPrefix,
+                    this.getCurrentClan().getClanName(), this.getCurrentClan().getClanTag()));
+
+            for (UUID clanMember : this.getCurrentClan().getClanMembers()) {
+                stringBuilder.append("  §8● §5").append(this.getCurrentClan().getFormattedUserName(clanMember));
+            }
+
+            stringBuilder.append(" ");
+
+            for (StringBuilder builder : Collections.singletonList(stringBuilder)) {
+                this.sendMessage(builder.toString(), false, this.getUUID());
+            }
+        }
+    }
+
+
+
 }

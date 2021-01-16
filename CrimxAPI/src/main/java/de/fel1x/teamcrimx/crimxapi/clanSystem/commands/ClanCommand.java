@@ -77,6 +77,9 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                         player.sendMessage(this.clanPrefix + "§7Du kannst deinen Clan in wenigen Schritten erstellen. " +
                                 "Nutze dafür bitte §c/clan create <Name> <Tag> §o(max 5. Zeichen)§r§c <Material> §o(Beliebiges Minecraft Material)");
                         break;
+                    case "members":
+                        clanPlayer.sendMembersList();
+                        break;
                     case "search":
                         player.sendMessage(this.clanPrefix + "§7Suche einen Clan mit einem Tag §o§8(§b/clan search <Tag>§8)§r§7 oder suche nach dem Clan eines Spielers §o§8(§b/clan search <Playername>§8)");
                         break;
@@ -88,7 +91,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                         break;
                     case "quit":
                         if(clanPlayer.hasClan()) {
-                            clanPlayer.removeFromClan(iClan.getClanUniqueId());
+                            iClan.removePlayerFromClan(clanPlayer);
                         } else {
                             player.sendMessage(this.clanPrefix + "§cDu bist in keinem Clan");
                         }
@@ -98,10 +101,19 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                     case "invite":
                         String playerName = args[1];
                         if( iClan.invitePlayer(playerName)) {
-                            player.sendMessage(this.clanPrefix + "§7Dem Spieler §e" + playerName + " wurde eine Anfrage gesendet");
+                            player.sendMessage(this.clanPrefix + "§7Dem Spieler §e" + playerName + " §7wurde eine Anfrage gesendet");
                         } else {
                             player.sendMessage(this.clanPrefix + "§cDieser Spieler ist bereits in einem Clan");
                         }
+                        break;
+                    case "kick":
+                        String playerNameToKick = args[1];
+                        if(iClan.removePlayerFromClanByName(playerNameToKick)) {
+                            player.sendMessage(this.clanPrefix + "§7Du hast den Spieler §e" + playerNameToKick + " §7erfolgreich aus deinem Clan entfernt!");
+                        } else {
+                            player.sendMessage(this.clanPrefix + "§cDieser Spieler ist nicht in deinem Clan");
+                        }
+                        break;
                 }
 
             } else if(args.length == 4) {
@@ -139,7 +151,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                 }
             }
         } else {
-            player.sendMessage(this.clanPrefix + "§7Nutze §c/clan create | info | search | invite | kick | quit");
+            player.sendMessage(this.clanPrefix + "§7Nutze §c/clan create | info | members | search | invite | kick | quit");
         }
         return true;
     }
@@ -163,6 +175,6 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                     }
             }
         }
-        return Arrays.asList("create", "info", "search", "invite", "kick");
+        return Arrays.asList("create", "info", "members", "search", "invite", "kick");
     }
 }
