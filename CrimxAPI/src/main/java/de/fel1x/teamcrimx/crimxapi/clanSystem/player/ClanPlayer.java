@@ -11,14 +11,12 @@ import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanRank;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.database.ClanDatabase;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
-import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializable {
 
@@ -27,6 +25,8 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
 
     private final CrimxAPI crimxAPI = CrimxAPI.getInstance();
     private final CrimxSpigotAPI crimxSpigotAPI = CrimxSpigotAPI.getInstance();
+
+    private final CompletableFuture<ArrayList<String>> clanPlayers = CompletableFuture.supplyAsync(this::getClanPlayersNameFormatted);
 
     private final UUID uuid;
 
@@ -140,20 +140,27 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
         } else {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(String.format("%s§7Mitglieder des Clans §e%s §8(§6%s§8)", this.clanPrefix,
-                    this.getCurrentClan().getClanName(), this.getCurrentClan().getClanTag()));
+                    this.getCurrentClan().getClanName(), this.getCurrentClan().getClanTag()) + "\n");
 
-            for (UUID clanMember : this.getCurrentClan().getClanMembers()) {
-                stringBuilder.append("  §8● §5").append(this.getCurrentClan().getFormattedUserName(clanMember));
-            }
-
-            stringBuilder.append(" ");
-
-            for (StringBuilder builder : Collections.singletonList(stringBuilder)) {
-                this.sendMessage(builder.toString(), false, this.getUUID());
-            }
+            this.clanPlayers.thenAccept(list -> {
+                for (String playerName : list) {
+                    stringBuilder.append("      §8● §5").append(playerName).append("\n");
+                }
+                Objects.requireNonNull(this.getBukkitPlayerByUUID(this.getUUID())).sendMessage(stringBuilder.toString());
+            });
         }
     }
 
+    private ArrayList<String> getClanPlayersNameFormatted() {
 
+        ArrayList<String> toReturn = new ArrayList<>();
+
+        for (UUID clanMember : this.getCurrentClan().getClanMembers()) {
+            toReturn.add(this.getCurrentClan().getFormattedUserName(clanMember));
+        }
+
+        return toReturn;
+
+    }
 
 }

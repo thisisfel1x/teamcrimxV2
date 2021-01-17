@@ -3,6 +3,7 @@ package de.fel1x.teamcrimx.crimxapi.clanSystem.commands;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.Clan;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.IClan;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.events.ClanUpdateEvent;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
@@ -45,8 +46,6 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
         Player player = (Player) commandSender;
         IClanPlayer clanPlayer = new ClanPlayer(player.getUniqueId());
         IClan iClan = clanPlayer.getCurrentClan();
-
-        // /clan create TestClan TEST OAK_LOG
 
         if(args.length > 0) {
             if(args.length == 1) {

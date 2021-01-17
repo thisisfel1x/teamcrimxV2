@@ -10,6 +10,7 @@ import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanKickReason;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.database.ClanDatabase;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.events.ClanUpdateEvent;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanRank;
@@ -18,6 +19,7 @@ import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -100,6 +102,7 @@ public class Clan extends ClanDatabase implements IClan {
         }
 
         IClanPlayer clanPlayer = new ClanPlayer(cloudOfflinePlayer.getUniqueId());
+
         return this.removePlayerFromClan(clanPlayer);
     }
 
@@ -153,6 +156,9 @@ public class Clan extends ClanDatabase implements IClan {
                 .append("owner", iClanPlayer.getUUID().toString())
                 .append("members", this.getClanMembers());
         this.insertAsyncInClanCollection(clanDocument);
+
+        Bukkit.getPluginManager().callEvent(new ClanUpdateEvent(owner));
+
         return true;
     }
 
@@ -243,6 +249,8 @@ public class Clan extends ClanDatabase implements IClan {
             this.insertAsyncInCollection("clanRequests", playerClanRequests,
                     offlinePlayer.getUniqueId().toString(), MongoDBCollection.USERS);
 
+        } else {
+            return false;
         }
 
         if(iCloudPlayer != null) {
@@ -255,6 +263,8 @@ public class Clan extends ClanDatabase implements IClan {
                             .create())
             };
             BaseComponentMessenger.sendMessage(iCloudPlayer, messageComponent);
+        } else {
+            return false;
         }
         return true;
     }
