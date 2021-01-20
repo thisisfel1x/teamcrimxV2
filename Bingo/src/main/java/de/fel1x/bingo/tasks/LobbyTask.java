@@ -4,14 +4,29 @@ import com.destroystokyo.paper.Title;
 import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.objects.BingoDifficulty;
+import de.fel1x.bingo.objects.BingoPlayer;
+import de.fel1x.bingo.objects.BingoTeam;
+import de.fel1x.bingo.utils.Utils;
+import de.fel1x.bingo.utils.world.ArmorstandStatsLoader;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public class LobbyTask implements IBingoTask {
 
     private final Bingo bingo = Bingo.getInstance();
     private int taskId = 0;
     private int countdown = 60;
+
+    //private final CompletableFuture<Boolean> playerTeleport = CompletableFuture.supplyAsync(this::teleportPlayers);
 
     boolean isRunning = false;
 
@@ -38,7 +53,7 @@ public class LobbyTask implements IBingoTask {
                     case 3:
                     case 2:
                     case 1:
-                        if(this.countdown == 10) {
+                        if (this.countdown == 10) {
                             BingoDifficulty bingoDifficulty = this.bingo.getVotingManager()
                                     .getForcedBingoDifficulty() == BingoDifficulty.NOT_FORCED
                                     ? this.bingo.getVotingManager().getFinalDifficulty()
@@ -65,12 +80,9 @@ public class LobbyTask implements IBingoTask {
                         break;
 
                     case 0:
-                        Bukkit.broadcastMessage(this.bingo.getPrefix() + "§e§lDie Runde beginnt!");
-
-                        this.bingo.startTimerByClass(PreGameTask.class);
-
+                        Bukkit.broadcastMessage(this.bingo.getPrefix() + "§cDie Spieler werden teleportiert...");
+                        this.teleportPlayers();
                         break;
-
                 }
 
                 if (this.countdown >= 1) {
@@ -99,6 +111,71 @@ public class LobbyTask implements IBingoTask {
 
         }
 
+    }
+
+    int counter;
+
+    private void teleportPlayers() {
+        Location worldSpawnLocation = new Location(Bukkit.getWorlds().get(0), 0, 0, 0);
+        int y = worldSpawnLocation.getWorld().getHighestBlockYAt(0, 0);
+        worldSpawnLocation.setY(y);
+
+        ArrayList<Location> spawns = ArmorstandStatsLoader
+                .getCirclePoints(worldSpawnLocation, 20, 6 * this.bingo.getTeamSize());
+
+        Collections.shuffle(spawns);
+
+        this.counter = 0;
+        int playerSize = this.bingo.getData().getPlayers().size();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Player player = LobbyTask.this.bingo.getData().getPlayers().get(LobbyTask.this.counter);
+                // TELEPORT
+                player.sendActionBar("§aDu wirst teleportiert...");
+
+                Location spawnLocation = spawns.get(LobbyTask.this.counter).getWorld()
+                        .getHighestBlockAt(spawns.get(LobbyTask.this.counter)).getLocation();
+                spawnLocation.getBlock().setType(player.hasMetadata("block") ?
+                        (Material) Objects.requireNonNull(player.getMetadata("block").get(0).value())
+                        : Material.GLASS);
+                spawnLocation.clone().add(0, 1, 0);
+
+                player.teleport(spawnLocation.toCenterLocation().clone().subtract(0, 0.5, 0));
+                Title information = Title.builder().title("§cTeleport " + (LobbyTask.this.counter + 1) + "/" + playerSize)
+                        .subtitle("§7Spieler werden teleportiert...")
+                        .fadeIn(0).stay(20).fadeOut(10).build();
+                Bukkit.getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.sendTitle(information));
+
+                player.getInventory().clear();
+                player.setExp(0);
+                player.setLevel(0);
+                player.getInventory().setItem(8, LobbyTask.this.bingo.getBingoItemsQuickAccess());
+
+                BingoPlayer bingoPlayer = new BingoPlayer(player);
+                if (bingoPlayer.getTeam() == null) {
+                    for (BingoTeam bingoTeam : BingoTeam.values()) {
+                        if (bingoTeam.getTeamPlayers().size() < bingoTeam.getTeamSize()) {
+                            bingoPlayer.setTeam(bingoTeam);
+                            player.sendMessage(LobbyTask.this.bingo.getPrefix() + "§7Du wurdest zu Team "
+                                    + Utils.getChatColor(bingoTeam.getColor()) + bingoTeam.getName() + " zugewiesen");
+                            break;
+                        }
+                    }
+                }
+
+                LobbyTask.this.counter++;
+                if(LobbyTask.this.counter == playerSize) {
+                    Title success = Title.builder().title("§aFertig").subtitle("§7Alle Spieler wurden teleportiert")
+                            .fadeIn(0).stay(20).fadeOut(10).build();
+                    Bukkit.getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.sendTitle(success));
+                    Bukkit.broadcastMessage(LobbyTask.this.bingo.getPrefix() + "§e§lDie Runde beginnt!");
+                    LobbyTask.this.bingo.startTimerByClass(PreGameTask.class);
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(this.bingo, 0L, 10L);
     }
 
     public int getCountdown() {

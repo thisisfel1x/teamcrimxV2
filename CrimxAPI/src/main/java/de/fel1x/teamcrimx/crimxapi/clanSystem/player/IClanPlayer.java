@@ -47,4 +47,7 @@ public interface IClanPlayer {
 
     void sendMembersList();
 
+    void sendClanRequestMessage();
+
+    boolean deleteAllRequests();
 }

@@ -31,6 +31,8 @@ public class GameTask implements IBingoTask {
     private int eventTimer = this.random.nextInt(120) + 60;
     private double timeToGo = this.eventTimer;
 
+    private final boolean eventsEnabled = false;
+
     @Override
     public void start() {
 

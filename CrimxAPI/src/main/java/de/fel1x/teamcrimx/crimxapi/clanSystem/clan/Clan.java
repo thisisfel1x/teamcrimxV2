@@ -15,7 +15,6 @@ import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanRank;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
-import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bson.Document;

@@ -125,13 +125,12 @@ public final class Bingo extends JavaPlugin {
 
         for (int i = worldSpawnLocationChunk.getX() - 60; i < worldSpawnLocationChunk.getX() + 61; i++) {
             for (int j = worldSpawnLocationChunk.getZ() - 60; j < worldSpawnLocationChunk.getZ() + 61; j++) {
-                Chunk current = world.getChunkAt(i, j);
-                current.load(true);
                 if (i > -4 && i < 4 && j > -4 && j < 4) {
+                    Chunk current = world.getChunkAt(i, j);
+                    current.load(true);
                     current.setForceLoaded(true);
+                    Bukkit.getConsoleSender().sendMessage(Bingo.getInstance().getPrefix() + "Loading Chunk " + current.getX() + " " + current.getZ());
                 }
-                Bukkit.getConsoleSender().sendMessage(Bingo.getInstance().getPrefix() + "Loading Chunk " + current.getX() + " " + current.getZ());
-
             }
         }
     }

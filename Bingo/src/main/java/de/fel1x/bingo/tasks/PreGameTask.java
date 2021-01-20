@@ -44,42 +44,6 @@ public class PreGameTask implements IBingoTask {
             this.isRunning = true;
             this.bingo.getGamestateHandler().setGamestate(Gamestate.PREGAME);
 
-            Location worldSpawnLocation = new Location(Bukkit.getWorlds().get(0), 0, 0, 0);
-            int y = worldSpawnLocation.getWorld().getHighestBlockYAt(0, 0);
-            worldSpawnLocation.setY(y);
-
-            ArrayList<Location> spawns = ArmorstandStatsLoader
-                    .getCirclePoints(worldSpawnLocation,20, 6 * this.bingo.getTeamSize());
-
-            Collections.shuffle(spawns);
-
-            int counter = 0;
-
-            for (Player player : this.bingo.getData().getPlayers()) {
-                player.getInventory().clear();
-                player.getInventory().setItem(8, this.bingo.getBingoItemsQuickAccess());
-                Location spawnLocation = spawns.get(counter).getWorld().getHighestBlockAt(spawns.get(counter)).getLocation();
-                spawnLocation.getBlock().setType(player.hasMetadata("block") ?
-                        (Material) Objects.requireNonNull(player.getMetadata("block").get(0).value())
-                        : Material.GLASS);
-                spawnLocation.clone().add(0, 1, 0);
-                player.teleportAsync(spawnLocation.toCenterLocation().clone().subtract(0, 0.5, 0));
-                player.sendTitle(new Title.Builder().title(" ").subtitle("§cDu wirst teleportiert...").fadeIn(10)
-                        .stay(20).fadeOut(10).build());
-                BingoPlayer bingoPlayer = new BingoPlayer(player);
-                if (bingoPlayer.getTeam() == null) {
-                    for (BingoTeam bingoTeam : BingoTeam.values()) {
-                        if (bingoTeam.getTeamPlayers().size() < bingoTeam.getTeamSize()) {
-                            bingoPlayer.setTeam(bingoTeam);
-                            player.sendMessage(this.bingo.getPrefix() + "§7Du wurdest zu Team "
-                                    + Utils.getChatColor(bingoTeam.getColor()) + bingoTeam.getName() + " zugewiesen");
-                            break;
-                        }
-                    }
-                }
-                counter++;
-            }
-
             this.bingo.setGameScoreboard(new GameScoreboard());
             this.bingo.getData().getPlayers().forEach(player -> this.bingo.getGameScoreboard().setGameScoreboard(player));
 

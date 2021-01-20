@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -94,6 +93,14 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                         } else {
                             player.sendMessage(this.clanPrefix + "§cDu bist in keinem Clan");
                         }
+                        break;
+                    case "deleteallrequests":
+                        if(clanPlayer.deleteAllRequests()) {
+                            player.sendMessage(this.clanPrefix + "§7Alle Anfragen wurden erfolgreich §cgelöscht!");
+                        } else {
+                            player.sendMessage(this.clanPrefix + "§7Du hast keine offenen Anfragen!");
+                        }
+                        break;
                 }
             } else if(args.length == 2) {
                 switch (args[0].toLowerCase()) {
@@ -142,7 +149,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
 
                     IClan clan = new Clan(UUID.randomUUID(), false);
                     if(clan.createClan(clanName, clanTag, clanMaterialParsed, clanPlayer)) {
-                        clanPlayer.sendMessage("test", true, player.getUniqueId());
+                        clanPlayer.sendMessage("§7Dein Clan wurde erstellt!", true, player.getUniqueId());
                     } else {
                         player.sendMessage(this.clanPrefix + "§cEin Fehler ist aufgetreten!");
                         return false;
@@ -150,7 +157,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                 }
             }
         } else {
-            player.sendMessage(this.clanPrefix + "§7Nutze §c/clan create | info | members | search | invite | kick | quit");
+            player.sendMessage(this.clanPrefix + "§7Nutze §c/clan create | info | members | search | invite | kick | quit | deleteAllRequests");
         }
         return true;
     }
@@ -174,6 +181,6 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                     }
             }
         }
-        return Arrays.asList("create", "info", "members", "search", "invite", "kick");
+        return Arrays.asList("create", "info", "members", "invite", "kick", "deleteAllRequests", "quit");
     }
 }

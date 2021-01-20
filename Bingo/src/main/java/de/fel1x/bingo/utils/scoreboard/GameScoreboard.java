@@ -1,10 +1,15 @@
 package de.fel1x.bingo.utils.scoreboard;
 
+import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.driver.permission.IPermissionGroup;
+import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
 import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.objects.BingoTeam;
 import de.fel1x.bingo.utils.Utils;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -87,6 +92,22 @@ public class GameScoreboard {
 
         if (player.getScoreboard().equals(this.gameScoreboard) && bingoTeam != null) {
             Team team = this.scoreboardTeams.get(bingoTeam);
+
+            IClanPlayer clanPlayer;
+
+            if(player.getMetadata("iClanPlayer").get(0) != null) {
+                clanPlayer = (IClanPlayer) player.getMetadata("iClanPlayer").get(0).value();
+            } else {
+                clanPlayer = new ClanPlayer(player.getUniqueId());
+            }
+
+            String clan = "";
+
+            if(clanPlayer.hasClan()) {
+                clan = " §7[§e" + clanPlayer.getCurrentClan().getClanTag() + "§7]";
+            }
+
+            team.setSuffix(clan);
             team.addEntry(player.getName());
             player.setDisplayName(team.getDisplayName() + player.getName());
 
@@ -97,7 +118,24 @@ public class GameScoreboard {
     public void handleJoin(Player player) {
         if (!player.getScoreboard().equals(this.gameScoreboard)) {
             player.setScoreboard(this.gameScoreboard);
-            BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
+            BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player, player1 -> {
+                IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(player1.getUniqueId());
+                IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(permissionUser);
+
+                IClanPlayer clanPlayer;
+
+                if(player1.getMetadata("iClanPlayer").get(0) != null) {
+                    clanPlayer = (IClanPlayer) player1.getMetadata("iClanPlayer").get(0).value();
+                } else {
+                    clanPlayer = new ClanPlayer(player1.getUniqueId());
+                }
+
+                if(clanPlayer.hasClan()) {
+                    permissionGroup.setSuffix(" §7[§e" + clanPlayer.getCurrentClan().getClanTag() + "§7]");
+                }
+
+                return permissionGroup;
+            });
         }
 
         for (Player gamePlayer : Bingo.getInstance().getData().getPlayers()) {
@@ -109,12 +147,41 @@ public class GameScoreboard {
                 if (!bingoScoreboardTeam.hasEntry(gamePlayer.getName())) {
                     bingoScoreboardTeam.addEntry(gamePlayer.getName());
                 }
-                gamePlayer.setDisplayName(bingoScoreboardTeam.getDisplayName() + gamePlayer.getName());
+                IClanPlayer clanPlayer;
+
+                if(gamePlayer.getMetadata("iClanPlayer").get(0) != null) {
+                    clanPlayer = (IClanPlayer) gamePlayer.getMetadata("iClanPlayer").get(0).value();
+                } else {
+                    clanPlayer = new ClanPlayer(gamePlayer.getUniqueId());
+                }
+
+                String clan = "";
+
+                if(clanPlayer.hasClan()) {
+                    clan = " §7[§e" + clanPlayer.getCurrentClan().getClanTag() + "§7]";
+                }
+                gamePlayer.setDisplayName(bingoScoreboardTeam.getDisplayName() + gamePlayer.getName()
+                        + clan);
             }
         }
 
         this.spectatorTeam.addEntry(player.getName());
-        player.setDisplayName(this.spectatorTeam.getDisplayName() + player.getName());
+
+        IClanPlayer clanPlayer;
+
+        if(player.getMetadata("iClanPlayer").get(0) != null) {
+            clanPlayer = (IClanPlayer) player.getMetadata("iClanPlayer").get(0);
+        } else {
+            clanPlayer = new ClanPlayer(player.getUniqueId());
+        }
+
+        String clan = "";
+
+        if(clanPlayer.hasClan()) {
+            clan = " §7[§e" + clanPlayer.getCurrentClan().getClanTag() + "§7]";
+        }
+
+        player.setDisplayName(this.spectatorTeam.getDisplayName() + player.getName() + clan);
 
     }
 

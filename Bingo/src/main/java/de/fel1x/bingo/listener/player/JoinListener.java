@@ -5,6 +5,7 @@ import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.objects.BingoTeam;
 import de.fel1x.bingo.tasks.LobbyTask;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class JoinListener implements Listener {
 
@@ -28,6 +30,7 @@ public class JoinListener implements Listener {
     public void on(PlayerJoinEvent event) {
 
         Player player = event.getPlayer();
+        player.setMetadata("iClanPlayer", new FixedMetadataValue(this.bingo, new ClanPlayer(player.getUniqueId())));
 
         BingoPlayer bingoPlayer = new BingoPlayer(player);
         CrimxPlayer crimxPlayer = new CrimxPlayer(bingoPlayer.getICloudPlayer());
@@ -41,7 +44,8 @@ public class JoinListener implements Listener {
         bingoPlayer.fetchPlayerData();
         event.setJoinMessage(null);
 
-        int neededPlayers = (BingoTeam.RED.getTeamSize() * 2) - this.bingo.getData().getPlayers().size();
+        //int neededPlayers = (BingoTeam.RED.getTeamSize() * 2) - this.bingo.getData().getPlayers().size();
+        int neededPlayers = 2;
 
         player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(18);
         this.bingo.getData().getPlayerGG().put(player.getUniqueId(), false);

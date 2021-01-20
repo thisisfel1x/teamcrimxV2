@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializable {
 
@@ -144,12 +145,48 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
 
             this.clanPlayers.thenAccept(list -> {
                 for (String playerName : list) {
-                    stringBuilder.append("      §8● §5").append(playerName).append("\n");
+                    stringBuilder.append("        §8- §5").append(playerName).append("\n");
                 }
                 Objects.requireNonNull(this.getBukkitPlayerByUUID(this.getUUID())).sendMessage(stringBuilder.toString());
             });
         }
     }
+
+    @Override
+    public void sendClanRequestMessage() {
+        ArrayList<UUID> playerClanRequests = (ArrayList<UUID>) this.getObject("clanRequests",
+                this.getMongoDB().getUserCollection(), this.getUUID());
+
+        if(playerClanRequests.isEmpty()) {
+            return;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder().append(this.clanPrefix).append("§7Offene Clananfragen: §e");
+
+        List<String> clanNames = playerClanRequests.stream().map(uuid -> new Clan(uuid).getClanName()).collect(Collectors.toList());
+        stringBuilder.append(String.join("§8, §e", clanNames));
+        stringBuilder.append("\n").append(this.clanPrefix)
+                .append("§7Nutze §e/clan deleteAllRequests§7, um alle Requests zu löschen");
+
+        Objects.requireNonNull(this.getBukkitPlayerByUUID(this.getUUID())).sendMessage(stringBuilder.toString());
+    }
+
+    @Override
+    public boolean deleteAllRequests() {
+        ArrayList<UUID> playerClanRequests = (ArrayList<UUID>) this.getObject("clanRequests",
+                this.getMongoDB().getUserCollection(), this.getUUID());
+
+        if(playerClanRequests.isEmpty()) {
+            return false;
+        }
+
+        playerClanRequests.clear();
+        this.insertAsyncInCollection("clanRequests", playerClanRequests,
+                this.getUUID().toString(), MongoDBCollection.USERS);
+
+        return true;
+    }
+
 
     private ArrayList<String> getClanPlayersNameFormatted() {
 
