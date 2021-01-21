@@ -31,7 +31,7 @@ public class PreGameTask implements IBingoTask {
             " "
     };
     private int taskId = 0;
-    private int timer = 20;
+    private int timer = 30;
     private boolean isRunning = false;
 
     @Override

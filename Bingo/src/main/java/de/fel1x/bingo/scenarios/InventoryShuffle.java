@@ -50,4 +50,11 @@ public class InventoryShuffle implements IBingoScenario {
     public Material getDisplayMaterial() {
         return Material.REDSTONE;
     }
+
+    @Override
+    public String[] getDescription() {
+        return new String[] {
+                "", "§7Die Items im §eSpielerinventar §7werden §evertauscht", ""
+        };
+    }
 }

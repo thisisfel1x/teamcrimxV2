@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 
 public class BlockTransformListener implements Listener {
 
-    Bingo bingo;
+    private final Bingo bingo;
 
     public BlockTransformListener(Bingo bingo) {
         this.bingo = bingo;

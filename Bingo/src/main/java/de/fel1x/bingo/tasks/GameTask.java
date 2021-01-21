@@ -4,6 +4,7 @@ import com.destroystokyo.paper.Title;
 import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.scenarios.IBingoScenario;
+import de.fel1x.bingo.scenarios.Scenario;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
@@ -12,7 +13,11 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class GameTask implements IBingoTask {
 
@@ -31,18 +36,26 @@ public class GameTask implements IBingoTask {
     private int eventTimer = this.random.nextInt(120) + 60;
     private double timeToGo = this.eventTimer;
 
-    private final boolean eventsEnabled = false;
+    private boolean eventsEnabled = this.bingo.getData().areEventsEnabled();
 
     @Override
     public void start() {
 
         Bukkit.getScheduler().cancelTasks(this.bingo);
 
-        this.bossBar = this.bingo.getServer().createBossBar(String.format("§7Nächstes Event in §e%s Sekunden", this.eventTimer),
-                BarColor.GREEN, BarStyle.SEGMENTED_20, BarFlag.DARKEN_SKY);
-        this.bossBar.removeFlag(BarFlag.DARKEN_SKY);
+        List<Scenario> enabledScenarios = Arrays.stream(Scenario.values()).filter(Scenario::isEnabled).collect(Collectors.toList());
 
-        Bukkit.getOnlinePlayers().forEach(player -> this.bossBar.addPlayer(player));
+        if(enabledScenarios.isEmpty()) {
+            this.eventsEnabled = false;
+        }
+
+        if(this.eventsEnabled) {
+            this.bossBar = this.bingo.getServer().createBossBar(String.format("§7Nächstes Event in §e%s Sekunden", this.eventTimer),
+                    BarColor.GREEN, BarStyle.SEGMENTED_20, BarFlag.DARKEN_SKY);
+            this.bossBar.removeFlag(BarFlag.DARKEN_SKY);
+
+            Bukkit.getOnlinePlayers().forEach(player -> this.bossBar.addPlayer(player));
+        }
 
         if (!this.isRunning) {
 
@@ -59,35 +72,42 @@ public class GameTask implements IBingoTask {
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.bingo, () -> {
 
-                this.bossBar.setColor(this.getColor(this.eventTimer));
-                this.bossBar.setProgress(this.eventTimer / this.timeToGo);
-                if (this.eventTimer > 0) {
-                    this.bossBar.setTitle(String.format("§7Nächstes Event in §e%s", ((this.eventTimer == 1) ? "einer Sekunde" :
-                            ((this.eventTimer <= 60) ? this.eventTimer + " Sekunden" :
-                                    String.format("%02d:%02d", this.eventTimer / 60, this.eventTimer % 60)))));
+                if(this.eventsEnabled) {
+                    this.bossBar.setColor(this.getColor(this.eventTimer));
+                    this.bossBar.setProgress(this.eventTimer / this.timeToGo);
+                    if (this.eventTimer > 0) {
+                        this.bossBar.setTitle(String.format("§7Nächstes Event in §e%s", ((this.eventTimer == 1) ? "einer Sekunde" :
+                                ((this.eventTimer <= 60) ? this.eventTimer + " Sekunden" :
+                                        String.format("%02d:%02d", this.eventTimer / 60, this.eventTimer % 60)))));
+                    }
                 }
 
                 Bukkit.getOnlinePlayers().forEach(player -> player.sendActionBar("§fVergangene Zeit §8● §e" + this.formatSeconds(this.timer)));
 
-                if (this.eventTimer == 0) {
-                    this.eventTimer = this.random.nextInt(120) + 60;
-                    this.timeToGo = this.eventTimer;
+                if(this.eventsEnabled) {
+                    if (this.eventTimer == 0) {
+                        this.eventTimer = this.random.nextInt(120) + 60;
+                        this.timeToGo = this.eventTimer;
 
-                    try {
-                        IBingoScenario bingoScenario = this.bingo.startRandomScenario()
-                                .get(this.random.nextInt(this.bingo.startRandomScenario().size())).newInstance();
-                        bingoScenario.execute();
-                        this.bossBar.setTitle("§7Event §8● §a§l" + bingoScenario.getName());
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        e.printStackTrace();
+                        try {
+                            IBingoScenario bingoScenario = enabledScenarios
+                                    .get(this.random.nextInt(this.bingo.startRandomScenario().size()))
+                                    .getScenarioClazz().newInstance();
+                            bingoScenario.execute();
+                            this.bossBar.setTitle("§7Event §8● §a§l" + bingoScenario.getName());
+                        } catch (InstantiationException | IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+
                     }
-
                 }
 
                 this.timer++;
 
-                if(this.eventTimer > 0) {
-                    this.eventTimer--;
+                if(this.eventsEnabled) {
+                    if (this.eventTimer > 0) {
+                        this.eventTimer--;
+                    }
                 }
 
                 if(Bukkit.getOnlinePlayers().isEmpty()) {
@@ -108,7 +128,9 @@ public class GameTask implements IBingoTask {
             this.isRunning = false;
             Bukkit.getScheduler().cancelTask(this.taskId);
 
-            this.bossBar.removeAll();
+            if(this.eventsEnabled) {
+                this.bossBar.removeAll();
+            }
 
         }
 

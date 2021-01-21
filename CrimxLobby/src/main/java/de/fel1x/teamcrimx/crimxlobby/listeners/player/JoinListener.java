@@ -63,7 +63,7 @@ public class JoinListener implements Listener {
             IClanPlayer clanPlayer;
 
             if(player1.getMetadata("iClanPlayer").get(0) != null) {
-                clanPlayer = (IClanPlayer) player1.getMetadata("iClanPlayer").get(0);
+                clanPlayer = (IClanPlayer) player1.getMetadata("iClanPlayer").get(0).value();
             } else {
                 clanPlayer = new ClanPlayer(player1.getUniqueId());
             }

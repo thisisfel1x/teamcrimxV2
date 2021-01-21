@@ -4,11 +4,10 @@ import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.inventories.SpectatorCompassInventory;
 import de.fel1x.bingo.inventories.TeamSelectorInventory;
+import de.fel1x.bingo.inventories.settings.SettingsOverviewInventory;
 import de.fel1x.bingo.inventories.voting.VotingInventory;
-import de.fel1x.bingo.inventories.voting.VotingManager;
 import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.tasks.LobbyTask;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,6 +53,8 @@ public class InteractListener implements Listener {
                             }
                         }
                         VotingInventory.VOTING_INVENTORY.open(player);
+                    } else if (event.getMaterial() == Material.REPEATER) {
+                        SettingsOverviewInventory.SETTINGS_OVERVIEW_INVENTORY.open(player);
                     }
                 }
 

@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class JoinListener implements Listener {
@@ -44,8 +45,7 @@ public class JoinListener implements Listener {
         bingoPlayer.fetchPlayerData();
         event.setJoinMessage(null);
 
-        //int neededPlayers = (BingoTeam.RED.getTeamSize() * 2) - this.bingo.getData().getPlayers().size();
-        int neededPlayers = 2;
+        int neededPlayers = (BingoTeam.RED.getTeamSize() * 2) - this.bingo.getData().getPlayers().size();
 
         player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(18);
         this.bingo.getData().getPlayerGG().put(player.getUniqueId(), false);
@@ -62,7 +62,9 @@ public class JoinListener implements Listener {
 
                 player.getInventory().addItem(new ItemBuilder(Material.CHEST_MINECART)
                         .setName("§8● §aWähle dein Team").toItemStack(),
-                        new ItemBuilder(Material.PAPER).setName("§8● §eSchwierigkeitsvoting").toItemStack());
+                        new ItemBuilder(Material.PAPER).setName("§8● §eSchwierigkeitsvoting").toItemStack(),
+                        (player.hasPermission("bingo.settings") ? new ItemBuilder(Material.REPEATER)
+                                .setName("§8● §cEinstellungen").toItemStack() : new ItemStack(Material.AIR)));
 
                 player.teleport(this.bingo.getSpawnLocation());
 

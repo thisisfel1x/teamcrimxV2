@@ -62,7 +62,7 @@ public final class CrimxLobby extends JavaPlugin {
             this.saveDefaultConfig();
         }
 
-        Bukkit.createWorld(new WorldCreator("lobbywinter"));
+        Bukkit.createWorld(new WorldCreator("lobbysommer"));
 
         this.crimxAPI = CrimxAPI.getInstance();
 
@@ -96,7 +96,7 @@ public final class CrimxLobby extends JavaPlugin {
                         "A0UUTGQgMlEeSEYc5H/mYn8GjKsq2fd4X+2mPnszJHRWH3GhO01QU7fO/HSHcccronEb1eWQPgkqCD6rtXWslh7nubKvORJZcBiVpOWTNpjJsDZH57XOghdKsDWp79jTUMM3AaY8irRMC8SlXdMK9RM8uMPofb0FgrHaMUI4D8vTpPEvEZXbyhEpuuCKs3Psb1BBu130x3xm7w1kGKOoyQYSZ1CE9JdYAGF3FOCeAsmGohpO6KMtGsrWJ/wR1lExzbAjlp5vPtMXpqpsQoCTEldtiZ8gxB8bU+5ms5FYxbIUy1I7N5YYcpNUFiBEwWbFHIkzYt5KoQEXZ2P3mTOgJsjyUlKxlDJOQRDeNZuuNMZDiuqL7JGrtSKNRkCwGAE+Pr91YOAjhymzL7t/Hhn9V6i6198HrDDXZzZqm9ebc6Y7bdSSTHtSDWYXD80B0CgGUyMTS9g0h8qN6rFN6taMxEeBxBuI8Hpj5ERchrqT9xhJzOapcQJEf59l60h2BcDjDJJxefq4N6hvvGPL+t1H/D/bPN5eF7HYJKSz/y/lpJutqWJfnolhoxTf7Qy0XPp7BNQxOFdDOqujLb0haPxpcBCrhgzd/QXUlcpYpMC9zov3jqL5muXg6aXTDkEU2UlLDhPNEXolM2nbvG55WXNvpe3ulbVBbCs3PQDi7bsdLb0="))))
                 .lookAtPlayer(true)
                 .imitatePlayer(true)
-                .location(new Location(Bukkit.getWorld("lobbywinter"), 18.5, 13, -29.5))
+                .location(new Location(Bukkit.getWorld("lobbysommer"), 18.5, 13, -29.5))
                 .spawnCustomizer((npc1, player) -> npc1.metadata().queue(MetadataModifier.EntityMetadata.SKIN_LAYERS, true).send())
                 .build(this.npcPool);
         this.perksNpc = new NPC.Builder(new Profile(UUID.randomUUID(), "§ePerks",
@@ -106,7 +106,7 @@ public final class CrimxLobby extends JavaPlugin {
                 .lookAtPlayer(true)
                 .imitatePlayer(true)
                 .spawnCustomizer((npc, player) -> npc.metadata().queue(MetadataModifier.EntityMetadata.SKIN_LAYERS, true).send())
-                .location(new Location(Bukkit.getWorld("lobbywinter"), 16.5, 13, -27.5))
+                .location(new Location(Bukkit.getWorld("lobbysommer"), 16.5, 13, -27.5))
                 .build(this.npcPool);
     }
 
@@ -142,7 +142,10 @@ public final class CrimxLobby extends JavaPlugin {
             world.setGameRule(GameRule.DO_MOB_LOOT, false);
             world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
             world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-            world.setTime(14000);
+            world.setTime(4000);
+            world.setWeatherDuration(0);
+            world.setThundering(false);
+            world.setClearWeatherDuration(Integer.MAX_VALUE);
         }
     }
 

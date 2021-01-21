@@ -54,4 +54,11 @@ public class EnderGamesTeleport implements IBingoScenario {
     public Material getDisplayMaterial() {
         return Material.ENDER_PEARL;
     }
+
+    @Override
+    public String[] getDescription() {
+        return new String[] {
+                "", "§7Jeder Spieler wird zufällig mit einem anderen §evertauscht", ""
+        };
+    }
 }

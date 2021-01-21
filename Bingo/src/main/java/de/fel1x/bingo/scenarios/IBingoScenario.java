@@ -11,4 +11,5 @@ public interface IBingoScenario {
 
     Material getDisplayMaterial();
 
+    String[] getDescription();
 }

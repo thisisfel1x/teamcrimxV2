@@ -38,6 +38,7 @@ import org.reflections.Reflections;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -125,7 +126,7 @@ public final class Bingo extends JavaPlugin {
 
         for (int i = worldSpawnLocationChunk.getX() - 60; i < worldSpawnLocationChunk.getX() + 61; i++) {
             for (int j = worldSpawnLocationChunk.getZ() - 60; j < worldSpawnLocationChunk.getZ() + 61; j++) {
-                if (i > -4 && i < 4 && j > -4 && j < 4) {
+                if (i > -8 && i < 8 && j > -8 && j < 8) {
                     Chunk current = world.getChunkAt(i, j);
                     current.load(true);
                     current.setForceLoaded(true);
@@ -174,7 +175,6 @@ public final class Bingo extends JavaPlugin {
     }
 
     private void setMotdAndUpdate() {
-
         String unformatted = new Location(Bukkit.getWorlds().get(0), 0.5, 125, 0.5).getChunk()
                 .getChunkSnapshot(false, true, false)
                 .getBiome(0, 125, 0).name();
@@ -193,7 +193,6 @@ public final class Bingo extends JavaPlugin {
 
         BukkitCloudNetHelper.setApiMotd(formatted + " 6x2");
         BridgeHelper.updateServiceInfo();
-
     }
 
     /*
@@ -202,7 +201,7 @@ public final class Bingo extends JavaPlugin {
      */
     private void setupWorlds() {
         World waitingLobby = Bukkit.createWorld(new WorldCreator("Wartelobby"));
-        this.spawnLocation = new Location(waitingLobby, -23.5, 5, 51.5, -149, -1.1f);
+        this.spawnLocation = new Location(waitingLobby, -23.5, 5, 51.5, -189, -1.1f);
 
         if (waitingLobby == null) {
             return;
@@ -234,6 +233,7 @@ public final class Bingo extends JavaPlugin {
         new ChatListener(this);
         new BucketListener(this);
         new ArmorstandInteractListener(this);
+        new CraftListener(this);
 
         // BLOCK
         new BlockTransformListener(this);

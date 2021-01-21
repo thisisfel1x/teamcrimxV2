@@ -43,4 +43,11 @@ public class RandomPotionEffect implements IBingoScenario {
     public Material getDisplayMaterial() {
         return Material.POTION;
     }
+
+    @Override
+    public String[] getDescription() {
+        return new String[] {
+                "", "§7Alle Spieler erhalten einen §ezufälligen Effekt", ""
+        };
+    }
 }

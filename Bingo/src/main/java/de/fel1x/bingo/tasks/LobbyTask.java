@@ -8,10 +8,8 @@ import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.objects.BingoTeam;
 import de.fel1x.bingo.utils.Utils;
 import de.fel1x.bingo.utils.world.ArmorstandStatsLoader;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -80,6 +78,11 @@ public class LobbyTask implements IBingoTask {
                         break;
 
                     case 0:
+                        World world = Bukkit.getWorlds().get(0);
+                        world.getEntities().forEach(Entity::remove);
+                        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, LobbyTask.this.bingo.getData().doDaylightCycle());
+                        world.setGameRule(GameRule.DO_MOB_SPAWNING, LobbyTask.this.bingo.getData().doMobSpawn());
+
                         Bukkit.broadcastMessage(this.bingo.getPrefix() + "§cDie Spieler werden teleportiert...");
                         this.teleportPlayers();
                         break;
@@ -170,6 +173,7 @@ public class LobbyTask implements IBingoTask {
                     Title success = Title.builder().title("§aFertig").subtitle("§7Alle Spieler wurden teleportiert")
                             .fadeIn(0).stay(20).fadeOut(10).build();
                     Bukkit.getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.sendTitle(success));
+
                     Bukkit.broadcastMessage(LobbyTask.this.bingo.getPrefix() + "§e§lDie Runde beginnt!");
                     LobbyTask.this.bingo.startTimerByClass(PreGameTask.class);
                     this.cancel();
