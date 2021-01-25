@@ -2,7 +2,6 @@ package de.fel1x.bingo.scenarios;
 
 import de.fel1x.bingo.Bingo;
 import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,8 +12,8 @@ import java.util.Arrays;
 public class PlayerXRay implements IBingoScenario {
 
     private final Bingo bingo = Bingo.getInstance();
-    private final ArrayList<Material> ores = new ArrayList<>(Arrays.asList(Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE,
-            Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.REDSTONE_ORE, Material.LAPIS_ORE));
+    private final ArrayList<Material> toReplace = new ArrayList<>(Arrays.asList(Material.GRASS_BLOCK, Material.DIRT,
+            Material.STONE, Material.GRANITE, Material.ANDESITE));
 
     @Override
     public void execute() {
@@ -24,8 +23,8 @@ public class PlayerXRay implements IBingoScenario {
             Cuboid cuboid = new Cuboid(playerLocation.clone().add(3, 3, 3),
                     playerLocation.clone().subtract(3, 3, 3));
 
-            cuboid.getBlocks().stream().filter(block -> !this.ores.contains(block.getType()))
-                    .forEach(block -> player.sendBlockChange(block.getLocation(), Bukkit.createBlockData(Material.GLASS)));
+            cuboid.getBlocks().stream().filter(block -> this.toReplace.contains(block.getType()))
+                    .forEach(block -> block.setType(Material.AIR));
         }
     }
 

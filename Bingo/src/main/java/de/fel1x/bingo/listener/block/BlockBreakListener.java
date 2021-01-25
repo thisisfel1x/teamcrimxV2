@@ -3,6 +3,7 @@ package de.fel1x.bingo.listener.block;
 import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.objects.BingoPlayer;
+import de.fel1x.bingo.settings.Settings;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -42,16 +43,17 @@ public class BlockBreakListener implements Listener {
                 if (bingoPlayer.isSpectator()) {
                     event.setCancelled(true);
                 }
-                if(this.bingo.getData().isRandomizer()) {
+                if(Settings.RANDOMIZER.isEnabled()) {
                     if(block.getType().equals(Material.AIR)) {
                         return;
                     }
 
                     event.setCancelled(true);
-                    block.setType(Material.AIR);
 
                     Material blockToDrop = this.bingo.getData().getRandomizedBlocks().get(block.getType());
                     block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(blockToDrop));
+
+                    block.setType(Material.AIR);
                 }
                 break;
         }

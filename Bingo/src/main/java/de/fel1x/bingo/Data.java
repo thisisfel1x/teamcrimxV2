@@ -17,12 +17,6 @@ public class Data {
     private final Map<UUID, Long> playTime;
     private final Map<UUID, Boolean> playerGG;
 
-    private boolean eventsEnabled = true;
-    private boolean doMobSpawn = true;
-    private boolean doDaylightCycle = true;
-    private boolean randomizer = false;
-    private boolean advancedRandomizer = false;
-
     private final Map<Material, Material> randomizedBlocks;
 
     public Data() {
@@ -43,46 +37,6 @@ public class Data {
 
         this.randomizedBlocks = IntStream.range(0, normalBlocks.size()).boxed().collect(Collectors.toMap(normalBlocks::get, randomizedBlocksList::get));
 
-    }
-
-    public boolean isAdvancedRandomizer() {
-        return this.advancedRandomizer;
-    }
-
-    public void setAdvancedRandomizer(boolean advancedRandomizer) {
-        this.advancedRandomizer = advancedRandomizer;
-    }
-
-    public boolean isRandomizer() {
-        return this.randomizer;
-    }
-
-    public void setRandomizer(boolean randomizer) {
-        this.randomizer = randomizer;
-    }
-
-    public boolean areEventsEnabled() {
-        return this.eventsEnabled;
-    }
-
-    public void setEventsEnabled(boolean eventsEnabled) {
-        this.eventsEnabled = eventsEnabled;
-    }
-
-    public boolean doMobSpawn() {
-        return this.doMobSpawn;
-    }
-
-    public void setDoMobSpawn(boolean doMobSpawn) {
-        this.doMobSpawn = doMobSpawn;
-    }
-
-    public boolean doDaylightCycle() {
-        return this.doDaylightCycle;
-    }
-
-    public void setDoDaylightCycle(boolean doDaylightCycle) {
-        this.doDaylightCycle = doDaylightCycle;
     }
 
     public List<Player> getPlayers() {

@@ -56,6 +56,7 @@ public class PreGameTask implements IBingoTask {
                         }
                         break;
 
+                    case 30:
                     case 15:
                     case 10:
                     case 5:

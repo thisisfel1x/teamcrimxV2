@@ -6,6 +6,7 @@ import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.objects.BingoDifficulty;
 import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.objects.BingoTeam;
+import de.fel1x.bingo.settings.Settings;
 import de.fel1x.bingo.utils.Utils;
 import de.fel1x.bingo.utils.world.ArmorstandStatsLoader;
 import org.bukkit.*;
@@ -16,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class LobbyTask implements IBingoTask {
@@ -80,8 +82,8 @@ public class LobbyTask implements IBingoTask {
                     case 0:
                         World world = Bukkit.getWorlds().get(0);
                         world.getEntities().forEach(Entity::remove);
-                        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, LobbyTask.this.bingo.getData().doDaylightCycle());
-                        world.setGameRule(GameRule.DO_MOB_SPAWNING, LobbyTask.this.bingo.getData().doMobSpawn());
+                        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, Settings.DAYLIGHT_CYCLE.isEnabled());
+                        world.setGameRule(GameRule.DO_MOB_SPAWNING, Settings.DO_MOB_SPAWN.isEnabled());
 
                         Bukkit.broadcastMessage(this.bingo.getPrefix() + "§cDie Spieler werden teleportiert...");
                         this.teleportPlayers();

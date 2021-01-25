@@ -2,6 +2,7 @@ package de.fel1x.bingo.listener.player;
 
 import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
+import de.fel1x.bingo.settings.Settings;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -26,7 +27,7 @@ public class CraftListener implements Listener {
                 return;
             }
 
-            if(this.bingo.getData().isAdvancedRandomizer()) {
+            if(Settings.CRAFT_RANDOMIZER.isEnabled()) {
                 if(event.getRecipe() == null) {
                     return;
                 }

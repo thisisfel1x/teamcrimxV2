@@ -29,10 +29,11 @@ public class SkipItemCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        if (!player.isOp() || !player.hasPermission("bingo.skipitem")) return false;
+        if (!player.hasPermission("bingo.skipitem")) {
+            return false;
+        }
 
-        if (!this.bingo.getGamestateHandler().getGamestate().equals(Gamestate.IDLE)
-                && !this.bingo.getGamestateHandler().getGamestate().equals(Gamestate.LOBBY)) {
+        if (this.bingo.getGamestateHandler().getGamestate() != Gamestate.PREGAME) {
             player.sendMessage(this.bingo.getPrefix() + "§7Die Runde läuft noch nicht oder ist schon vorbei!");
             return false;
         }
@@ -46,5 +47,4 @@ public class SkipItemCommand implements CommandExecutor {
         return true;
 
     }
-
 }

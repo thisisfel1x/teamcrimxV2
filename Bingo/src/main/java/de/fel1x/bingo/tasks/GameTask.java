@@ -5,6 +5,7 @@ import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.scenarios.IBingoScenario;
 import de.fel1x.bingo.scenarios.Scenario;
+import de.fel1x.bingo.settings.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
@@ -36,7 +37,7 @@ public class GameTask implements IBingoTask {
     private int eventTimer = this.random.nextInt(120) + 60;
     private double timeToGo = this.eventTimer;
 
-    private boolean eventsEnabled = this.bingo.getData().areEventsEnabled();
+    private boolean eventsEnabled = Settings.EVENTS_ENABLED.isEnabled();
 
     @Override
     public void start() {
@@ -91,7 +92,7 @@ public class GameTask implements IBingoTask {
 
                         try {
                             IBingoScenario bingoScenario = enabledScenarios
-                                    .get(this.random.nextInt(this.bingo.startRandomScenario().size()))
+                                    .get(this.random.nextInt(enabledScenarios.size()))
                                     .getScenarioClazz().newInstance();
                             bingoScenario.execute();
                             this.bossBar.setTitle("§7Event §8● §a§l" + bingoScenario.getName());
