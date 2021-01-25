@@ -38,7 +38,7 @@ public class SkipItemCommand implements CommandExecutor {
             return false;
         }
 
-        if(this.bingo.getItemGenerator() == null) {
+        if (this.bingo.getItemGenerator() == null) {
             player.sendMessage(this.bingo.getPrefix() + "§cDie Items wurden noch nicht generiert, bitte stimme zuerst über die Schwierigkeit ab!");
             return false;
         }

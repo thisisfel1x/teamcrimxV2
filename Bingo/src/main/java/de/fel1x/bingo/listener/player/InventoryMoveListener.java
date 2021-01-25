@@ -49,13 +49,13 @@ public class InventoryMoveListener implements Listener {
                 return;
             }
 
-            if(event.getCursor() == null) return;
-            if(event.getCursor().equals(this.bingo.getBingoItemsQuickAccess())) {
+            if (event.getCursor() == null) return;
+            if (event.getCursor().equals(this.bingo.getBingoItemsQuickAccess())) {
                 event.setCancelled(true);
                 return;
             }
 
-            if(event.getOldCursor().equals(this.bingo.getBingoItemsQuickAccess())) {
+            if (event.getOldCursor().equals(this.bingo.getBingoItemsQuickAccess())) {
                 event.setCancelled(true);
                 return;
             }

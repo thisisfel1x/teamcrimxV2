@@ -47,7 +47,7 @@ public class Clan extends ClanDatabase implements IClan {
         super(CrimxAPI.getInstance());
         this.clanUniqueId = clanUniqueId;
 
-        if(shouldFetchData) {
+        if (shouldFetchData) {
             this.fetchDataSync();
         }
     }
@@ -73,7 +73,7 @@ public class Clan extends ClanDatabase implements IClan {
 
     @Override
     public boolean addPlayerToClan(IClanPlayer iClanPlayer) {
-        if(this.clanPlayers.contains(iClanPlayer.getUUID())) {
+        if (this.clanPlayers.contains(iClanPlayer.getUUID())) {
             return false;
         }
 
@@ -96,7 +96,7 @@ public class Clan extends ClanDatabase implements IClan {
     @Override
     public boolean removePlayerFromClanByName(String playerName) {
         ICloudOfflinePlayer cloudOfflinePlayer = this.playerManager.getFirstOfflinePlayer(playerName);
-        if(cloudOfflinePlayer == null) {
+        if (cloudOfflinePlayer == null) {
             return false;
         }
 
@@ -135,7 +135,7 @@ public class Clan extends ClanDatabase implements IClan {
     @Override
     public boolean createClan(String clanName, String clanTag, Material clanItem, IClanPlayer iClanPlayer) {
 
-        if(this.clanTagAlreadyTaken(clanTag)) {
+        if (this.clanTagAlreadyTaken(clanTag)) {
             iClanPlayer.sendMessage(String.format("§cEin Clan mit dem gewählten Tag §e(%s) §cexistiert bereits!", clanTag),
                     true, iClanPlayer.getUUID());
             return false;
@@ -230,16 +230,16 @@ public class Clan extends ClanDatabase implements IClan {
         ICloudOfflinePlayer offlinePlayer = this.playerManager.getFirstOfflinePlayer(playerName);
         ICloudPlayer iCloudPlayer = this.playerManager.getFirstOnlinePlayer(playerName);
 
-        if(offlinePlayer != null) {
+        if (offlinePlayer != null) {
             IClanPlayer iClanPlayer = new ClanPlayer(offlinePlayer.getUniqueId());
-            if(iClanPlayer.hasClan()) {
+            if (iClanPlayer.hasClan()) {
                 return false;
             }
 
             ArrayList<UUID> playerClanRequests = (ArrayList<UUID>) this.getObject("clanRequests",
                     this.getMongoDB().getUserCollection(), offlinePlayer.getUniqueId());
 
-            if(playerClanRequests == null) {
+            if (playerClanRequests == null) {
                 playerClanRequests = new ArrayList<>();
             }
 
@@ -252,7 +252,7 @@ public class Clan extends ClanDatabase implements IClan {
             return false;
         }
 
-        if(iCloudPlayer != null) {
+        if (iCloudPlayer != null) {
             BaseComponent[] messageComponent = {
                     new TextComponent(new ComponentBuilder(this.getCrimxAPI().getClanPrefix()
                             + " §7Klicke ").append("§e§l*hier*")

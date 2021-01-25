@@ -40,7 +40,7 @@ public class PlayerXRay implements IBingoScenario {
 
     @Override
     public String[] getDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§7In einem §e5x5 Radius §7um den Spieler", "§7wird §eStein §7mit §eGlas vertauscht", ""
         };
     }

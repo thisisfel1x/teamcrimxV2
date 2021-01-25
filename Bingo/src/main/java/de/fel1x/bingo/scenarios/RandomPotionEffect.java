@@ -46,7 +46,7 @@ public class RandomPotionEffect implements IBingoScenario {
 
     @Override
     public String[] getDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§7Alle Spieler erhalten einen §ezufälligen Effekt", ""
         };
     }

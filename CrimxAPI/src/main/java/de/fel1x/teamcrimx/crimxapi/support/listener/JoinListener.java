@@ -18,7 +18,7 @@ public class JoinListener implements Listener {
         Player player = event.getPlayer();
         String taskName = CrimxAPI.getInstance().getPlayerManager().getOnlinePlayer(player.getUniqueId()).getConnectedService().getTaskName();
 
-        if(taskName != null && taskName.equalsIgnoreCase("Lobby")) {
+        if (taskName != null && taskName.equalsIgnoreCase("Lobby")) {
             IClanPlayer clanPlayer = new ClanPlayer(player.getUniqueId());
             clanPlayer.sendClanRequestMessage();
         }

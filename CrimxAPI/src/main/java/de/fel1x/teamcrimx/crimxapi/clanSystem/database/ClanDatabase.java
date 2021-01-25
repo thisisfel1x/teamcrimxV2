@@ -68,10 +68,10 @@ public class ClanDatabase {
 
     public boolean insertAsyncInCollection(String key, String value, Document playerDocument, MongoDBCollection mongoDBCollection) {
         Bson updateOperation = new Document("$set", new Document(key, value));
-        if(mongoDBCollection == MongoDBCollection.CLAN) {
+        if (mongoDBCollection == MongoDBCollection.CLAN) {
             Bukkit.getScheduler().runTaskAsynchronously(this.crimxSpigotAPI, () -> this.clanCollection.updateOne(playerDocument, updateOperation));
             return true;
-        } else if(mongoDBCollection == MongoDBCollection.USERS) {
+        } else if (mongoDBCollection == MongoDBCollection.USERS) {
             Bukkit.getScheduler().runTaskAsynchronously(this.crimxSpigotAPI, () -> this.userCollection.updateOne(playerDocument, updateOperation));
             return true;
         } else {
@@ -85,7 +85,7 @@ public class ClanDatabase {
             MongoCollection<Document> collection = mongoDBCollection == MongoDBCollection.CLAN
                     ? this.clanCollection : this.userCollection;
             Document toInsert = collection.find(new Document("_id", id)).first();
-            if(toInsert != null) {
+            if (toInsert != null) {
                 collection.updateOne(toInsert, updateOperation);
             }
         });

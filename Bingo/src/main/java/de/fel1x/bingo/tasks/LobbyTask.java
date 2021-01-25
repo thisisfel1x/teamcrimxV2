@@ -171,7 +171,7 @@ public class LobbyTask implements IBingoTask {
                 }
 
                 LobbyTask.this.counter++;
-                if(LobbyTask.this.counter == playerSize) {
+                if (LobbyTask.this.counter == playerSize) {
                     Title success = Title.builder().title("§aFertig").subtitle("§7Alle Spieler wurden teleportiert")
                             .fadeIn(0).stay(20).fadeOut(10).build();
                     Bukkit.getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.sendTitle(success));

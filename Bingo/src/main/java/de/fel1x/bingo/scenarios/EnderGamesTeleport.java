@@ -57,7 +57,7 @@ public class EnderGamesTeleport implements IBingoScenario {
 
     @Override
     public String[] getDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§7Jeder Spieler wird zufällig mit einem anderen §evertauscht", ""
         };
     }

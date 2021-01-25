@@ -29,6 +29,7 @@ public interface IClanPlayer {
 
     /**
      * Get a BukkitPlayer by UUID
+     *
      * @param playerUniqueId UniqueId of the player
      * @return returns {@link Player}
      */

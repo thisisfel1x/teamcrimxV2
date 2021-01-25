@@ -29,7 +29,7 @@ public class InventoryShuffle implements IBingoScenario {
             player.sendMessage(this.bingo.getPrefix() + "§7Dein Inventar wurde vertauscht");
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.5f);
 
-            if(player.getInventory().getItem(8) != null) {
+            if (player.getInventory().getItem(8) != null) {
                 ItemStack cache = player.getInventory().getItem(8);
                 player.getInventory().getItem(8).setType(Material.AIR);
                 player.getInventory().addItem(cache);
@@ -53,7 +53,7 @@ public class InventoryShuffle implements IBingoScenario {
 
     @Override
     public String[] getDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§7Die Items im §eSpielerinventar §7werden §evertauscht", ""
         };
     }

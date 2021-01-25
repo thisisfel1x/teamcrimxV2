@@ -25,7 +25,7 @@ public class DropListener implements Listener {
 
         Gamestate gamestate = this.bingo.getGamestateHandler().getGamestate();
 
-        if(event.getItemDrop().getItemStack().equals(this.bingo.getBingoItemsQuickAccess())) {
+        if (event.getItemDrop().getItemStack().equals(this.bingo.getBingoItemsQuickAccess())) {
             event.setCancelled(true);
             return;
         }

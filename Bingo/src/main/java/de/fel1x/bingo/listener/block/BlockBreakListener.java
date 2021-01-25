@@ -43,8 +43,8 @@ public class BlockBreakListener implements Listener {
                 if (bingoPlayer.isSpectator()) {
                     event.setCancelled(true);
                 }
-                if(Settings.RANDOMIZER.isEnabled()) {
-                    if(block.getType().equals(Material.AIR)) {
+                if (Settings.RANDOMIZER.isEnabled()) {
+                    if (block.getType().equals(Material.AIR)) {
                         return;
                     }
 

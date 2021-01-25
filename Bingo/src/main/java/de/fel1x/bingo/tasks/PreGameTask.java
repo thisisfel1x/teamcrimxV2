@@ -74,7 +74,7 @@ public class PreGameTask implements IBingoTask {
                             player.setExp(0f);
 
                             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.75f);
-                            if(this.timer <= 3) {
+                            if (this.timer <= 3) {
                                 player.sendTitle(Title.builder()
                                         .title(((this.timer == 3) ? "§a§l" : ((this.timer == 2) ? "§e§l" : "§c§l")) + this.timer)
                                         .fadeIn(10).stay(20).fadeOut(10).build());

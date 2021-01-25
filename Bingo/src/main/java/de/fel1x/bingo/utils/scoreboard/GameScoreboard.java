@@ -95,7 +95,7 @@ public class GameScoreboard {
 
             IClanPlayer clanPlayer;
 
-            if(player.getMetadata("iClanPlayer").get(0) != null) {
+            if (player.getMetadata("iClanPlayer").get(0) != null) {
                 clanPlayer = (IClanPlayer) player.getMetadata("iClanPlayer").get(0).value();
             } else {
                 clanPlayer = new ClanPlayer(player.getUniqueId());
@@ -103,7 +103,7 @@ public class GameScoreboard {
 
             String clan = "";
 
-            if(clanPlayer.hasClan()) {
+            if (clanPlayer.hasClan()) {
                 clan = " §7[§e" + clanPlayer.getCurrentClan().getClanTag() + "§7]";
             }
 
@@ -124,13 +124,13 @@ public class GameScoreboard {
 
                 IClanPlayer clanPlayer;
 
-                if(player1.getMetadata("iClanPlayer").get(0) != null) {
+                if (player1.getMetadata("iClanPlayer").get(0) != null) {
                     clanPlayer = (IClanPlayer) player1.getMetadata("iClanPlayer").get(0).value();
                 } else {
                     clanPlayer = new ClanPlayer(player1.getUniqueId());
                 }
 
-                if(clanPlayer.hasClan()) {
+                if (clanPlayer.hasClan()) {
                     permissionGroup.setSuffix(" §7[§e" + clanPlayer.getCurrentClan().getClanTag() + "§7]");
                 }
 
@@ -149,7 +149,7 @@ public class GameScoreboard {
                 }
                 IClanPlayer clanPlayer;
 
-                if(gamePlayer.getMetadata("iClanPlayer").get(0) != null) {
+                if (gamePlayer.getMetadata("iClanPlayer").get(0) != null) {
                     clanPlayer = (IClanPlayer) gamePlayer.getMetadata("iClanPlayer").get(0).value();
                 } else {
                     clanPlayer = new ClanPlayer(gamePlayer.getUniqueId());
@@ -157,7 +157,7 @@ public class GameScoreboard {
 
                 String clan = "";
 
-                if(clanPlayer.hasClan()) {
+                if (clanPlayer.hasClan()) {
                     clan = " §7[§e" + clanPlayer.getCurrentClan().getClanTag() + "§7]";
                 }
                 gamePlayer.setDisplayName(bingoScoreboardTeam.getDisplayName() + gamePlayer.getName()
@@ -169,7 +169,7 @@ public class GameScoreboard {
 
         IClanPlayer clanPlayer;
 
-        if(player.getMetadata("iClanPlayer").get(0) != null) {
+        if (player.getMetadata("iClanPlayer").get(0) != null) {
             clanPlayer = (IClanPlayer) player.getMetadata("iClanPlayer").get(0);
         } else {
             clanPlayer = new ClanPlayer(player.getUniqueId());
@@ -177,7 +177,7 @@ public class GameScoreboard {
 
         String clan = "";
 
-        if(clanPlayer.hasClan()) {
+        if (clanPlayer.hasClan()) {
             clan = " §7[§e" + clanPlayer.getCurrentClan().getClanTag() + "§7]";
         }
 

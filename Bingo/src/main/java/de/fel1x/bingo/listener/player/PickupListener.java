@@ -41,7 +41,7 @@ public class PickupListener implements Listener {
                 return;
             }
 
-            if(event.getItem().getItemStack().equals(this.bingo.getBingoItemsQuickAccess())) {
+            if (event.getItem().getItemStack().equals(this.bingo.getBingoItemsQuickAccess())) {
                 event.setCancelled(true);
                 return;
             }

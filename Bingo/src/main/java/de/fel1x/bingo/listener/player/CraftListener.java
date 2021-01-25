@@ -22,13 +22,13 @@ public class CraftListener implements Listener {
 
         Gamestate gamestate = this.bingo.getGamestateHandler().getGamestate();
 
-        if(gamestate == Gamestate.INGAME) {
-            if(event.isRepair()) {
+        if (gamestate == Gamestate.INGAME) {
+            if (event.isRepair()) {
                 return;
             }
 
-            if(Settings.CRAFT_RANDOMIZER.isEnabled()) {
-                if(event.getRecipe() == null) {
+            if (Settings.CRAFT_RANDOMIZER.isEnabled()) {
+                if (event.getRecipe() == null) {
                     return;
                 }
 

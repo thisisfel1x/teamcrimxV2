@@ -32,7 +32,7 @@ public class ScenarioInventory implements InventoryProvider {
         int state = contents.property("state", 0);
         contents.setProperty("state", state + 1);
 
-        if(state % 2 != 0) {
+        if (state % 2 != 0) {
             return;
         }
 
@@ -50,10 +50,10 @@ public class ScenarioInventory implements InventoryProvider {
                                 .setLore(bingoScenario.getDescription())
                                 .toItemStack(),
                         event -> {
-                    if(event.getClick().isLeftClick()) {
-                        scenario.setEnabled(!scenario.isEnabled());
-                    }
-                }));
+                            if (event.getClick().isLeftClick()) {
+                                scenario.setEnabled(!scenario.isEnabled());
+                            }
+                        }));
 
             } catch (IllegalAccessException | InstantiationException e) {
                 player.sendMessage(this.bingo.getPrefix() + "§cEin Fehler ist aufgetreten!");
@@ -61,7 +61,7 @@ public class ScenarioInventory implements InventoryProvider {
             }
 
             slot++;
-            if(slot == 8) {
+            if (slot == 8) {
                 slot = 1;
                 row++;
             }

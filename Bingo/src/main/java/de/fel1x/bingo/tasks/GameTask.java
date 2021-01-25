@@ -46,11 +46,11 @@ public class GameTask implements IBingoTask {
 
         List<Scenario> enabledScenarios = Arrays.stream(Scenario.values()).filter(Scenario::isEnabled).collect(Collectors.toList());
 
-        if(enabledScenarios.isEmpty()) {
+        if (enabledScenarios.isEmpty()) {
             this.eventsEnabled = false;
         }
 
-        if(this.eventsEnabled) {
+        if (this.eventsEnabled) {
             this.bossBar = this.bingo.getServer().createBossBar(String.format("§7Nächstes Event in §e%s Sekunden", this.eventTimer),
                     BarColor.GREEN, BarStyle.SEGMENTED_20, BarFlag.DARKEN_SKY);
             this.bossBar.removeFlag(BarFlag.DARKEN_SKY);
@@ -73,7 +73,7 @@ public class GameTask implements IBingoTask {
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.bingo, () -> {
 
-                if(this.eventsEnabled) {
+                if (this.eventsEnabled) {
                     this.bossBar.setColor(this.getColor(this.eventTimer));
                     this.bossBar.setProgress(this.eventTimer / this.timeToGo);
                     if (this.eventTimer > 0) {
@@ -85,7 +85,7 @@ public class GameTask implements IBingoTask {
 
                 Bukkit.getOnlinePlayers().forEach(player -> player.sendActionBar("§fVergangene Zeit §8● §e" + this.formatSeconds(this.timer)));
 
-                if(this.eventsEnabled) {
+                if (this.eventsEnabled) {
                     if (this.eventTimer == 0) {
                         this.eventTimer = this.random.nextInt(120) + 60;
                         this.timeToGo = this.eventTimer;
@@ -105,13 +105,13 @@ public class GameTask implements IBingoTask {
 
                 this.timer++;
 
-                if(this.eventsEnabled) {
+                if (this.eventsEnabled) {
                     if (this.eventTimer > 0) {
                         this.eventTimer--;
                     }
                 }
 
-                if(Bukkit.getOnlinePlayers().isEmpty()) {
+                if (Bukkit.getOnlinePlayers().isEmpty()) {
                     Bukkit.shutdown();
                 }
 
@@ -129,7 +129,7 @@ public class GameTask implements IBingoTask {
             this.isRunning = false;
             Bukkit.getScheduler().cancelTask(this.taskId);
 
-            if(this.eventsEnabled) {
+            if (this.eventsEnabled) {
                 this.bossBar.removeAll();
             }
 
