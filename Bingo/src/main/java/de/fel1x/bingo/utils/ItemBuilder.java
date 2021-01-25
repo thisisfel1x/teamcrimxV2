@@ -246,12 +246,17 @@ public class ItemBuilder {
     }
 
     public ItemBuilder addGlow() {
+        return this.addGlow(true);
+    }
 
-        ItemMeta im = this.is.getItemMeta();
-        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        this.is.setItemMeta(im);
+    public ItemBuilder addGlow(boolean glow) {
+        if(glow) {
+            ItemMeta im = this.is.getItemMeta();
+            im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            this.is.setItemMeta(im);
+            this.addEnchant(Enchantment.DAMAGE_ARTHROPODS, 1);
+        }
         return this;
-
     }
 
     /**

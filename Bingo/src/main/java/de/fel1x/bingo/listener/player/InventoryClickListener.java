@@ -5,6 +5,7 @@ import de.fel1x.bingo.events.BingoItemUnlockEvent;
 import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.utils.Utils;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,6 +52,12 @@ public class InventoryClickListener implements Listener {
                 return;
             }
 
+            if(event.getCurrentItem() == null) return;
+            if(event.getCurrentItem().equals(this.bingo.getBingoItemsQuickAccess())) {
+                event.setCancelled(true);
+                return;
+            }
+
             if (event.getSlotType().equals(InventoryType.SlotType.RESULT) ||
                     ((event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY) || event.getAction().equals(InventoryAction.PICKUP_ALL))
                             && !event.getView().getBottomInventory().equals(event.getClickedInventory()))) {
@@ -70,7 +77,8 @@ public class InventoryClickListener implements Listener {
                                     + Utils.getChatColor(bingoPlayer.getTeam().getColor())
                                     + "Team " + bingoPlayer.getTeam().getName() + "§8)"
                                     + " §7hat das Item §b§l"
-                                    + event.getCurrentItem().getType().name().replace('_', ' ') + " §7gefunden! §8(§a"
+                                    + WordUtils.capitalizeFully(event.getCurrentItem().getType().name().replace('_', ' '))
+                                    + " §7gefunden! §8(§a"
                                     + bingoPlayer.getTeam().getDoneItemsSize() + "§7/§c9§8)");
 
                             this.bingo.getData().getCachedStats().get(player).increaseItemsCrafted();

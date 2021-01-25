@@ -9,20 +9,20 @@ import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.objects.BingoTeam;
 import de.fel1x.bingo.utils.Utils;
 import de.fel1x.bingo.utils.scoreboard.GameScoreboard;
-import org.bukkit.*;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.util.Vector;
+import de.fel1x.bingo.utils.world.ArmorstandStatsLoader;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
 
 public class PreGameTask implements IBingoTask {
 
     private final Bingo bingo = Bingo.getInstance();
-    private int taskId = 0;
-    private int timer = 20;
-
-    private boolean isRunning = false;
-
     private final String[] commandInfo = {
             " ",
             this.bingo.getPrefix() + "§e§lWichtige Commands:",
@@ -30,6 +30,9 @@ public class PreGameTask implements IBingoTask {
             this.bingo.getPrefix() + "§a/backpack §7oder §a/bp §8● §7Öffne den Team-Backpack",
             " "
     };
+    private int taskId = 0;
+    private int timer = 30;
+    private boolean isRunning = false;
 
     @Override
     public void start() {
@@ -40,22 +43,6 @@ public class PreGameTask implements IBingoTask {
 
             this.isRunning = true;
             this.bingo.getGamestateHandler().setGamestate(Gamestate.PREGAME);
-
-            this.bingo.getData().getPlayers().forEach(player -> {
-                player.teleport(new Location(Bukkit.getWorlds().get(0), 0.5, 125, 0.5));
-                player.getInventory().clear();
-                BingoPlayer bingoPlayer = new BingoPlayer(player);
-                if (bingoPlayer.getTeam() == null) {
-                    for (BingoTeam bingoTeam : BingoTeam.values()) {
-                        if (bingoTeam.getTeamPlayers().size() < bingoTeam.getTeamSize()) {
-                            bingoPlayer.setTeam(bingoTeam);
-                            player.sendMessage(this.bingo.getPrefix() + "§7Du wurdest zu Team "
-                                    + Utils.getChatColor(bingoTeam.getColor()) + bingoTeam.getName() + " zugewiesen");
-                            break;
-                        }
-                    }
-                }
-            });
 
             this.bingo.setGameScoreboard(new GameScoreboard());
             this.bingo.getData().getPlayers().forEach(player -> this.bingo.getGameScoreboard().setGameScoreboard(player));
@@ -69,6 +56,7 @@ public class PreGameTask implements IBingoTask {
                         }
                         break;
 
+                    case 30:
                     case 15:
                     case 10:
                     case 5:
@@ -82,10 +70,15 @@ public class PreGameTask implements IBingoTask {
 
                         this.bingo.getData().getPlayers().forEach(player -> {
 
+                            player.setLevel(0);
+                            player.setExp(0f);
+
                             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 0.75f);
-                            player.sendTitle(Title.builder()
-                                    .title(((this.timer == 3) ? "§a§l" : ((this.timer == 2) ? "§e§l" : "§c§l")) + this.timer)
-                                    .fadeIn(10).stay(20).fadeOut(10).build());
+                            if(this.timer <= 3) {
+                                player.sendTitle(Title.builder()
+                                        .title(((this.timer == 3) ? "§a§l" : ((this.timer == 2) ? "§e§l" : "§c§l")) + this.timer)
+                                        .fadeIn(10).stay(20).fadeOut(10).build());
+                            }
 
                         });
 
@@ -96,41 +89,6 @@ public class PreGameTask implements IBingoTask {
                         Bukkit.getScheduler().cancelTasks(this.bingo);
 
                         this.bingo.getGamestateHandler().setGamestate(Gamestate.INGAME);
-
-                        this.bingo.getData().getPlayers().forEach(player -> {
-
-                            player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.5f, 1.25f);
-                            player.sendTitle(Title.builder()
-                                    .title("§a§lGO").fadeIn(0).stay(40).fadeOut(10).build());
-
-                            //int x = this.random.nextInt(20) * (this.random.nextBoolean() ? -1 : 1);
-                            //int z = this.random.nextInt(20) * (this.random.nextBoolean() ? -1 : 1);
-
-                            player.setVelocity(player.getEyeLocation().getDirection().setY(10)
-                                    .multiply(10));
-
-                            player.setGameMode(GameMode.SURVIVAL);
-
-                        });
-
-                        this.bingo.getWorldGenerator().getBlocks().forEach(block -> {
-
-                            float x = -2.0F + (float) (Math.random() * 4.0D + 1.0D);
-                            float y = -3.0F + (float) (Math.random() * 6.0D + 1.0D);
-                            float z = -2.0F + (float) (Math.random() * 4.0D + 1.0D);
-
-                            FallingBlock fallingBlock = block.getWorld().spawnFallingBlock(block.getLocation(), block.getBlockData());
-                            this.bingo.getFallingGlassBlocks().add(fallingBlock);
-
-                            fallingBlock.setVelocity(new Vector(x, y, z));
-                            fallingBlock.setDropItem(false);
-
-                            block.setType(Material.AIR);
-
-                        });
-
-
-                        Bukkit.getWorlds().get(0).getBlockAt(0, 120, 0).setType(Material.AIR);
 
                         this.bingo.startTimerByClass(GameTask.class);
 

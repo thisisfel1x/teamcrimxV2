@@ -1,10 +1,15 @@
 package de.fel1x.bingo.utils.scoreboard;
 
+import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.driver.permission.IPermissionGroup;
+import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
 import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.objects.BingoTeam;
 import de.fel1x.bingo.utils.Utils;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -82,8 +87,23 @@ public class LobbyScoreboard {
 
             });
 
+            IClanPlayer clanPlayer;
+
+            if(player.getMetadata("iClanPlayer").get(0) != null) {
+                clanPlayer = (IClanPlayer) player.getMetadata("iClanPlayer").get(0).value();
+            } else {
+                clanPlayer = new ClanPlayer(player.getUniqueId());
+            }
+
+            String clan = "";
+
+            if(clanPlayer.hasClan()) {
+                clan = " §7[§e" + clanPlayer.getCurrentClan().getClanTag() + "§7]";
+            }
+
+            team.setSuffix(clan);
             team.addEntry(player.getName());
-            player.setDisplayName(team.getDisplayName() + player.getName());
+            player.setDisplayName(team.getDisplayName() + player.getName() + clan);
 
         }
 
@@ -93,19 +113,50 @@ public class LobbyScoreboard {
 
         if (!player.getScoreboard().equals(this.lobbyScoreboard)) {
             player.setScoreboard(this.lobbyScoreboard);
-            BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
+            BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player, player1 -> {
+                IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(player1.getUniqueId());
+                IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(permissionUser);
+
+                IClanPlayer clanPlayer;
+
+                if(player1.getMetadata("iClanPlayer").get(0) != null) {
+                    clanPlayer = (IClanPlayer) player1.getMetadata("iClanPlayer").get(0).value();
+                } else {
+                    clanPlayer = new ClanPlayer(player1.getUniqueId());
+                }
+
+                if(clanPlayer.hasClan()) {
+                    permissionGroup.setSuffix(" §7[§e" + clanPlayer.getCurrentClan().getClanTag() + "§7]");
+                }
+
+                return permissionGroup;
+            });
         }
 
         for (Player gamePlayer : Bingo.getInstance().getData().getPlayers()) {
             BingoPlayer bingoPlayer = new BingoPlayer(gamePlayer);
             BingoTeam bingoTeam = bingoPlayer.getTeam();
 
-            if(bingoTeam != null) {
+            if (bingoTeam != null) {
                 Team bingoScoreboardTeam = this.scoreboardTeams.get(bingoTeam);
                 if (!bingoScoreboardTeam.hasEntry(gamePlayer.getName())) {
                     bingoScoreboardTeam.addEntry(gamePlayer.getName());
                 }
-                gamePlayer.setDisplayName(bingoScoreboardTeam.getDisplayName() + gamePlayer.getName());
+                IClanPlayer clanPlayer;
+
+                if(gamePlayer.getMetadata("iClanPlayer").get(0) != null) {
+                    clanPlayer = (IClanPlayer) gamePlayer.getMetadata("iClanPlayer").get(0).value();
+                } else {
+                    clanPlayer = new ClanPlayer(gamePlayer.getUniqueId());
+                }
+
+                String clan = "";
+
+                if(clanPlayer.hasClan()) {
+                    clan = " §7[§e" + clanPlayer.getCurrentClan().getClanTag() + "§7]";
+                }
+                gamePlayer.setDisplayName(bingoScoreboardTeam.getDisplayName() + gamePlayer.getName()
+                        + clan);
             }
         }
     }

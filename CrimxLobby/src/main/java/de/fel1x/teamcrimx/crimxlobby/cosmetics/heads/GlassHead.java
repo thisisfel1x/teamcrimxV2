@@ -18,7 +18,7 @@ public class GlassHead implements ICosmetic {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§c3, 2, 1, Zündung!"
         };
     }

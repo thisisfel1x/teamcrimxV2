@@ -35,16 +35,17 @@ public class PreGameTask implements IFloorIsLavaTask {
             ArrayList<Location> spawns = ArmorstandStatsLoader.getCirclePoints(this.floorIsLava.getWorldSpawnLocation(), 20.0D, 12);
             int counter = 0;
             for (Player player : this.floorIsLava.getData().getPlayers()) {
-                Location spawnLocation = spawns.get(counter).getWorld().getHighestBlockAt(spawns.get(0)).getLocation();
+                Location spawnLocation = spawns.get(counter).getWorld().getHighestBlockAt(spawns.get(counter)).getLocation();
                 spawnLocation.getBlock().setType(player.hasMetadata("block") ?
-                                (Material) Objects.requireNonNull(player.getMetadata("block").get(0).value())
+                        (Material) Objects.requireNonNull(player.getMetadata("block").get(0).value())
                         : Material.GLASS);
                 spawnLocation.clone().add(0, 1, 0);
                 player.teleport(spawnLocation.toCenterLocation().clone().subtract(0, 0.5, 0));
                 counter++;
                 player.getInventory().addItem(
                         new ItemBuilder(Material.STONE_PICKAXE).addEnchant(Enchantment.DIG_SPEED, 1).setUnbreakable().toItemStack(),
-                        new ItemBuilder(Material.STONE_AXE).addEnchant(Enchantment.DIG_SPEED, 1).setUnbreakable().toItemStack()
+                        new ItemBuilder(Material.STONE_AXE).addEnchant(Enchantment.DIG_SPEED, 1).setUnbreakable().toItemStack(),
+                        new ItemBuilder(Material.COOKED_MUTTON, 8).toItemStack()
                 );
             }
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.floorIsLava, () -> {
@@ -62,9 +63,6 @@ public class PreGameTask implements IFloorIsLavaTask {
                             player.sendTitle(Title.builder()
                                     .title(((this.timer == 3) ? "§a§l" : ((this.timer == 2) ? "§e§l" : "§c§l")) + this.timer)
                                     .fadeIn(10).stay(20).fadeOut(10).build());
-
-                            player.getInventory().clear();
-
                         });
                         break;
                     case 0:

@@ -7,10 +7,12 @@ import de.fel1x.teamcrimx.mlgwars.utils.entites.ZombieEquipment;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
+import net.minecraft.server.v1_16_R3.WorldServer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -60,16 +62,23 @@ public class ProjectileHitListener implements Listener {
 
                 Player player = (Player) egg.getShooter();
 
-                LivingEntity entity = CustomZombie.EntityTypes.spawnEntity(new CustomZombie(egg.getWorld()),
-                        egg.getLocation().clone().add(0, 1.5, 0));
+                CustomZombie customZombie = new CustomZombie(egg.getLocation().clone().add(0, 1.5, 0), player);
 
-                if (entity == null) return;
+                WorldServer world = ((CraftWorld) player.getWorld()).getHandle(); // Creates and NMS world
+                world.addEntity(customZombie);
+
+                Zombie entity = (Zombie) customZombie.getBukkitEntity();
+
+                Disguise disguise = new PlayerDisguise(player.getName(), player.getName());
+                disguise.setReplaceSounds(true);
+                DisguiseAPI.disguiseEntity(entity, disguise);
+
+                entity.setShouldBurnInDay(false);
 
                 entity.setCustomName(player.getDisplayName());
                 entity.setCustomNameVisible(true);
-                entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 3, true, false));
+                entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, true, false));
 
-                entity.setCustomName(player.getDisplayName());
                 entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
                 entity.getEquipment().setItemInMainHand(this.zombieEquipment.getSwords()[this.random.nextInt(this.zombieEquipment.getSwords().length)]);
 
@@ -79,10 +88,6 @@ public class ProjectileHitListener implements Listener {
                 entity.getEquipment().setBoots(this.zombieEquipment.getShoes()[this.random.nextInt(this.zombieEquipment.getShoes().length)]);
 
                 entity.setMetadata("owner", new FixedMetadataValue(this.mlgWars, player.getName()));
-
-                Disguise disguise = new PlayerDisguise(player.getName(), player.getName());
-                disguise.setReplaceSounds(true);
-                DisguiseAPI.disguiseEntity(entity, disguise);
             }
 
         } else if (event.getEntity() instanceof Fireball) {
@@ -117,10 +122,9 @@ public class ProjectileHitListener implements Listener {
 
                 for (Player player : snowball.getWorld().getNearbyPlayers(snowball.getLocation(), 5, 5)
                         .stream().filter(player -> !player.equals(snowball.getShooter())).collect(Collectors.toList())) {
-                    player.setLastDamage(5D);
 
                     Vector vector = player.getVelocity();
-                    vector.add(new Vector(2, 2, 2));
+                    vector.multiply(2).setY(5).multiply(2);
                     player.setVelocity(vector);
                 }
             }

@@ -12,10 +12,7 @@ import de.fel1x.teamcrimx.crimxlobby.cosmetics.heads.SlimeHead;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.pets.pet.BeePet;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.pets.pet.ParrotPet;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.pets.pet.SheepPet;
-import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.HeartShoeCosmetic;
-import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.LibraryShoeCosmetic;
-import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.NoteShoeCosmetic;
-import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.WitchShoeCosmetic;
+import de.fel1x.teamcrimx.crimxlobby.cosmetics.trails.*;
 
 public enum Cosmetic {
 
@@ -27,6 +24,9 @@ public enum Cosmetic {
     NOTE_SHOE(NoteShoeCosmetic.class, CosmeticCategory.BOOTS),
     SPELL_SHOE(WitchShoeCosmetic.class, CosmeticCategory.BOOTS),
     LIBRARY_SHOE(LibraryShoeCosmetic.class, CosmeticCategory.BOOTS),
+    HONEY_SHOE(HoneyShoeCosmetic.class, CosmeticCategory.BOOTS),
+    HAPPY_SHOE(HappinessShoeCosmetic.class, CosmeticCategory.BOOTS),
+    WATER_SHOE(WaterShoeCosmetic.class, CosmeticCategory.BOOTS),
 
     CLOCK_TRAIL(RolexShoeTrail.class, CosmeticCategory.TRAILS),
     DIAMOND_TRAIL(MoneyShoeTrail.class, CosmeticCategory.TRAILS),

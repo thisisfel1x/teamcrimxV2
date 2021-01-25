@@ -1,15 +1,10 @@
 package de.fel1x.teamcrimx.crimxlobby.objects;
 
-import com.github.juliarn.npc.NPC;
-import com.github.juliarn.npc.SpawnCustomizer;
-import com.github.juliarn.npc.modifier.MetadataModifier;
-import com.github.juliarn.npc.profile.Profile;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
-import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.crimxapi.utils.TimeUtils;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
@@ -29,22 +24,19 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 public class LobbyPlayer {
 
-    private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
-
     final Player player;
     final CrimxLobby crimxLobby = CrimxLobby.getInstance();
-    private final WaterMlgHandler waterMlgHandler = this.crimxLobby.getWaterMlgHandler();
     final Data data = this.crimxLobby.getData();
-    SpawnManager spawnManager = this.crimxLobby.getSpawnManager();
     final LobbyDatabase lobbyDatabase = new LobbyDatabase();
-    Document lobbyDocument;
-    Document networkDocument;
+    private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
+    private final WaterMlgHandler waterMlgHandler = this.crimxLobby.getWaterMlgHandler();
     private final Material[] woolTypes = {
             Material.WHITE_WOOL, Material.ORANGE_WOOL, Material.MAGENTA_WOOL, Material.LIGHT_BLUE_WOOL, Material.YELLOW_WOOL,
             Material.LIME_WOOL, Material.PINK_WOOL, Material.GRAY_WOOL, Material.LIGHT_GRAY_WOOL, Material.CYAN_WOOL,
@@ -55,6 +47,9 @@ public class LobbyPlayer {
             Material.LIME_CONCRETE, Material.PINK_CONCRETE, Material.GRAY_CONCRETE, Material.LIGHT_GRAY_CONCRETE, Material.CYAN_CONCRETE,
             Material.PURPLE_CONCRETE, Material.BLUE_CONCRETE, Material.GREEN_CONCRETE, Material.RED_CONCRETE
     };
+    SpawnManager spawnManager = this.crimxLobby.getSpawnManager();
+    Document lobbyDocument;
+    Document networkDocument;
 
     public LobbyPlayer(Player player) {
         this.player = player;
@@ -121,7 +116,7 @@ public class LobbyPlayer {
 
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
-        this.cleanUpPlayer();
+        lobbyPlayer.cleanUpPlayer();
 
         if ((lobbyPlayer.isInBuild())) {
             lobbyPlayer.removeFromBuild();
@@ -349,7 +344,7 @@ public class LobbyPlayer {
         this.data.getLobbyDatabasePlayer().put(this.player.getUniqueId(), new LobbyDatabasePlayer(hotbarSoundEnabled, spawnAtLastLocation, lastReward));
 
         for (Cosmetic cosmetic : Cosmetic.values()) {
-            if(this.getObjectFromMongoDocument(cosmetic.name(), MongoDBCollection.LOBBY) == null) {
+            if (this.getObjectFromMongoDocument(cosmetic.name(), MongoDBCollection.LOBBY) == null) {
                 this.saveObjectInDocument(cosmetic.name(), false, MongoDBCollection.LOBBY);
             }
         }

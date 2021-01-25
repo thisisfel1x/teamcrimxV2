@@ -8,24 +8,16 @@ import de.fel1x.bingo.objects.BingoTeam;
 import de.fel1x.bingo.tasks.EndingTask;
 import de.fel1x.bingo.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.FireworkEffect;
 import org.bukkit.Sound;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
-import java.util.Random;
 
 public class BingoItemListener implements Listener {
 
     private final Bingo bingo;
-    private final Random random = new Random();
-    private int timer = 0;
 
     public BingoItemListener(Bingo bingo) {
         this.bingo = bingo;
@@ -36,7 +28,18 @@ public class BingoItemListener implements Listener {
     public void on(BingoItemUnlockEvent event) {
 
         BingoTeam bingoTeam = event.getTeam();
+
+        for (Player teamPlayer : bingoTeam.getTeamPlayers()) {
+            this.bingo.getGameScoreboard().updateBoard(teamPlayer,
+                    String.format("§7Items gefunden §8● §a%s§8/§c9", bingoTeam.getDoneItemsSize()),
+                    "items");
+        }
+
         boolean allDone = Arrays.stream(bingoTeam.getDoneItems()).allMatch(val -> val);
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            this.bingo.getGameScoreboard().updateIngameScoreboard(player);
+        }
 
         if (allDone) {
 
@@ -61,20 +64,11 @@ public class BingoItemListener implements Listener {
                         .fadeOut(10)
                         .build());
 
-                if(bingoPlayer.isPlayer()) {
+                if (bingoPlayer.isPlayer()) {
                     bingoPlayer.saveStats();
                 }
 
-                /*if ((bingoPlayer.isPlayer() && !bingoPlayer.getTeam().equals(event.getTeam())) || bingoPlayer.isSpectator()) {
-                    player.teleport(event.getPlayer());
-                    if (bingoPlayer.isSpectator()) {
-                        Bukkit.getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.showPlayer(this.bingo, onlinePlayer));
-                    }
-                }*/
-
-                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    onlinePlayer.teleport(this.bingo.getSpawnLocation());
-                }
+                player.teleportAsync(this.bingo.getSpawnLocation());
 
                 player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2, 0.5f);
 
@@ -86,31 +80,6 @@ public class BingoItemListener implements Listener {
 
                 player.setHealth(20);
                 player.setFoodLevel(20);
-
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-
-                        for (int i = 0; i < 3; i++) {
-                            Firework firework = (Firework) player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK);
-                            FireworkEffect effect = FireworkEffect.builder().
-                                    with(FireworkEffect.Type.values()[BingoItemListener.this.random.nextInt(FireworkEffect.Type.values().length)])
-                                    .withColor(bingoTeam.getColor())
-                                    .build();
-
-                            FireworkMeta meta = firework.getFireworkMeta();
-                            meta.setPower(2);
-                            meta.addEffect(effect);
-                            firework.setFireworkMeta(meta);
-                        }
-
-                        if (BingoItemListener.this.timer == 10) {
-                            this.cancel();
-                        }
-
-                        BingoItemListener.this.timer++;
-                    }
-                }.runTaskTimer(this.bingo, 0L, 10L);
             });
         }
     }

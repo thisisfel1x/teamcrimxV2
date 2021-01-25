@@ -7,7 +7,6 @@ import de.fel1x.teamcrimx.crimxlobby.inventories.NavigatorInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.SettingsInventory;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.Material;
-import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
@@ -39,7 +38,7 @@ public class InteractListener implements Listener {
             return;
         }
 
-        if(item == null) {
+        if (item == null) {
             return;
         }
 
@@ -47,7 +46,7 @@ public class InteractListener implements Listener {
             return;
         }
 
-        if(action == Action.PHYSICAL
+        if (action == Action.PHYSICAL
                 && player.getLocation().clone().subtract(0, 1, 0).getBlock().getType() == Material.FARMLAND) {
             event.setCancelled(true);
             return;

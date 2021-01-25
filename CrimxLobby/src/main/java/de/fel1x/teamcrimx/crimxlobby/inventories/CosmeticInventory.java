@@ -11,8 +11,6 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -57,7 +55,8 @@ public class CosmeticInventory implements InventoryProvider {
                 .setName("§8» §dKöpfe").toItemStack(), event -> this.updateInventory(player, CosmeticCategory.HEADS, contents)));
 
         contents.set(2, 8, ClickableItem.of(new ItemBuilder(Material.SADDLE)
-                .setName("§8» §9Pets").toItemStack(), event -> this.updateInventory(player, CosmeticCategory.PETS, contents)));;
+                .setName("§8» §9Pets").toItemStack(), event -> this.updateInventory(player, CosmeticCategory.PETS, contents)));
+        ;
 
         contents.set(3, 8, ClickableItem.empty(new ItemBuilder(Material.OAK_SIGN)
                 .setName("§8» §4Siegesanimationen §c(soon)").toItemStack()));
@@ -66,7 +65,7 @@ public class CosmeticInventory implements InventoryProvider {
             CrimxLobby.getInstance().getData().getCosmetic().remove(player.getUniqueId());
             CrimxLobby.getInstance().getData().getHueMap().remove(player.getUniqueId());
             player.getInventory().setArmorContents(null);
-            if(CrimxLobby.getInstance().getData().getPlayerPet().containsKey(player.getUniqueId())) {
+            if (CrimxLobby.getInstance().getData().getPlayerPet().containsKey(player.getUniqueId())) {
                 CrimxLobby.getInstance().getData().getPlayerPet().get(player.getUniqueId()).remove();
                 CrimxLobby.getInstance().getData().getPlayerPet().remove(player.getUniqueId());
             }
@@ -86,7 +85,7 @@ public class CosmeticInventory implements InventoryProvider {
         int slot = 2;
 
         for (Cosmetic cosmetic : Cosmetic.values()) {
-            if(cosmetic.getCosmeticCategory() != cosmeticCategory) continue;
+            if (cosmetic.getCosmeticCategory() != cosmeticCategory) continue;
 
             boolean bought = (boolean) lobbyPlayer.getObjectFromMongoDocument(cosmetic.name(), MongoDBCollection.LOBBY);
 
@@ -123,7 +122,7 @@ public class CosmeticInventory implements InventoryProvider {
                                 int slotToRemove = (player.hasPermission("crimxlobby.vip") ? 2 : 4);
                                 player.getInventory().setItem(slotToRemove, new ItemStack(Material.AIR));
                                 player.closeInventory();
-                                if(CrimxLobby.getInstance().getData().getPlayerPet().containsKey(player.getUniqueId())) {
+                                if (CrimxLobby.getInstance().getData().getPlayerPet().containsKey(player.getUniqueId())) {
                                     CrimxLobby.getInstance().getData().getPlayerPet().get(player.getUniqueId()).remove();
                                     CrimxLobby.getInstance().getData().getPlayerPet().remove(player.getUniqueId());
                                 }
@@ -140,7 +139,7 @@ public class CosmeticInventory implements InventoryProvider {
 
             slot++;
 
-            if (slot == 6) {
+            if (slot == 7) {
                 slot = 2;
                 row++;
             }
@@ -148,9 +147,9 @@ public class CosmeticInventory implements InventoryProvider {
     }
 
     private void clear(InventoryContents inventoryContents) {
-        for(int row = 1; row < 4; row++) {
-            for(int slot = 2; slot < 7; slot++) {
-                if(inventoryContents.get(row, slot).isPresent()) {
+        for (int row = 1; row < 4; row++) {
+            for (int slot = 2; slot < 7; slot++) {
+                if (inventoryContents.get(row, slot).isPresent()) {
                     inventoryContents.set(row, slot, ClickableItem.empty(null));
                 }
             }

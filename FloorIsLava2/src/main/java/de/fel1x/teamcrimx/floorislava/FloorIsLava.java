@@ -35,16 +35,14 @@ import java.util.stream.StreamSupport;
 
 public final class FloorIsLava extends JavaPlugin {
 
+    public static final String ATTENTION = "⚠";
+    public static final String SAVE = "✔";
+    public static final String DOT = "●";
     public static FloorIsLava instance;
     private PluginManager pluginManager;
     private ArrayList<Entity> fallingAnvils;
     private CrimxAPI crimxAPI;
     private boolean pvpEnabled = false;
-
-    public static final String ATTENTION = "⚠";
-    public static final String SAVE = "✔";
-    public static final String DOT = "●";
-
     private Location spawnLocation;
     private Cuboid lootDropCuboid;
     private Cuboid areaCuboid;
@@ -84,7 +82,7 @@ public final class FloorIsLava extends JavaPlugin {
     private void initCuboid() {
         int size = 50;
         this.lootDropCuboid = new Cuboid(this.worldSpawnLocation.clone().subtract(size / 2.0D, 0, size / 2.0D),
-        this.worldSpawnLocation.clone().add(size / 2.0D, 0, size / 2.0D));
+                this.worldSpawnLocation.clone().add(size / 2.0D, 0, size / 2.0D));
         this.areaCuboid = new Cuboid(this.worldSpawnLocation.clone().subtract(size / 2.0D, 0, size / 2.0D),
                 this.worldSpawnLocation.clone().add(size / 2.0D, 256, size / 2.0D));
         Collections.shuffle(this.lootDropCuboid.getBlocks());
@@ -191,7 +189,7 @@ public final class FloorIsLava extends JavaPlugin {
     }
 
     /**
-    Returns the waiting hub spawn location
+     * Returns the waiting hub spawn location
      */
     public Location getSpawnLocation() {
         return this.spawnLocation;

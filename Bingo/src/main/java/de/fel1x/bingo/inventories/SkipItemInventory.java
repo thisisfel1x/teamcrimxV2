@@ -20,7 +20,7 @@ public class SkipItemInventory implements InventoryProvider {
             .title(Bingo.getInstance().getPrefix() + "§7Management")
             .manager(Bingo.getInstance().getInventoryManager())
             .build();
-    Bingo bingo = Bingo.getInstance();
+    private final Bingo bingo = Bingo.getInstance();
 
     @Override
     public void init(Player player, InventoryContents contents) {

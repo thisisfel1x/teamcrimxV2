@@ -37,10 +37,10 @@ public class CSGOKit implements IKit {
                         .toItemStack(),
                 new ItemBuilder(Material.FIRE_CHARGE, 3)
                         .setName("§8● §cMolotowcocktail")
-                        .toItemStack(),
-                new ItemBuilder(Material.FIREWORK_STAR, 7)
-                        .setName("§8● §7Smoke")
                         .toItemStack()
+                /*new ItemBuilder(Material.FIREWORK_STAR, 7)
+                        .setName("§8● §7Smoke")
+                        .toItemStack() */
         );
     }
 }

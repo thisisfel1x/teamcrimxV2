@@ -1,12 +1,13 @@
 package de.fel1x.teamcrimx.floorislava.tasks;
 
-import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
 import de.fel1x.teamcrimx.floorislava.FloorIsLava;
 import de.fel1x.teamcrimx.floorislava.gameevents.lootdrop.LootDrop;
 import de.fel1x.teamcrimx.floorislava.gamehandler.Gamestate;
-import de.fel1x.teamcrimx.floorislava.scenarios.*;
+import de.fel1x.teamcrimx.floorislava.scenarios.EnderGamesTeleport;
+import de.fel1x.teamcrimx.floorislava.scenarios.ILavaScenario;
+import de.fel1x.teamcrimx.floorislava.scenarios.InventoryShuffle;
+import de.fel1x.teamcrimx.floorislava.scenarios.RandomPotionEffect;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
@@ -57,14 +58,14 @@ public class FarmingTask implements IFloorIsLavaTask {
                     onlinePlayer.sendActionBar("§7Verbleibende Zeit §8● §a" + this.formatSeconds(this.farmingTime));
                 }
 
-                if(this.bossBarTimer > 0 && this.generateNewEvent) {
+                if (this.bossBarTimer > 0 && this.generateNewEvent) {
                     this.bossBar.setColor(this.getColor(this.bossBarTimer));
                     this.bossBar.setProgress((this.bossBarTimer / this.timeToGo >= 0 ? this.bossBarTimer / this.timeToGo : 0));
                     this.bossBar.setTitle(String.format("§7Nächstes Event in §e%s",
                             (this.bossBarTimer == 1) ? "einer Sekunde" : ((this.bossBarTimer <= 60)
                                     ? (this.bossBarTimer + " Sekunden") : String.format("%02d:%02d",
                                     this.bossBarTimer / 60, this.bossBarTimer % 60))));
-                } else if(this.bossBarTimer == 0 && this.generateNewEvent) {
+                } else if (this.bossBarTimer == 0 && this.generateNewEvent) {
                     try {
                         ILavaScenario lavaScenario = this.scenarios.get(this.random.nextInt(this.scenarios.size())).newInstance();
                         lavaScenario.execute();
@@ -75,10 +76,10 @@ public class FarmingTask implements IFloorIsLavaTask {
                     /*
                     Generating a new number
                      */
-                    if(this.farmingTime > 60) {
+                    if (this.farmingTime > 60) {
                         this.bossBarTimer = this.random.nextInt(20) + 30;
                         this.timeToGo = this.bossBarTimer;
-                    } else if(this.farmingTime > 20) {
+                    } else if (this.farmingTime > 20) {
                         this.bossBarTimer = this.random.nextInt(5) + 10;
                         this.timeToGo = this.bossBarTimer;
                     } else {
@@ -89,14 +90,14 @@ public class FarmingTask implements IFloorIsLavaTask {
                     }
                 }
 
-                if(this.farmingTime == 0) {
+                if (this.farmingTime == 0) {
                     this.bossBar.setTitle("§6TheFloorIsLava");
                     this.bossBar.setColor(BarColor.YELLOW);
 
                     this.floorIsLava.startTimerByClass(RisingTask.class);
                 }
 
-                if(this.lootDropTime == 0) {
+                if (this.lootDropTime == 0) {
                     this.lootDropTime = this.random.nextInt(20) + 50;
 
                     Location randomLocation = this.floorIsLava.getLootDropCuboid().getBlocks()
@@ -108,8 +109,8 @@ public class FarmingTask implements IFloorIsLavaTask {
                     Bukkit.broadcastMessage(this.floorIsLava.getPrefix() + "§7Ein §aLootdrop §7ist gespawnt!");
                 }
 
-                if(this.lootDropTime != 0) this.lootDropTime--;
-                if(this.bossBarTimer != 0) this.bossBarTimer--;
+                if (this.lootDropTime != 0) this.lootDropTime--;
+                if (this.bossBarTimer != 0) this.bossBarTimer--;
                 this.farmingTime--;
             }, 0L, 20L);
         }

@@ -25,9 +25,9 @@ public class NPCInteractListener implements Listener {
         NPC npc = event.getNPC();
         Player player = event.getPlayer();
 
-        if(npc.getEntityId() == this.crimxLobby.getLobbyNpc().getEntityId()) {
+        if (npc.getEntityId() == this.crimxLobby.getLobbyNpc().getEntityId()) {
             NPCInventory.NPC_INVENTORY.open(player);
-        } else if(npc.getEntityId() == this.crimxLobby.getPerksNpc().getEntityId()) {
+        } else if (npc.getEntityId() == this.crimxLobby.getPerksNpc().getEntityId()) {
             PerksInventory.PERKS_INVENTORY.open(player);
         }
 

@@ -1,18 +1,21 @@
 package de.fel1x.bingo.scenarios;
 
 import de.fel1x.bingo.Bingo;
+import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+import java.util.stream.Collectors;
 
 public class EnderGamesTeleport implements IBingoScenario {
 
-    Bingo bingo = Bingo.getInstance();
-    Random random = new Random();
+    private final Bingo bingo = Bingo.getInstance();
 
     @Override
     public void execute() {
@@ -21,26 +24,24 @@ public class EnderGamesTeleport implements IBingoScenario {
 
         if (players.size() == 1) return;
 
-        Player player1 = players.get(this.random.nextInt(players.size()));
-        Player player2 = players.get(this.random.nextInt(players.size()));
+        Collections.shuffle(players);
+        HashMap<Location, String> locations = new HashMap<>();
 
-        while (player2.equals(player1)) {
+        players.forEach(player -> locations.put(player.getLocation(), player.getDisplayName()));
 
-            player2 = players.get(this.random.nextInt(players.size()));
+        int counter = 0;
 
+        for (Player player : players) {
+            Location location = new ArrayList<>(locations.keySet()).get(counter);
+
+            player.teleportAsync(location);
+
+            player.sendMessage(this.bingo.getPrefix() + "§7Du wurdest mit " + locations.get(location) + " §7getauscht!");
+            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 3, 5);
+            player.playEffect(EntityEffect.TELEPORT_ENDER);
+
+            counter++;
         }
-
-        Location player1Location = player1.getLocation();
-        Location player2Location = player2.getLocation();
-
-        player1.teleport(player2Location);
-        player2.teleport(player1Location);
-
-        player1.playSound(player1.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 3, 5);
-        player2.playSound(player2.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 3, 5);
-
-        player1.sendMessage(this.bingo.getPrefix() + "§7Du wurdest mit " + player2.getDisplayName() + " §7getauscht!");
-        player2.sendMessage(this.bingo.getPrefix() + "§7Du wurdest mit " + player1.getDisplayName() + " §7getauscht!");
 
     }
 
@@ -52,5 +53,12 @@ public class EnderGamesTeleport implements IBingoScenario {
     @Override
     public Material getDisplayMaterial() {
         return Material.ENDER_PEARL;
+    }
+
+    @Override
+    public String[] getDescription() {
+        return new String[] {
+                "", "§7Jeder Spieler wird zufällig mit einem anderen §evertauscht", ""
+        };
     }
 }

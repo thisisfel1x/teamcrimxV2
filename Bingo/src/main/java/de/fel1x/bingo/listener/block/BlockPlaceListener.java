@@ -10,7 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 public class BlockPlaceListener implements Listener {
 
-    Bingo bingo;
+    private final Bingo bingo;
 
     public BlockPlaceListener(Bingo bingo) {
         this.bingo = bingo;

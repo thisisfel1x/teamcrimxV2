@@ -13,7 +13,9 @@ commands:
     description: Get and manage your coins
   suggest:
     description: Suggest a new feature!
-    aliases: [suggestion, vorschlag]
+    aliases: [ suggestion, vorschlag ]
   bug:
-     description: Report a bug
-     aliases: [bugreport]
+    description: Report a bug
+    aliases: [ bugreport ]
+  clan:
+    description: Create a clan

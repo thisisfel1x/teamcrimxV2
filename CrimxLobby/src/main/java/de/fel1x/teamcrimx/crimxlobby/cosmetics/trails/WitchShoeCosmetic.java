@@ -38,7 +38,7 @@ public class WitchShoeCosmetic implements ICosmetic {
 
     @Override
     public int getCosmeticCost() {
-        return 2500;
+        return 1000;
     }
 
     @Override

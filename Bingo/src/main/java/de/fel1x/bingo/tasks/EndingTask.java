@@ -21,6 +21,8 @@ public class EndingTask implements IBingoTask {
             this.isRunning = true;
             this.bingo.getGamestateHandler().setGamestate(Gamestate.ENDING);
 
+            Bukkit.getOnlinePlayers().forEach(player -> player.getInventory().clear());
+
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.bingo, () -> {
 
                 switch (this.timer) {

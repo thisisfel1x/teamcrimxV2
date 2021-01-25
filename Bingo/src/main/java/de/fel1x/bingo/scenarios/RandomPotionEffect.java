@@ -11,10 +11,10 @@ import java.util.Random;
 
 public class RandomPotionEffect implements IBingoScenario {
 
-    Bingo bingo = Bingo.getInstance();
-    Data data = this.bingo.getData();
+    private final Bingo bingo = Bingo.getInstance();
+    private final Data data = this.bingo.getData();
 
-    Random random = new Random();
+    private final Random random = new Random();
 
     @Override
     public void execute() {
@@ -42,5 +42,12 @@ public class RandomPotionEffect implements IBingoScenario {
     @Override
     public Material getDisplayMaterial() {
         return Material.POTION;
+    }
+
+    @Override
+    public String[] getDescription() {
+        return new String[] {
+                "", "§7Alle Spieler erhalten einen §ezufälligen Effekt", ""
+        };
     }
 }

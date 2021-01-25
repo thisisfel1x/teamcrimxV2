@@ -5,7 +5,6 @@ import com.mongodb.client.model.Sorts;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
-import de.dytanic.cloudnet.ext.cloudperms.bukkit.BukkitCloudNetCloudPermissionsPlugin;
 import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.Data;
 import de.fel1x.bingo.database.BingoDatabase;
@@ -66,12 +65,14 @@ public class BingoPlayer {
 
     public void setScoreboardOnJoin() {
         switch (this.bingo.getGamestateHandler().getGamestate()) {
-            case LOBBY: case IDLE:
+            case LOBBY:
+            case IDLE:
                 this.bingo.getLobbyScoreboard().handleJoin(this.player);
                 this.bingo.getLobbyScoreboard().updateBoard(this.player, "§8● §6" + this.bingo.getFormattedBiomeName(),
                         "biome", "§6");
                 break;
-            case PREGAME: case INGAME:
+            case PREGAME:
+            case INGAME:
                 this.bingo.getGameScoreboard().handleJoin(this.player);
         }
     }
@@ -100,10 +101,12 @@ public class BingoPlayer {
     public void cleanupOnQuit() {
 
         switch (this.bingo.getGamestateHandler().getGamestate()) {
-            case IDLE: case LOBBY:
+            case IDLE:
+            case LOBBY:
                 this.bingo.getLobbyScoreboard().handleQuit(this.player);
                 break;
-            case PREGAME: case INGAME:
+            case PREGAME:
+            case INGAME:
                 this.bingo.getGameScoreboard().handleQuit(this.player);
                 break;
         }

@@ -18,7 +18,7 @@ public class FlowerHead implements ICosmetic {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§dFLOWER POWER"
         };
     }

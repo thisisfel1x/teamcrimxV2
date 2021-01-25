@@ -31,7 +31,7 @@ public class TornadoKit implements IKit {
 
     @Override
     public void setKitInventory(Player player) {
-        player.getInventory().setItem(0, new ItemBuilder(Material.DEAD_BUSH, 3)
+        player.getInventory().setItem(0, new ItemBuilder(Material.DEAD_BUSH)
                 .setName("§8● §fTornado")
                 .addGlow()
                 .toItemStack());

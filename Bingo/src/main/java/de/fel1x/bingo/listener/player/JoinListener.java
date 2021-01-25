@@ -5,15 +5,18 @@ import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.objects.BingoPlayer;
 import de.fel1x.bingo.objects.BingoTeam;
 import de.fel1x.bingo.tasks.LobbyTask;
-import de.fel1x.bingo.utils.ItemBuilder;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
+import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class JoinListener implements Listener {
 
@@ -28,6 +31,7 @@ public class JoinListener implements Listener {
     public void on(PlayerJoinEvent event) {
 
         Player player = event.getPlayer();
+        player.setMetadata("iClanPlayer", new FixedMetadataValue(this.bingo, new ClanPlayer(player.getUniqueId())));
 
         BingoPlayer bingoPlayer = new BingoPlayer(player);
         CrimxPlayer crimxPlayer = new CrimxPlayer(bingoPlayer.getICloudPlayer());
@@ -56,22 +60,30 @@ public class JoinListener implements Listener {
                 bingoPlayer.addToPlayers();
                 event.setJoinMessage(this.bingo.getPrefix() + "§a" + player.getDisplayName() + " §7hat das Spiel betreten");
 
-                player.getInventory().setItem(0, new ItemBuilder(Material.RED_BED)
-                        .setName("§8» §a§lWähle dein Team").toItemStack());
+                player.getInventory().addItem(new ItemBuilder(Material.CHEST_MINECART)
+                        .setName("§8● §aWähle dein Team").toItemStack(),
+                        new ItemBuilder(Material.PAPER).setName("§8● §eSchwierigkeitsvoting").toItemStack(),
+                        (player.hasPermission("bingo.settings") ? new ItemBuilder(Material.REPEATER)
+                                .setName("§8● §cEinstellungen").toItemStack() : new ItemStack(Material.AIR)));
 
                 player.teleport(this.bingo.getSpawnLocation());
 
                 this.bingo.getData().getPlayers().forEach(players -> this.bingo.getLobbyScoreboard().updateBoard(players,
                         String.format("§8● §a%s§8/§c%s",
-                        this.bingo.getData().getPlayers().size(), BingoTeam.RED.getTeamSize() * 6),
+                                this.bingo.getData().getPlayers().size(), BingoTeam.RED.getTeamSize() * 6),
                         "players", "§a"));
 
                 break;
 
             case INGAME:
+            case PREGAME:
                 bingoPlayer.addToSpectators();
                 bingoPlayer.activateSpectatorMode();
 
+                break;
+
+            case ENDING:
+                player.teleportAsync(this.bingo.getSpawnLocation());
                 break;
 
         }

@@ -27,7 +27,7 @@ public class SuggestCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
-        if(!(commandSender instanceof Player)) {
+        if (!(commandSender instanceof Player)) {
             return false;
         }
 
@@ -36,11 +36,11 @@ public class SuggestCommand implements CommandExecutor {
 
         long lastSuggestion = player.hasMetadata("lastSuggestion") ? player.getMetadata("lastSuggestion").get(0).asLong() : 0;
 
-        if(lastSuggestion > currentTime) {
+        if (lastSuggestion > currentTime) {
             player.sendMessage(this.crimxAPI.getSuggestionPrefix() + "§cBitte warte noch einen Moment bevor du auf diesem Server den nächsten Vorschlag einreichst!");
             return false;
         } else {
-            if(args.length == 0) {
+            if (args.length == 0) {
                 player.sendMessage(this.crimxAPI.getSuggestionPrefix() + "§7Bitte beschreibe deine Idee etwas genauer!");
                 return false;
             } else {
@@ -53,7 +53,7 @@ public class SuggestCommand implements CommandExecutor {
 
                 ICloudPlayer cloudPlayer = this.crimxAPI.getPlayerManager().getOnlinePlayer(player.getUniqueId());
 
-                if(cloudPlayer.getConnectedService() == null) {
+                if (cloudPlayer.getConnectedService() == null) {
                     player.sendMessage(this.crimxAPI.getSuggestionPrefix() + "§cEin Fehler ist aufgetreten!");
                     return false;
                 }

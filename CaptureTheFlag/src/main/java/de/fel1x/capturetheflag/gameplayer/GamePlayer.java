@@ -282,7 +282,7 @@ public class GamePlayer {
                     .append("gamesWon", stats.getGamesWon());
 
             Bson statsUpdateOperation = new Document("$set", toUpdate);
-            this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().updateOne(ctfDocument , statsUpdateOperation);
+            this.captureTheFlag.getCrimxAPI().getMongoDB().getCaptureTheFlagCollection().updateOne(ctfDocument, statsUpdateOperation);
 
             long onlineTimeInMillis;
 

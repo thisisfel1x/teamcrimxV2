@@ -38,7 +38,7 @@ public class MoneyShoeTrail implements ICosmetic {
 
     @Override
     public int getCosmeticCost() {
-        return 6000;
+        return 1000;
     }
 
     @Override

@@ -1,9 +1,20 @@
 package de.fel1x.teamcrimx.mlgwars.utils.entites;
 
+import de.fel1x.teamcrimx.mlgwars.MlgWars;
+import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.Disguise;
+import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import net.minecraft.server.v1_16_R3.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -11,65 +22,26 @@ import java.util.Map;
 
 public class CustomZombie extends EntityZombie {
 
-    public CustomZombie(org.bukkit.World world) {
-        super(((CraftWorld) world).getHandle());
+    private final Player player;
 
-        List goalB = (List) getPrivateField("b", PathfinderGoalSelector.class, this.goalSelector);
-        goalB.clear();
-        List goalC = (List) getPrivateField("c", PathfinderGoalSelector.class, this.goalSelector);
-        goalC.clear();
-        List targetB = (List) getPrivateField("b", PathfinderGoalSelector.class, this.targetSelector);
-        targetB.clear();
-        List targetC = (List) getPrivateField("c", PathfinderGoalSelector.class, this.targetSelector);
-        targetC.clear();
+    public CustomZombie(Location location, Player player) {
+        super(EntityTypes.ZOMBIE, ((CraftWorld) location.getWorld()).getHandle());
 
-        this.goalSelector.a(0, new PathfinderGoalFloat(this));
-        this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, 1.0D, false));
-        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
-        this.goalSelector.a(5, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
-        this.goalSelector.a(6, new PathfinderGoalMoveThroughVillage(this, 0, false, 0, () -> false));
-        this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
-        this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
+        this.player = player;
+        this.setPosition(location.getX(), location.getY(), location.getZ());
+    }
+
+    @Override
+    protected void initPathfinder() {
+        super.initPathfinder();
+
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityZombie.class, 8.0F));
-        this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
-        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, Entity.class));
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityZombie.class, true));
+
     }
 
-    public static Object getPrivateField(String fieldName, Class<?> clazz, PathfinderGoalSelector object) {
-        Field field;
-        Object o = null;
-
-        try {
-            field = clazz.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            o = field.get(object);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return o;
+    @Override
+    public CraftEntity getBukkitEntity() {
+        return super.getBukkitEntity();
     }
-
-    public enum EntityTypes {
-
-        CUSTOM_ZOMBIE("Zombie", 54, CustomZombie.class);
-
-        EntityTypes(String name, int id, Class<? extends Entity> custom) {
-            addToMaps(custom, name, id);
-        }
-
-        public static LivingEntity spawnEntity(Entity entity, Location loc) {
-            entity.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-            ((CraftWorld) loc.getWorld()).getHandle().addEntity(entity);
-            return ((LivingEntity) entity.getBukkitEntity());
-        }
-
-        private static void addToMaps(Class clazz, String name, int id) {
-            ((Map) getPrivateField("c", net.minecraft.server.v1_16_R3.EntityTypes.class, null)).put(name, clazz);
-            ((Map) getPrivateField("d", net.minecraft.server.v1_16_R3.EntityTypes.class, null)).put(clazz, name);
-            ((Map) getPrivateField("f", net.minecraft.server.v1_16_R3.EntityTypes.class, null)).put(clazz, id);
-        }
-    }
-
 }

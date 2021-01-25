@@ -1,6 +1,5 @@
 package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 
-import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.entity.Player;
@@ -27,7 +26,7 @@ public class QuitListener implements Listener {
 
         lobbyPlayer.saveNewLocation();
 
-        if(this.crimxLobby.getData().getPlayerPet().containsKey(player.getUniqueId())) {
+        if (this.crimxLobby.getData().getPlayerPet().containsKey(player.getUniqueId())) {
             this.crimxLobby.getData().getPlayerPet().get(player.getUniqueId()).remove();
             this.crimxLobby.getData().getPlayerPet().remove(player.getUniqueId());
         }

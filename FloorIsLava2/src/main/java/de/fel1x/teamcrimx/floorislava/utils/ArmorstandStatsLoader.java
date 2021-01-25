@@ -25,7 +25,7 @@ public class ArmorstandStatsLoader {
 
     public ArmorstandStatsLoader(FloorIsLava floorIsLava) {
         this.floorIsLava = floorIsLava;
-        this.signs = new Location[] {
+        this.signs = new Location[]{
                 new Location(this.floorIsLava.getSpawnLocation().getWorld(), -9.0D, 6.0D, 11.0D),
                 new Location(this.floorIsLava.getSpawnLocation().getWorld(), -9.0D, 5.0D, 13.0D),
                 new Location(this.floorIsLava.getSpawnLocation().getWorld(), -11.0D, 5.0D, 11.0D)

@@ -10,10 +10,9 @@ import java.util.ArrayList;
 
 public class SmokeGrenade extends BukkitRunnable {
 
-    private long lifeTime; // how long the smoke grenade effect should stay
     private final World world; // World to display
-
     private final ArrayList<Location> locations; // Coordinates for the smoke ball
+    private long lifeTime; // how long the smoke grenade effect should stay
 
     public SmokeGrenade(JavaPlugin plugin, Location location, long lifeTime, World world) { // lifeTime here is in seconds as well
         this.lifeTime = lifeTime * 20; // cache life time and set it to ticks

@@ -5,9 +5,9 @@ import org.bukkit.enchantments.Enchantment;
 
 public class BingoItem {
 
-    Material material;
-    Enchantment enchantment;
-    BingoDifficulty bingoDifficulty;
+    private Material material;
+    private Enchantment enchantment;
+    private BingoDifficulty bingoDifficulty;
 
     public BingoItem(Material material, BingoDifficulty bingoDifficulty) {
         this.material = material;

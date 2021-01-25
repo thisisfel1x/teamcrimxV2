@@ -18,6 +18,7 @@ public class MongoDB {
     private final MongoCollection<Document> floorIsLavaCollection;
     private final MongoCollection<Document> suggestionsCollection;
     private final MongoCollection<Document> bugCollection;
+    private final MongoCollection<Document> clanCollection;
 
     public MongoDB() {
 
@@ -33,6 +34,7 @@ public class MongoDB {
         this.floorIsLavaCollection = this.networkDatabase.getCollection("floorislava");
         this.suggestionsCollection = this.networkDatabase.getCollection("suggestions");
         this.bugCollection = this.networkDatabase.getCollection("bug");
+        this.clanCollection = this.networkDatabase.getCollection("clan");
 
     }
 
@@ -74,5 +76,9 @@ public class MongoDB {
 
     public MongoCollection<Document> getBugCollection() {
         return this.bugCollection;
+    }
+
+    public MongoCollection<Document> getClanCollection() {
+        return this.clanCollection;
     }
 }

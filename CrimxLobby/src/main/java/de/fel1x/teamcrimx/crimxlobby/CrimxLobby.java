@@ -2,7 +2,6 @@ package de.fel1x.teamcrimx.crimxlobby;
 
 import com.github.juliarn.npc.NPC;
 import com.github.juliarn.npc.NPCPool;
-import com.github.juliarn.npc.modifier.AnimationModifier;
 import com.github.juliarn.npc.modifier.MetadataModifier;
 import com.github.juliarn.npc.profile.Profile;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
@@ -35,6 +34,8 @@ import java.util.UUID;
 public final class CrimxLobby extends JavaPlugin {
 
     private static CrimxLobby instance;
+    private final SpawnManager spawnManager = new SpawnManager();
+    private final Random random = new Random();
     int actionBarCount;
     private int actionbarTimer = 0;
     private Data data;
@@ -42,12 +43,10 @@ public final class CrimxLobby extends JavaPlugin {
     private PluginManager pluginManager;
     private NPCPool npcPool;
     private InventoryManager inventoryManager;
-    private final SpawnManager spawnManager = new SpawnManager();
     private WaterMlgHandler waterMlgHandler;
     private LobbyScoreboard lobbyScoreboard;
     private NPC lobbyNpc;
     private NPC perksNpc;
-    private final Random random = new Random();
 
     public static CrimxLobby getInstance() {
         return instance;
@@ -63,7 +62,7 @@ public final class CrimxLobby extends JavaPlugin {
             this.saveDefaultConfig();
         }
 
-        Bukkit.createWorld(new WorldCreator("lobbywinter"));
+        Bukkit.createWorld(new WorldCreator("lobbysommer"));
 
         this.crimxAPI = CrimxAPI.getInstance();
 
@@ -83,7 +82,7 @@ public final class CrimxLobby extends JavaPlugin {
         this.registerListener();
 
         this.loadWorld();
-        
+
         this.spawnNpc();
 
         this.runMainScheduler();
@@ -97,7 +96,7 @@ public final class CrimxLobby extends JavaPlugin {
                         "A0UUTGQgMlEeSEYc5H/mYn8GjKsq2fd4X+2mPnszJHRWH3GhO01QU7fO/HSHcccronEb1eWQPgkqCD6rtXWslh7nubKvORJZcBiVpOWTNpjJsDZH57XOghdKsDWp79jTUMM3AaY8irRMC8SlXdMK9RM8uMPofb0FgrHaMUI4D8vTpPEvEZXbyhEpuuCKs3Psb1BBu130x3xm7w1kGKOoyQYSZ1CE9JdYAGF3FOCeAsmGohpO6KMtGsrWJ/wR1lExzbAjlp5vPtMXpqpsQoCTEldtiZ8gxB8bU+5ms5FYxbIUy1I7N5YYcpNUFiBEwWbFHIkzYt5KoQEXZ2P3mTOgJsjyUlKxlDJOQRDeNZuuNMZDiuqL7JGrtSKNRkCwGAE+Pr91YOAjhymzL7t/Hhn9V6i6198HrDDXZzZqm9ebc6Y7bdSSTHtSDWYXD80B0CgGUyMTS9g0h8qN6rFN6taMxEeBxBuI8Hpj5ERchrqT9xhJzOapcQJEf59l60h2BcDjDJJxefq4N6hvvGPL+t1H/D/bPN5eF7HYJKSz/y/lpJutqWJfnolhoxTf7Qy0XPp7BNQxOFdDOqujLb0haPxpcBCrhgzd/QXUlcpYpMC9zov3jqL5muXg6aXTDkEU2UlLDhPNEXolM2nbvG55WXNvpe3ulbVBbCs3PQDi7bsdLb0="))))
                 .lookAtPlayer(true)
                 .imitatePlayer(true)
-                .location(new Location(Bukkit.getWorld("lobbywinter"),18.5, 13, -29.5))
+                .location(new Location(Bukkit.getWorld("lobbysommer"), 18.5, 13, -29.5))
                 .spawnCustomizer((npc1, player) -> npc1.metadata().queue(MetadataModifier.EntityMetadata.SKIN_LAYERS, true).send())
                 .build(this.npcPool);
         this.perksNpc = new NPC.Builder(new Profile(UUID.randomUUID(), "§ePerks",
@@ -107,7 +106,7 @@ public final class CrimxLobby extends JavaPlugin {
                 .lookAtPlayer(true)
                 .imitatePlayer(true)
                 .spawnCustomizer((npc, player) -> npc.metadata().queue(MetadataModifier.EntityMetadata.SKIN_LAYERS, true).send())
-                .location(new Location(Bukkit.getWorld("lobbywinter"), 16.5, 13, -27.5))
+                .location(new Location(Bukkit.getWorld("lobbysommer"), 16.5, 13, -27.5))
                 .build(this.npcPool);
     }
 
@@ -143,7 +142,10 @@ public final class CrimxLobby extends JavaPlugin {
             world.setGameRule(GameRule.DO_MOB_LOOT, false);
             world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
             world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-            world.setTime(14000);
+            world.setTime(4000);
+            world.setWeatherDuration(0);
+            world.setThundering(false);
+            world.setClearWeatherDuration(Integer.MAX_VALUE);
         }
     }
 
@@ -198,17 +200,17 @@ public final class CrimxLobby extends JavaPlugin {
             this.data.getPlayerPet().forEach((uuid, entity) -> {
                 Player owner = Bukkit.getPlayer(uuid);
 
-                if(owner == null || !owner.isOnline() || entity.isDead()) {
+                if (owner == null || !owner.isOnline() || entity.isDead()) {
                     return;
                 }
 
                 double distance = owner.getLocation().distanceSquared(entity.getLocation());
 
-                if(distance > 10) {
+                if (distance > 10) {
                     //Bukkit.broadcastMessage("pathfinding " + owner.getName() + " distance > 10");
                     entity.getPathfinder().moveTo(owner.getLocation().clone()
                             .add(this.random.nextBoolean() ? 1 : -1, 0, this.random.nextBoolean() ? 1 : -1));
-                    if(owner.getLocation().getY() > entity.getLocation().getY() + 3 || distance > 150) {
+                    if (owner.getLocation().getY() > entity.getLocation().getY() + 3 || distance > 150) {
                         entity.teleport(owner.getLocation().
                                 add(this.random.nextBoolean() ? 1 : -1, 0, this.random.nextBoolean() ? 1 : -1));
                         entity.getPathfinder().stopPathfinding();

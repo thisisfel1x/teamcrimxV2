@@ -11,25 +11,24 @@ import java.util.Random;
 
 public class ItemGenerator {
 
-    BiMap<Integer, BingoItem> possibleItems = HashBiMap.create();
+    private final BiMap<Integer, BingoItem> possibleItems = HashBiMap.create();
 
-    BingoDifficulty bingoDifficulty = BingoDifficulty.EASY;
-    Bingo bingo = Bingo.getInstance();
+    private final BingoDifficulty bingoDifficulty;
 
-    List<BingoItem> items;
-    Random random;
+    private final List<BingoItem> items;
+    private final Random random;
 
-    public ItemGenerator() {
+    public ItemGenerator(BingoDifficulty bingoDifficulty) {
 
-        this.items = this.bingo.getItems().getItems();
+        this.bingoDifficulty = bingoDifficulty;
+
+        Bingo bingo = Bingo.getInstance();
+        this.items = bingo.getItems().getItems();
         this.random = new Random();
 
         for (int i = 0; i < 9; i++) {
-
             this.generateNewItem(i);
-
         }
-
     }
 
     public BiMap<Integer, BingoItem> getPossibleItems() {

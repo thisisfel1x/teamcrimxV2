@@ -22,8 +22,8 @@ public class SpectatorCompassInventory implements InventoryProvider {
             .manager(Bingo.getInstance().getInventoryManager())
             .build();
 
-    int column;
-    int row;
+    private int column;
+    private int row;
 
     @Override
     public void init(Player player, InventoryContents contents) {

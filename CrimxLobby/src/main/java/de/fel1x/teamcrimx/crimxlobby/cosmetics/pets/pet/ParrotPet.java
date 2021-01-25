@@ -7,7 +7,6 @@ import de.fel1x.teamcrimx.crimxlobby.cosmetics.pets.IPet;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.entity.Bee;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
@@ -21,7 +20,7 @@ public class ParrotPet implements ICosmetic, IPet {
 
     @Override
     public String[] getCosmeticDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§aAb in den Jungel mit dir!"
         };
     }
@@ -43,7 +42,7 @@ public class ParrotPet implements ICosmetic, IPet {
 
     @Override
     public int getCosmeticCost() {
-        return 0;
+        return 1000;
     }
 
     @Override

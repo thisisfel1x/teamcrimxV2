@@ -16,14 +16,12 @@ public class RisingTask implements IFloorIsLavaTask {
     private final String notSave = String.format("§c%s §8%s §7Du bist §cnicht sicher!", FloorIsLava.ATTENTION, FloorIsLava.DOT);
     private final Title notSaveTitle = new Title.Builder().title(" ").subtitle("§cDu bist nicht sicher").fadeIn(0).stay(30).fadeOut(10).build();
     private final Location spawnLocation = this.floorIsLava.getWorldSpawnLocation();
+    private final Title pvpTitle = Title.builder().title("§7『§aPVP§7§7』").subtitle("§aaktiviert").fadeIn(10).stay(60).fadeOut(10).build();
+    private final Title infoTitle = Title.builder().title("§4Achtung").subtitle("§cDie Lava steigt!").fadeIn(10).stay(60).fadeOut(10).build();
     private int delay = 5;
     private int height = 0;
     private Location bottomRight;
     private Location topLeft;
-
-    private final Title pvpTitle = Title.builder().title("§7『§aPVP§7§7』").subtitle("§aaktiviert").fadeIn(10).stay(60).fadeOut(10).build();
-    private final Title infoTitle = Title.builder().title("§4Achtung").subtitle("§cDie Lava steigt!").fadeIn(10).stay(60).fadeOut(10).build();
-
     private boolean isRunning = false;
 
     private int taskId;
@@ -73,7 +71,7 @@ public class RisingTask implements IFloorIsLavaTask {
                             }
                         }
                     }
-                    if(this.height == this.heightToGo) {
+                    if (this.height == this.heightToGo) {
                         this.floorIsLava.setPvpEnabled(true);
                         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                             onlinePlayer.sendTitle(this.pvpTitle);

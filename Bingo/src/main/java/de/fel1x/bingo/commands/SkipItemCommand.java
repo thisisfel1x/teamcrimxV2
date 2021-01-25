@@ -29,19 +29,22 @@ public class SkipItemCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        BingoPlayer bingoPlayer = new BingoPlayer(player);
+        if (!player.hasPermission("bingo.skipitem")) {
+            return false;
+        }
 
-        if (!this.bingo.getGamestateHandler().getGamestate().equals(Gamestate.IDLE)
-                && !this.bingo.getGamestateHandler().getGamestate().equals(Gamestate.LOBBY)) {
+        if (this.bingo.getGamestateHandler().getGamestate() != Gamestate.PREGAME) {
             player.sendMessage(this.bingo.getPrefix() + "§7Die Runde läuft noch nicht oder ist schon vorbei!");
             return false;
         }
 
-        if (!player.isOp() || !player.hasPermission("bingo.skipitem")) return false;
+        if(this.bingo.getItemGenerator() == null) {
+            player.sendMessage(this.bingo.getPrefix() + "§cDie Items wurden noch nicht generiert, bitte stimme zuerst über die Schwierigkeit ab!");
+            return false;
+        }
 
         SkipItemInventory.SKIP_INVENTORY.open(player);
         return true;
 
     }
-
 }

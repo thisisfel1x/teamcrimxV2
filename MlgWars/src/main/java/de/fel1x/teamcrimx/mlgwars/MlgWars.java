@@ -212,8 +212,7 @@ public final class MlgWars extends JavaPlugin {
     }
 
     public String getPrefix() {
-        String prefix = "§eMlgWars §8● §r";
-        return prefix;
+        return "§eMlgWars §8● §r";
     }
 
     public Data getData() {
