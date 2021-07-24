@@ -1,7 +1,8 @@
 package de.fel1x.teamcrimx.crimxapi.commands;
 
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
-import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
+import de.fel1x.teamcrimx.crimxapi.coins.CrimxCoins;
+import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,30 +12,29 @@ import org.bukkit.entity.Player;
 public class CoinsCommand implements CommandExecutor {
 
     private final CrimxAPI crimxAPI = CrimxAPI.getInstance();
+    private CrimxCoins crimxCoins;
+
+    public CoinsCommand(CrimxSpigotAPI crimxSpigotAPI) {
+        crimxSpigotAPI.getCommand("coins").setExecutor(this);
+    }
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String string, String[] args) {
-
         if (!(commandSender instanceof Player)) {
             return false;
         }
 
         Player player = (Player) commandSender;
-        CoinsAPI coinsAPI;
 
         boolean hasPermission = player.hasPermission("crimxapi.coins");
 
-        if (!hasPermission) {
-            coinsAPI = new CoinsAPI(player.getUniqueId());
-            player.sendMessage(this.crimxAPI.getPrefix() + "§7Du besitzt momentan stolze §e" + coinsAPI.getCoins() + " Coins");
+        if (!hasPermission || args.length == 0) {
+            new CrimxCoins(player.getUniqueId()).getCoinsAsync().thenAccept(coins ->
+                    player.sendMessage(this.crimxAPI.getPrefix() + "§7Du besitzt momentan stolze §e" + coins + " Coins"));
         } else {
-            if (args.length == 0) {
-                coinsAPI = new CoinsAPI(player.getUniqueId());
-                player.sendMessage(this.crimxAPI.getPrefix() + "§7Du besitzt momentan stolze §e" + coinsAPI.getCoins() + " Coins");
-            } else if (args.length == 1) {
-                player.sendMessage(this.crimxAPI.getPrefix() + "§cUsage: /coins <set|add|remove> <playername>");
+            if (args.length == 1) {
+                player.sendMessage(this.crimxAPI.getPrefix() + "§cNutzung: /coins <set|add|remove> <playername> <coins>");
             } else if (args.length == 3) {
-
                 String operation = args[0];
                 Player targetPlayer = Bukkit.getPlayer(args[1]);
                 int coinsOperation;
@@ -51,39 +51,55 @@ public class CoinsCommand implements CommandExecutor {
                     return false;
                 }
 
-                coinsAPI = new CoinsAPI(targetPlayer.getUniqueId());
+                this.crimxCoins = new CrimxCoins(targetPlayer.getUniqueId());
 
                 switch (operation) {
                     case "get":
-                        player.sendMessage(this.crimxAPI.getPrefix() + "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coinsAPI.getCoins() + " Coins");
+                        this.crimxCoins.getCoinsAsync().thenAccept(coins ->
+                                player.sendMessage(this.crimxAPI.getPrefix() + "§7Der Spieler §a" + targetPlayer.displayName()
+                                        + " §7besitzt §e" + coins + " Coins"));
                         break;
 
                     case "add":
-                        coinsAPI.addCoins(coinsOperation);
-                        coinsAPI = new CoinsAPI(targetPlayer.getUniqueId());
-                        player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins gutgeschrieben! " +
-                                "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coinsAPI.getCoins() + " Coins");
+                        this.crimxCoins.addCoinsAsync(coinsOperation).thenAccept(success -> {
+                            if (success) {
+                                this.crimxCoins.getCoinsAsync().thenAccept(coins ->
+                                        player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins gutgeschrieben! " +
+                                                "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coins + " Coins"));
+                            } else {
+                                player.sendMessage(this.crimxAPI.getPrefix() + "§cEs trat ein Fehler auf");
+                            }
+                        });
                         break;
 
                     case "remove":
-                        coinsAPI.removeCoins(coinsOperation);
-                        coinsAPI = new CoinsAPI(targetPlayer.getUniqueId());
-                        player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins entfernt! " +
-                                "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coinsAPI.getCoins() + " Coins");
+                        this.crimxCoins.removeCoinsAsync(coinsOperation).thenAccept(success -> {
+                            if (success) {
+                                this.crimxCoins.getCoinsAsync().thenAccept(coins ->
+                                        player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins entfernt! " +
+                                                "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coins + " Coins"));
+                            } else {
+                                player.sendMessage(this.crimxAPI.getPrefix() + "§cEs trat ein Fehler auf");
+                            }
+                        });
                         break;
 
                     case "set":
-                        coinsAPI.setCoins(coinsOperation);
-                        coinsAPI = new CoinsAPI(targetPlayer.getUniqueId());
-                        player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins gesetzt! " +
-                                "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coinsAPI.getCoins() + " Coins");
+                        this.crimxCoins.setCoinsAsync(coinsOperation).thenAccept(success -> {
+                            if (success) {
+                                this.crimxCoins.getCoinsAsync().thenAccept(coins ->
+                                        player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins gesetzt! " +
+                                                "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coins + " Coins"));
+                            } else {
+                                player.sendMessage(this.crimxAPI.getPrefix() + "§cEs trat ein Fehler auf");
+                            }
+                        });
                         break;
 
                 }
 
             }
         }
-
         return true;
     }
 }

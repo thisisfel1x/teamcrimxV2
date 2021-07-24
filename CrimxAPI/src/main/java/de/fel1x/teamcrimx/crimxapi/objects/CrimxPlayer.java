@@ -1,58 +1,66 @@
 package de.fel1x.teamcrimx.crimxapi.objects;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.database.CosmeticPlayer;
+import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDB;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
-import de.fel1x.teamcrimx.crimxapi.utils.Skin;
+import de.fel1x.teamcrimx.crimxapi.friends.database.FriendPlayer;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatColor;
 import org.bson.Document;
-import org.bson.conversions.Bson;
+import org.bukkit.entity.Player;
 
-import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CrimxPlayer {
 
     private final CrimxAPI crimxAPI = CrimxAPI.getInstance();
+    private final MongoDB mongoDB = this.crimxAPI.getMongoDB();
 
-    ICloudPlayer cloudPlayer;
+    private final ICloudPlayer cloudPlayer;
+
+    public CrimxPlayer(UUID playerUniqueId) {
+        this.cloudPlayer = this.crimxAPI.getPlayerManager().getOnlinePlayer(playerUniqueId);
+    }
 
     public CrimxPlayer(ICloudPlayer cloudPlayer) {
         this.cloudPlayer = cloudPlayer;
     }
 
-    public boolean checkIfPlayerExistsInCollection(UUID uuid) {
-        return this.checkIfPlayerExistsInCollection(uuid, null);
+    public CrimxPlayer(Player player) {
+        this.cloudPlayer = this.crimxAPI.getPlayerManager().getOnlinePlayer(player.getUniqueId());
     }
 
-    public boolean checkIfPlayerExistsInCollection(UUID uuid, @Nullable MongoDBCollection mongoDBCollection) {
-        if (mongoDBCollection == null) {
-            return Arrays.stream(MongoDBCollection.values()).allMatch(collection -> this.crimxAPI.getMongoDB()
-                    .getNetworkDatabase().getCollection(collection.getName()).countDocuments(new Document("_id", uuid.toString())) > 0);
+    /*
+    This method stores all important information for a player into the user collection
+     */
+    public void createPlayerData(Player player) {
+        player.sendMessage(this.crimxAPI.getPrefix() + "§7Nutzerdaten werden angelegt...");
+
+        String[] skin = this.getPlayerSkinFromDatabase(player);
+
+        String skinSignature = "";
+        String skinTexture = "";
+
+        if (skin != null) {
+            skinSignature = skin[0];
+            skinTexture = skin[1];
         } else {
-            return this.crimxAPI.getMongoDB().getNetworkDatabase().getCollection(mongoDBCollection.getName())
-                    .countDocuments(new Document("_id", uuid.toString())) > 0;
-        }
-    }
-
-    public void createPlayerData() {
-
-        this.sendMessage(this.crimxAPI.getPrefix() + "§7Nutzerdaten werden angelegt...");
-
-        String[] skin = Skin.getSkinFromName(this.cloudPlayer.getName());
-
-        if (skin == null) {
-            this.sendMessage(this.crimxAPI.getPrefix() + "§cEin Fehler ist aufgetreten! §4(ERROR: SKIN_TIMEOUT)");
-            return;
+            player.sendMessage(this.crimxAPI.getPrefix() + "§cDein Skin konnte nicht gespeichert werden. " +
+                    "Bitte versuche es später erneut");
         }
 
-        Document basicDBObject = new Document("_id", this.cloudPlayer.getUniqueId().toString())
+        Document playerDocument = new Document("_id", this.cloudPlayer.getUniqueId().toString())
                 .append("name", this.cloudPlayer.getName())
                 .append("coins", 0)
                 .append("firstJoin", System.currentTimeMillis())
@@ -60,34 +68,88 @@ public class CrimxPlayer {
                 .append("onlinetime", 0L)
                 .append("lastJoinMe", 0L)
                 .append("currentClan", null)
-                .append("skinTexture", skin[0])
-                .append("skinSignature", skin[1]);
+                .append("skinSignature", skinSignature)
+                .append("skinTexture", skinTexture);
 
-        this.crimxAPI.getMongoDB().getUserCollection().insertOne(basicDBObject);
-
-        this.sendMessage(this.crimxAPI.getPrefix() + "§7Nutzerdaten wurden erfolgreich angelegt!");
-
-    }
-
-    public void updateUserData() {
-
-        Document found = this.crimxAPI.getMongoDB().getUserCollection().
-                find(new Document("_id", this.cloudPlayer.getUniqueId().toString())).first();
-
-        Bson updatedValue = new Document("lastJoin", System.currentTimeMillis());
-        Bson updateOperation = new Document("$set", updatedValue);
-        this.crimxAPI.getMongoDB().getUserCollection().updateOne(found, updateOperation);
+        if (this.mongoDB.insertDocumentInCollectionSync(playerDocument, MongoDBCollection.USERS)) {
+            player.sendMessage(this.crimxAPI.getPrefix() + "§7Nutzerdaten wurden erfolgreich angelegt!");
+        } else {
+            player.kick(Component.text(this.crimxAPI.getPrefix() + "§cEin Fehler ist aufgetreten"));
+        }
 
     }
 
-    public void sendMessage(String message) {
+    /*
+    This method updates a players skin and name if changed
+    Also checks if the player is already saved the user collection (-> first join)
+     */
+    public void updateUserDataIfNecessary(Player player) {
+        if (!this.mongoDB.checkIfDocumentExistsSync(player.getUniqueId(), MongoDBCollection.USERS)) {
+            this.createPlayerData(player);
+            return;
+        }
 
-        this.cloudPlayer.getPlayerExecutor().sendChatMessage(message);
+        new CosmeticPlayer(player.getUniqueId()).updateCosmeticList();
+        new FriendPlayer(player.getUniqueId()).createPlayerData();
 
+        Document found = this.mongoDB.getDocumentSync(this.cloudPlayer.getUniqueId(), MongoDBCollection.USERS);
+
+        if (found == null) {
+            this.createPlayerData(player);
+            return;
+        }
+
+        Document updateDocument = new Document();
+
+        if (!found.getString("name").equalsIgnoreCase(player.getName())) {
+            updateDocument.append("name", player.getName());
+        }
+
+        String[] skin = this.getPlayerSkinFromDatabase(player);
+
+        if (!found.getString("skinSignature").equalsIgnoreCase(skin[0])) {
+            updateDocument.append("skinSignature", skin[0]);
+        }
+
+        if (!found.getString("skinTexture").equalsIgnoreCase(skin[1])) {
+            updateDocument.append("skinTexture", skin[1]);
+        }
+
+        if (!updateDocument.isEmpty()) {
+            this.mongoDB.updateDocumentInCollectionSync(player.getUniqueId(), MongoDBCollection.USERS, updateDocument);
+        }
     }
 
-    public String[] getPlayerSkin() {
+    /**
+     * Get a players skin (signature & texture)
+     * String[0] -> Signature
+     * String[1] -> Value
+     *
+     * @param player - Player
+     * @return String[]
+     */
+    public String[] getPlayerSkinFromDatabase(Player player) {
 
+        PlayerProfile playerProfile = player.getPlayerProfile();
+
+        if (playerProfile.hasTextures()) {
+            List<ProfileProperty> properties = playerProfile.getProperties().stream()
+                    .filter(profileProperty -> profileProperty.getName().equalsIgnoreCase("textures"))
+                    .collect(Collectors.toList());
+
+            return new String[]{
+                    properties.get(0).getSignature(), properties.get(0).getValue()
+            };
+        }
+
+        return null;
+    }
+
+
+    /*
+    With this method you can get the skin signature and value out of the database
+     */
+    public String[] getPlayerSkinFromDatabase() {
         Document found = this.crimxAPI.getMongoDB().getUserCollection().
                 find(new Document("_id", this.cloudPlayer.getUniqueId().toString())).first();
 
@@ -97,13 +159,15 @@ public class CrimxPlayer {
         String signature = found.getString("skinSignature");
 
         return new String[]{value, signature};
-
     }
 
-    public String[] getPlayerSkinForChat(String user, int scale) {
-
+    /*
+    This method returns a String[] for displaying the players skin in chat
+     */
+    public String[] getPlayerSkinForChat(UUID playerUniqueID, int scale) {
         String[] toReturn = new String[scale];
-        String urlString = "https://minotar.net/avatar/" + user + "/" + scale + ".png";
+        String urlString = "https://crafatar.com/avatars/"
+                + playerUniqueID.toString() + "?size=8";
 
         try {
             URL url = new URL(urlString);
@@ -112,8 +176,6 @@ public class CrimxPlayer {
                 StringBuilder chatHeadString = new StringBuilder();
                 for (int j = 0; j < image.getWidth(); j++) {
                     Color color = new Color(image.getRGB(j, i));
-                    /* ChatColor chatColor = ColorUtil.fromRGB(color.getRed(), color.getGreen(), color.getBlue());
-                    chatHeadString.append(chatColor).append("⬛"); */
 
                     ChatColor chatColor = ChatColor.of(color);
                     chatHeadString.append(chatColor).append("⬛");

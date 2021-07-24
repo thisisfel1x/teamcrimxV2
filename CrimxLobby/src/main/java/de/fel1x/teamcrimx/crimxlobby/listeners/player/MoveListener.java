@@ -3,11 +3,9 @@ package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.Data;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
-import de.fel1x.teamcrimx.crimxlobby.minigames.jumpandrun.JumpAndRunPlayer;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -62,25 +60,5 @@ public class MoveListener implements Listener {
                     break;
             }
         }
-
-        if (lobbyPlayer.isInJumpAndRun()) {
-
-            JumpAndRunPlayer jumpAndRunPlayer = this.crimxLobby.getData().getJumpAndRunPlayers().get(player.getUniqueId());
-
-            Block block = player.getLocation().clone().add(0, -1, 0).getBlock();
-
-            if (block.getType() == Material.LEGACY_WOOL) {
-
-                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 7, 9);
-                lobbyPlayer.generateNextJump();
-
-            } else if (event.getTo().getY() < jumpAndRunPlayer.getCurrentBlock().getY()) {
-
-                lobbyPlayer.endJumpAndRun();
-                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 5, 8);
-
-            }
-        }
     }
-
 }

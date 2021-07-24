@@ -6,6 +6,9 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * @deprecated Minecraft chat now supports rgb. no need for this class
+ */
 public class ColorUtil {
 
     private static final Map<ChatColor, ColorSet<Integer, Integer, Integer>> colorMap = new EnumMap<>(ChatColor.class);

@@ -52,8 +52,8 @@ public class InventoryClickListener implements Listener {
                 return;
             }
 
-            if(event.getCurrentItem() == null) return;
-            if(event.getCurrentItem().equals(this.bingo.getBingoItemsQuickAccess())) {
+            if (event.getCurrentItem() == null) return;
+            if (event.getCurrentItem().equals(this.bingo.getBingoItemsQuickAccess())) {
                 event.setCancelled(true);
                 return;
             }

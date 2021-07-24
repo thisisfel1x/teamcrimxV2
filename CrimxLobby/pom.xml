@@ -6,15 +6,17 @@
 
     <groupId>de.fel1x.teamcrimx</groupId>
     <artifactId>CrimxLobby</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>CrimxLobby</name>
 
     <description>Our Lobby System for navigating in our lobby</description>
     <properties>
-        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+        <java.version>16</java.version>
     </properties>
     <url>teamcrimx.de</url>
 
@@ -56,6 +58,10 @@
 
     <repositories>
         <repository>
+            <id>papermc</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
+        </repository>
+        <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
@@ -71,17 +77,18 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
-            <artifactId>paper</artifactId>
-            <version>1.16.4-R0.1-SNAPSHOT</version>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.17.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>de.fel1x.teamcrimx</groupId>
             <artifactId>CrimxAPI</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>2.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>fr.minuskube.inv</groupId>
             <artifactId>smart-invs</artifactId>
@@ -89,44 +96,28 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--  cloudnet driver for plugins and modules -->
+        <!--  cloudnet -->
         <dependency>
             <groupId>de.dytanic.cloudnet</groupId>
             <artifactId>cloudnet-driver</artifactId>
             <version>3.3.0-RELEASE</version>
             <scope>provided</scope>
         </dependency>
-        <!--  cloudnet wrapper for plugins -->
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-wrapper-jvm</artifactId>
-            <version>3.3.0-RELEASE</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--  cloudnet bridge module for plugins and modules -->
         <dependency>
             <groupId>de.dytanic.cloudnet</groupId>
             <artifactId>cloudnet-bridge</artifactId>
             <version>3.3.0-RELEASE</version>
             <scope>provided</scope>
         </dependency>
-        <!--  cloudnet syncproxy module for plugins (proxy) and modules -->
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-syncproxy</artifactId>
-            <version>3.3.0-RELEASE</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--  cloudnet signs module for plugins and modules -->
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-signs</artifactId>
-            <version>3.3.0-RELEASE</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>de.dytanic.cloudnet</groupId>
             <artifactId>cloudnet-cloudperms</artifactId>
+            <version>3.3.0-RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.dytanic.cloudnet</groupId>
+            <artifactId>cloudnet-wrapper-jvm</artifactId>
             <version>3.3.0-RELEASE</version>
             <scope>provided</scope>
         </dependency>

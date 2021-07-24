@@ -1,17 +1,15 @@
 package de.fel1x.teamcrimx.crimxapi.utils;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.SkullType;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -72,23 +70,22 @@ public class SkullCreator {
     }
 
     /**
-     * Creates a player skull item with the skin at a Mojang URL.
-     *
-     * @param url The Mojang URL.
-     * @return The head of the Player.
-     */
-    public static ItemStack itemFromUrl(String url) {
-        return itemWithUrl(createSkull(), url);
-    }
-
-    /**
      * Creates a player skull item with the skin based on a base64 string.
      *
      * @param base64 The Mojang URL.
      * @return The head of the Player.
      */
     public static ItemStack itemFromBase64(String base64) {
-        return itemWithBase64(createSkull(), base64);
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+
+        PlayerProfile playerProfile = Bukkit.createProfile(UUID.randomUUID());
+        playerProfile.setProperty(new ProfileProperty("textures", base64));
+
+        skullMeta.setPlayerProfile(playerProfile);
+        skull.setItemMeta(skullMeta);
+
+        return skull;
     }
 
     /**
@@ -104,9 +101,11 @@ public class SkullCreator {
         notNull(item, "item");
         notNull(name, "name");
 
-        SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setOwner(name);
-        item.setItemMeta(meta);
+        SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
+
+        PlayerProfile playerProfile = Bukkit.createProfile(name);
+        skullMeta.setPlayerProfile(playerProfile);
+        item.setItemMeta(skullMeta);
 
         return item;
     }
@@ -122,44 +121,11 @@ public class SkullCreator {
         notNull(item, "item");
         notNull(id, "id");
 
-        SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setOwningPlayer(Bukkit.getOfflinePlayer(id));
-        item.setItemMeta(meta);
+        SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
 
-        return item;
-    }
-
-    /**
-     * Modifies a skull to use the skin at the given Mojang URL.
-     *
-     * @param item The item to apply the skin to. Must be a player skull.
-     * @param url  The URL of the Mojang skin.
-     * @return The head associated with the URL.
-     */
-    public static ItemStack itemWithUrl(ItemStack item, String url) {
-        notNull(item, "item");
-        notNull(url, "url");
-
-        return itemWithBase64(item, urlToBase64(url));
-    }
-
-    /**
-     * Modifies a skull to use the skin based on the given base64 string.
-     *
-     * @param item   The ItemStack to put the base64 onto. Must be a player skull.
-     * @param base64 The base64 string containing the texture.
-     * @return The head with a custom texture.
-     */
-    public static ItemStack itemWithBase64(ItemStack item, String base64) {
-        notNull(item, "item");
-        notNull(base64, "base64");
-
-        if (!(item.getItemMeta() instanceof SkullMeta)) {
-            return null;
-        }
-        SkullMeta meta = (SkullMeta) item.getItemMeta();
-        mutateItemMeta(meta, base64);
-        item.setItemMeta(meta);
+        PlayerProfile playerProfile = Bukkit.createProfile(id);
+        skullMeta.setPlayerProfile(playerProfile);
+        item.setItemMeta(skullMeta);
 
         return item;
     }
@@ -177,7 +143,9 @@ public class SkullCreator {
         notNull(name, "name");
 
         Skull state = (Skull) block.getState();
-        state.setOwningPlayer(Bukkit.getOfflinePlayer(name));
+
+        PlayerProfile playerProfile = Bukkit.createProfile(name);
+        state.setPlayerProfile(playerProfile);
         state.update(false, false);
     }
 
@@ -192,51 +160,18 @@ public class SkullCreator {
         notNull(id, "id");
 
         setToSkull(block);
+
         Skull state = (Skull) block.getState();
-        state.setOwningPlayer(Bukkit.getOfflinePlayer(id));
-        state.update(false, false);
-    }
+        PlayerProfile playerProfile = Bukkit.createProfile(id);
 
-    /**
-     * Sets the block to a skull with the skin found at the provided mojang URL.
-     *
-     * @param block The block to set.
-     * @param url   The mojang URL to set it to use.
-     */
-    public static void blockWithUrl(Block block, String url) {
-        notNull(block, "block");
-        notNull(url, "url");
-
-        blockWithBase64(block, urlToBase64(url));
-    }
-
-    /**
-     * Sets the block to a skull with the skin for the base64 string.
-     *
-     * @param block  The block to set.
-     * @param base64 The base64 to set it to use.
-     */
-    public static void blockWithBase64(Block block, String base64) {
-        notNull(block, "block");
-        notNull(base64, "base64");
-
-        setToSkull(block);
-        Skull state = (Skull) block.getState();
-        mutateBlockState(state, base64);
+        state.setPlayerProfile(playerProfile);
         state.update(false, false);
     }
 
     private static void setToSkull(Block block) {
         checkLegacy();
 
-        try {
-            block.setType(Material.valueOf("PLAYER_HEAD"), false);
-        } catch (IllegalArgumentException e) {
-            block.setType(Material.valueOf("SKULL"), false);
-            Skull state = (Skull) block.getState();
-            state.setSkullType(SkullType.PLAYER);
-            state.update(false, false);
-        }
+        block.setType(Material.PLAYER_HEAD, false);
     }
 
     private static void notNull(Object o, String name) {
@@ -255,52 +190,6 @@ public class SkullCreator {
         }
         String toEncode = "{\"textures\":{\"SKIN\":{\"url\":\"" + actualUrl.toString() + "\"}}}";
         return Base64.getEncoder().encodeToString(toEncode.getBytes());
-    }
-
-    private static GameProfile makeProfile(String b64) {
-        // random uuid based on the b64 string
-        UUID id = new UUID(
-                b64.substring(b64.length() - 20).hashCode(),
-                b64.substring(b64.length() - 10).hashCode()
-        );
-        GameProfile profile = new GameProfile(id, "aaaaa");
-        profile.getProperties().put("textures", new Property("textures", b64));
-        return profile;
-    }
-
-    private static void mutateBlockState(Skull block, String b64) {
-        try {
-            if (blockProfileField == null) {
-                blockProfileField = block.getClass().getDeclaredField("profile");
-                blockProfileField.setAccessible(true);
-            }
-            blockProfileField.set(block, makeProfile(b64));
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void mutateItemMeta(SkullMeta meta, String b64) {
-        try {
-            if (metaSetProfileMethod == null) {
-                metaSetProfileMethod = meta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
-                metaSetProfileMethod.setAccessible(true);
-            }
-            metaSetProfileMethod.invoke(meta, makeProfile(b64));
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-            // if in an older API where there is no setProfile method,
-            // we set the profile field directly.
-            try {
-                if (metaProfileField == null) {
-                    metaProfileField = meta.getClass().getDeclaredField("profile");
-                    metaProfileField.setAccessible(true);
-                }
-                metaProfileField.set(meta, makeProfile(b64));
-
-            } catch (NoSuchFieldException | IllegalAccessException ex2) {
-                ex2.printStackTrace();
-            }
-        }
     }
 
     // suppress warning since PLAYER_HEAD doesn't exist in 1.12.2,

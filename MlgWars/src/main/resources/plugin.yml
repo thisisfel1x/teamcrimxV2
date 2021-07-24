@@ -9,6 +9,7 @@ depend:
   - CrimxAPI
   - CloudNet-Bridge
   - SmartInvs
+  - ProtocolLib
 
 commands:
   start:

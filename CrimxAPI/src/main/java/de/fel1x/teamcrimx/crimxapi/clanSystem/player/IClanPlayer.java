@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public interface IClanPlayer {
 
@@ -23,12 +24,15 @@ public interface IClanPlayer {
 
     IClan getCurrentClan();
 
+    CompletableFuture<IClan> getCurrentClanAsync();
+
     IClanPlayer getByUUID(UUID playerUniqueId);
 
     ICloudPlayer getCloudPlayerByUUID(UUID playerUniqueId);
 
     /**
      * Get a BukkitPlayer by UUID
+     *
      * @param playerUniqueId UniqueId of the player
      * @return returns {@link Player}
      */

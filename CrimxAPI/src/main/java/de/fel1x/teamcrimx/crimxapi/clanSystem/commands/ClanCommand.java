@@ -3,7 +3,6 @@ package de.fel1x.teamcrimx.crimxapi.clanSystem.commands;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.Clan;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.IClan;
-import de.fel1x.teamcrimx.crimxapi.clanSystem.events.ClanUpdateEvent;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
@@ -26,29 +25,27 @@ import java.util.stream.Collectors;
 public class ClanCommand implements CommandExecutor, TabCompleter {
 
     private final CrimxAPI crimxAPI = CrimxAPI.getInstance();
-    private final CrimxSpigotAPI crimxSpigotAPI;
 
     private final String clanPrefix = this.crimxAPI.getClanPrefix();
 
     public ClanCommand(CrimxSpigotAPI crimxSpigotAPI) {
-        this.crimxSpigotAPI = crimxSpigotAPI;
 
-        this.crimxSpigotAPI.getCommand("clan").setExecutor(this::onCommand);
-        this.crimxSpigotAPI.getCommand("clan").setTabCompleter(this::onTabComplete);
+        crimxSpigotAPI.getCommand("clan").setExecutor(this::onCommand);
+        crimxSpigotAPI.getCommand("clan").setTabCompleter(this::onTabComplete);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String string, @NotNull String[] args) {
 
-        if(!(commandSender instanceof Player)) return false;
+        if (!(commandSender instanceof Player)) return false;
 
         Player player = (Player) commandSender;
         IClanPlayer clanPlayer = new ClanPlayer(player.getUniqueId());
         IClan iClan = clanPlayer.getCurrentClan();
 
-        if(args.length > 0) {
-            if(args.length == 1) {
-                if(args[0].startsWith("?join=")) {
+        if (args.length > 0) {
+            if (args.length == 1) {
+                if (args[0].startsWith("?join=")) {
                     String clanId = args[0].split("=")[1];
                     UUID clanUUID = UUID.fromString(clanId);
                     IClan toJoin = new Clan(clanUUID);
@@ -88,25 +85,25 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                         player.sendMessage(this.clanPrefix + "§7Kicke einen Spieler aus deinem Clan §o§8(§b/clan kick <Playername>§8)");
                         break;
                     case "quit":
-                        if(clanPlayer.hasClan()) {
+                        if (clanPlayer.hasClan()) {
                             iClan.removePlayerFromClan(clanPlayer);
                         } else {
                             player.sendMessage(this.clanPrefix + "§cDu bist in keinem Clan");
                         }
                         break;
                     case "deleteallrequests":
-                        if(clanPlayer.deleteAllRequests()) {
+                        if (clanPlayer.deleteAllRequests()) {
                             player.sendMessage(this.clanPrefix + "§7Alle Anfragen wurden erfolgreich §cgelöscht!");
                         } else {
                             player.sendMessage(this.clanPrefix + "§7Du hast keine offenen Anfragen!");
                         }
                         break;
                 }
-            } else if(args.length == 2) {
+            } else if (args.length == 2) {
                 switch (args[0].toLowerCase()) {
                     case "invite":
                         String playerName = args[1];
-                        if( iClan.invitePlayer(playerName)) {
+                        if (iClan.invitePlayer(playerName)) {
                             player.sendMessage(this.clanPrefix + "§7Dem Spieler §e" + playerName + " §7wurde eine Anfrage gesendet");
                         } else {
                             player.sendMessage(this.clanPrefix + "§cDieser Spieler ist bereits in einem Clan");
@@ -114,7 +111,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                         break;
                     case "kick":
                         String playerNameToKick = args[1];
-                        if(iClan.removePlayerFromClanByName(playerNameToKick)) {
+                        if (iClan.removePlayerFromClanByName(playerNameToKick)) {
                             player.sendMessage(this.clanPrefix + "§7Du hast den Spieler §e" + playerNameToKick + " §7erfolgreich aus deinem Clan entfernt!");
                         } else {
                             player.sendMessage(this.clanPrefix + "§cDieser Spieler ist nicht in deinem Clan");
@@ -122,9 +119,9 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                         break;
                 }
 
-            } else if(args.length == 4) {
-                if(args[0].equalsIgnoreCase("create")) {
-                    if(clanPlayer.hasClan()) {
+            } else if (args.length == 4) {
+                if (args[0].equalsIgnoreCase("create")) {
+                    if (clanPlayer.hasClan()) {
                         player.sendMessage(this.clanPrefix + "§cDu bist bereits in einem Clan!");
                         return false;
                     }
@@ -135,7 +132,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                     String clanMaterialNotParsed = args[3];
                     Material clanMaterialParsed;
 
-                    if(clanTag.length() > 5) {
+                    if (clanTag.length() > 5) {
                         player.sendMessage(this.clanPrefix + "§cDer Clantag ist zu lang. Er darf maximal aus 5 Zeichen bestehen!");
                         return false;
                     }
@@ -148,7 +145,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                     }
 
                     IClan clan = new Clan(UUID.randomUUID(), false);
-                    if(clan.createClan(clanName, clanTag, clanMaterialParsed, clanPlayer)) {
+                    if (clan.createClan(clanName, clanTag, clanMaterialParsed, clanPlayer)) {
                         clanPlayer.sendMessage("§7Dein Clan wurde erstellt!", true, player.getUniqueId());
                     } else {
                         player.sendMessage(this.clanPrefix + "§cEin Fehler ist aufgetreten!");
@@ -165,7 +162,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String string, @NotNull String[] args) {
-        if(args.length > 0) {
+        if (args.length > 0) {
             switch (args.length) {
                 case 2:
                     if (args[0].equalsIgnoreCase("search") || args[0].equalsIgnoreCase("invite")) {
@@ -174,7 +171,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                         return null;
                     }
                 case 4:
-                    if(args[0].equalsIgnoreCase("create")) {
+                    if (args[0].equalsIgnoreCase("create")) {
                         return Arrays.stream(Material.values()).map(Enum::name).collect(Collectors.toList());
                     } else {
                         return null;

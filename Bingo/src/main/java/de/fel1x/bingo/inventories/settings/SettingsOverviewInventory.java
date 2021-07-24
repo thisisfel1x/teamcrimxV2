@@ -32,7 +32,7 @@ public class SettingsOverviewInventory implements InventoryProvider {
         int state = contents.property("state", 0);
         contents.setProperty("state", state + 1);
 
-        if(state % 2 != 0) {
+        if (state % 2 != 0) {
             return;
         }
 
@@ -43,20 +43,20 @@ public class SettingsOverviewInventory implements InventoryProvider {
             contents.set(row, slot, ClickableItem.of(new ItemBuilder(setting.getDisplayMaterial())
                     .setName("§e" + setting.getName()
                             + " §8● " + (setting.isEnabled() ? "§aaktiviert" : "§cdeaktiviert"))
-                    .setLore("" , "§eLinksklick§7, um §e" + setting.getName() + " §7zu §aaktivieren§7/§cdeaktivieren",
+                    .setLore("", "§eLinksklick§7, um §e" + setting.getName() + " §7zu §aaktivieren§7/§cdeaktivieren",
                             setting.hasConfiguration() ? "§eRechtsklick§7, um einzelne Events anzupassen\n " : "")
                     .addGlow(setting.isEnabled())
                     .toItemStack(), event -> {
                 ClickType clickType = event.getClick();
-                if(clickType.isLeftClick()) {
+                if (clickType.isLeftClick()) {
                     setting.setEnabled(!setting.isEnabled());
-                } else if(clickType.isRightClick() && setting.hasConfiguration() && setting.getInventoryClazz() != null) {
+                } else if (clickType.isRightClick() && setting.hasConfiguration() && setting.getInventoryClazz() != null) {
                     ((SmartInventory) setting.getInventoryClazz()).open(player);
                 }
             }));
 
             slot++;
-            if(slot == 8) {
+            if (slot == 8) {
                 slot = 1;
                 row++;
             }

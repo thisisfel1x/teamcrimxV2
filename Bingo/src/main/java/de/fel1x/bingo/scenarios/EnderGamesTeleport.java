@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class EnderGamesTeleport implements IBingoScenario {
 
@@ -57,7 +56,7 @@ public class EnderGamesTeleport implements IBingoScenario {
 
     @Override
     public String[] getDescription() {
-        return new String[] {
+        return new String[]{
                 "", "§7Jeder Spieler wird zufällig mit einem anderen §evertauscht", ""
         };
     }

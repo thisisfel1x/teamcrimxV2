@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClanUpdateEvent extends Event {
 
-    private final IClanPlayer iClanPlayer;
     private static final HandlerList handlers = new HandlerList();
+    private final IClanPlayer iClanPlayer;
 
     public ClanUpdateEvent(IClanPlayer iClanPlayer) {
         this.iClanPlayer = iClanPlayer;
@@ -19,6 +19,10 @@ public class ClanUpdateEvent extends Event {
         this.iClanPlayer = iClanPlayer;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public IClanPlayer getiClanPlayer() {
         return this.iClanPlayer;
     }
@@ -26,10 +30,6 @@ public class ClanUpdateEvent extends Event {
     @NotNull
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

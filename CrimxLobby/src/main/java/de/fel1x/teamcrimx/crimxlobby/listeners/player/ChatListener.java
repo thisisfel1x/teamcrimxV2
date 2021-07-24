@@ -28,5 +28,7 @@ public class ChatListener implements Listener {
         IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(iPermissionUser);
         event.setFormat(ChatColor.translateAlternateColorCodes('&', permissionGroup.getDisplay()) + player.getName() + " §8» §f" + event.getMessage());
 
+        // TODO: clan tag in chat
+
     }
 }

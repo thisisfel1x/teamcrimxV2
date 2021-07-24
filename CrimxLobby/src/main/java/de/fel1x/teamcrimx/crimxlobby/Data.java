@@ -2,8 +2,6 @@ package de.fel1x.teamcrimx.crimxlobby;
 
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import de.fel1x.teamcrimx.crimxlobby.database.LobbyDatabasePlayer;
-import de.fel1x.teamcrimx.crimxlobby.minigames.jumpandrun.JumpAndRunPlayer;
-import org.bson.Document;
 import org.bukkit.entity.Mob;
 
 import java.util.*;
@@ -13,11 +11,8 @@ public class Data {
     private final List<UUID> builders;
 
     private final Map<UUID, Integer> playerHiderState;
-    private final Map<UUID, Document> playerMongoDocument;
-    private final Map<UUID, Document> playerMongoNetworkDocument;
     private final Map<UUID, LobbyDatabasePlayer> lobbyDatabasePlayer;
 
-    private final Map<UUID, JumpAndRunPlayer> jumpAndRunPlayers;
     private final List<UUID> jumpers;
 
     private final Map<UUID, ICosmetic> cosmetic;
@@ -30,11 +25,8 @@ public class Data {
 
         this.playerHiderState = new HashMap<>();
 
-        this.playerMongoDocument = new HashMap<>();
-        this.playerMongoNetworkDocument = new HashMap<>();
         this.lobbyDatabasePlayer = new HashMap<>();
 
-        this.jumpAndRunPlayers = new HashMap<>();
         this.jumpers = new ArrayList<>();
 
         this.cosmetic = new HashMap<>();
@@ -51,20 +43,8 @@ public class Data {
         return this.playerHiderState;
     }
 
-    public Map<UUID, Document> getPlayerMongoDocument() {
-        return this.playerMongoDocument;
-    }
-
-    public Map<UUID, Document> getPlayerMongoNetworkDocument() {
-        return this.playerMongoNetworkDocument;
-    }
-
     public Map<UUID, LobbyDatabasePlayer> getLobbyDatabasePlayer() {
         return this.lobbyDatabasePlayer;
-    }
-
-    public Map<UUID, JumpAndRunPlayer> getJumpAndRunPlayers() {
-        return this.jumpAndRunPlayers;
     }
 
     public List<UUID> getJumpers() {

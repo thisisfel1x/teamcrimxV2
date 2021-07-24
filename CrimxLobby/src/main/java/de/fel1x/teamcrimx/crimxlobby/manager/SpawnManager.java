@@ -16,7 +16,6 @@ public class SpawnManager {
     private final FileConfiguration config = YamlConfiguration.loadConfiguration(this.configfile);
 
     public void saveLocation(Location location, String root, Player player) {
-
         location = location.toCenterLocation();
 
         this.config.set(root + ".World", location.getWorld().getName());
@@ -26,7 +25,6 @@ public class SpawnManager {
         this.config.set(root + ".Yaw", location.getYaw());
         this.config.set(root + ".Pitch", location.getPitch());
 
-
         this.config.options().copyDefaults(true);
 
         try {
@@ -34,18 +32,12 @@ public class SpawnManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         player.sendMessage("§7Du hast erfolgreich die Position §b§a" + root + " §7gesetzt!");
-
-
     }
 
     public Location loadLocation(String root) {
-
         if (this.configfile.exists()) {
-
             if (this.config.get(root + ".World") != null) {
-
                 World world = Bukkit.getWorld(this.config.getString(root + ".World"));
                 double x = this.config.getDouble(root + ".X");
                 double y = this.config.getDouble(root + ".Y");
@@ -54,18 +46,12 @@ public class SpawnManager {
                 float pitch = (float) this.config.getDouble(root + ".Pitch");
 
                 return new Location(world, x, y, z, yaw, pitch);
-
             } else {
-
                 return null;
-
             }
-
-
         } else {
             return null;
         }
-
     }
 
 }

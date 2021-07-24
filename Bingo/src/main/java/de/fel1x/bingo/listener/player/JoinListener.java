@@ -61,7 +61,7 @@ public class JoinListener implements Listener {
                 event.setJoinMessage(this.bingo.getPrefix() + "§a" + player.getDisplayName() + " §7hat das Spiel betreten");
 
                 player.getInventory().addItem(new ItemBuilder(Material.CHEST_MINECART)
-                        .setName("§8● §aWähle dein Team").toItemStack(),
+                                .setName("§8● §aWähle dein Team").toItemStack(),
                         new ItemBuilder(Material.PAPER).setName("§8● §eSchwierigkeitsvoting").toItemStack(),
                         (player.hasPermission("bingo.settings") ? new ItemBuilder(Material.REPEATER)
                                 .setName("§8● §cEinstellungen").toItemStack() : new ItemStack(Material.AIR)));

@@ -42,7 +42,7 @@ public class NPCInventory implements InventoryProvider {
 
         contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1).setName(" ").toItemStack()));
 
-        contents.set(0, 4, ClickableItem.empty(new ItemBuilder(crimxPlayer.getPlayerSkin()[0])
+        contents.set(0, 4, ClickableItem.empty(new ItemBuilder(crimxPlayer.getPlayerSkinFromDatabase()[0])
                 .setName("§8● §a" + player.getDisplayName()).addGlow().toItemStack()));
 
         Date date = new Date(lobbyPlayer.get().getCloudPlayer().getFirstLoginTimeMillis());
@@ -87,13 +87,15 @@ public class NPCInventory implements InventoryProvider {
                 if (canGet) {
                     player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast §a100 Coins §7durch die tägliche Belohnung erhalten!");
                     this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setLastReward(System.currentTimeMillis());
-                    lobbyPlayer.get().saveObjectInDocument("lastReward", System.currentTimeMillis(), MongoDBCollection.LOBBY);
+                    CrimxLobby.getInstance().getCrimxAPI().getMongoDB()
+                            .insertObjectInDocument(player.getUniqueId(), MongoDBCollection.LOBBY,
+                                    "lastReward", System.currentTimeMillis());
                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 2, 0.75f);
                     CoinsAPI coinsAPI = new CoinsAPI(player.getUniqueId());
                     coinsAPI.addCoins(100);
-                    lobbyPlayer.set(new LobbyPlayer(player, true));
-                    int coins = (int) lobbyPlayer.get().getObjectFromMongoDocument("coins", MongoDBCollection.USERS);
-                    this.crimxLobby.getLobbyScoreboard().updateBoard(player, String.format("§8● §e%s Coins", coins), "coins", "§e");
+                    lobbyPlayer.set(new LobbyPlayer(player));
+                    int coins = new CoinsAPI(player.getUniqueId()).getCoins();
+                    this.crimxLobby.getLobbyScoreboard().updateBoard(player, String.format("§8● §e%s Coins", coins), "coins");
                 } else {
                     player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast bereits deine tägliche Belohnung abgeholt!");
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);

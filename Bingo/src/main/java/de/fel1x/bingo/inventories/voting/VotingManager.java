@@ -124,18 +124,18 @@ public class VotingManager {
         ArrayList<BingoDifficulty> sorted = Arrays.stream(BingoDifficulty.values())
                 .filter(bingoDifficulty -> bingoDifficulty != BingoDifficulty.NOT_FORCED).sorted((o1, o2) -> {
 
-            int i1 = o1.getFinalVotingCounts();
-            int i2 = o2.getFinalVotingCounts();
+                    int i1 = o1.getFinalVotingCounts();
+                    int i2 = o2.getFinalVotingCounts();
 
-            if (i1 > i2) {
-                return 1;
-            } else if (i1 < i2) {
-                return -1;
-            }
+                    if (i1 > i2) {
+                        return 1;
+                    } else if (i1 < i2) {
+                        return -1;
+                    }
 
-            return 0;
+                    return 0;
 
-        }).collect(Collectors.toCollection(ArrayList::new));
+                }).collect(Collectors.toCollection(ArrayList::new));
 
         Collections.reverse(sorted);
 

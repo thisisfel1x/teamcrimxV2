@@ -47,8 +47,8 @@ public class WorldGenerator {
 
         Chunk worldSpawnLocationChunk = spawnLocation.getChunk();
 
-        for(int i = worldSpawnLocationChunk.getX() - 15; i < worldSpawnLocationChunk.getX() + 15; i++) {
-            for(int j = worldSpawnLocationChunk.getZ() - 15; j < worldSpawnLocationChunk.getZ() + 15; j++) {
+        for (int i = worldSpawnLocationChunk.getX() - 15; i < worldSpawnLocationChunk.getX() + 15; i++) {
+            for (int j = worldSpawnLocationChunk.getZ() - 15; j < worldSpawnLocationChunk.getZ() + 15; j++) {
                 Chunk current = world.getChunkAt(i, j);
                 current.load(true);
                 Bukkit.getConsoleSender().sendMessage(Bingo.getInstance().getPrefix() + "Loading Chunk " + current.getX() + " " + current.getZ());

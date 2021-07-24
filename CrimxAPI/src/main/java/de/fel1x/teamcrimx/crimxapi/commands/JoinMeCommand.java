@@ -11,6 +11,7 @@ import de.dytanic.cloudnet.ext.bridge.player.NetworkServiceInfo;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.objects.CrimxPlayer;
+import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.command.Command;
@@ -21,6 +22,10 @@ import org.bukkit.entity.Player;
 public class JoinMeCommand implements CommandExecutor {
 
     private final CrimxAPI crimxAPI = CrimxAPI.getInstance();
+
+    public JoinMeCommand(CrimxSpigotAPI crimxSpigotAPI) {
+        crimxSpigotAPI.getCommand("joinme").setExecutor(this);
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String string, String[] args) {
@@ -59,7 +64,7 @@ public class JoinMeCommand implements CommandExecutor {
             String map = serviceInfoSnapshot.getProperty(BridgeServiceProperty.MOTD).orElse("???")
                     .replace("A CloudNet V3 service", "???");
 
-            String[] toSend = crimxPlayer.getPlayerSkinForChat(player.getName(), 8);
+            String[] toSend = crimxPlayer.getPlayerSkinForChat(player.getUniqueId(), 8);
             toSend[0] = "\n" + toSend[0] + " §7§m----------------------------------";
             toSend[7] = toSend[7] + " §7§m----------------------------------";
 

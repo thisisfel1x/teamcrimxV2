@@ -3,7 +3,6 @@ package de.fel1x.bingo.commands;
 import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.inventories.SkipItemInventory;
-import de.fel1x.bingo.objects.BingoPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,7 +37,7 @@ public class SkipItemCommand implements CommandExecutor {
             return false;
         }
 
-        if(this.bingo.getItemGenerator() == null) {
+        if (this.bingo.getItemGenerator() == null) {
             player.sendMessage(this.bingo.getPrefix() + "§cDie Items wurden noch nicht generiert, bitte stimme zuerst über die Schwierigkeit ab!");
             return false;
         }

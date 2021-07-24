@@ -1,11 +1,7 @@
 package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 
-import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,22 +22,7 @@ public class WaterBucketEmptyListener implements Listener {
         Player player = event.getPlayer();
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
-        if (lobbyPlayer.isInWaterMLG()) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(CrimxLobby.getInstance(), () -> {
-                if (!lobbyPlayer.isMlgFailed()) {
-
-                    Actionbar.sendOnlyTitle(player, "§a§l✔", 2, 5, 3);
-                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 2, 4);
-                    lobbyPlayer.endWaterMLG();
-
-                    event.getBlockClicked().getLocation().clone().add(0, 1, 0).getBlock().setType(Material.WATER);
-                }
-
-            }, 5L);
-
-            Bukkit.getScheduler().scheduleSyncDelayedTask(CrimxLobby.getInstance(), () -> event.getBlockClicked().getLocation().clone().add(0, 1, 0).getBlock().setType(Material.AIR), 15L);
-
-        }
+        // TODO: either rework this whole shit or do something different
 
     }
 

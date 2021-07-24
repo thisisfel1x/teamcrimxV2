@@ -1,4 +1,0 @@
-name: CrimxAPI
-version: ${project.version}
-main: de.fel1x.teamcrimx.crimxapi.support.CrimxBungeeAPI
-description: An API to connect our minigames with other stuff

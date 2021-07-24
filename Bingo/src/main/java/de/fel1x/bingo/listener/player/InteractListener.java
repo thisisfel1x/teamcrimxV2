@@ -40,14 +40,14 @@ public class InteractListener implements Listener {
             case LOBBY:
                 event.setCancelled(true);
 
-                if((event.getAction() == Action.RIGHT_CLICK_AIR
+                if ((event.getAction() == Action.RIGHT_CLICK_AIR
                         || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
                     if (event.getMaterial() == Material.CHEST_MINECART) {
                         TeamSelectorInventory.TEAM_SELECTOR.open(player);
                     } else if (event.getMaterial() == Material.PAPER) {
-                        if(this.bingo.getBingoTask() instanceof LobbyTask) {
+                        if (this.bingo.getBingoTask() instanceof LobbyTask) {
                             LobbyTask lobbyTask = (LobbyTask) this.bingo.getBingoTask();
-                            if(lobbyTask.getCountdown() <= 15) {
+                            if (lobbyTask.getCountdown() <= 15) {
                                 player.sendMessage(this.bingo.getPrefix() + "§cDu kannst nicht mehr abstimmen!");
                                 return;
                             }
@@ -84,10 +84,10 @@ public class InteractListener implements Listener {
                 break;
         }
 
-        if(gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
-            if(event.hasItem()) {
-                if(event.getItem() == null) return;
-                if(event.getItem().equals(this.bingo.getBingoItemsQuickAccess())) {
+        if (gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
+            if (event.hasItem()) {
+                if (event.getItem() == null) return;
+                if (event.getItem().equals(this.bingo.getBingoItemsQuickAccess())) {
                     player.openInventory(this.bingo.getBingoInventory(new BingoPlayer(player)));
                     event.setCancelled(true);
                 }

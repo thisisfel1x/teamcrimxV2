@@ -10,15 +10,18 @@ public enum MongoDBCollection {
     FLOOR_IS_LAVA("floorislava"),
     SUGGESTIONS("suggestions"),
     BUGS("bugs"),
-    CLAN("clan");
+    CLAN("clan"),
+    FRIENDS("friends"),
+    COSMETIC("cosmetics"),
+    STATISTICS("statistics");
 
-    String name;
+    private final String collectionName;
 
     MongoDBCollection(String name) {
-        this.name = name;
+        this.collectionName = name;
     }
 
-    public String getName() {
-        return this.name;
+    public String getCollectionName() {
+        return this.collectionName;
     }
 }

@@ -11,6 +11,7 @@ import fr.minuskube.inv.content.InventoryProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+@Deprecated
 public class BuyInventory implements InventoryProvider {
 
     public static final SmartInventory BUY_INVENTORY = SmartInventory.builder()
@@ -36,9 +37,7 @@ public class BuyInventory implements InventoryProvider {
                 .setName("§8● §aKaufen").toItemStack(), event1 -> {
 
             LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
-
             lobbyPlayer.unlockCosmetic(cosmetic);
-
             CosmeticInventory.COSMETICS_INVENTORY.open(player);
 
         }));

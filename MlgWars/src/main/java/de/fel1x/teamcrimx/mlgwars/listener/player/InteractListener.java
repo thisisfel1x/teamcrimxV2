@@ -521,6 +521,10 @@ public class InteractListener implements Listener {
                                 return;
                             }
 
+                            if (event.getItem() == null) {
+                                return;
+                            }
+
                             if (!event.getItem().getItemMeta().hasDisplayName()) {
                                 return;
                             }

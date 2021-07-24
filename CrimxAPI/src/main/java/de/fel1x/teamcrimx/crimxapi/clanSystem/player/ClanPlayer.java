@@ -15,7 +15,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -26,10 +29,8 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
 
     private final CrimxAPI crimxAPI = CrimxAPI.getInstance();
     private final CrimxSpigotAPI crimxSpigotAPI = CrimxSpigotAPI.getInstance();
-
-    private final CompletableFuture<ArrayList<String>> clanPlayers = CompletableFuture.supplyAsync(this::getClanPlayersNameFormatted);
-
     private final UUID uuid;
+    private final CompletableFuture<ArrayList<String>> clanPlayers = CompletableFuture.supplyAsync(this::getClanPlayersNameFormatted);
 
     public ClanPlayer(UUID uuid) {
         super(CrimxAPI.getInstance());
@@ -44,7 +45,7 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
 
     @Override
     public boolean setClan(UUID clanUniqueId) {
-        if(this.hasClan()) {
+        if (this.hasClan()) {
             return false;
         } else {
             this.insertAsyncInCollection("currentClan", clanUniqueId.toString(), this.getUUID().toString(), MongoDBCollection.USERS);
@@ -60,7 +61,7 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
 
     @Override
     public boolean isInClan(UUID clanUniqueId) {
-        if(!hasClan()) {
+        if (!hasClan()) {
             return false;
         }
         UUID joinedClanUUID = UUID.fromString((String) this.getObject("currentClan",
@@ -75,7 +76,7 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
 
     @Override
     public IClan getCurrentClan() {
-        if(!hasClan()) {
+        if (!hasClan()) {
             return null;
         }
         return new Clan(UUID.fromString((String) this.getObject("currentClan",
@@ -83,8 +84,13 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
     }
 
     @Override
+    public CompletableFuture<IClan> getCurrentClanAsync() {
+        return CompletableFuture.supplyAsync(this::getCurrentClan);
+    }
+
+    @Override
     public IClanPlayer getByUUID(UUID playerUniqueId) {
-        if(this.uuid.equals(playerUniqueId)) {
+        if (this.uuid.equals(playerUniqueId)) {
             return this;
         }
         return null;
@@ -136,7 +142,7 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
 
     @Override
     public void sendMembersList() {
-        if(!this.hasClan()) {
+        if (!this.hasClan()) {
             this.sendMessage("§cDu bist in keinem Clan", true, this.getUUID());
         } else {
             StringBuilder stringBuilder = new StringBuilder();
@@ -157,7 +163,7 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
         ArrayList<UUID> playerClanRequests = (ArrayList<UUID>) this.getObject("clanRequests",
                 this.getMongoDB().getUserCollection(), this.getUUID());
 
-        if(playerClanRequests.isEmpty()) {
+        if (playerClanRequests == null || playerClanRequests.isEmpty()) {
             return;
         }
 
@@ -176,7 +182,7 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
         ArrayList<UUID> playerClanRequests = (ArrayList<UUID>) this.getObject("clanRequests",
                 this.getMongoDB().getUserCollection(), this.getUUID());
 
-        if(playerClanRequests.isEmpty()) {
+        if (playerClanRequests.isEmpty()) {
             return false;
         }
 

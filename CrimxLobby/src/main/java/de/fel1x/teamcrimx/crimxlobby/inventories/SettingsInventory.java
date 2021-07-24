@@ -3,7 +3,6 @@ package de.fel1x.teamcrimx.crimxlobby.inventories;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
-import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
@@ -11,6 +10,7 @@ import fr.minuskube.inv.content.InventoryProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+@Deprecated
 public class SettingsInventory implements InventoryProvider {
 
     public static final SmartInventory SETTINGS_INVENTORY = SmartInventory.builder()
@@ -21,10 +21,10 @@ public class SettingsInventory implements InventoryProvider {
             .manager(CrimxLobby.getInstance().getInventoryManager())
             .build();
 
-    final CrimxLobby crimxLobby = CrimxLobby.getInstance();
+    private final CrimxLobby crimxLobby = CrimxLobby.getInstance();
 
-    boolean defaultSpawn;
-    boolean hotbarSound;
+    private boolean defaultSpawn;
+    private boolean hotbarSound;
 
     @Override
     public void init(Player player, InventoryContents contents) {
@@ -54,15 +54,14 @@ public class SettingsInventory implements InventoryProvider {
 
     @Override
     public void update(Player player, InventoryContents contents) {
-
-        LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
-
         contents.set(2, 3, ClickableItem.of(new ItemBuilder((this.defaultSpawn) ? Material.LIME_DYE : Material.RED_DYE)
                         .setName((this.defaultSpawn) ? "§aAktiviert" : "§cDeaktiviert")
                         .toItemStack(),
                 event -> {
                     this.defaultSpawn = !this.defaultSpawn;
-                    lobbyPlayer.saveObjectInDocument("defaultSpawn", this.defaultSpawn, MongoDBCollection.LOBBY);
+                    SettingsInventory.this.crimxLobby.getCrimxAPI().getMongoDB()
+                            .insertObjectInDocument(player.getUniqueId(), MongoDBCollection.LOBBY,
+                                    "defaultSpawn", this.defaultSpawn);
                     this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setSpawnAtLastLocation(this.defaultSpawn);
                 }));
 
@@ -71,7 +70,9 @@ public class SettingsInventory implements InventoryProvider {
                         .toItemStack(),
                 event -> {
                     this.hotbarSound = !this.hotbarSound;
-                    lobbyPlayer.saveObjectInDocument("hotbarSound", this.hotbarSound, MongoDBCollection.LOBBY);
+                    SettingsInventory.this.crimxLobby.getCrimxAPI().getMongoDB()
+                            .insertObjectInDocument(player.getUniqueId(), MongoDBCollection.LOBBY,
+                                    "hotbarSound", this.hotbarSound);
                     this.crimxLobby.getData().getLobbyDatabasePlayer().get(player.getUniqueId()).setHotbarSoundEnabled(this.hotbarSound);
                 }));
     }
