@@ -19,10 +19,6 @@ public class BlockBreakListener implements Listener {
         Player player = event.getPlayer();
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
-        if (!lobbyPlayer.isInBuild()) {
-            event.setCancelled(true);
-        }
-
+        event.setCancelled(!lobbyPlayer.isInBuild());
     }
-
 }

@@ -28,35 +28,31 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void on(PlayerJoinEvent event) {
+        event.joinMessage(null);
 
         Player player = event.getPlayer();
-
-        event.setJoinMessage(null);
-
-        player.setMetadata("iClanPlayer", new FixedMetadataValue(this.crimxLobby, new ClanPlayer(player.getUniqueId())));
-
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
-        CrimxPlayer crimxPlayer = new CrimxPlayer(lobbyPlayer.getCloudPlayer());
+        CrimxPlayer crimxPlayer = new CrimxPlayer(player.getUniqueId());
 
-        lobbyPlayer.cleanUpPlayer();
+        crimxPlayer.updateUserDataIfNecessary(player);
 
-        if (!crimxPlayer.checkIfPlayerExistsInCollection(player.getUniqueId(), MongoDBCollection.USERS)) {
-            crimxPlayer.createPlayerData();
-        } else {
-            crimxPlayer.updateUserData();
-        }
-
-        if (!crimxPlayer.checkIfPlayerExistsInCollection(player.getUniqueId(), MongoDBCollection.LOBBY)) {
+        if (!this.crimxLobby.getCrimxAPI().getMongoDB()
+                .checkIfDocumentExistsSync(player.getUniqueId(), MongoDBCollection.LOBBY)) {
             lobbyPlayer.createPlayerData();
         }
 
+        lobbyPlayer.cleanUpPlayer();
         lobbyPlayer.loadMongoDocument();
         lobbyPlayer.initPlayerHider();
         lobbyPlayer.setLobbyInventory();
         lobbyPlayer.teleportToSpawn();
 
         lobbyPlayer.setScoreboard();
-        BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player, player1 -> {
+
+        BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
+
+        // TODO: rework clan system
+        /*BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player, player1 -> {
             IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(player1.getUniqueId());
             IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(permissionUser);
 
@@ -73,13 +69,12 @@ public class JoinListener implements Listener {
             }
 
             return permissionGroup;
-        });
+        });*/
 
         boolean vipPerms = player.hasPermission("crimxlobby.vip");
         int playerState = this.crimxLobby.getData().getPlayerHiderState().get(player.getUniqueId());
 
         Bukkit.getOnlinePlayers().forEach(loop -> {
-
             int state = this.crimxLobby.getData().getPlayerHiderState().get(loop.getUniqueId());
 
             switch (state) {

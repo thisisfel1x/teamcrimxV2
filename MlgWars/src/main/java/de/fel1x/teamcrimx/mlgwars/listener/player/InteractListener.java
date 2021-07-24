@@ -29,6 +29,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class InteractListener implements Listener {
 
@@ -518,6 +519,10 @@ public class InteractListener implements Listener {
 
                         case ENDER_MAN:
                             if (interactedMaterial != Material.ENDER_PEARL) {
+                                return;
+                            }
+
+                            if(event.getItem() == null) {
                                 return;
                             }
 

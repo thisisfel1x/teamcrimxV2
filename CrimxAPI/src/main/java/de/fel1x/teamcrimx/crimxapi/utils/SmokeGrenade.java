@@ -8,6 +8,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 
+/**
+ * @deprecated because of performance reasons
+ */
 public class SmokeGrenade extends BukkitRunnable {
 
     private final World world; // World to display

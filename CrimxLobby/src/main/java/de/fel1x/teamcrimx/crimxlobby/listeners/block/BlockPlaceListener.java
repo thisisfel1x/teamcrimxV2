@@ -19,8 +19,6 @@ public class BlockPlaceListener implements Listener {
         Player player = event.getPlayer();
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
-        event.setCancelled(!lobbyPlayer.isInBuild() && !lobbyPlayer.isInWaterMLG());
-
+        event.setCancelled(!lobbyPlayer.isInBuild());
     }
-
 }

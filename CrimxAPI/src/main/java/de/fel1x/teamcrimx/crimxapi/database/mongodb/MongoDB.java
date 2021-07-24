@@ -5,7 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
-public class MongoDB {
+public class MongoDB extends MongoHandler {
 
     private final MongoClient mongoClient;
     private final MongoDatabase networkDatabase;
@@ -19,13 +19,23 @@ public class MongoDB {
     private final MongoCollection<Document> suggestionsCollection;
     private final MongoCollection<Document> bugCollection;
     private final MongoCollection<Document> clanCollection;
+    private final MongoCollection<Document> friendCollection;
 
+    /*
+    Constructor for initializing the database.
+    This plugin runs on all servers, so by adding it as a dependency to maven you can access this methods easily
+     */
     public MongoDB() {
-
         this.mongoClient = new MongoClient();
 
+        /*
+        Network database. Location where all stuff is stored
+         */
         this.networkDatabase = this.mongoClient.getDatabase("network");
 
+        /*
+        All collections for all kind of stuff like minigames
+         */
         this.userCollection = this.networkDatabase.getCollection("users");
         this.lobbyCollection = this.networkDatabase.getCollection("lobby");
         this.mlgWarsCollection = this.networkDatabase.getCollection("mlgwars");
@@ -35,6 +45,7 @@ public class MongoDB {
         this.suggestionsCollection = this.networkDatabase.getCollection("suggestions");
         this.bugCollection = this.networkDatabase.getCollection("bug");
         this.clanCollection = this.networkDatabase.getCollection("clan");
+        this.friendCollection = this.networkDatabase.getCollection("friends");
 
     }
 
@@ -80,5 +91,9 @@ public class MongoDB {
 
     public MongoCollection<Document> getClanCollection() {
         return this.clanCollection;
+    }
+
+    public MongoCollection<Document> getFriendCollection() {
+        return this.friendCollection;
     }
 }

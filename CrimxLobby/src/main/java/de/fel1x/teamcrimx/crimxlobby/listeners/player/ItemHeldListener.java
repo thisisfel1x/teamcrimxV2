@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 
+@Deprecated()
 public class ItemHeldListener implements Listener {
 
     private final CrimxLobby crimxLobby;

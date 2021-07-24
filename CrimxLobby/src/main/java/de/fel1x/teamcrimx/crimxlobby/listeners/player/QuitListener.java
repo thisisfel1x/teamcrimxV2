@@ -20,9 +20,9 @@ public class QuitListener implements Listener {
     public void on(PlayerQuitEvent event) {
 
         Player player = event.getPlayer();
-        LobbyPlayer lobbyPlayer = new LobbyPlayer(player, true);
+        LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
-        event.setQuitMessage(null);
+        event.quitMessage(null);
 
         lobbyPlayer.saveNewLocation();
 
@@ -33,10 +33,6 @@ public class QuitListener implements Listener {
 
         if (lobbyPlayer.isInBuild()) {
             lobbyPlayer.removeFromBuild();
-        }
-
-        if (lobbyPlayer.isInJumpAndRun()) {
-            lobbyPlayer.endJumpAndRun();
         }
 
     }

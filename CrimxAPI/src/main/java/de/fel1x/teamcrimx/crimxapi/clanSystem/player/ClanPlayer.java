@@ -83,6 +83,11 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
     }
 
     @Override
+    public CompletableFuture<IClan> getCurrentClanAsync() {
+        return CompletableFuture.supplyAsync(this::getCurrentClan);
+    }
+
+    @Override
     public IClanPlayer getByUUID(UUID playerUniqueId) {
         if (this.uuid.equals(playerUniqueId)) {
             return this;
@@ -157,7 +162,7 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
         ArrayList<UUID> playerClanRequests = (ArrayList<UUID>) this.getObject("clanRequests",
                 this.getMongoDB().getUserCollection(), this.getUUID());
 
-        if (playerClanRequests.isEmpty()) {
+        if (playerClanRequests == null || playerClanRequests.isEmpty()) {
             return;
         }
 

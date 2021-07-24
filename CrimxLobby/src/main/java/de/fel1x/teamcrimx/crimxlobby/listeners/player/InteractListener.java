@@ -2,9 +2,11 @@ package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
-import de.fel1x.teamcrimx.crimxlobby.inventories.CosmeticInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.NavigatorInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.SettingsInventory;
+import de.fel1x.teamcrimx.crimxlobby.inventories.rework.CosmeticReworkInventory;
+import de.fel1x.teamcrimx.crimxlobby.inventories.rework.LobbySwitcherInventory;
+import de.fel1x.teamcrimx.crimxlobby.inventories.rework.ProfileInventory;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -31,6 +33,7 @@ public class InteractListener implements Listener {
         Player player = event.getPlayer();
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
 
+
         Action action = event.getAction();
         ItemStack item = event.getItem();
 
@@ -53,11 +56,6 @@ public class InteractListener implements Listener {
         }
 
         if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-
-            if (lobbyPlayer.isInWaterMLG() && event.getMaterial().equals(Material.WATER_BUCKET)) {
-                return;
-            }
-
             ICosmetic iCosmetic = lobbyPlayer.getSelectedCosmetic();
 
             event.setCancelled(true);
@@ -69,16 +67,6 @@ public class InteractListener implements Listener {
                         break;
 
                     case RED_DYE:
-                        if (lobbyPlayer.isInJumpAndRun()) {
-                            lobbyPlayer.endJumpAndRun();
-                        } else if (lobbyPlayer.isInWaterMLG()) {
-                            lobbyPlayer.endWaterMLG();
-                        } else {
-                            lobbyPlayer.updatePlayerHiderState();
-                        }
-                        break;
-
-
                     case LIME_DYE:
                     case PURPLE_DYE:
                         lobbyPlayer.updatePlayerHiderState();
@@ -86,14 +74,25 @@ public class InteractListener implements Listener {
 
 
                     case CHEST_MINECART:
-                        CosmeticInventory.COSMETICS_INVENTORY.open(player);
+                        //CosmeticInventory.COSMETICS_INVENTORY.open(player);
+                        CosmeticReworkInventory.COSMETICS_REWORK_INVENTORY.open(player);
+                        break;
+
+                    case PLAYER_HEAD:
+                        ProfileInventory.PROFILE_REWORK_INVENTORY.open(player);
                         break;
 
                     case REPEATER:
+                        // TODO: deprecated remove, replacement is Profile
                         SettingsInventory.SETTINGS_INVENTORY.open(player);
                         break;
 
+                    case MOJANG_BANNER_PATTERN:
+                        LobbySwitcherInventory.LOBBY_SWITCHER_INVENTORY.open(player);
+                        break;
+
                     case NETHER_STAR:
+                        // TODO: minigames
                         //MinigameInventory.MINIGAME_INVENTORY.open(player);
                         player.sendMessage(this.crimxLobby.getPrefix() + "§7Dieses Feature wird noch auf die 1.16 geupdatet!");
                         break;

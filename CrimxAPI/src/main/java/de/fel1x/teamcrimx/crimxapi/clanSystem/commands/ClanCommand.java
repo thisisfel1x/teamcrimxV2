@@ -26,15 +26,13 @@ import java.util.stream.Collectors;
 public class ClanCommand implements CommandExecutor, TabCompleter {
 
     private final CrimxAPI crimxAPI = CrimxAPI.getInstance();
-    private final CrimxSpigotAPI crimxSpigotAPI;
 
     private final String clanPrefix = this.crimxAPI.getClanPrefix();
 
     public ClanCommand(CrimxSpigotAPI crimxSpigotAPI) {
-        this.crimxSpigotAPI = crimxSpigotAPI;
 
-        this.crimxSpigotAPI.getCommand("clan").setExecutor(this::onCommand);
-        this.crimxSpigotAPI.getCommand("clan").setTabCompleter(this::onTabComplete);
+        crimxSpigotAPI.getCommand("clan").setExecutor(this::onCommand);
+        crimxSpigotAPI.getCommand("clan").setTabCompleter(this::onTabComplete);
     }
 
     @Override
