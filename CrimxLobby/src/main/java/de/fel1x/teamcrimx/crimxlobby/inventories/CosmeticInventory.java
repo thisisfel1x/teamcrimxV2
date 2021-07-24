@@ -91,7 +91,7 @@ public class CosmeticInventory implements InventoryProvider {
                     .getMongoDB().getObjectFromDocumentSync(player.getUniqueId(), MongoDBCollection.LOBBY, cosmetic.name());
 
             boolean bought = false;
-            if(object != null) bought = (boolean) object;
+            if (object != null) bought = (boolean) object;
 
             try {
                 ICosmetic iCosmetic = cosmetic.getCosmeticClass().newInstance();

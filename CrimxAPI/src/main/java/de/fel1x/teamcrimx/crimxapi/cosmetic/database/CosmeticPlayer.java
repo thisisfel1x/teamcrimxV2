@@ -47,7 +47,7 @@ public class CosmeticPlayer implements ICosmeticPlayer {
 
     @Override
     public void updateCosmeticList() {
-        if(!this.crimxAPI.getMongoDB().checkIfDocumentExistsSync(this.uuid, MongoDBCollection.COSMETIC)) {
+        if (!this.crimxAPI.getMongoDB().checkIfDocumentExistsSync(this.uuid, MongoDBCollection.COSMETIC)) {
             this.createPlayerData();
             return;
         }
@@ -55,7 +55,7 @@ public class CosmeticPlayer implements ICosmeticPlayer {
         Document registryDocument = (Document) this.crimxAPI.getMongoDB()
                 .getObjectFromDocumentSync(this.uuid, MongoDBCollection.COSMETIC, "registry");
 
-        if(registryDocument == null) {
+        if (registryDocument == null) {
             this.createPlayerData();
             return;
         }
@@ -65,7 +65,7 @@ public class CosmeticPlayer implements ICosmeticPlayer {
         for (CosmeticRegistry cosmeticRegistry : CosmeticRegistry.values()) {
             Document registryCategory = (Document) registryDocument.get(cosmeticRegistry.getCosmeticCategory().name());
 
-            if(!registryCategory.containsKey(cosmeticRegistry.name())) {
+            if (!registryCategory.containsKey(cosmeticRegistry.name())) {
                 updateDocument = true;
 
                 ((Document) registryDocument.get(cosmeticRegistry.getCosmeticCategory().name()))
@@ -73,7 +73,7 @@ public class CosmeticPlayer implements ICosmeticPlayer {
             }
         }
 
-        if(updateDocument) {
+        if (updateDocument) {
             this.crimxAPI.getMongoDB().insertObjectInDocument(this.uuid, MongoDBCollection.COSMETIC, "registry", registryDocument);
         }
     }
@@ -83,7 +83,7 @@ public class CosmeticPlayer implements ICosmeticPlayer {
         Document cosmeticDocument = this.crimxAPI.getMongoDB()
                 .getDocumentSync(this.uuid, MongoDBCollection.COSMETIC);
 
-        if(cosmeticDocument == null) {
+        if (cosmeticDocument == null) {
             this.createPlayerData();
             return false;
         }
@@ -133,7 +133,7 @@ public class CosmeticPlayer implements ICosmeticPlayer {
     public CosmeticRegistry getSelectedCosmeticByCategorySync(CosmeticCategory cosmeticCategory) {
         return CosmeticRegistry.valueOf(String.valueOf(this.crimxAPI.getMongoDB()
                 .getObjectFromDocumentSync(this.uuid, MongoDBCollection.COSMETIC,
-                "selected" + WordUtils.capitalizeFully(cosmeticCategory.name()))));
+                        "selected" + WordUtils.capitalizeFully(cosmeticCategory.name()))));
     }
 
     @Override

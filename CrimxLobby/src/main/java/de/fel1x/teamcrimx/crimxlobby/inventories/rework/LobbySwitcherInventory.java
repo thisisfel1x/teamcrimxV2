@@ -25,9 +25,6 @@ import java.util.stream.Collectors;
 
 public class LobbySwitcherInventory implements InventoryProvider {
 
-    private final String informationSkullBase64 = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDYxNzhhZDUxZmQ1MmIxOWQwYTM4ODg3MTBiZDkyMDY4ZTkzMzI1MmFhYzZiMTNjNzZlN2U2ZWE1ZDMyMjYifX19";
-    private int count;
-
     public static final SmartInventory LOBBY_SWITCHER_INVENTORY = SmartInventory.builder()
             .id("LOBBY_SWITCHER_INVENTORY")
             .provider(new LobbySwitcherInventory())
@@ -35,6 +32,8 @@ public class LobbySwitcherInventory implements InventoryProvider {
             .title("§8● §eProfil")
             .manager(CrimxLobby.getInstance().getInventoryManager())
             .build();
+    private final String informationSkullBase64 = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDYxNzhhZDUxZmQ1MmIxOWQwYTM4ODg3MTBiZDkyMDY4ZTkzMzI1MmFhYzZiMTNjNzZlN2U2ZWE1ZDMyMjYifX19";
+    private int count;
 
     @Override
     public void init(Player player, InventoryContents contents) {
@@ -49,13 +48,13 @@ public class LobbySwitcherInventory implements InventoryProvider {
         // TODO: global variables
         contents.set(5, 7, ClickableItem.of(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ2OWUwNmU1ZGFkZmQ4NGU1ZjNkMWMyMTA2M2YyNTUzYjJmYTk0NWVlMWQ0ZDcxNTJmZGM1NDI1YmMxMmE5In19fQ==")
                 .setName(Component.text("§8● §7Vorherige Seite")).toItemStack(), event -> {
-            if(!pagination.isFirst()) {
+            if (!pagination.isFirst()) {
                 LOBBY_SWITCHER_INVENTORY.open(player, pagination.previous().getPage());
             }
         }));
         contents.set(5, 8, ClickableItem.of(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTliZjMyOTJlMTI2YTEwNWI1NGViYTcxM2FhMWIxNTJkNTQxYTFkODkzODgyOWM1NjM2NGQxNzhlZDIyYmYifX19")
                 .setName(Component.text("§8● §7Nächste Seite")).toItemStack(), event -> {
-            if(!pagination.isLast()) {
+            if (!pagination.isLast()) {
                 LOBBY_SWITCHER_INVENTORY.open(player, pagination.next().getPage());
             }
         }));
@@ -67,7 +66,7 @@ public class LobbySwitcherInventory implements InventoryProvider {
         int state = contents.property("state", 0);
         contents.setProperty("state", state + 1);
 
-        if(state % 20 != 0) {
+        if (state % 20 != 0) {
             return;
         }
 
@@ -124,7 +123,7 @@ public class LobbySwitcherInventory implements InventoryProvider {
                                     .append(Component.text(String.valueOf(
                                             serviceInfoSnapshot.getProperty(BridgeServiceProperty.ONLINE_COUNT).orElse(0)),
                                             NamedTextColor.GREEN)
-                                    .append(Component.text("/", NamedTextColor.DARK_GRAY)))
+                                            .append(Component.text("/", NamedTextColor.DARK_GRAY)))
                                     .append(Component.text(String.valueOf(
                                             serviceInfoSnapshot.getProperty(BridgeServiceProperty.MAX_PLAYERS).orElse(0)),
                                             NamedTextColor.RED))

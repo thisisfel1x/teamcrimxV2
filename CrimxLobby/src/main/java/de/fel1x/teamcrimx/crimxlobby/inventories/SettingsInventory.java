@@ -3,7 +3,6 @@ package de.fel1x.teamcrimx.crimxlobby.inventories;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
-import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;

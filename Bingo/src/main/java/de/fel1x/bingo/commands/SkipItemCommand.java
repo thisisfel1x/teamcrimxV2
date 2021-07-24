@@ -3,7 +3,6 @@ package de.fel1x.bingo.commands;
 import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
 import de.fel1x.bingo.inventories.SkipItemInventory;
-import de.fel1x.bingo.objects.BingoPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

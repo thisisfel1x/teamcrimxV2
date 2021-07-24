@@ -1,14 +1,9 @@
 package de.fel1x.teamcrimx.crimxapi.support.listener;
 
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
-import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
-import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.CosmeticCategory;
-import de.fel1x.teamcrimx.crimxapi.cosmetic.CosmeticRegistry;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.database.CosmeticPlayer;
-import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +13,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Objects;
 
 public class JoinListener implements Listener {
 
@@ -56,7 +50,7 @@ public class JoinListener implements Listener {
     // TODO: very dirty
     @EventHandler
     public void on2(PlayerQuitEvent event) {
-        if(CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().containsKey(event.getPlayer().getUniqueId())) {
+        if (CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().containsKey(event.getPlayer().getUniqueId())) {
             CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().remove(event.getPlayer().getUniqueId()).stopCosmetic(event.getPlayer());
         }
     }

@@ -52,7 +52,7 @@ public class CrimxPlayer {
         String skinSignature = "";
         String skinTexture = "";
 
-        if(skin != null) {
+        if (skin != null) {
             skinSignature = skin[0];
             skinTexture = skin[1];
         } else {
@@ -71,7 +71,7 @@ public class CrimxPlayer {
                 .append("skinSignature", skinSignature)
                 .append("skinTexture", skinTexture);
 
-        if(this.mongoDB.insertDocumentInCollectionSync(playerDocument, MongoDBCollection.USERS)) {
+        if (this.mongoDB.insertDocumentInCollectionSync(playerDocument, MongoDBCollection.USERS)) {
             player.sendMessage(this.crimxAPI.getPrefix() + "§7Nutzerdaten wurden erfolgreich angelegt!");
         } else {
             player.kick(Component.text(this.crimxAPI.getPrefix() + "§cEin Fehler ist aufgetreten"));
@@ -84,7 +84,7 @@ public class CrimxPlayer {
     Also checks if the player is already saved the user collection (-> first join)
      */
     public void updateUserDataIfNecessary(Player player) {
-        if(!this.mongoDB.checkIfDocumentExistsSync(player.getUniqueId(), MongoDBCollection.USERS)) {
+        if (!this.mongoDB.checkIfDocumentExistsSync(player.getUniqueId(), MongoDBCollection.USERS)) {
             this.createPlayerData(player);
             return;
         }
@@ -94,28 +94,28 @@ public class CrimxPlayer {
 
         Document found = this.mongoDB.getDocumentSync(this.cloudPlayer.getUniqueId(), MongoDBCollection.USERS);
 
-        if(found == null) {
+        if (found == null) {
             this.createPlayerData(player);
             return;
         }
 
         Document updateDocument = new Document();
 
-        if(!found.getString("name").equalsIgnoreCase(player.getName())) {
+        if (!found.getString("name").equalsIgnoreCase(player.getName())) {
             updateDocument.append("name", player.getName());
         }
 
         String[] skin = this.getPlayerSkinFromDatabase(player);
 
-        if(!found.getString("skinSignature").equalsIgnoreCase(skin[0])) {
+        if (!found.getString("skinSignature").equalsIgnoreCase(skin[0])) {
             updateDocument.append("skinSignature", skin[0]);
         }
 
-        if(!found.getString("skinTexture").equalsIgnoreCase(skin[1])){
+        if (!found.getString("skinTexture").equalsIgnoreCase(skin[1])) {
             updateDocument.append("skinTexture", skin[1]);
         }
 
-        if(!updateDocument.isEmpty()) {
+        if (!updateDocument.isEmpty()) {
             this.mongoDB.updateDocumentInCollectionSync(player.getUniqueId(), MongoDBCollection.USERS, updateDocument);
         }
     }
@@ -124,6 +124,7 @@ public class CrimxPlayer {
      * Get a players skin (signature & texture)
      * String[0] -> Signature
      * String[1] -> Value
+     *
      * @param player - Player
      * @return String[]
      */
@@ -131,12 +132,12 @@ public class CrimxPlayer {
 
         PlayerProfile playerProfile = player.getPlayerProfile();
 
-        if(playerProfile.hasTextures()) {
+        if (playerProfile.hasTextures()) {
             List<ProfileProperty> properties = playerProfile.getProperties().stream()
                     .filter(profileProperty -> profileProperty.getName().equalsIgnoreCase("textures"))
                     .collect(Collectors.toList());
 
-            return new String[] {
+            return new String[]{
                     properties.get(0).getSignature(), properties.get(0).getValue()
             };
         }

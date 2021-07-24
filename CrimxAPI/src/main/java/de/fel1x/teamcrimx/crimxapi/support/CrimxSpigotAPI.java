@@ -1,7 +1,6 @@
 package de.fel1x.teamcrimx.crimxapi.support;
 
 import com.github.juliarn.npc.NPCPool;
-import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.commands.ClanCommand;
@@ -17,8 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Locale;
-
 public class CrimxSpigotAPI extends JavaPlugin {
 
     private static CrimxSpigotAPI instance;
@@ -27,6 +24,10 @@ public class CrimxSpigotAPI extends JavaPlugin {
     private NPCPool npcPool;
 
     private CosmeticTask cosmeticTask;
+
+    public static CrimxSpigotAPI getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
@@ -78,7 +79,9 @@ public class CrimxSpigotAPI extends JavaPlugin {
             case "Proxy":
                 CrimxAPI.getInstance().setServerType(ServerType.UNKNOWN);
                 break;
-            case "Lobby": case "PremiumLobby": case "SilentLobby":
+            case "Lobby":
+            case "PremiumLobby":
+            case "SilentLobby":
                 CrimxAPI.getInstance().setServerType(ServerType.LOBBY_SERVER);
                 break;
             default:
@@ -90,10 +93,6 @@ public class CrimxSpigotAPI extends JavaPlugin {
     @Override
     public void onDisable() {
         CrimxAPI.getInstance().getMongoDB().getMongoClient().close();
-    }
-
-    public static CrimxSpigotAPI getInstance() {
-        return instance;
     }
 
     public PluginManager getPluginManager() {

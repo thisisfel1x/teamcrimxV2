@@ -3,8 +3,8 @@ package de.fel1x.teamcrimx.crimxapi.clanSystem.clan;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudOfflinePlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanKickReason;
-import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.constants.ClanRank;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import org.bukkit.Material;
 
 import java.util.Collection;

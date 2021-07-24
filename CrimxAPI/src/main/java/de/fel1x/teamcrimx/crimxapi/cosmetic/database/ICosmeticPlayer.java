@@ -19,6 +19,7 @@ public interface ICosmeticPlayer {
 
     /**
      * Unlocks a cosmetic sync
+     *
      * @param cosmeticRegistry the cosmetic to unlock
      * @return {@link java.lang.Boolean}
      */
@@ -26,6 +27,7 @@ public interface ICosmeticPlayer {
 
     /**
      * Unlocks a cosmetic sync
+     *
      * @param cosmeticRegistry the cosmetic to unlock
      * @return {@link java.util.concurrent.CompletableFuture}
      */
@@ -33,6 +35,7 @@ public interface ICosmeticPlayer {
 
     /**
      * Save a selected cosmetic to database
+     *
      * @param cosmeticRegistry the cosmetic to save
      */
     void saveSelectedCosmeticToDatabase(CosmeticRegistry cosmeticRegistry);
@@ -49,12 +52,14 @@ public interface ICosmeticPlayer {
 
     /**
      * Get the players selected cosmetic by category sync
+     *
      * @param cosmeticCategory the selected cosmetic
      */
     CosmeticRegistry getSelectedCosmeticByCategorySync(CosmeticCategory cosmeticCategory);
 
     /**
      * Get the players selected cosmetic by category async
+     *
      * @param cosmeticCategory the selected cosmetic
      */
     CompletableFuture<CosmeticRegistry> getSelectedCosmeticByCategoryAsync(CosmeticCategory cosmeticCategory);

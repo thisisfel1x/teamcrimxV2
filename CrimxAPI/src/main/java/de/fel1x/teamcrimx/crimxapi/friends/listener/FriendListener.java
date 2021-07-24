@@ -36,8 +36,8 @@ public class FriendListener implements Listener {
     public void on(BridgeProxyPlayerDisconnectEvent event) {
         new FriendPlayer(event.getNetworkConnectionInfo().getUniqueId()).notifyOnlineFriendsOnQuit()
                 .thenAccept(success ->
-                Objects.requireNonNull(CrimxAPI.getInstance().getPlayerManager()
-                .getOfflinePlayer(event.getNetworkConnectionInfo().getUniqueId())).getProperties().remove("friend"));
+                        Objects.requireNonNull(CrimxAPI.getInstance().getPlayerManager()
+                                .getOfflinePlayer(event.getNetworkConnectionInfo().getUniqueId())).getProperties().remove("friend"));
     }
 
 }

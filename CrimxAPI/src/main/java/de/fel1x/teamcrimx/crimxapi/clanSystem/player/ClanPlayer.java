@@ -15,7 +15,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -26,10 +29,8 @@ public class ClanPlayer extends ClanDatabase implements IClanPlayer, Serializabl
 
     private final CrimxAPI crimxAPI = CrimxAPI.getInstance();
     private final CrimxSpigotAPI crimxSpigotAPI = CrimxSpigotAPI.getInstance();
-
-    private final CompletableFuture<ArrayList<String>> clanPlayers = CompletableFuture.supplyAsync(this::getClanPlayersNameFormatted);
-
     private final UUID uuid;
+    private final CompletableFuture<ArrayList<String>> clanPlayers = CompletableFuture.supplyAsync(this::getClanPlayersNameFormatted);
 
     public ClanPlayer(UUID uuid) {
         super(CrimxAPI.getInstance());

@@ -3,7 +3,6 @@ package de.fel1x.teamcrimx.crimxapi.clanSystem.commands;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.Clan;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.clan.IClan;
-import de.fel1x.teamcrimx.crimxapi.clanSystem.events.ClanUpdateEvent;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;

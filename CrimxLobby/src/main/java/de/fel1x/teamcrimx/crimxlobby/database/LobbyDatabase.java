@@ -4,7 +4,6 @@ import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDB;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
-import de.fel1x.teamcrimx.crimxlobby.cosmetics.Cosmetic;
 import de.fel1x.teamcrimx.crimxlobby.objects.Spawn;
 import org.bson.Document;
 import org.bukkit.Location;
@@ -22,7 +21,7 @@ public class LobbyDatabase {
         final Location spawnLocation = Spawn.SPAWN.getPlayerSpawn();
         String locationSerialized = spawnLocation.getWorld().getName() + ":" + spawnLocation.getX()
                 + ":" + spawnLocation.getY() + ":" + spawnLocation.getZ()
-                + ":" + spawnLocation.getYaw() + ":" + spawnLocation.getPitch() ;
+                + ":" + spawnLocation.getYaw() + ":" + spawnLocation.getPitch();
 
         Document basicDBObject = new Document("_id", player.getUniqueId().toString())
                 .append("name", player.getName())

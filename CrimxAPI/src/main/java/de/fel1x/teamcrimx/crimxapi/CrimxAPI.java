@@ -12,14 +12,10 @@ public final class CrimxAPI {
 
     public static CrimxAPI instance;
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
-
-    private ServerType serverType = ServerType.UNKNOWN;
-
     private final Logger logger;
-
     private final MongoDB mongoDB;
     private final ClanDatabase clanDatabase;
-
+    private ServerType serverType = ServerType.UNKNOWN;
     private boolean displayCosmetics = false;
 
     public CrimxAPI() {

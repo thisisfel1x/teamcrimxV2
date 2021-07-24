@@ -25,7 +25,8 @@ public class MongoHandler {
 
     /**
      * Returns a Document out of a collection sync
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection identifier for Collection
      * @return found Document if not null
      */
@@ -36,7 +37,8 @@ public class MongoHandler {
 
     /**
      * Returns a Document out of a collection sync
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection identifier for Collection
      * @return CompletableFuture<Document>
      */
@@ -46,15 +48,16 @@ public class MongoHandler {
 
     /**
      * Returns an Object in a Document if not null
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection identifier for Collection
-     * @param key Key for Value in Document
+     * @param key               Key for Value in Document
      * @return Object
      */
     public Object getObjectFromDocumentSync(UUID uuid, MongoDBCollection mongoDBCollection, String key) {
         Document found = this.getDocumentSync(uuid, mongoDBCollection);
 
-        if(found != null) {
+        if (found != null) {
             return found.get(key);
         }
         return null;
@@ -62,17 +65,18 @@ public class MongoHandler {
 
     /**
      * Returns an Object in a Document if not null
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection identifier for Collection
-     * @param key Key for Value in Document
+     * @param key               Key for Value in Document
      * @return ArrayList
      */
     public ArrayList<String> getStringArrayListFromDocumentSync(UUID uuid, MongoDBCollection mongoDBCollection, String key) {
         Document found = this.getDocumentSync(uuid, mongoDBCollection);
 
-        if(found != null) {
+        if (found != null) {
             Object foundObject = found.get(key);
-            if(foundObject instanceof ArrayList) {
+            if (foundObject instanceof ArrayList) {
                 return (ArrayList<String>) foundObject;
             }
         }
@@ -81,16 +85,17 @@ public class MongoHandler {
 
     /**
      * Returns an Object in a Document if not null
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection identifier for Collection
-     * @param key Key for Value in Document
-     * @param defaultValue Default Value if key is null
+     * @param key               Key for Value in Document
+     * @param defaultValue      Default Value if key is null
      * @return Object
      */
     public @Nullable Object getObjectFromDocumentSyncOrDefault(UUID uuid, MongoDBCollection mongoDBCollection, String key, Object defaultValue) {
         Document found = this.getDocumentSync(uuid, mongoDBCollection);
 
-        if(found != null) {
+        if (found != null) {
             return found.get(key, defaultValue);
         }
         return null;
@@ -98,9 +103,10 @@ public class MongoHandler {
 
     /**
      * Returns an Object in a Document if not null async
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection identifier for Collection
-     * @param key Key for Value in Document
+     * @param key               Key for Value in Document
      * @return CompletableFuture<Object>
      */
     @Nullable
@@ -110,10 +116,11 @@ public class MongoHandler {
 
     /**
      * Returns an Object in a Document if not null async
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection identifier for Collection
-     * @param key Key for Value in Document
-     * @param defaultValue Default Value if key is null
+     * @param key               Key for Value in Document
+     * @param defaultValue      Default Value if key is null
      * @return CompletableFuture<Object>
      */
     @Nullable
@@ -123,7 +130,8 @@ public class MongoHandler {
 
     /**
      * Checks if a Document exists in a specific Collection
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection identifier for Collection
      * @return boolean
      */
@@ -134,7 +142,8 @@ public class MongoHandler {
 
     /**
      * Checks if a Document exists in a specific Collection async
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection identifier for Collection
      * @return CompletableFuture<Boolean>
      */
@@ -144,7 +153,8 @@ public class MongoHandler {
 
     /**
      * Inserts a document in a collection
-     * @param document The document to insert
+     *
+     * @param document          The document to insert
      * @param mongoDBCollection The target collection
      * @return boolean indicates success or not
      */
@@ -160,15 +170,16 @@ public class MongoHandler {
 
     /**
      * Updates a value in a document sync
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection The target collection
-     * @param updateDocument the document with update content
+     * @param updateDocument    the document with update content
      */
     public void updateDocumentInCollectionSync(UUID uuid, MongoDBCollection mongoDBCollection, Document updateDocument) {
         Document toInsert = this.getDocumentSync(uuid, mongoDBCollection);
         Bson updateOperation = new Document("$set", updateDocument);
 
-        if(toInsert != null) {
+        if (toInsert != null) {
             this.mongoDB.getNetworkDatabase().getCollection(mongoDBCollection.getCollectionName())
                     .updateOne(toInsert, updateOperation);
         }
@@ -176,10 +187,11 @@ public class MongoHandler {
 
     /**
      * Inserts an object in a document
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection the target collection
-     * @param key the key for the value
-     * @param value the specific value
+     * @param key               the key for the value
+     * @param value             the specific value
      * @return boolean indicates success or not
      */
     public boolean insertObjectInDocument(UUID uuid, MongoDBCollection mongoDBCollection, String key, Object value) {
@@ -187,7 +199,7 @@ public class MongoHandler {
         Document document = new Document(key, value);
         Bson updateOperation = new Document("$set", document);
 
-        if(toInsert == null) {
+        if (toInsert == null) {
             return false;
         }
 
@@ -197,9 +209,10 @@ public class MongoHandler {
 
     /**
      * Get a nested document in another document sync
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection the target collection
-     * @param key the nested document name or key
+     * @param key               the nested document name or key
      * @return nested document
      */
     public Document getNestedDocumentSync(UUID uuid, MongoDBCollection mongoDBCollection, String key) {
@@ -208,9 +221,10 @@ public class MongoHandler {
 
     /**
      * Get a nested document in another document sync
-     * @param uuid Player UUID
+     *
+     * @param uuid              Player UUID
      * @param mongoDBCollection the target collection
-     * @param key the nested document name or key
+     * @param key               the nested document name or key
      * @return CompletableFuture
      */
     public CompletableFuture<Document> getNestedDocumentAsync(UUID uuid, MongoDBCollection mongoDBCollection, String key) {

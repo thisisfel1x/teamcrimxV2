@@ -14,7 +14,6 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -23,17 +22,13 @@ import java.util.stream.Collectors;
 public class GameTask implements IBingoTask {
 
     private final Bingo bingo = Bingo.getInstance();
-    private int taskId = 0;
-    private int timer = 0;
-
     private final Title title = Title.builder().title("§aViel Glück").subtitle("§7Das Spiel beginnt").fadeIn(0)
             .stay(40).fadeOut(10).build();
-
-    private boolean isRunning = false;
-
-    private BossBar bossBar;
-
     private final Random random = new Random();
+    private int taskId = 0;
+    private int timer = 0;
+    private boolean isRunning = false;
+    private BossBar bossBar;
     private int eventTimer = this.random.nextInt(120) + 60;
     private double timeToGo = this.eventTimer;
 

@@ -7,7 +7,6 @@ import com.github.juliarn.npc.profile.Profile;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.util.Arrays;

@@ -5,20 +5,9 @@ import de.dytanic.cloudnet.ext.bridge.BridgeHelper;
 import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
 import de.fel1x.bingo.Bingo;
 import de.fel1x.bingo.gamehandler.Gamestate;
-import de.fel1x.bingo.objects.BingoPlayer;
-import de.fel1x.bingo.objects.BingoTeam;
-import de.fel1x.bingo.utils.Utils;
 import de.fel1x.bingo.utils.scoreboard.GameScoreboard;
-import de.fel1x.bingo.utils.world.ArmorstandStatsLoader;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Objects;
 
 public class PreGameTask implements IBingoTask {
 

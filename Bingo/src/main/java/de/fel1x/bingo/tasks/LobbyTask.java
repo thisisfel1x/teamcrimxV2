@@ -17,18 +17,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 public class LobbyTask implements IBingoTask {
 
     private final Bingo bingo = Bingo.getInstance();
-    private int taskId = 0;
-    private int countdown = 60;
+    boolean isRunning = false;
+    int counter;
 
     //private final CompletableFuture<Boolean> playerTeleport = CompletableFuture.supplyAsync(this::teleportPlayers);
-
-    boolean isRunning = false;
+    private int taskId = 0;
+    private int countdown = 60;
 
     @Override
     public void start() {
@@ -117,8 +115,6 @@ public class LobbyTask implements IBingoTask {
         }
 
     }
-
-    int counter;
 
     private void teleportPlayers() {
         Location worldSpawnLocation = new Location(Bukkit.getWorlds().get(0), 0, 0, 0);

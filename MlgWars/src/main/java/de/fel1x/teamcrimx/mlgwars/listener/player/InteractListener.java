@@ -29,7 +29,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 public class InteractListener implements Listener {
 
@@ -522,7 +521,7 @@ public class InteractListener implements Listener {
                                 return;
                             }
 
-                            if(event.getItem() == null) {
+                            if (event.getItem() == null) {
                                 return;
                             }
 

@@ -7,9 +7,7 @@ import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
-import dev.esophose.playerparticles.particles.data.ParticleColor;
 import dev.esophose.playerparticles.styles.DefaultStyles;
-import dev.esophose.playerparticles.styles.ParticleStyle;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,7 +21,7 @@ public class HaloEffect implements ICosmetic, IEffect {
 
     @Override
     public Component[] getDescription() {
-        return new Component[] {
+        return new Component[]{
                 Component.text("§7Der Unschuldige :)"),
         };
     }

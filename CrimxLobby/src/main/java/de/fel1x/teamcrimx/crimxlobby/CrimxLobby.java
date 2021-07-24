@@ -2,8 +2,6 @@ package de.fel1x.teamcrimx.crimxlobby;
 
 import com.github.juliarn.npc.NPC;
 import com.github.juliarn.npc.NPCPool;
-import com.github.juliarn.npc.modifier.MetadataModifier;
-import com.github.juliarn.npc.profile.Profile;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.crimxapi.utils.npc.NPCCreator;
@@ -22,16 +20,12 @@ import de.fel1x.teamcrimx.crimxlobby.scoreboard.LobbyScoreboard;
 import fr.minuskube.inv.InventoryManager;
 import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 public final class CrimxLobby extends JavaPlugin {
 
@@ -92,7 +86,7 @@ public final class CrimxLobby extends JavaPlugin {
         this.perksNpc = new NPCCreator(new Location(Bukkit.getWorld("lobbysommer"), 16.5, 13, -27.5))
                 .shouldImitatePlayer(true)
                 .shouldLookAtPlayer(true)
-                .addHeaders(new String[]{"§bteamcrimx§lDE §7- §bCoinshop", "§7Heute gute Pleis" })
+                .addHeaders(new String[]{"§bteamcrimx§lDE §7- §bCoinshop", "§7Heute gute Pleis"})
                 .createProfile("eyJ0aW1lc3RhbXAiOjE1ODU3NDMzODM2ODcsInByb2ZpbGVJZCI6IjkxZmUxOTY4N2M5MDQ2NTZhYTFmYzA1OTg2ZGQzZmU3IiwicHJvZmlsZU5hbWUiOiJoaGphYnJpcyIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWU1YmQ2ZDVjOWQ1NDM0ODc1MTZjYzNmY2FiNDczNWUxZGFlMjEyYzM5MjdhYjllNDBlNmFlM2U1OWI5NThhYSJ9fX0=",
                         "amJcsYzBIKpdlkKnwDNJ9iI0jMh675fmxQkRtKXquQk1xMFUy7wlsOBnNI6qHH5aNWKnKbq+eID6u3XHe3fcbEShCQyMtydyMzdYjyro5LWl9XkRs3LhbQDUllnJmoG6sIeCNHZ+VAqDLeHh0ahhSqHhg9C+4831C71uCoL2ah1+mPh7GA9CAnyp09ZZ3t1eHW9fvwwVMiDONgZjB2LLom6QW+rMHV3eltQojhkulniomKEApPi0qKvr97X6FKYznysNEw51jsw1ndkRVfNgF4DBEWwoC4yYw3MTYOFpjcCn0t3NLFwRus9wInjciD2jM1W/tPZKFltSdhT98PH7H2uQCq/+/uXgrwCnhZaGRqKSjAcqKaLjCd2EmfVLmMkmEGVOe04H3zmJCbA0IhdU2R2EHbMMoyZJxkLW1RwGayn+OHF7Cdmnemd1nIVFhdqE3kjf8SKhqsHRpnD7biqkIkazNsZa2W4bp00yBwHssEBOmZQt/VAzh1bRTn5lmiQ1HSrUzPTMdQ/z3dSSwkAu0FPwFtEGTvtDQOKlBWSST/lMUQ+wcOKkAKK5QX8l0s5nxPUBpHt5mpt0Ezea37av41UY/ZkuQ3s3nlUOGe8QjzYUNo8mkBvV93+r81CFoAODmQmH2bvLyb7RvW4a/mXW1BDsOw0zuqUrAT2m7oEmehM=")
                 .spawn();

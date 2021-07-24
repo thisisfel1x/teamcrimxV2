@@ -15,7 +15,10 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -56,7 +59,7 @@ public class FriendPlayer implements IFriendPlayer {
             // Step 2: Check if target player is currently online and send him a message
             ICloudPlayer cloudPlayer = this.crimxAPI.getPlayerManager().getOnlinePlayer(friendUUID);
             ICloudOfflinePlayer requestPlayer = this.crimxAPI.getPlayerManager().getOfflinePlayer(this.uuid);
-            if(cloudPlayer != null && requestPlayer != null) {
+            if (cloudPlayer != null && requestPlayer != null) {
                 TextComponent info = Component.text(this.friendPrefix)
                         .append(Component.text("§7Du hast eine Freundschaftsanfrage von "))
                         .append(Component.text(requestPlayer.getName(), NamedTextColor.YELLOW))
@@ -80,19 +83,19 @@ public class FriendPlayer implements IFriendPlayer {
     @Override
     public CompletableFuture<Boolean> addFriend(UUID friendUUID) {
         return CompletableFuture.supplyAsync(() -> {
-            if(!this.removeFriendRequest(friendUUID)) {
+            if (!this.removeFriendRequest(friendUUID)) {
                 return false;
             }
 
             // Step 2: put uuid in both tables
-            if(!this.areAlreadyFriends(this.uuid, friendUUID)) {
+            if (!this.areAlreadyFriends(this.uuid, friendUUID)) {
                 ArrayList<String> friendList = this.crimxAPI.getMongoDB()
                         .getStringArrayListFromDocumentSync(this.uuid, MongoDBCollection.FRIENDS, "friends");
                 friendList.add(friendUUID.toString());
                 this.crimxAPI.getMongoDB().insertObjectInDocument(this.uuid, MongoDBCollection.FRIENDS,
                         "friends", friendList);
             }
-            if(!this.areAlreadyFriends(friendUUID, this.uuid)) {
+            if (!this.areAlreadyFriends(friendUUID, this.uuid)) {
                 ArrayList<String> friendList1 = this.crimxAPI.getMongoDB()
                         .getStringArrayListFromDocumentSync(friendUUID, MongoDBCollection.FRIENDS, "friends");
                 friendList1.add(this.uuid.toString());
@@ -114,14 +117,14 @@ public class FriendPlayer implements IFriendPlayer {
     public CompletableFuture<Boolean> removeFriend(UUID friendUUID) {
         return CompletableFuture.supplyAsync(() -> {
             // Step 1: Remove UUID from both friend lists
-            if(this.areAlreadyFriends(this.uuid, friendUUID)) {
+            if (this.areAlreadyFriends(this.uuid, friendUUID)) {
                 ArrayList<String> friendList = this.crimxAPI.getMongoDB()
                         .getStringArrayListFromDocumentSync(this.uuid, MongoDBCollection.FRIENDS, "friends");
                 friendList.remove(friendUUID.toString());
                 this.crimxAPI.getMongoDB().insertObjectInDocument(this.uuid, MongoDBCollection.FRIENDS,
                         "friends", friendList);
             }
-            if(this.areAlreadyFriends(friendUUID, this.uuid)) {
+            if (this.areAlreadyFriends(friendUUID, this.uuid)) {
                 ArrayList<String> friendList1 = this.crimxAPI.getMongoDB()
                         .getStringArrayListFromDocumentSync(friendUUID, MongoDBCollection.FRIENDS, "friends");
                 friendList1.remove(this.uuid.toString());
@@ -176,7 +179,7 @@ public class FriendPlayer implements IFriendPlayer {
     public CompletableFuture<Boolean> denyAllRequests() {
         return CompletableFuture.supplyAsync(() -> this.crimxAPI.getMongoDB()
                 .insertObjectInDocument(this.uuid, MongoDBCollection.FRIENDS,
-                "friendRequests", new ArrayList<String>()));
+                        "friendRequests", new ArrayList<String>()));
     }
 
     @Override
@@ -203,8 +206,8 @@ public class FriendPlayer implements IFriendPlayer {
 
     @Override
     public boolean removeFriendRequest(UUID friendUUID) {
-        if(!this.hasOpenFriendRequest(this.uuid, friendUUID) && this.hasOpenFriendRequest(friendUUID, this.uuid)) {
-           return false;
+        if (!this.hasOpenFriendRequest(this.uuid, friendUUID) && this.hasOpenFriendRequest(friendUUID, this.uuid)) {
+            return false;
         }
 
         ArrayList<String> friendRequests = this.crimxAPI.getMongoDB()
@@ -234,7 +237,7 @@ public class FriendPlayer implements IFriendPlayer {
     @Override
     public void sendMessage(String message, UUID player) {
         ICloudPlayer cloudPlayer = this.getOnlinePlayer(player);
-        if(cloudPlayer != null) {
+        if (cloudPlayer != null) {
             cloudPlayer.getPlayerExecutor().sendChatMessage(message);
         }
     }
@@ -243,7 +246,7 @@ public class FriendPlayer implements IFriendPlayer {
     public String getConnectedServerName(UUID targetUUID) {
         ICloudPlayer cloudPlayer = this.getOnlinePlayer(targetUUID);
 
-        if(cloudPlayer == null) {
+        if (cloudPlayer == null) {
             return "";
         }
 
@@ -258,7 +261,7 @@ public class FriendPlayer implements IFriendPlayer {
             ArrayList<String> friends = this.crimxAPI.getMongoDB().getStringArrayListFromDocumentSync(this.uuid,
                     MongoDBCollection.FRIENDS, "friends");
 
-            if(!friends.isEmpty()) {
+            if (!friends.isEmpty()) {
                 for (String friendUUIDString : friends) {
                     UUID friendUUID = UUID.fromString(friendUUIDString);
 
@@ -290,8 +293,8 @@ public class FriendPlayer implements IFriendPlayer {
 
     @Override
     public void jumpToFriend(UUID targetUUID, boolean force) {
-        if(!force) {
-            if(!this.getSetting(targetUUID, FriendSettings.CAN_JUMP_TO_FRIEND)) {
+        if (!force) {
+            if (!this.getSetting(targetUUID, FriendSettings.CAN_JUMP_TO_FRIEND)) {
                 this.sendMessage(this.friendPrefix + "§cDu kannst nicht zu diesem Spieler springen", this.uuid);
                 return;
             }
@@ -299,12 +302,12 @@ public class FriendPlayer implements IFriendPlayer {
 
         ICloudPlayer targetPlayer = this.getOnlinePlayer(targetUUID);
         ICloudPlayer player = this.getOnlinePlayer(this.uuid);
-        if(targetPlayer == null || player == null) {
+        if (targetPlayer == null || player == null) {
             Bukkit.getServer().sendMessage(Component.text("fehler", NamedTextColor.YELLOW));
             return;
         }
 
-        if(targetPlayer.getConnectedService().getServerName()
+        if (targetPlayer.getConnectedService().getServerName()
                 .equalsIgnoreCase(player.getConnectedService().getServerName())) {
             // TODO: prefix
             this.sendMessage(this.friendPrefix + "§cDu befindest dich bereits auf dem gleichen Server von §e"
@@ -332,19 +335,19 @@ public class FriendPlayer implements IFriendPlayer {
     public CompletableFuture<Boolean> sendOnlineFriendsMessageOnProxyJoinAsync() {
         return CompletableFuture.supplyAsync(() -> {
 
-            if(this.crimxAPI.getServerType() != ServerType.LOBBY_SERVER) {
+            if (this.crimxAPI.getServerType() != ServerType.LOBBY_SERVER) {
                 return false;
             }
 
             ArrayList<UUID> onlineFriendsUUIDs = this.getOnlineFriends();
 
-            if(onlineFriendsUUIDs == null) {
+            if (onlineFriendsUUIDs == null) {
                 return false;
             }
 
             for (UUID onlineFriendUUID : onlineFriendsUUIDs) {
                 ICloudPlayer onlineFriend = this.getOnlinePlayer(onlineFriendUUID);
-                if(onlineFriend == null) {
+                if (onlineFriend == null) {
                     continue;
                 }
                 // TODO: prefix
@@ -389,13 +392,13 @@ public class FriendPlayer implements IFriendPlayer {
         return CompletableFuture.supplyAsync(() -> {
             ArrayList<UUID> onlineFriendsUUIDs = this.getOnlineFriends();
 
-            if(onlineFriendsUUIDs == null) {
+            if (onlineFriendsUUIDs == null) {
                 return false;
             }
 
             for (UUID onlineFriendUUID : onlineFriendsUUIDs) {
                 ICloudPlayer onlineFriend = this.getOnlinePlayer(onlineFriendUUID);
-                if(onlineFriend == null) {
+                if (onlineFriend == null) {
                     continue;
                 }
                 // TODO: prefix

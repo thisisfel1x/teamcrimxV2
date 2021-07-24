@@ -40,7 +40,7 @@ public class CrimxCoins implements ICrimxCoins {
             coins = 0;
         }
 
-        if(this.playerNetworkDocument == null) {
+        if (this.playerNetworkDocument == null) {
             return false;
         }
 
@@ -61,7 +61,7 @@ public class CrimxCoins implements ICrimxCoins {
     @Override
     public boolean addCoinsSync(int coins) {
         // If coins are negative multiply by -1 that they are positive
-        if(Math.signum(coins) == -1.0) {
+        if (Math.signum(coins) == -1.0) {
             coins *= -1;
         }
 
@@ -77,7 +77,7 @@ public class CrimxCoins implements ICrimxCoins {
     @Override
     public boolean removeCoinsSync(int coins) {
         // If coins are negative multiply by -1 that they are positive
-        if(Math.signum(coins) == -1.0) {
+        if (Math.signum(coins) == -1.0) {
             coins *= -1;
         }
 

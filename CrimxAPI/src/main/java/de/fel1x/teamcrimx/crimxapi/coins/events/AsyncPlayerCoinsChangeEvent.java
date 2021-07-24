@@ -7,10 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class AsyncPlayerCoinsChangeEvent extends Event {
 
+    private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private final int newCoins;
-
-    private static final HandlerList handlers = new HandlerList();
 
     public AsyncPlayerCoinsChangeEvent(Player player, int newCoins) {
         this.player = player;
@@ -21,6 +20,10 @@ public class AsyncPlayerCoinsChangeEvent extends Event {
         super(isAsync);
         this.player = player;
         this.newCoins = newCoins;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     public Player getPlayer() {
@@ -34,10 +37,6 @@ public class AsyncPlayerCoinsChangeEvent extends Event {
     @NotNull
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

@@ -8,7 +8,6 @@ import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
-import de.fel1x.teamcrimx.crimxlobby.inventories.NPCShopInventory;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
@@ -17,12 +16,9 @@ import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import net.kyori.adventure.text.Component;
 import org.bson.Document;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.potion.PotionType;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -83,7 +79,7 @@ public class CosmeticReworkInventory implements InventoryProvider {
                 .toItemStack(), event -> {
             player.closeInventory();
             new CosmeticPlayer(player.getUniqueId()).stopAllActiveCosmeticsAsync().thenAccept(success -> {
-                if(!success) {
+                if (!success) {
                     player.sendMessage(CrimxLobby.getInstance().getPrefix()
                             + "§cEin Fehler ist aufgetreten. Versuche es später erneut...");
                 }
@@ -93,13 +89,13 @@ public class CosmeticReworkInventory implements InventoryProvider {
         // Pagination Items
         contents.set(5, 7, ClickableItem.of(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ2OWUwNmU1ZGFkZmQ4NGU1ZjNkMWMyMTA2M2YyNTUzYjJmYTk0NWVlMWQ0ZDcxNTJmZGM1NDI1YmMxMmE5In19fQ==")
                 .setName(Component.text("§8● §7Vorherige Seite")).toItemStack(), event -> {
-            if(!pagination.isFirst()) {
+            if (!pagination.isFirst()) {
                 COSMETICS_REWORK_INVENTORY.open(player, pagination.previous().getPage());
             }
         }));
         contents.set(5, 8, ClickableItem.of(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTliZjMyOTJlMTI2YTEwNWI1NGViYTcxM2FhMWIxNTJkNTQxYTFkODkzODgyOWM1NjM2NGQxNzhlZDIyYmYifX19")
                 .setName(Component.text("§8● §7Nächste Seite")).toItemStack(), event -> {
-            if(!pagination.isLast()) {
+            if (!pagination.isLast()) {
                 COSMETICS_REWORK_INVENTORY.open(player, pagination.next().getPage());
             }
         }));
@@ -115,12 +111,12 @@ public class CosmeticReworkInventory implements InventoryProvider {
         int slot = 0;
         int row = 2;
 
-        for(int i = 0; i < 27; i++) {
-            if(inventoryContents.get(row, slot).isPresent()) {
+        for (int i = 0; i < 27; i++) {
+            if (inventoryContents.get(row, slot).isPresent()) {
                 inventoryContents.set(row, slot, ClickableItem.empty(null));
             }
             slot++;
-            if(slot == 9) {
+            if (slot == 9) {
                 slot = 0;
                 row++;
             }
@@ -134,7 +130,7 @@ public class CosmeticReworkInventory implements InventoryProvider {
                     Document cosmeticCategoryRegistryDocument = (Document) ((Document) cosmeticDocument.get("registry"))
                             .get(cosmeticCategory.name());
 
-                    if(cosmeticCategoryRegistryDocument == null) {
+                    if (cosmeticCategoryRegistryDocument == null) {
                         player.closeInventory();
                         player.sendMessage(CrimxLobby.getInstance().getPrefix()
                                 + "§cEin Fehler ist aufgetreten. Versuche es später erneut...");
@@ -154,7 +150,7 @@ public class CosmeticReworkInventory implements InventoryProvider {
                             boolean bought = cosmeticCategoryRegistryDocument.getBoolean(key);
 
                             // Checks if player hasn't bought the specific cosmetic
-                            if(!bought) {
+                            if (!bought) {
                                 continue;
                             }
 
@@ -167,14 +163,15 @@ public class CosmeticReworkInventory implements InventoryProvider {
 
                             cosmetics[count] = ClickableItem.of(itemStack, event -> {
                                 player.closeInventory();
-                                if(CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().containsKey(player.getUniqueId())) {
+                                if (CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().containsKey(player.getUniqueId())) {
                                     CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().get(player.getUniqueId()).stopCosmetic(player);
                                 }
                                 cosmetic.initializeCosmetic(player);
                                 new CosmeticPlayer(player.getUniqueId()).saveSelectedCosmeticToDatabase(cosmeticRegistry);
                             });
                             count++;
-                        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ignored) { }
+                        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ignored) {
+                        }
                     }
 
                     pagination.setItems(cosmetics);

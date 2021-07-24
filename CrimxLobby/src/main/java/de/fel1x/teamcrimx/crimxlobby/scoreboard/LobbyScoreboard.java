@@ -4,7 +4,6 @@ import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.utils.TimeUtils;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
-import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -83,10 +82,10 @@ public class LobbyScoreboard {
                             formattedTime = hours == 1 ? hours + " Stunde" : hours + " Stunden";
                         }
                         this.updateBoard(player, "§8● §6" + formattedTime, "playtime");
-            });
+                    });
 
             new ClanPlayer(player.getUniqueId()).getCurrentClanAsync().thenAccept(iClan -> {
-                if(iClan != null) {
+                if (iClan != null) {
                     this.updateBoard(player, String.format("§8● §b%s§8/§7%s §7[§b%s§7]",
                             iClan.getTotalClanMembers(), 20, // TODO: proper system here
                             iClan.getClanTag()), "clan");

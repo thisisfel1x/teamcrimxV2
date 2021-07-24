@@ -34,6 +34,24 @@ public class ArmorstandStatsLoader {
         this.setTop3Wall();
     }
 
+    public static ArrayList<Location> getCirclePoints(Location center, double radius, int amount) {
+        World world = center.getWorld();
+        double increment = (2 * Math.PI) / amount;
+
+        ArrayList<Location> locations = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+
+            double angle = i * increment;
+            double x = center.getX() + (radius * Math.cos(angle));
+            double z = center.getZ() + (radius * Math.sin(angle));
+
+            Location particle = new Location(world, x, center.getY(), z);
+            locations.add(particle);
+
+        }
+        return locations;
+    }
+
     public void setTop3Wall() {
         if (this.signs == null) {
             return;
@@ -162,24 +180,6 @@ public class ArmorstandStatsLoader {
                 this.count = 0;
             }
         }, 0L, 0L);
-    }
-
-    public static ArrayList<Location> getCirclePoints(Location center, double radius, int amount) {
-        World world = center.getWorld();
-        double increment = (2 * Math.PI) / amount;
-
-        ArrayList<Location> locations = new ArrayList<>();
-        for (int i = 0; i < amount; i++) {
-
-            double angle = i * increment;
-            double x = center.getX() + (radius * Math.cos(angle));
-            double z = center.getZ() + (radius * Math.sin(angle));
-
-            Location particle = new Location(world, x, center.getY(), z);
-            locations.add(particle);
-
-        }
-        return locations;
     }
 
 }

@@ -75,9 +75,9 @@ public class NPCShopInventory implements InventoryProvider {
             contents.set(0, this.navigationItemsSlot[index],
                     ClickableItem.of(cosmeticCategory.getItemStack(),
                             event -> {
-                this.clearInv(contents);
-                this.setInventoryContest(contents, pagination, cosmeticCategory, player);
-            }));
+                                this.clearInv(contents);
+                                this.setInventoryContest(contents, pagination, cosmeticCategory, player);
+                            }));
         }
 
         // TODO: discount
@@ -86,33 +86,33 @@ public class NPCShopInventory implements InventoryProvider {
                 .setLore(Component.text("§7Nächstes Angebot in §5???"))
                 .toItemStack()));
         contents.set(5, 1, ClickableItem.of(new ItemBuilder(Material.PAPER)
-                .setName(Component.text("§8● §aSortierung"))
-                .setLoreByComponentList(Sorting.ALL.lore) // We can hard-code this because default ist Sorting.ALL
-                .toItemStack(),
+                        .setName(Component.text("§8● §aSortierung"))
+                        .setLoreByComponentList(Sorting.ALL.lore) // We can hard-code this because default ist Sorting.ALL
+                        .toItemStack(),
                 event -> {
-            this.updateSorting(contents);
-            if(contents.property("category") != null) {
-                this.setInventoryContest(contents, pagination, contents.property("category"), player);
-            }
-        }));
+                    this.updateSorting(contents);
+                    if (contents.property("category") != null) {
+                        this.setInventoryContest(contents, pagination, contents.property("category"), player);
+                    }
+                }));
 
         // Pagination Items
         contents.set(5, 7, ClickableItem.of(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ2OWUwNmU1ZGFkZmQ4NGU1ZjNkMWMyMTA2M2YyNTUzYjJmYTk0NWVlMWQ0ZDcxNTJmZGM1NDI1YmMxMmE5In19fQ==")
                 .setName(Component.text("§8● §7Vorherige Seite")).toItemStack(), event -> {
-            if(!pagination.isFirst()) {
+            if (!pagination.isFirst()) {
                 NPC_SHOP_INVENTORY.open(player, pagination.previous().getPage());
             }
         }));
         contents.set(5, 8, ClickableItem.of(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTliZjMyOTJlMTI2YTEwNWI1NGViYTcxM2FhMWIxNTJkNTQxYTFkODkzODgyOWM1NjM2NGQxNzhlZDIyYmYifX19")
                 .setName(Component.text("§8● §7Nächste Seite")).toItemStack(), event -> {
-            if(!pagination.isLast()) {
+            if (!pagination.isLast()) {
                 NPC_SHOP_INVENTORY.open(player, pagination.next().getPage());
             }
         }));
     }
 
     private void updateSorting(InventoryContents contents) {
-        if(!(contents.property("sorting") instanceof Sorting)) {
+        if (!(contents.property("sorting") instanceof Sorting)) {
             return;
         }
 
@@ -126,7 +126,7 @@ public class NPCShopInventory implements InventoryProvider {
 
         contents.setProperty("sorting", sorting);
 
-        if(contents.get(5, 1).isEmpty()) {
+        if (contents.get(5, 1).isEmpty()) {
             return;
         }
 
@@ -144,12 +144,12 @@ public class NPCShopInventory implements InventoryProvider {
         int slot = 0;
         int row = 2;
 
-        for(int i = 0; i < 27; i++) {
-            if(inventoryContents.get(row, slot).isPresent()) {
+        for (int i = 0; i < 27; i++) {
+            if (inventoryContents.get(row, slot).isPresent()) {
                 inventoryContents.set(row, slot, ClickableItem.empty(null));
             }
             slot++;
-            if(slot == 9) {
+            if (slot == 9) {
                 slot = 0;
                 row++;
             }
@@ -159,7 +159,7 @@ public class NPCShopInventory implements InventoryProvider {
     private void setInventoryContest(InventoryContents contents, Pagination pagination, CosmeticCategory cosmeticCategory, Player player) {
         contents.setProperty("category", cosmeticCategory);
 
-        if(!(contents.property("sorting") instanceof Sorting)) {
+        if (!(contents.property("sorting") instanceof Sorting)) {
             return;
         }
 
@@ -173,7 +173,7 @@ public class NPCShopInventory implements InventoryProvider {
                     Document cosmeticCategoryRegistryDocument = (Document) ((Document) cosmeticDocument.get("registry"))
                             .get(cosmeticCategory.name());
 
-                    if(cosmeticCategoryRegistryDocument == null) {
+                    if (cosmeticCategoryRegistryDocument == null) {
                         player.closeInventory();
                         player.sendMessage("§cFEHLER - Versuche es später erneut...");
                         return;
@@ -192,7 +192,7 @@ public class NPCShopInventory implements InventoryProvider {
                             boolean bought = cosmeticCategoryRegistryDocument.getBoolean(key);
 
                             // Checks if Sorting is set for not bought and if player already bought the specific cosmetic
-                            if(sorting == Sorting.NOT_BOUGHT && bought) {
+                            if (sorting == Sorting.NOT_BOUGHT && bought) {
                                 continue;
                             }
 
@@ -207,7 +207,7 @@ public class NPCShopInventory implements InventoryProvider {
                             cosmetics[count] = ClickableItem.of(itemStack, event -> {
                                 if (bought) {
                                     player.closeInventory();
-                                    if(CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().containsKey(player.getUniqueId())) {
+                                    if (CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().containsKey(player.getUniqueId())) {
                                         CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().get(player.getUniqueId()).stopCosmetic(player);
                                     }
                                     cosmetic.initializeCosmetic(player);
@@ -219,7 +219,8 @@ public class NPCShopInventory implements InventoryProvider {
                                 }
                             });
                             count++;
-                        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ignored) { }
+                        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ignored) {
+                        }
                     }
 
                     pagination.setItems(cosmetics);

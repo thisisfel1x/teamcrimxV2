@@ -57,15 +57,15 @@ public class CoinsCommand implements CommandExecutor {
                     case "get":
                         this.crimxCoins.getCoinsAsync().thenAccept(coins ->
                                 player.sendMessage(this.crimxAPI.getPrefix() + "§7Der Spieler §a" + targetPlayer.displayName()
-                                + " §7besitzt §e" + coins + " Coins"));
+                                        + " §7besitzt §e" + coins + " Coins"));
                         break;
 
                     case "add":
                         this.crimxCoins.addCoinsAsync(coinsOperation).thenAccept(success -> {
-                            if(success) {
+                            if (success) {
                                 this.crimxCoins.getCoinsAsync().thenAccept(coins ->
                                         player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins gutgeschrieben! " +
-                                        "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coins + " Coins"));
+                                                "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coins + " Coins"));
                             } else {
                                 player.sendMessage(this.crimxAPI.getPrefix() + "§cEs trat ein Fehler auf");
                             }
@@ -74,10 +74,10 @@ public class CoinsCommand implements CommandExecutor {
 
                     case "remove":
                         this.crimxCoins.removeCoinsAsync(coinsOperation).thenAccept(success -> {
-                            if(success) {
+                            if (success) {
                                 this.crimxCoins.getCoinsAsync().thenAccept(coins ->
                                         player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins entfernt! " +
-                                        "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coins + " Coins"));
+                                                "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coins + " Coins"));
                             } else {
                                 player.sendMessage(this.crimxAPI.getPrefix() + "§cEs trat ein Fehler auf");
                             }
@@ -86,10 +86,10 @@ public class CoinsCommand implements CommandExecutor {
 
                     case "set":
                         this.crimxCoins.setCoinsAsync(coinsOperation).thenAccept(success -> {
-                            if(success) {
+                            if (success) {
                                 this.crimxCoins.getCoinsAsync().thenAccept(coins ->
                                         player.sendMessage(this.crimxAPI.getPrefix() + "§e" + coinsOperation + " Coins gesetzt! " +
-                                        "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coins + " Coins"));
+                                                "§7Der Spieler §a" + targetPlayer.getDisplayName() + " §7besitzt §e" + coins + " Coins"));
                             } else {
                                 player.sendMessage(this.crimxAPI.getPrefix() + "§cEs trat ein Fehler auf");
                             }

@@ -7,7 +7,6 @@ import de.fel1x.teamcrimx.crimxapi.friends.InventoryFriend;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 
 public interface IFriendPlayer {
 
@@ -33,6 +32,7 @@ public interface IFriendPlayer {
 
     /**
      * List every friends
+     *
      * @param page friend page
      */
     void listFriends(int page);
@@ -120,7 +120,6 @@ public interface IFriendPlayer {
     CompletableFuture<Boolean> sendOnlineFriendsMessageOnProxyJoinAsync();
 
     /**
-     *
      * @return
      */
     CompletableFuture<Boolean> notifyOnlineFriendsOnQuit();

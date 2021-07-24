@@ -37,10 +37,13 @@ public class FriendCommand implements CommandExecutor, TabCompleter {
         Player player = (Player) sender;
         IFriendPlayer friendPlayer = new FriendPlayer(player.getUniqueId());
 
-        if(args.length > 0) {
-            if(args.length == 1) {
+        if (args.length > 0) {
+            if (args.length == 1) {
                 switch (args[0].toLowerCase()) {
-                    case "add": case "remove": case "denyRequest": case "acceptRequest":
+                    case "add":
+                    case "remove":
+                    case "denyRequest":
+                    case "acceptRequest":
                         player.sendMessage(this.guideString);
                         break;
                     case "list":
@@ -48,7 +51,7 @@ public class FriendCommand implements CommandExecutor, TabCompleter {
                         break;
                     case "denyallrequests":
                         friendPlayer.denyAllRequests().thenAccept(success -> {
-                            if(success) {
+                            if (success) {
                                 player.sendMessage(this.friendPrefix + "§7Alle offenen Freundschaftsanfragen wurden erfolgreich gelöscht");
                             } else {
                                 player.sendMessage(this.friendPrefix + "§cEin Fehler ist aufgetreten");
@@ -57,20 +60,20 @@ public class FriendCommand implements CommandExecutor, TabCompleter {
                         break;
                     default:
                         String internalCommand = args[0];
-                        if(!internalCommand.startsWith("?")) {
+                        if (!internalCommand.startsWith("?")) {
                             return false;
                         }
                         UUID targetUUID = UUID.fromString(internalCommand.split("=")[1]);
                         switch (internalCommand.substring(1).split("=")[0].toLowerCase()) {
                             case "add":
-                                if(friendPlayer.areAlreadyFriends(targetUUID)) {
+                                if (friendPlayer.areAlreadyFriends(targetUUID)) {
                                     player.sendMessage(this.friendPrefix + "§cDu bist bereits mit diesem Spieler befreundet!");
                                     return false;
                                 }
                                 friendPlayer.addFriend(targetUUID);
                                 break;
                             case "deny":
-                                if(!friendPlayer.hasOpenFriendRequest(targetUUID)) {
+                                if (!friendPlayer.hasOpenFriendRequest(targetUUID)) {
                                     player.sendMessage(this.friendPrefix + "§cDu hast keine offene " +
                                             "Freundschaftsanfrage von diesem Spieler!");
                                     return false;
@@ -80,36 +83,36 @@ public class FriendCommand implements CommandExecutor, TabCompleter {
                         }
 
                 }
-            } else if(args.length == 2) {
+            } else if (args.length == 2) {
                 UUID targetPlayerUUID = this.getUUIDFromName(args[1]);
-                if(targetPlayerUUID == null) {
+                if (targetPlayerUUID == null) {
                     player.sendMessage(this.friendPrefix + "§cDieser Spieler war noch nie auf dem Netzwerk. " +
                             "Bitte achte auf Groß- und Kleinschreibung");
                     return false;
                 }
-                if(targetPlayerUUID.equals(player.getUniqueId())) {
+                if (targetPlayerUUID.equals(player.getUniqueId())) {
                     player.sendMessage(this.friendPrefix + "§cDu kannst nicht selbst mit dir interagieren!");
                     return false;
                 }
                 switch (args[0].toLowerCase()) {
                     case "add":
-                        if(friendPlayer.areAlreadyFriends(targetPlayerUUID)) {
+                        if (friendPlayer.areAlreadyFriends(targetPlayerUUID)) {
                             player.sendMessage(this.friendPrefix + "§cDu bist bereits mit diesem Spieler befreundet");
                             return false;
                         }
-                        if(friendPlayer.hasOpenFriendRequest(targetPlayerUUID)) {
+                        if (friendPlayer.hasOpenFriendRequest(targetPlayerUUID)) {
                             player.sendMessage(this.friendPrefix + "§7Dieser Spieler hat dir bereits eine " +
                                     "Freundschaftsanfrage geschickt");
                             return false;
                         }
                         friendPlayer.sendFriendRequest(targetPlayerUUID).thenAccept(success -> {
-                           if(!success) {
-                               player.sendMessage(this.friendPrefix + "§cEin interner Fehler ist aufgetreten");
-                           } else {
-                               // TODO: rank prefix
-                               player.sendMessage(this.friendPrefix + "§7Eine Freundschaftsanfrage wurde an §e"
-                                       + args[1] + " §7versandt");
-                           }
+                            if (!success) {
+                                player.sendMessage(this.friendPrefix + "§cEin interner Fehler ist aufgetreten");
+                            } else {
+                                // TODO: rank prefix
+                                player.sendMessage(this.friendPrefix + "§7Eine Freundschaftsanfrage wurde an §e"
+                                        + args[1] + " §7versandt");
+                            }
                         });
                         break;
                     case "remove":
@@ -163,7 +166,7 @@ public class FriendCommand implements CommandExecutor, TabCompleter {
     // TODO: look iFriendPlayer
     private UUID getUUIDFromName(String playerName) {
         ICloudOfflinePlayer cloudOfflinePlayer = this.crimxAPI.getPlayerManager().getFirstOfflinePlayer(playerName);
-        if(cloudOfflinePlayer == null) {
+        if (cloudOfflinePlayer == null) {
             return null;
         }
         return cloudOfflinePlayer.getUniqueId();

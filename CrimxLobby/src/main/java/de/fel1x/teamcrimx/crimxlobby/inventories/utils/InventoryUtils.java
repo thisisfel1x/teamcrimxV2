@@ -16,11 +16,11 @@ public class InventoryUtils {
                 {
                         0, 8
                 }, {
-                    0, 1, 2, 3, 4, 5, 6, 7, 8
-                }, {}, {}, {}, (pagination) ? new int[]{
+                0, 1, 2, 3, 4, 5, 6, 7, 8
+        }, {}, {}, {}, (pagination) ? new int[]{
                 0, 1, 2, 3, 4, 5, 6
         } : new int[]{
-                0, 1, 2, 3, 4, 5, 6, 7, 8 }
+                0, 1, 2, 3, 4, 5, 6, 7, 8}
         };
 
         int row = 0;

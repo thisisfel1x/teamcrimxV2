@@ -10,7 +10,6 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import net.kyori.adventure.text.Component;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -34,7 +33,7 @@ public class FriendOptionsInventory implements InventoryProvider {
                 .setName(Component.empty()).toItemStack()));
 
         InventoryFriend inventoryFriend = (InventoryFriend) player.getMetadata("inventoryFriend").get(0).value();
-        if(inventoryFriend == null) {
+        if (inventoryFriend == null) {
             player.closeInventory();
             player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten");
             return;
@@ -50,7 +49,7 @@ public class FriendOptionsInventory implements InventoryProvider {
                 .setSkullOwner(inventoryFriend.getName())
                 .toItemStack()));
 
-        if(inventoryFriend.isOnline()) {
+        if (inventoryFriend.isOnline()) {
             contents.set(1, 3, ClickableItem.of(new ItemBuilder(Material.CAKE)
                     .setName(Component.text("§8● §7Zur §5Party §7einladen"))
                     .toItemStack(), event -> {
@@ -61,17 +60,17 @@ public class FriendOptionsInventory implements InventoryProvider {
                             .setName(Component.text("§8● §7Freund §enachspringen"))
                             .toItemStack(),
                     event -> {
-                player.closeInventory();
-                friendPlayer.jumpToFriend(inventoryFriend.getUuid(), player.hasPermission("friends.force.jump"));
-            }));
+                        player.closeInventory();
+                        friendPlayer.jumpToFriend(inventoryFriend.getUuid(), player.hasPermission("friends.force.jump"));
+                    }));
         }
 
         contents.set(1, 4, ClickableItem.of(new ItemBuilder(Material.IRON_CHESTPLATE)
                         .setName(Component.text("§8● §7In §bClan §7einladen"))
                         .toItemStack(),
                 event -> {
-            // TODO: clan invite
-        }));
+                    // TODO: clan invite
+                }));
 
         contents.set(1, 7, ClickableItem.of(new ItemBuilder(Material.BARRIER)
                 .setName(Component.text("§8● §cFreund entfernen"))

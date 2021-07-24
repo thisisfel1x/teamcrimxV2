@@ -28,9 +28,9 @@ public enum Settings {
     private final String name;
     private final Material displayMaterial;
     private final String[] description;
-    private boolean enabled;
     private final boolean hasConfiguration;
     private final Object inventoryClazz;
+    private boolean enabled;
 
     Settings(String name, Material displayMaterial, String[] description, boolean enabled, boolean hasConfiguration, Object inventoryClazz) {
         this.name = name;

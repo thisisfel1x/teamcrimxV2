@@ -11,16 +11,12 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.title.Title;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
-import org.checkerframework.checker.units.qual.C;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.Duration;
 
 public class ConfirmCosmeticBuyReworkInventory implements InventoryProvider {
 
@@ -35,7 +31,7 @@ public class ConfirmCosmeticBuyReworkInventory implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
         CosmeticRegistry selectedCosmetic = (CosmeticRegistry) player.getMetadata("cosmetic").get(0).value();
-        if(selectedCosmetic == null) {
+        if (selectedCosmetic == null) {
             player.closeInventory();
             player.sendMessage(CrimxLobby.getInstance().getPrefix() + "§cEin Fehler ist aufgetreten");
             return;
@@ -77,9 +73,10 @@ public class ConfirmCosmeticBuyReworkInventory implements InventoryProvider {
 
     /**
      * Method for unlocking a cosmetic for the player
-     * @param player the specific player
+     *
+     * @param player   the specific player
      * @param cosmetic the selected cosmetic
-     * @param cost the cosmetic price
+     * @param cost     the cosmetic price
      */
     private void buyCosmetic(Player player, CosmeticRegistry cosmetic, int cost) {
         player.closeInventory();
@@ -87,26 +84,26 @@ public class ConfirmCosmeticBuyReworkInventory implements InventoryProvider {
         CrimxCoins crimxCoins = new CrimxCoins(player.getUniqueId());
         int currentCoins = crimxCoins.getCoinsSync();
 
-        if(currentCoins < cost) {
+        if (currentCoins < cost) {
             player.sendTitle("§cUps...", "§7Du hast nicht genügend Coins", 10, 40, 10);
             return;
         }
 
         crimxCoins.removeCoinsAsync(cost).thenAccept(success -> {
-           if(!success) {
-               player.sendTitle("§cUps...", "§7Ein Fehler ist aufgetreten", 10, 40, 10);
-               return;
-           }
+            if (!success) {
+                player.sendTitle("§cUps...", "§7Ein Fehler ist aufgetreten", 10, 40, 10);
+                return;
+            }
 
-           new CosmeticPlayer(player.getUniqueId()).unlockCosmeticAsync(cosmetic).thenAccept(unlockSuccess -> {
-               if(!unlockSuccess) {
-                   player.sendTitle("§cUps...", "§7Ein Fehler beim Freischalten ist aufgetreten", 10, 40, 10);
-                   return;
-               }
+            new CosmeticPlayer(player.getUniqueId()).unlockCosmeticAsync(cosmetic).thenAccept(unlockSuccess -> {
+                if (!unlockSuccess) {
+                    player.sendTitle("§cUps...", "§7Ein Fehler beim Freischalten ist aufgetreten", 10, 40, 10);
+                    return;
+                }
 
-               player.sendTitle("§aGlückwunsch!", "§7Cosmetic erfolgreich erhalten", 10, 40, 10);
-               player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 0.5f);
-           });
+                player.sendTitle("§aGlückwunsch!", "§7Cosmetic erfolgreich erhalten", 10, 40, 10);
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 0.5f);
+            });
         });
     }
 

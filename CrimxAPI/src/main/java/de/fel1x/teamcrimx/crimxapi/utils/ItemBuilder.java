@@ -53,8 +53,8 @@ public class ItemBuilder {
     /**
      * Create a new ItemBuilder from scratch.
      *
-     * @param material      The material of the item.
-     * @param amount The amount of the item.
+     * @param material The material of the item.
+     * @param amount   The amount of the item.
      */
     public ItemBuilder(Material material, int amount) {
         this.itemStack = new ItemStack(material, amount);
@@ -85,6 +85,7 @@ public class ItemBuilder {
 
     /**
      * Set the displayname of the item.
+     *
      * @param component The component to change it to
      */
     public ItemBuilder setName(Component component) {
@@ -98,8 +99,8 @@ public class ItemBuilder {
     /**
      * Add an unsafe enchantment.
      *
-     * @param enchantment  The enchantment to add.
-     * @param level The level to put the enchant on.
+     * @param enchantment The enchantment to add.
+     * @param level       The level to put the enchant on.
      */
     public ItemBuilder addUnsafeEnchantment(Enchantment enchantment, int level) {
         this.itemStack.addUnsafeEnchantment(enchantment, level);
@@ -135,8 +136,8 @@ public class ItemBuilder {
     /**
      * Add an enchant to the item.
      *
-     * @param enchantment  The enchant to add
-     * @param level The level
+     * @param enchantment The enchant to add
+     * @param level       The level
      */
     public ItemBuilder addEnchant(Enchantment enchantment, int level) {
         ItemMeta im = this.itemStack.getItemMeta();
@@ -186,7 +187,7 @@ public class ItemBuilder {
      * Re-sets the lore.
      *
      * @param lore The lore to set it to.
-     * @Deprecated Use {@link de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder#setLoreByComponentList(List)} 
+     * @Deprecated Use {@link de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder#setLoreByComponentList(List)}
      */
     @Deprecated
     public ItemBuilder setLore(List<String> lore) {
@@ -198,6 +199,7 @@ public class ItemBuilder {
 
     /**
      * Re-sets the lore.
+     *
      * @param lore The lore to set it to.
      */
     public ItemBuilder setLoreByComponentList(List<Component> lore) {
@@ -209,7 +211,7 @@ public class ItemBuilder {
 
     /**
      * Remove a lore line.
-     * 
+     *
      * @param line The lore to remove.
      * @deprecated Use {@link de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder#removeLoreLine(Component)}
      */
@@ -231,10 +233,10 @@ public class ItemBuilder {
      */
     public ItemBuilder removeLoreLine(Component toRemove) {
         ItemMeta im = this.itemStack.getItemMeta();
-        if(im.lore() == null) {
+        if (im.lore() == null) {
             return this;
         }
-        
+
         List<Component> lore = new ArrayList<>(Objects.requireNonNull(im.lore()));
         if (!lore.contains(toRemove)) return this;
         lore.remove(toRemove);
@@ -250,7 +252,7 @@ public class ItemBuilder {
      */
     public ItemBuilder removeLoreLine(int index) {
         ItemMeta im = this.itemStack.getItemMeta();
-        if(im.lore() == null) {
+        if (im.lore() == null) {
             return this;
         }
 
@@ -286,7 +288,7 @@ public class ItemBuilder {
      */
     public ItemBuilder addLoreLine(Component toAdd) {
         ItemMeta im = this.itemStack.getItemMeta();
-        if(im.lore() == null) {
+        if (im.lore() == null) {
             return this;
         }
 
@@ -319,11 +321,11 @@ public class ItemBuilder {
      * Add a lore line.
      *
      * @param toAdd The lore line to add.
-     * @param pos  The index of where to put it.
+     * @param pos   The index of where to put it.
      */
     public ItemBuilder addLoreLine(Component toAdd, int pos) {
         ItemMeta im = this.itemStack.getItemMeta();
-        if(im.lore() == null) {
+        if (im.lore() == null) {
             return this;
         }
 
@@ -347,10 +349,11 @@ public class ItemBuilder {
 
     /**
      * Adds glow to an itemstack
+     *
      * @param glow glow or not
      */
     public ItemBuilder addGlow(boolean glow) {
-        if(glow) {
+        if (glow) {
             return this.addGlow();
         }
         return this;
@@ -414,6 +417,7 @@ public class ItemBuilder {
 
     /**
      * Sets a PotionEffect to a (splash) potion or tipped arrow
+     *
      * @param potionEffectType {@link org.bukkit.potion.PotionType} to set
      */
     public ItemBuilder setPotionEffect(PotionType potionEffectType) {
@@ -428,10 +432,11 @@ public class ItemBuilder {
 
     /**
      * Sets a PotionEffect to a tipped arrow, used for color
+     *
      * @param potionEffectType {@link org.bukkit.potion.PotionType} to set
      */
     public ItemBuilder setArrowEffect(PotionType potionEffectType) {
-        if(this.itemStack.getType() == Material.TIPPED_ARROW) {
+        if (this.itemStack.getType() == Material.TIPPED_ARROW) {
             PotionMeta potionMeta = (PotionMeta) this.itemStack.getItemMeta();
             potionMeta.setBasePotionData(new PotionData(potionEffectType));
             this.itemStack.setItemMeta(potionMeta);

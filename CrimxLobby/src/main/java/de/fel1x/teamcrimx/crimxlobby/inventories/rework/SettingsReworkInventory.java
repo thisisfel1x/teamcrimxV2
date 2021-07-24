@@ -41,13 +41,13 @@ public class SettingsReworkInventory implements InventoryProvider {
 
     @Override
     public void update(Player player, InventoryContents contents) {
-        if(contents.property("document") == null) {
+        if (contents.property("document") == null) {
             return;
         }
 
         Document document = contents.property("document");
 
-        if(document == null) {
+        if (document == null) {
             return;
         }
 

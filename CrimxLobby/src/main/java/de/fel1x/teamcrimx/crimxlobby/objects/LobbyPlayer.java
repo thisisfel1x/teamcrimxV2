@@ -19,7 +19,6 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 
 public class LobbyPlayer {
 
@@ -144,7 +143,7 @@ public class LobbyPlayer {
 
     public void setPlayerHiderDisplayName() {
         ItemStack itemStack = this.player.getInventory().getItem(1);
-        if(itemStack == null) {
+        if (itemStack == null) {
             return;
         }
 
@@ -172,7 +171,7 @@ public class LobbyPlayer {
             String serializedLocation = (String) this.crimxLobby.getCrimxAPI().getMongoDB()
                     .getObjectFromDocumentSync(this.player.getUniqueId(), MongoDBCollection.LOBBY, "lastLocation");
 
-            if(serializedLocation != null &&
+            if (serializedLocation != null &&
                     !serializedLocation.trim().equalsIgnoreCase("")
                     && serializedLocation.split(":").length == 6) {
 
@@ -212,7 +211,7 @@ public class LobbyPlayer {
         final Location spawnLocation = this.player.getLocation();
         String locationSerialized = spawnLocation.getWorld().getName() + ":" + spawnLocation.getX()
                 + ":" + spawnLocation.getY() + ":" + spawnLocation.getZ()
-                + ":" + spawnLocation.getPitch() + ":" + spawnLocation.getYaw() ;
+                + ":" + spawnLocation.getPitch() + ":" + spawnLocation.getYaw();
 
         Document toUpdate = new Document();
         toUpdate.append("lastLocation", locationSerialized)
@@ -239,7 +238,7 @@ public class LobbyPlayer {
         Document lobbyDocument = this.crimxLobby.getCrimxAPI().getMongoDB()
                 .getDocumentSync(this.player.getUniqueId(), MongoDBCollection.LOBBY);
 
-        if(lobbyDocument == null) {
+        if (lobbyDocument == null) {
             return;
         }
 
@@ -262,6 +261,7 @@ public class LobbyPlayer {
      * Unlocks a cosmetic if the player has enough coins <br>
      * NO LONGER SUPPORTED - FOR REMOVAL - MIGHT NOT WORK PROPERLY ANYMORE <br>
      * Deprecated - use package {@link de.fel1x.teamcrimx.crimxapi.cosmetic} for more
+     *
      * @param cosmetic the cosmetic to unlock
      */
     @Deprecated

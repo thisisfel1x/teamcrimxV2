@@ -12,13 +12,9 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-
-import java.util.ArrayList;
 
 public class ProfileInventory implements InventoryProvider {
 
@@ -34,10 +30,10 @@ public class ProfileInventory implements InventoryProvider {
             {
                     0, 8
             }, {
-                    0, 1, 2, 3, 4, 5, 6, 7, 8
-            }, {}, {}, {}, {
-                    0, 1, 2, 3, 4, 5, 6
-            }
+            0, 1, 2, 3, 4, 5, 6, 7, 8
+    }, {}, {}, {}, {
+            0, 1, 2, 3, 4, 5, 6
+    }
     };
 
     @Override
@@ -51,14 +47,14 @@ public class ProfileInventory implements InventoryProvider {
             int counter = 0;
             for (InventoryFriend inventoryFriend : inventoryFriends) {
                 Component[] lore;
-                if(inventoryFriend.isOnline()) {
+                if (inventoryFriend.isOnline()) {
                     lore = new Component[]{
                             Component.text("§7Verbundener Server §8● §a" + inventoryFriend.getConnectedServer()),
                             Component.text(""),
                             Component.text("§eKlicke §7für weitere Optionen")
                     };
                 } else {
-                    lore = new Component[] {
+                    lore = new Component[]{
                             Component.text(""),
                             Component.text("§eKlicke §7für weitere Optionen")
                     };
@@ -66,17 +62,17 @@ public class ProfileInventory implements InventoryProvider {
 
                 clickableItem[counter] = ClickableItem.of(new ItemBuilder((inventoryFriend.isOnline())
                                 ? Material.PLAYER_HEAD : Material.SKELETON_SKULL)
-                            // TODO: prefix
+                                // TODO: prefix
                                 .setName(Component.text("§e" + inventoryFriend.getName() + " §8● "
                                         + ((inventoryFriend.isOnline()) ? "§aonline" : "§coffline")))
                                 .setLore(lore)
                                 .setSkullOwner(inventoryFriend.getName())
                                 .toItemStack(),
                         event -> {
-                    player.setMetadata("inventoryFriend",
-                            new FixedMetadataValue(CrimxLobby.getInstance(), inventoryFriend));
-                    FriendOptionsInventory.FRIEND_OPTIONS_INVENTORY.open(player);
-                });
+                            player.setMetadata("inventoryFriend",
+                                    new FixedMetadataValue(CrimxLobby.getInstance(), inventoryFriend));
+                            FriendOptionsInventory.FRIEND_OPTIONS_INVENTORY.open(player);
+                        });
 
                 counter++;
             }
@@ -91,13 +87,13 @@ public class ProfileInventory implements InventoryProvider {
         // Pagination Items
         contents.set(5, 7, ClickableItem.of(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ2OWUwNmU1ZGFkZmQ4NGU1ZjNkMWMyMTA2M2YyNTUzYjJmYTk0NWVlMWQ0ZDcxNTJmZGM1NDI1YmMxMmE5In19fQ==")
                 .setName(Component.text("§8● §7Vorherige Seite")).toItemStack(), event -> {
-            if(!pagination.isFirst()) {
+            if (!pagination.isFirst()) {
                 PROFILE_REWORK_INVENTORY.open(player, pagination.previous().getPage());
             }
         }));
         contents.set(5, 8, ClickableItem.of(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTliZjMyOTJlMTI2YTEwNWI1NGViYTcxM2FhMWIxNTJkNTQxYTFkODkzODgyOWM1NjM2NGQxNzhlZDIyYmYifX19")
                 .setName(Component.text("§8● §7Nächste Seite")).toItemStack(), event -> {
-            if(!pagination.isLast()) {
+            if (!pagination.isLast()) {
                 PROFILE_REWORK_INVENTORY.open(player, pagination.next().getPage());
             }
         }));
