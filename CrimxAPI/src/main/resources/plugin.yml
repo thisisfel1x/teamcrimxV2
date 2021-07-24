@@ -5,17 +5,18 @@ authors: [ fel1x ]
 description: An API to connect our minigames with other stuff
 website: teamcrimx.de
 api-version: 1.16
+depend:
+  - ProtocolLib
 
 commands:
   joinme:
     description: Brodcast a joinme
   coins:
     description: Get and manage your coins
-  suggest:
-    description: Suggest a new feature!
-    aliases: [ suggestion, vorschlag ]
-  bug:
-    description: Report a bug
-    aliases: [ bugreport ]
   clan:
     description: Create a clan
+  friend:
+    description: Add some friends
+  party:
+    description: not yet
+
