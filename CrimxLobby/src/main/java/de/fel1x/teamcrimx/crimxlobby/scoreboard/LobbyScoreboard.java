@@ -2,9 +2,12 @@ package de.fel1x.teamcrimx.crimxlobby.scoreboard;
 
 import de.fel1x.teamcrimx.crimxapi.clanSystem.player.ClanPlayer;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
+import de.fel1x.teamcrimx.crimxapi.friends.database.FriendPlayer;
 import de.fel1x.teamcrimx.crimxapi.utils.TimeUtils;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -35,6 +38,10 @@ public class LobbyScoreboard {
         clan.addEntry("§8");
         clan.prefix(Component.text("§8● §b%s"));
 
+        Team friends = gameScoreboard.registerNewTeam("friends");
+        friends.addEntry("§7");
+        friends.prefix(Component.text("N/A", NamedTextColor.RED));
+
         objective.getScore("§1").setScore(12);
         objective.getScore("§fCoins:").setScore(11);
         objective.getScore("§f").setScore(10);
@@ -46,7 +53,7 @@ public class LobbyScoreboard {
         objective.getScore("§8").setScore(4);
         objective.getScore("§4").setScore(3);
         objective.getScore("§fFreunde:").setScore(2);
-        objective.getScore("§8● §a0§8/§70").setScore(1);
+        objective.getScore("§7").setScore(1);
         objective.getScore("§5").setScore(0);
 
         if (!player.getScoreboard().equals(gameScoreboard)) {
@@ -93,6 +100,19 @@ public class LobbyScoreboard {
                 }
                 this.updateBoard(player, "§8● §bKein Clan", "clan");
             });
+
+            FriendPlayer friendPlayer = new FriendPlayer(player.getUniqueId());
+            int onlineFriendsCount = friendPlayer.getOnlineFriendsCount();
+            int totalFriendsCount = friendPlayer.getTotalFriendsCount();
+
+            this.updateBoard(player,
+                    Component.text("●", NamedTextColor.DARK_GRAY)
+                            .append(Component.space()).append(Component.text(onlineFriendsCount, NamedTextColor.GREEN)
+                            .append(Component.text("/", NamedTextColor.DARK_GRAY)
+                                    .append(Component.text(totalFriendsCount, NamedTextColor.GRAY))
+                                    .asComponent().decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))),
+                    "friends");
+
         }
     }
 
@@ -100,8 +120,18 @@ public class LobbyScoreboard {
         if (player.getScoreboard().getTeam("coins") != null) {
             Objects.requireNonNull(player.getScoreboard().getTeam(score)).prefix(Component.text(value));
         } else {
-            setDefaultLobbyScoreboard(player);
-            updateBoard(player, value, score);
+            this.setDefaultLobbyScoreboard(player);
+            this.updateBoard(player, value, score);
         }
     }
+
+    public void updateBoard(Player player, Component value, String score) {
+        if (player.getScoreboard().getTeam("coins") != null) {
+            Objects.requireNonNull(player.getScoreboard().getTeam(score)).prefix(value);
+        } else {
+            this.setDefaultLobbyScoreboard(player);
+            this.updateBoard(player, value, score);
+        }
+    }
+
 }

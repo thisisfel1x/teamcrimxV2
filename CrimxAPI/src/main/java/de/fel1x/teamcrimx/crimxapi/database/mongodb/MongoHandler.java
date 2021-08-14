@@ -208,6 +208,19 @@ public class MongoHandler {
     }
 
     /**
+     * Inserts an object in a document
+     *
+     * @param uuid              Player UUID
+     * @param mongoDBCollection the target collection
+     * @param key               the key for the value
+     * @param value             the specific value
+     * @return CompletableFuture / boolean indicates success or not
+     */
+    public CompletableFuture<Boolean> insertObjectInDocumentAsync(UUID uuid, MongoDBCollection mongoDBCollection, String key, Object value) {
+        return CompletableFuture.supplyAsync(() -> this.insertObjectInDocument(uuid, mongoDBCollection, key, value));
+    }
+
+    /**
      * Get a nested document in another document sync
      *
      * @param uuid              Player UUID

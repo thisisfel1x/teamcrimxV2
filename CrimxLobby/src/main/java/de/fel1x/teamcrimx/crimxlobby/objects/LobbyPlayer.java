@@ -14,6 +14,9 @@ import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import de.fel1x.teamcrimx.crimxlobby.database.LobbyDatabase;
 import de.fel1x.teamcrimx.crimxlobby.database.LobbyDatabasePlayer;
 import de.fel1x.teamcrimx.crimxlobby.inventories.CosmeticInventory;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -97,7 +100,15 @@ public class LobbyPlayer {
                 .setName("§8● §6Profil").setSkullOwner(this.player.getName()).toItemStack());
 
         if (hasPermission) {
-            this.player.getInventory().setItem(4, new ItemBuilder(Material.NAME_TAG).setName("§8● §5Nick").toItemStack());
+            boolean nickActivated = (boolean) this.crimxLobby.getCrimxAPI().getMongoDB()
+                    .getObjectFromDocumentSync(this.player.getUniqueId(), MongoDBCollection.USERS, "nick");
+            this.player.getInventory().setItem(4, new ItemBuilder(Material.NAME_TAG)
+                    .setName(Component.text("● ", NamedTextColor.DARK_GRAY)
+                            .append(Component.text("Nick ", NamedTextColor.DARK_PURPLE))
+                            .append(Component.text("» ", NamedTextColor.GRAY))
+                            .append(Component.text((nickActivated ? "aktiviert" : "deaktiviert"),
+                                    (nickActivated ? NamedTextColor.GREEN : NamedTextColor.RED))).asComponent().decoration(TextDecoration.ITALIC, false))
+                    .toItemStack());
         }
     }
 

@@ -1,7 +1,7 @@
 package de.fel1x.teamcrimx.crimxapi.support.listener;
 
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
-import de.fel1x.teamcrimx.crimxapi.cosmetic.CosmeticCategory;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.CosmeticRegistry;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.database.CosmeticPlayer;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import org.bukkit.Bukkit;
@@ -32,17 +32,18 @@ public class JoinListener implements Listener {
 
         Bukkit.getScheduler().runTaskLater(CrimxSpigotAPI.getInstance(), () -> {
             new CosmeticPlayer(player.getUniqueId())
-                    .getSelectedCosmeticByCategoryAsync(CosmeticCategory.EFFECT)
-                    .thenAccept(cosmeticRegistry -> {
-                        if (cosmeticRegistry == null) {
-                            return;
+                    .getSelectedCosmeticsAsync()
+                    .thenAccept(cosmeticRegistries -> {
+                        for (CosmeticRegistry cosmeticRegistry : cosmeticRegistries) {
+                            if (cosmeticRegistry == null) {
+                                continue;
+                            }
+                            try {
+                                cosmeticRegistry.getCosmeticClass().getDeclaredConstructor().newInstance().initializeCosmetic(player);
+                            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ignored) {
+                                player.sendMessage(CrimxAPI.getInstance().getPrefix() + "§cEin Fehler beim Laden deines Cosmetics aufgetreten!");
+                            }
                         }
-                        try {
-                            cosmeticRegistry.getCosmeticClass().getDeclaredConstructor().newInstance().initializeCosmetic(player);
-                        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ignored) {
-                            player.sendMessage(CrimxAPI.getInstance().getPrefix() + "§cEin Fehler beim Laden deines Cosmetics aufgetreten!");
-                        }
-
                     });
         }, 20L);
     }

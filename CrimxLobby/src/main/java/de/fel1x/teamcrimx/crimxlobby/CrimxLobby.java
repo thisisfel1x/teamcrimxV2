@@ -8,6 +8,9 @@ import de.fel1x.teamcrimx.crimxapi.utils.npc.NPCCreator;
 import de.fel1x.teamcrimx.crimxlobby.commands.BuildCommand;
 import de.fel1x.teamcrimx.crimxlobby.commands.SetupCommand;
 import de.fel1x.teamcrimx.crimxlobby.cosmetics.armor.RainbowArmor;
+import de.fel1x.teamcrimx.crimxlobby.inventories.NavigatorInventory;
+import de.fel1x.teamcrimx.crimxlobby.inventories.rework.LobbySwitcherInventory;
+import de.fel1x.teamcrimx.crimxlobby.inventories.rework.NickGui;
 import de.fel1x.teamcrimx.crimxlobby.listeners.block.BlockBreakListener;
 import de.fel1x.teamcrimx.crimxlobby.listeners.block.BlockPlaceListener;
 import de.fel1x.teamcrimx.crimxlobby.listeners.entity.DamageListener;
@@ -19,7 +22,7 @@ import de.fel1x.teamcrimx.crimxlobby.objects.Spawn;
 import de.fel1x.teamcrimx.crimxlobby.scoreboard.LobbyScoreboard;
 import fr.minuskube.inv.InventoryManager;
 import org.bukkit.*;
-import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -64,8 +67,6 @@ public final class CrimxLobby extends JavaPlugin {
         this.pluginManager = Bukkit.getPluginManager();
         this.data = new Data();
 
-        this.npcPool = new NPCPool(this, 125, 25, 40);
-
         this.inventoryManager = new InventoryManager(this);
         this.inventoryManager.init();
 
@@ -77,6 +78,10 @@ public final class CrimxLobby extends JavaPlugin {
         this.loadWorld();
 
         this.spawnNpc();
+
+        new NickGui();
+        new LobbySwitcherInventory(this);
+        new NavigatorInventory(this);
 
         this.runMainScheduler();
 
@@ -111,11 +116,7 @@ public final class CrimxLobby extends JavaPlugin {
         if (lobby == null) {
             Bukkit.getConsoleSender().sendMessage("§cKein Spawn gesetzt!");
         } else {
-            lobby.getWorld().getEntities().forEach(entity -> {
-                if (!(entity instanceof ArmorStand)) {
-                    entity.remove();
-                }
-            });
+            lobby.getWorld().getEntities().forEach(Entity::remove);
 
             World world = lobby.getWorld();
             world.setSpawnLocation((int) lobby.getX(), (int) lobby.getY(), (int) lobby.getZ());

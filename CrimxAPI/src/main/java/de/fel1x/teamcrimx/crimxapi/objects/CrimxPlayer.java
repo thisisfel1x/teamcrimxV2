@@ -69,7 +69,8 @@ public class CrimxPlayer {
                 .append("lastJoinMe", 0L)
                 .append("currentClan", null)
                 .append("skinSignature", skinSignature)
-                .append("skinTexture", skinTexture);
+                .append("skinTexture", skinTexture)
+                .append("nick", false);
 
         if (this.mongoDB.insertDocumentInCollectionSync(playerDocument, MongoDBCollection.USERS)) {
             player.sendMessage(this.crimxAPI.getPrefix() + "§7Nutzerdaten wurden erfolgreich angelegt!");

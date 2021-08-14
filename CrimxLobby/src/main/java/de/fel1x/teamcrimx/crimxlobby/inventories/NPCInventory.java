@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Deprecated
 public class NPCInventory implements InventoryProvider {
 
     public static final SmartInventory NPC_INVENTORY = SmartInventory.builder()

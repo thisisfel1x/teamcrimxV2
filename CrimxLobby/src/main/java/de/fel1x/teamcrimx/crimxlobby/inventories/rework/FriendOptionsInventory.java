@@ -19,7 +19,7 @@ public class FriendOptionsInventory implements InventoryProvider {
             .id("FRIEND_OPTIONS_INVENTORY")
             .provider(new FriendOptionsInventory())
             .size(3, 9)
-            .title("§8● §eProfil")
+            .title("§8● Freunde - Einstellungen")
             .manager(CrimxLobby.getInstance().getInventoryManager())
             .build();
 

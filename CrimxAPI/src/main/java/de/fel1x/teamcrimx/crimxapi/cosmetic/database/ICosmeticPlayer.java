@@ -2,6 +2,7 @@ package de.fel1x.teamcrimx.crimxapi.cosmetic.database;
 
 import de.fel1x.teamcrimx.crimxapi.cosmetic.CosmeticCategory;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.CosmeticRegistry;
+import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -67,11 +68,17 @@ public interface ICosmeticPlayer {
     /**
      * Stops all active cosmetics
      */
-    boolean stopAllActiveCosmeticsSync();
+    boolean stopAllActiveCosmeticsSync(Player player);
 
     /**
      * Stops all active cosmetics async
      */
-    CompletableFuture<Boolean> stopAllActiveCosmeticsAsync();
+    CompletableFuture<Boolean> stopAllActiveCosmeticsAsync(Player player);
 
+    /**
+     * Stops cosmetic by type
+     *
+     * @param cosmeticCategory
+     */
+    void stopCosmeticByType(CosmeticCategory cosmeticCategory, Player player);
 }

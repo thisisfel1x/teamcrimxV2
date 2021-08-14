@@ -5,6 +5,10 @@ import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.database.ClanDatabase;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDB;
 import de.fel1x.teamcrimx.crimxapi.server.ServerType;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
 import java.util.logging.Logger;
 
@@ -32,6 +36,12 @@ public final class CrimxAPI {
 
     public static CrimxAPI getInstance() {
         return instance;
+    }
+
+    public static Component gadgetPrefix() {
+        return Component.text("Gadgets ", TextColor.fromHexString("#1358f4"))
+                .append(Component.text("● ", NamedTextColor.DARK_GRAY)).asComponent()
+                .decoration(TextDecoration.ITALIC, false);
     }
 
     public String getPrefix() {

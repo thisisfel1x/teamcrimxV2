@@ -123,4 +123,14 @@ public interface IFriendPlayer {
      * @return
      */
     CompletableFuture<Boolean> notifyOnlineFriendsOnQuit();
+
+    /**
+     *
+     */
+    int getOnlineFriendsCount();
+
+    /**
+     *
+     */
+    int getTotalFriendsCount();
 }

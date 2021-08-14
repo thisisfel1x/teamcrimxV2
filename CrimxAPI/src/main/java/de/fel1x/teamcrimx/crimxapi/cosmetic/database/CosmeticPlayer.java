@@ -7,7 +7,7 @@ import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import org.apache.commons.lang.WordUtils;
 import org.bson.Document;
-import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -109,9 +109,13 @@ public class CosmeticPlayer implements ICosmeticPlayer {
         CosmeticRegistry[] selectedCosmetics = new CosmeticRegistry[CosmeticRegistry.values().length];
 
         for (int i = 0; i < CosmeticCategory.values().length; i++) {
-            selectedCosmetics[i] = CosmeticRegistry.valueOf((String) this.crimxAPI.getMongoDB()
-                    .getObjectFromDocumentSync(this.uuid, MongoDBCollection.COSMETIC,
-                            "selected" + WordUtils.capitalizeFully(CosmeticCategory.values()[i].name())));
+            try {
+                selectedCosmetics[i] = CosmeticRegistry.valueOf((String) this.crimxAPI.getMongoDB()
+                        .getObjectFromDocumentSync(this.uuid, MongoDBCollection.COSMETIC,
+                                "selected" + WordUtils.capitalizeFully(CosmeticCategory.values()[i].name())));
+            } catch (NullPointerException ignored) {
+                selectedCosmetics[i] = null;
+            }
 
         }
         return selectedCosmetics;
@@ -142,22 +146,41 @@ public class CosmeticPlayer implements ICosmeticPlayer {
     }
 
     @Override
-    public boolean stopAllActiveCosmeticsSync() {
+    public boolean stopAllActiveCosmeticsSync(Player player) {
         // TODO: DO THIS BETTER
         CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().remove(this.uuid)
-                .stopCosmetic(Bukkit.getPlayer(this.uuid));
+                .stopCosmetic(player);
 
-        for (CosmeticCategory cosmeticRegistry : CosmeticCategory.values()) {
+        player.getInventory().setItem(player.hasPermission("crimxlobby.vip") ? 2 : 4, null);
+
+        for (CosmeticCategory cosmeticCategory : CosmeticCategory.values()) {
             this.crimxAPI.getMongoDB().insertObjectInDocument(this.uuid,
                     MongoDBCollection.COSMETIC,
-                    "selected" + WordUtils.capitalizeFully(cosmeticRegistry.name()),
+                    "selected" + WordUtils.capitalizeFully(cosmeticCategory.name()),
                     null);
         }
         return true;
     }
 
     @Override
-    public CompletableFuture<Boolean> stopAllActiveCosmeticsAsync() {
-        return CompletableFuture.supplyAsync(this::stopAllActiveCosmeticsSync);
+    public CompletableFuture<Boolean> stopAllActiveCosmeticsAsync(Player player) {
+        return CompletableFuture.supplyAsync(() -> this.stopAllActiveCosmeticsSync(player));
+    }
+
+    @Override
+    public void stopCosmeticByType(CosmeticCategory cosmeticCategory, Player player) {
+
+        if (cosmeticCategory == CosmeticCategory.GADGETS) {
+            player.getInventory().setItem(player.hasPermission("crimxlobby.vip") ? 2 : 4, null);
+        }
+
+        this.crimxAPI.getMongoDB().insertObjectInDocument(this.uuid,
+                MongoDBCollection.COSMETIC,
+                "selected" + WordUtils.capitalizeFully(cosmeticCategory.name()),
+                null);
+
+        CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().remove(this.uuid)
+                .stopCosmetic(player);
+
     }
 }

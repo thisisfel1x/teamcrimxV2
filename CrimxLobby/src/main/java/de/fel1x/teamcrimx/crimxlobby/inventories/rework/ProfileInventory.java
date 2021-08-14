@@ -22,7 +22,7 @@ public class ProfileInventory implements InventoryProvider {
             .id("PROFILE_REWORK_INVENTORY")
             .provider(new ProfileInventory())
             .size(6, 9)
-            .title("§8● §eProfil")
+            .title("§8● Profil")
             .manager(CrimxLobby.getInstance().getInventoryManager())
             .build();
 
@@ -43,6 +43,7 @@ public class ProfileInventory implements InventoryProvider {
         InventoryUtils.setNavigationItems(contents, player, true);
 
         new FriendPlayer(player.getUniqueId()).getFriends().thenAccept(inventoryFriends -> {
+            System.out.println(inventoryFriends.size());
             ClickableItem[] clickableItem = new ClickableItem[inventoryFriends.size()];
             int counter = 0;
             for (InventoryFriend inventoryFriend : inventoryFriends) {
@@ -74,6 +75,7 @@ public class ProfileInventory implements InventoryProvider {
                             FriendOptionsInventory.FRIEND_OPTIONS_INVENTORY.open(player);
                         });
 
+                System.out.println(counter);
                 counter++;
             }
 
