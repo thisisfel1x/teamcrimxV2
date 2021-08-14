@@ -22,7 +22,7 @@ public class SettingsReworkInventory implements InventoryProvider {
             .id("SETTINGS_REWORK_INVENTORY")
             .provider(new SettingsReworkInventory())
             .size(6, 9)
-            .title("§8● §eEinstellungen")
+            .title("§8● Einstellungen")
             .manager(CrimxLobby.getInstance().getInventoryManager())
             .build();
 
@@ -60,8 +60,8 @@ public class SettingsReworkInventory implements InventoryProvider {
                             .append(Component.text("●", NamedTextColor.GRAY).append(Component.space())
                                     .append(Component.text(bool ? "aktiviert" : "deaktiviert",
                                             bool ? NamedTextColor.GREEN : NamedTextColor.RED))).asComponent().decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
-                    .setLore(Component.empty().append(Component.newline()).append(Component.text(setting.getDescription(), NamedTextColor.GRAY)
-                            .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)))
+                    .setLore(Component.empty(), Component.text(setting.getDescription(), NamedTextColor.GRAY)
+                            .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE), Component.empty())
                     .addGlow(bool)
                     .toItemStack(), inventoryClickEvent -> {
                 document.put(setting.name(), !bool);
@@ -74,12 +74,11 @@ public class SettingsReworkInventory implements InventoryProvider {
 
         contents.set(3, 6, ClickableItem.of(
                 new ItemBuilder(Material.MAGMA_CREAM)
-                        .setName(Component.text("●", NamedTextColor.DARK_GRAY).append(Component.space())
-                                .append(Component.text("Spawnpoint", NamedTextColor.YELLOW)).append(Component.space())
+                        .setName(Component.text("Spawnpoint", NamedTextColor.YELLOW).append(Component.space())
                                 .append(Component.text("●", NamedTextColor.GRAY)).append(Component.space())
                                 .append(Component.text(this.defaultSpawn ? "aktiviert" : "deaktiviert",
-                                        this.defaultSpawn ? NamedTextColor.GREEN : NamedTextColor.RED)
-                                        .asComponent().decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)))
+                                        this.defaultSpawn ? NamedTextColor.GREEN : NamedTextColor.RED))
+                                .asComponent().decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE))
                         .setLore("",
                                 "§aAktiviert §8- §7Du spawnst beim Join", "                 §7an deiner letzten Position",
                                 "§cDeaktiviert §8- §7Du spawnst immer am Spawn", "")

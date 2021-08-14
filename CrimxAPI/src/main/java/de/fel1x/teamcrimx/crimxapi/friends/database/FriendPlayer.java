@@ -7,6 +7,8 @@ import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.friends.FriendSettings;
 import de.fel1x.teamcrimx.crimxapi.friends.InventoryFriend;
+import de.fel1x.teamcrimx.crimxapi.friends.events.FriendOfflineEvent;
+import de.fel1x.teamcrimx.crimxapi.friends.events.FriendOnlineEvent;
 import de.fel1x.teamcrimx.crimxapi.server.ServerType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -14,6 +16,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -236,9 +239,13 @@ public class FriendPlayer implements IFriendPlayer {
 
     @Override
     public void sendMessage(String message, UUID player) {
-        ICloudPlayer cloudPlayer = this.getOnlinePlayer(player);
+        /*ICloudPlayer cloudPlayer = this.getOnlinePlayer(player);
         if (cloudPlayer != null) {
             cloudPlayer.getPlayerExecutor().sendChatMessage(message);
+        }*/
+        Player player1 = Bukkit.getPlayer(player);
+        if (player1 != null) {
+            player1.sendMessage(message); // TODO: fix duplicated messages caused by multiple API initialization
         }
     }
 
@@ -247,7 +254,7 @@ public class FriendPlayer implements IFriendPlayer {
         ICloudPlayer cloudPlayer = this.getOnlinePlayer(targetUUID);
 
         if (cloudPlayer == null) {
-            return "";
+            return "N/A";
         }
 
         return cloudPlayer.getConnectedService().getServerName();
@@ -356,33 +363,26 @@ public class FriendPlayer implements IFriendPlayer {
             }
 
             switch (onlineFriendsUUIDs.size()) {
-                case 0:
-                    this.sendMessage(this.friendPrefix + "§7Keine deiner Freunde sind online §8(RIP)", this.uuid);
-                    break;
-                case 1:
-                    // TODO: prefix
-                    this.sendMessage(String.format("%s§7Momentan ist nur §e%s §7online", this.friendPrefix,
-                            this.getNameFromUUID(onlineFriendsUUIDs.get(0))), this.uuid);
-                    break;
-                case 2:
-                    this.sendMessage(String.format("%s§7Momentan sind nur §e%s §7und §e%s §7online", this.friendPrefix,
-                            this.getNameFromUUID(onlineFriendsUUIDs.get(0)),
-                            this.getNameFromUUID(onlineFriendsUUIDs.get(1))), this.uuid);
-                    break;
-                case 3:
-                    this.sendMessage(String.format("%s§7Momentan sind nur §e%s§7, §e%s §7und §e%s §7online", this.friendPrefix,
-                            this.getNameFromUUID(onlineFriendsUUIDs.get(0)),
-                            this.getNameFromUUID(onlineFriendsUUIDs.get(1)),
-                            this.getNameFromUUID(onlineFriendsUUIDs.get(2))), this.uuid);
-                    break;
-                default:
-                    this.sendMessage(String.format("%s§7Momentan sind nur §e%s§7, §e%s §7, §e%s " +
-                                    "und §e%s §7weitere Freunde online", this.friendPrefix,
-                            this.getNameFromUUID(onlineFriendsUUIDs.get(0)),
-                            this.getNameFromUUID(onlineFriendsUUIDs.get(1)),
-                            this.getNameFromUUID(onlineFriendsUUIDs.get(2)),
-                            onlineFriendsUUIDs.size() - 3), this.uuid);
+                case 0 -> this.sendMessage(this.friendPrefix + "§7Keine deiner Freunde sind online", this.uuid);
+                case 1 ->
+                        // TODO: prefix
+                        this.sendMessage(String.format("%s§7Momentan ist nur §e%s §7online", this.friendPrefix,
+                                this.getNameFromUUID(onlineFriendsUUIDs.get(0))), this.uuid);
+                case 2 -> this.sendMessage(String.format("%s§7Momentan sind nur §e%s §7und §e%s §7online", this.friendPrefix,
+                        this.getNameFromUUID(onlineFriendsUUIDs.get(0)),
+                        this.getNameFromUUID(onlineFriendsUUIDs.get(1))), this.uuid);
+                case 3 -> this.sendMessage(String.format("%s§7Momentan sind nur §e%s§7, §e%s §7und §e%s §7online", this.friendPrefix,
+                        this.getNameFromUUID(onlineFriendsUUIDs.get(0)),
+                        this.getNameFromUUID(onlineFriendsUUIDs.get(1)),
+                        this.getNameFromUUID(onlineFriendsUUIDs.get(2))), this.uuid);
+                default -> this.sendMessage(String.format("%s§7Momentan sind nur §e%s§7, §e%s §7, §e%s " +
+                                "und §e%s §7weitere Freunde online", this.friendPrefix,
+                        this.getNameFromUUID(onlineFriendsUUIDs.get(0)),
+                        this.getNameFromUUID(onlineFriendsUUIDs.get(1)),
+                        this.getNameFromUUID(onlineFriendsUUIDs.get(2)),
+                        onlineFriendsUUIDs.size() - 3), this.uuid);
             }
+            Bukkit.getPluginManager().callEvent(new FriendOnlineEvent(true, this));
             return true;
         });
     }
@@ -405,7 +405,19 @@ public class FriendPlayer implements IFriendPlayer {
                 this.sendMessage(this.friendPrefix + "§e" + this.getNameFromUUID(this.uuid) + " §7ist nun §coffline",
                         onlineFriendUUID);
             }
+            Bukkit.getPluginManager().callEvent(new FriendOfflineEvent(this));
             return true;
         });
+    }
+
+    @Override
+    public int getOnlineFriendsCount() {
+        return this.getOnlineFriends().size();
+    }
+
+    @Override
+    public int getTotalFriendsCount() {
+        return this.crimxAPI.getMongoDB()
+                .getStringArrayListFromDocumentSync(this.uuid, MongoDBCollection.FRIENDS, "friends").size();
     }
 }

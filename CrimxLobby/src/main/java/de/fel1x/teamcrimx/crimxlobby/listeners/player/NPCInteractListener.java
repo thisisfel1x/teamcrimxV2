@@ -3,7 +3,6 @@ package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 import com.github.juliarn.npc.NPC;
 import com.github.juliarn.npc.event.PlayerNPCInteractEvent;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
-import de.fel1x.teamcrimx.crimxlobby.inventories.NPCInventory;
 import de.fel1x.teamcrimx.crimxlobby.inventories.NPCShopInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,12 +24,8 @@ public class NPCInteractListener implements Listener {
         NPC npc = event.getNPC();
         Player player = event.getPlayer();
 
-        if (npc.getEntityId() == this.crimxLobby.getLobbyNpc().getEntityId()) {
-            NPCInventory.NPC_INVENTORY.open(player);
-        } else if (npc.getEntityId() == this.crimxLobby.getPerksNpc().getEntityId()) {
+        if (npc.getEntityId() == this.crimxLobby.getPerksNpc().getEntityId()) {
             NPCShopInventory.NPC_SHOP_INVENTORY.open(player);
         }
-
     }
-
 }

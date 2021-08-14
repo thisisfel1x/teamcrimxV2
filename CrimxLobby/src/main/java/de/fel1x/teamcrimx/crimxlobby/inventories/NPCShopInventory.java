@@ -16,6 +16,7 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bson.Document;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -165,8 +166,6 @@ public class NPCShopInventory implements InventoryProvider {
 
         Sorting sorting = contents.property("sorting");
 
-        long ms = System.currentTimeMillis();
-
         CrimxLobby.getInstance().getCrimxAPI().getMongoDB()
                 .getDocumentAsync(player.getUniqueId(), MongoDBCollection.COSMETIC)
                 .thenAccept(cosmeticDocument -> {
@@ -198,7 +197,8 @@ public class NPCShopInventory implements InventoryProvider {
 
                             ItemStack itemStack = new ItemBuilder(cosmetic.getDisplayMaterial())
                                     .setName(cosmetic.getDisplayName()
-                                            .append(Component.text(" §8● " + (bought ? "§agekauft" : "§cnicht gekauft"))))
+                                            .append(Component.text(" §8● " + (bought ? "§agekauft" : "§cnicht gekauft")))
+                                            .asComponent().decoration(TextDecoration.ITALIC, false))
                                     .setLore(cosmetic.getDescription())
                                     .addLoreLine(Component.empty())
                                     .addLoreLine(Component.text("§7Kosten: §e" + cosmetic.getCost() + " Coins"))
@@ -227,7 +227,6 @@ public class NPCShopInventory implements InventoryProvider {
                     pagination.setItemsPerPage(27);
 
                     pagination.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 2, 0));
-                    player.sendMessage("Benchmark: " + (System.currentTimeMillis() - ms) + "ms");
                 });
     }
 

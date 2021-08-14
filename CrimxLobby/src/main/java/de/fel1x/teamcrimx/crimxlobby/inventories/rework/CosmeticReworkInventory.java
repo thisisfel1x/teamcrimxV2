@@ -15,12 +15,14 @@ import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bson.Document;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CosmeticReworkInventory implements InventoryProvider {
 
@@ -31,6 +33,8 @@ public class CosmeticReworkInventory implements InventoryProvider {
             .title("§8● §dDeine Cosmetics")
             .manager(CrimxLobby.getInstance().getInventoryManager())
             .build();
+
+    private final String oakWoodX = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWE2Nzg3YmEzMjU2NGU3YzJmM2EwY2U2NDQ5OGVjYmIyM2I4OTg0NWU1YTY2YjVjZWM3NzM2ZjcyOWVkMzcifX19";
 
     private final int[][] glassSlots2D = {
             {
@@ -51,6 +55,7 @@ public class CosmeticReworkInventory implements InventoryProvider {
     @Override
     public void init(Player player, InventoryContents contents) {
         Pagination pagination = contents.pagination();
+        final CosmeticPlayer cosmeticPlayer = new CosmeticPlayer(player.getUniqueId());
 
         int row = 0;
         for (int[] ints : this.glassSlots2D) {
@@ -69,22 +74,44 @@ public class CosmeticReworkInventory implements InventoryProvider {
                     ClickableItem.of(cosmeticCategory.getItemStack(),
                             event -> {
                                 this.clearInv(contents);
-                                this.setInventoryContest(contents, pagination, cosmeticCategory, player);
+                                this.setInventoryContents(contents, pagination, cosmeticCategory, player);
                             }));
         }
 
         // Remove all Cosmetics Item
         contents.set(5, 0, ClickableItem.of(new ItemBuilder(Material.BARRIER)
-                .setName(Component.text("§8● Entferne alle Cosmetics"))
+                .setName(Component.text("§8● §cEntferne alle Cosmetics"))
                 .toItemStack(), event -> {
             player.closeInventory();
-            new CosmeticPlayer(player.getUniqueId()).stopAllActiveCosmeticsAsync().thenAccept(success -> {
+            cosmeticPlayer.stopAllActiveCosmeticsAsync(player).thenAccept(success -> {
                 if (!success) {
                     player.sendMessage(CrimxLobby.getInstance().getPrefix()
-                            + "§cEin Fehler ist aufgetreten. Versuche es später erneut...");
+                            + "§cEin Fehler ist aufgetreten. Versuche es später erneut");
                 }
             });
         }));
+
+        // Active Cosmetics
+        AtomicInteger column = new AtomicInteger(2);
+        cosmeticPlayer.getSelectedCosmeticsAsync().thenAccept(cosmeticRegistries -> {
+            for (CosmeticRegistry cosmeticRegistry : cosmeticRegistries) {
+                if (cosmeticRegistry == null) {
+                    continue;
+                }
+                contents.set(5, column.get(), ClickableItem.of(new ItemBuilder(this.oakWoodX)
+                        .setName(Component.text("● ", NamedTextColor.DARK_GRAY)
+                                .append(Component.text(cosmeticRegistry.getCosmeticCategory().getPlainName(),
+                                        NamedTextColor.GRAY).append(Component.text(" -> ", NamedTextColor.DARK_GRAY)
+                                        .append(Component.text("aktiv", NamedTextColor.GREEN)))))
+                        .setLore(Component.empty(), Component.text("Klicke zum ausziehen", NamedTextColor.RED),
+                                Component.empty())
+                        .toItemStack(), event -> {
+                    cosmeticPlayer.stopCosmeticByType(cosmeticRegistry.getCosmeticCategory(), player);
+                    player.closeInventory();
+                }));
+                column.getAndIncrement();
+            }
+        });
 
         // Pagination Items
         contents.set(5, 7, ClickableItem.of(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ2OWUwNmU1ZGFkZmQ4NGU1ZjNkMWMyMTA2M2YyNTUzYjJmYTk0NWVlMWQ0ZDcxNTJmZGM1NDI1YmMxMmE5In19fQ==")
@@ -123,7 +150,7 @@ public class CosmeticReworkInventory implements InventoryProvider {
         }
     }
 
-    private void setInventoryContest(InventoryContents contents, Pagination pagination, CosmeticCategory cosmeticCategory, Player player) {
+    private void setInventoryContents(InventoryContents contents, Pagination pagination, CosmeticCategory cosmeticCategory, Player player) {
         CrimxLobby.getInstance().getCrimxAPI().getMongoDB()
                 .getDocumentAsync(player.getUniqueId(), MongoDBCollection.COSMETIC)
                 .thenAccept(cosmeticDocument -> {
@@ -158,7 +185,6 @@ public class CosmeticReworkInventory implements InventoryProvider {
                                     .setName(cosmetic.getDisplayName())
                                     .setLore(cosmetic.getDescription())
                                     .addLoreLine(Component.empty())
-                                    .addLoreLine(Component.text("§7Kosten: §e" + cosmetic.getCost() + " Coins"))
                                     .toItemStack();
 
                             cosmetics[count] = ClickableItem.of(itemStack, event -> {

@@ -76,17 +76,9 @@ public class CrimxSpigotAPI extends JavaPlugin {
 
     private void setServerType() {
         switch (Wrapper.getInstance().getServiceId().getTaskName()) {
-            case "Proxy":
-                CrimxAPI.getInstance().setServerType(ServerType.UNKNOWN);
-                break;
-            case "Lobby":
-            case "PremiumLobby":
-            case "SilentLobby":
-                CrimxAPI.getInstance().setServerType(ServerType.LOBBY_SERVER);
-                break;
-            default:
-                CrimxAPI.getInstance().setServerType(ServerType.GAME_SERVER);
-                break;
+            case "Proxy" -> CrimxAPI.getInstance().setServerType(ServerType.UNKNOWN);
+            case "Lobby", "PremiumLobby", "SilentLobby" -> CrimxAPI.getInstance().setServerType(ServerType.LOBBY_SERVER);
+            default -> CrimxAPI.getInstance().setServerType(ServerType.GAME_SERVER);
         }
     }
 

@@ -73,6 +73,10 @@
             <id>releases</id>
             <url>https://repo.cloudnetservice.eu/repository/releases/</url>
         </repository>
+        <repository>
+            <id>repo</id>
+            <url>https://repo.mattstudios.me/artifactory/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -89,11 +93,18 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- old inventory api -->
         <dependency>
             <groupId>fr.minuskube.inv</groupId>
             <artifactId>smart-invs</artifactId>
             <version>1.2.7</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- new inventory api -->
+        <dependency>
+            <groupId>dev.triumphteam</groupId>
+            <artifactId>triumph-gui</artifactId>
+            <version>3.0.3</version>
         </dependency>
 
         <!--  cloudnet -->
@@ -120,11 +131,6 @@
             <artifactId>cloudnet-wrapper-jvm</artifactId>
             <version>3.3.0-RELEASE</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.juliarn</groupId>
-            <artifactId>npc-lib</artifactId>
-            <version>2.4-RELEASE</version>
         </dependency>
     </dependencies>
 </project>
