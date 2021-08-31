@@ -6,15 +6,18 @@ import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.commands.ClanCommand;
 import de.fel1x.teamcrimx.crimxapi.commands.CoinsCommand;
 import de.fel1x.teamcrimx.crimxapi.commands.JoinMeCommand;
-import de.fel1x.teamcrimx.crimxapi.cosmetic.runnable.CosmeticTask;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.database.ActiveCosmetics;
 import de.fel1x.teamcrimx.crimxapi.friends.commands.FriendCommand;
 import de.fel1x.teamcrimx.crimxapi.friends.listener.FriendListener;
 import de.fel1x.teamcrimx.crimxapi.party.commands.PartyCommand;
 import de.fel1x.teamcrimx.crimxapi.server.ServerType;
-import de.fel1x.teamcrimx.crimxapi.support.listener.JoinListener;
+import de.fel1x.teamcrimx.crimxapi.support.listener.JoinQuitListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class CrimxSpigotAPI extends JavaPlugin {
 
@@ -23,7 +26,7 @@ public class CrimxSpigotAPI extends JavaPlugin {
 
     private NPCPool npcPool;
 
-    private CosmeticTask cosmeticTask;
+    private HashMap<UUID, ActiveCosmetics> activeCosmeticsHashMap;
 
     public static CrimxSpigotAPI getInstance() {
         return instance;
@@ -43,13 +46,13 @@ public class CrimxSpigotAPI extends JavaPlugin {
         this.registerCommands();
         this.registerListener();
 
+        this.activeCosmeticsHashMap = new HashMap<>();
+
         this.npcPool = NPCPool.builder(this)
                 .spawnDistance(60)
                 .actionDistance(30)
                 .tabListRemoveTicks(20)
                 .build();
-
-        this.cosmeticTask = new CosmeticTask(this);
 
         Bukkit.getConsoleSender().sendMessage("§aLoaded CrimxAPI v2 by fel1x");
 
@@ -57,7 +60,7 @@ public class CrimxSpigotAPI extends JavaPlugin {
 
     private void registerListener() {
         // BUKKIT
-        new JoinListener(this);
+        new JoinQuitListener(this);
 
         // CLOUDNET
         new FriendListener();
@@ -95,7 +98,7 @@ public class CrimxSpigotAPI extends JavaPlugin {
         return this.npcPool;
     }
 
-    public CosmeticTask getCosmeticTask() {
-        return this.cosmeticTask;
+    public HashMap<UUID, ActiveCosmetics> getActiveCosmeticsHashMap() {
+        return this.activeCosmeticsHashMap;
     }
 }

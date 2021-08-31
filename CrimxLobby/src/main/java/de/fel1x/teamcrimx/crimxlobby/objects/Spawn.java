@@ -5,23 +5,24 @@ import org.bukkit.Location;
 
 public enum Spawn {
 
-    SPAWN(CrimxLobby.getInstance().getSpawnManager().loadLocation("spawn"), null),
-    MLGWARS(CrimxLobby.getInstance().getSpawnManager().loadLocation("mlgwars"), null),
-    FLOOR_IS_LAVA(CrimxLobby.getInstance().getSpawnManager().loadLocation("floorislava"), null),
-    MASTERBUILDERS(CrimxLobby.getInstance().getSpawnManager().loadLocation("masterbuilders"), null),
-    BEDWARS(CrimxLobby.getInstance().getSpawnManager().loadLocation("bedwars"), null),
-    CAPTURE_THE_FLAG(CrimxLobby.getInstance().getSpawnManager().loadLocation("ctf"), null),
-    COMING_SOON(CrimxLobby.getInstance().getSpawnManager().loadLocation("soon"), null);
+    // SPAWN & NPC
+    SPAWN(null),
+    SHOP_NPC(null),
+    PROFILE_NPC(null),
+
+    // MINIGAMES
+    MLGWARS(null),
+    FLOOR_IS_LAVA(null),
+    BINGO(null),
+    CAPTURE_THE_FLAG(null);
 
     private Location playerSpawn;
-    private Location npcSpawn;
 
-    Spawn(Location playerSpawn, Location npcSpawn) {
+    Spawn(Location playerSpawn) {
         this.playerSpawn = playerSpawn;
-        this.npcSpawn = npcSpawn;
     }
 
-    public Location getPlayerSpawn() {
+    public Location getSpawn() {
         return this.playerSpawn;
     }
 
@@ -29,11 +30,4 @@ public enum Spawn {
         this.playerSpawn = playerSpawn;
     }
 
-    public Location getNpcSpawn() {
-        return this.npcSpawn;
-    }
-
-    public void setNpcSpawn(Location npcSpawn) {
-        this.npcSpawn = npcSpawn;
-    }
 }

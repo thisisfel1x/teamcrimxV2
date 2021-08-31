@@ -1,6 +1,7 @@
 package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
+import de.fel1x.teamcrimx.crimxlobby.minigames.connectfour.objects.Game;
 import de.fel1x.teamcrimx.crimxlobby.objects.LobbyPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,12 +25,11 @@ public class QuitListener implements Listener {
 
         event.quitMessage(null);
 
-        lobbyPlayer.saveNewLocation();
-
-        if (this.crimxLobby.getData().getPlayerPet().containsKey(player.getUniqueId())) {
-            this.crimxLobby.getData().getPlayerPet().get(player.getUniqueId()).remove();
-            this.crimxLobby.getData().getPlayerPet().remove(player.getUniqueId());
+        if(this.crimxLobby.getConnectFourGameManager().isPlaying(player)) {
+            this.crimxLobby.getConnectFourGameManager().getGame(player).stopGame(player, Game.FinishReason.PLAYER_LEFT_MATCH);
         }
+
+        lobbyPlayer.saveNewLocation();
 
         if (lobbyPlayer.isInBuild()) {
             lobbyPlayer.removeFromBuild();

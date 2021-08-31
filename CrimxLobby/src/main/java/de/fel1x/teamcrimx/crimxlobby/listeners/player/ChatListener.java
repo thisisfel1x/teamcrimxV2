@@ -1,14 +1,12 @@
 package de.fel1x.teamcrimx.crimxlobby.listeners.player;
 
-import de.dytanic.cloudnet.driver.CloudNetDriver;
-import de.dytanic.cloudnet.driver.permission.IPermissionGroup;
-import de.dytanic.cloudnet.driver.permission.IPermissionUser;
+import de.fel1x.teamcrimx.crimxapi.clanSystem.player.IClanPlayer;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
 
@@ -17,18 +15,21 @@ public class ChatListener implements Listener {
     }
 
     @EventHandler
-    public void on(AsyncPlayerChatEvent event) {
+    public void on(AsyncChatEvent event) {
 
-        Player player = event.getPlayer();
+        IClanPlayer clanPlayer = (IClanPlayer) event.getPlayer().getMetadata("iClanPlayer").get(0).value();
+        Component clanComponent = Component.empty();
 
-        IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(player.getUniqueId());
+        if(clanPlayer != null) {
+            clanComponent = clanComponent.append(Component.text("[", NamedTextColor.GRAY))
+                    .append(Component.text(clanPlayer.getCurrentClan().getClanTag(), NamedTextColor.YELLOW)
+                    .append(Component.text("] ", NamedTextColor.GRAY)));
+        }
 
-        if (iPermissionUser == null) return;
-
-        IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(iPermissionUser);
-        event.setFormat(ChatColor.translateAlternateColorCodes('&', permissionGroup.getDisplay()) + player.getName() + " §8» §f" + event.getMessage());
-
-        // TODO: clan tag in chat
+        Component finalClanComponent = clanComponent;
+        event.renderer((source, sourceDisplayName, message, viewer) -> finalClanComponent.append(sourceDisplayName)
+                .append(Component.text(": ", NamedTextColor.DARK_GRAY))
+                .append(message.color(NamedTextColor.WHITE)));
 
     }
 }

@@ -18,7 +18,7 @@ public class LobbyDatabase {
     public void createPlayerData(Player player) {
         player.sendMessage(this.crimxLobby.getPrefix() + "§7Nutzerdaten werden angelegt...");
 
-        final Location spawnLocation = Spawn.SPAWN.getPlayerSpawn();
+        final Location spawnLocation = Spawn.SPAWN.getSpawn();
         String locationSerialized = spawnLocation.getWorld().getName() + ":" + spawnLocation.getX()
                 + ":" + spawnLocation.getY() + ":" + spawnLocation.getZ()
                 + ":" + spawnLocation.getYaw() + ":" + spawnLocation.getPitch();

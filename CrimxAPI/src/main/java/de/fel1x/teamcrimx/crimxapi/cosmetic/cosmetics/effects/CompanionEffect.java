@@ -1,8 +1,7 @@
 package de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.effects;
 
 import de.fel1x.teamcrimx.crimxapi.cosmetic.CosmeticCategory;
-import de.fel1x.teamcrimx.crimxapi.cosmetic.ICosmetic;
-import de.fel1x.teamcrimx.crimxapi.cosmetic.IEffect;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.EffectCosmetic;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.particles.ParticleEffect;
@@ -12,7 +11,11 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class CompanionEffect implements ICosmetic, IEffect {
+public class CompanionEffect extends EffectCosmetic {
+
+    public CompanionEffect(Player player, CrimxSpigotAPI crimxSpigotAPI) {
+        super(player, crimxSpigotAPI);
+    }
 
     @Override
     public Component getDisplayName() {
@@ -48,28 +51,17 @@ public class CompanionEffect implements ICosmetic, IEffect {
     }
 
     @Override
-    public void initializeCosmetic(Player player) {
-        CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().put(player.getUniqueId(), this);
+    public void startCosmetic(Player player) {
         PlayerParticlesAPI.getInstance().addActivePlayerParticle(player, ParticleEffect.DUST, DefaultStyles.COMPANION, OrdinaryColor.RAINBOW);
     }
 
     @Override
-    public void updateAfterTicks(long ticksToGo) {
-
-    }
-
-    @Override
     public void stopCosmetic(Player player) {
-        CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().remove(player.getUniqueId());
         PlayerParticlesAPI.getInstance().removeActivePlayerParticles(player, DefaultStyles.COMPANION);
     }
 
     @Override
-    public Object calculateMath(Object[] args) {
-        return null;
-    }
+    public void run() {
 
-    @Override
-    public void displayParticles() {
     }
 }

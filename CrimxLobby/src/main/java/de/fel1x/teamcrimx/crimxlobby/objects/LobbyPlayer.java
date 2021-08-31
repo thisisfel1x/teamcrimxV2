@@ -1,22 +1,20 @@
 package de.fel1x.teamcrimx.crimxlobby.objects;
-
-import com.destroystokyo.paper.MaterialTags;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.driver.permission.IPermissionGroup;
+import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
-import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import de.fel1x.teamcrimx.crimxlobby.Data;
-import de.fel1x.teamcrimx.crimxlobby.cosmetics.Cosmetic;
-import de.fel1x.teamcrimx.crimxlobby.cosmetics.ICosmetic;
 import de.fel1x.teamcrimx.crimxlobby.database.LobbyDatabase;
 import de.fel1x.teamcrimx.crimxlobby.database.LobbyDatabasePlayer;
-import de.fel1x.teamcrimx.crimxlobby.inventories.CosmeticInventory;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -32,9 +30,6 @@ public class LobbyPlayer {
     private final Player player;
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
-
-    private final Material[] glassTypes = MaterialTags.STAINED_GLASS.getValues().toArray(new Material[0]);
-    private final Material[] concreteTypes = MaterialTags.CONCRETES.getValues().toArray(new Material[0]);
 
     public LobbyPlayer(Player player) {
         this.player = player;
@@ -90,14 +85,24 @@ public class LobbyPlayer {
     public void setLobbyInventory() {
         boolean hasPermission = this.player.hasPermission("crimxlobby.vip");
 
-        this.player.getInventory().setItem(0, new ItemBuilder(Material.MUSIC_DISC_CAT).setName("§8● §aTeleporter").toItemStack());
+        this.player.getInventory().setItem(0, new ItemBuilder(Material.MUSIC_DISC_CAT)
+                .setName(Component.text("● ", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)
+                        .append(Component.text("Teleporter", NamedTextColor.GREEN))).toItemStack());
         this.player.getInventory().setItem(1, new ItemBuilder(this.getPlayerHiderItemData(), 1)
                 .setName(this.getPlayerHiderDisplayName()).toItemStack());
-        this.player.getInventory().setItem(3, new ItemBuilder(Material.FISHING_ROD).setName("§8● §bEnterhaken").setUnbreakable().toItemStack());
-        this.player.getInventory().setItem(5, new ItemBuilder(Material.CHEST_MINECART).setName("§8● §eCosmetics").toItemStack());
-        this.player.getInventory().setItem(7, new ItemBuilder(Material.MOJANG_BANNER_PATTERN).setName("§8● §eLobby wechseln").toItemStack());
+        this.player.getInventory().setItem(3, new ItemBuilder(Material.SHEARS)
+                        .setName(Component.text("● ", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)
+                                .append(Component.text("Duell", TextColor.fromHexString("#ebcc34")))).toItemStack());
+        this.player.getInventory().setItem(5, new ItemBuilder(Material.CHEST_MINECART)
+                .setName(Component.text("● ", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)
+                        .append(Component.text("Dein Inventar", NamedTextColor.YELLOW))).toItemStack());
+        this.player.getInventory().setItem(7, new ItemBuilder(Material.MOJANG_BANNER_PATTERN)
+                .setName(Component.text("● ", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)
+                        .append(Component.text("Lobby wechseln", NamedTextColor.YELLOW))).toItemStack());
         this.player.getInventory().setItem(8, new ItemBuilder(Material.PLAYER_HEAD)
-                .setName("§8● §6Profil").setSkullOwner(this.player.getName()).toItemStack());
+                .setName(Component.text("● ", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)
+                        .append(Component.text("Profil", NamedTextColor.GOLD)))
+                .setSkullOwner(this.player.getName()).toItemStack());
 
         if (hasPermission) {
             boolean nickActivated = (boolean) this.crimxLobby.getCrimxAPI().getMongoDB()
@@ -110,10 +115,6 @@ public class LobbyPlayer {
                                     (nickActivated ? NamedTextColor.GREEN : NamedTextColor.RED))).asComponent().decoration(TextDecoration.ITALIC, false))
                     .toItemStack());
         }
-    }
-
-    public ICosmetic getSelectedCosmetic() {
-        return this.data.getCosmetic().get(this.player.getUniqueId());
     }
 
     public void updatePlayerHiderState() {
@@ -206,7 +207,7 @@ public class LobbyPlayer {
 
     public void teleport(Spawn spawn) {
         try {
-            this.player.teleport(spawn.getPlayerSpawn());
+            this.player.teleport(spawn.getSpawn());
         } catch (NullPointerException exception) {
             this.player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten! " +
                     "Bitte versuche es später erneut");
@@ -226,8 +227,6 @@ public class LobbyPlayer {
 
         Document toUpdate = new Document();
         toUpdate.append("lastLocation", locationSerialized)
-                .append("hotbarSound", this.data.getLobbyDatabasePlayer()
-                        .get(this.player.getUniqueId()).isHotbarSoundEnabled())
                 .append("defaultSpawn", this.data.getLobbyDatabasePlayer()
                         .get(this.player.getUniqueId()).isSpawnAtLastLocation())
                 .append("playerhiderState", this.data.getPlayerHiderState().get(this.player.getUniqueId()));
@@ -253,56 +252,10 @@ public class LobbyPlayer {
             return;
         }
 
-        boolean hotbarSoundEnabled = lobbyDocument.getBoolean("hotbarSound");
         boolean spawnAtLastLocation = lobbyDocument.getBoolean("defaultSpawn");
         long lastReward = lobbyDocument.getLong("lastReward");
 
-        this.data.getLobbyDatabasePlayer().put(this.player.getUniqueId(), new LobbyDatabasePlayer(hotbarSoundEnabled, spawnAtLastLocation, lastReward));
-
-        for (Cosmetic cosmetic : Cosmetic.values()) {
-            if (this.crimxLobby.getCrimxAPI().getMongoDB()
-                    .getObjectFromDocumentSync(this.player.getUniqueId(), MongoDBCollection.LOBBY, cosmetic.name()) == null) {
-                this.crimxLobby.getCrimxAPI().getMongoDB().insertObjectInDocument(this.player.getUniqueId(),
-                        MongoDBCollection.LOBBY, cosmetic.name(), false);
-            }
-        }
-    }
-
-    /**
-     * Unlocks a cosmetic if the player has enough coins <br>
-     * NO LONGER SUPPORTED - FOR REMOVAL - MIGHT NOT WORK PROPERLY ANYMORE <br>
-     * Deprecated - use package {@link de.fel1x.teamcrimx.crimxapi.cosmetic} for more
-     *
-     * @param cosmetic the cosmetic to unlock
-     */
-    @Deprecated
-    public void unlockCosmetic(Cosmetic cosmetic) {
-        // TODO: new cosmetic api
-        try {
-            ICosmetic iCosmetic = cosmetic.getCosmeticClass().newInstance();
-            CoinsAPI coinsAPI = new CoinsAPI(this.player.getUniqueId());
-
-            int coins = coinsAPI.getCoins();
-            int required = cosmetic.getCosmeticClass().newInstance().getCosmeticCost();
-
-            if (coins >= required) {
-                this.player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast erfolgreich §a" + iCosmetic.getCosmeticName() + " §7freigeschalten");
-                this.player.playSound(this.player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2, 0.5f);
-                CosmeticInventory.COSMETICS_INVENTORY.open(this.player);
-
-                coinsAPI.removeCoins(required);
-                Bukkit.broadcastMessage(String.valueOf(this.crimxLobby.getCrimxAPI().getMongoDB().insertObjectInDocument(this.player.getUniqueId(),
-                        MongoDBCollection.LOBBY, cosmetic.name(), true)));
-            } else {
-                this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
-                this.player.sendMessage(this.crimxLobby.getPrefix() + "§7Du hast nicht genügend Coins!");
-                this.player.closeInventory();
-            }
-        } catch (InstantiationException | IllegalAccessException e) {
-            this.player.closeInventory();
-            this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2, 0.5f);
-            this.player.sendMessage(this.crimxLobby.getPrefix() + "§cEin Fehler ist aufgetreten! Bitte versuche es später erneut.");
-        }
+        this.data.getLobbyDatabasePlayer().put(this.player.getUniqueId(), new LobbyDatabasePlayer(spawnAtLastLocation, lastReward));
     }
 
     public void setScoreboard() {

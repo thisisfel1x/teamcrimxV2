@@ -134,19 +134,19 @@ public class NavigatorInventory {
     public enum Navigation {
 
         SPAWN(Component.text("Spawn", NamedTextColor.YELLOW), 5, 4,
-                Spawn.SPAWN.getPlayerSpawn(), false, Material.MAGMA_CREAM, ServerType.LOBBY_SERVER,
+                Spawn.SPAWN.getSpawn(), false, Material.MAGMA_CREAM, ServerType.LOBBY_SERVER,
                 null, "Lobby"),
         MLG_WARS(Component.text("MlgWars", NamedTextColor.GOLD), 4, 2,
-                Spawn.MLGWARS.getPlayerSpawn(), false, Material.TNT_MINECART, ServerType.GAME_SERVER,
+                Spawn.MLGWARS.getSpawn(), false, Material.TNT_MINECART, ServerType.GAME_SERVER,
                 mlgWarsLegacyDescription, "MlgWars", "TeamMlgWars", "Labor"),
         FLOOR_IS_LAVA(Component.text("TheFloorIsLava", NamedTextColor.RED), 6, 2,
-                Spawn.FLOOR_IS_LAVA.getPlayerSpawn(), false, Material.LAVA_BUCKET, ServerType.LOBBY_SERVER,
+                Spawn.FLOOR_IS_LAVA.getSpawn(), false, Material.LAVA_BUCKET, ServerType.LOBBY_SERVER,
                 floorIsLavaLegacyDescription, "FloorIsLava"),
         BINGO(Component.text("Bingo", NamedTextColor.GREEN), 3, 3,
-                Spawn.SPAWN.getPlayerSpawn(), false, Material.BAMBOO, ServerType.GAME_SERVER,
+                Spawn.BINGO.getSpawn(), false, Material.BAMBOO, ServerType.GAME_SERVER,
                 bingoLegacyDescription, "Bingo"),
         CAPTURE_THE_FLAG(Component.text("CaptureTheFlag", NamedTextColor.BLUE), 7, 3,
-                Spawn.CAPTURE_THE_FLAG.getPlayerSpawn(), false, Material.BLUE_BANNER, ServerType.GAME_SERVER,
+                Spawn.CAPTURE_THE_FLAG.getSpawn(), false, Material.BLUE_BANNER, ServerType.GAME_SERVER,
                 captureTheFlagLegacyDescription, "CTF");
 
         private final Component displayName;
