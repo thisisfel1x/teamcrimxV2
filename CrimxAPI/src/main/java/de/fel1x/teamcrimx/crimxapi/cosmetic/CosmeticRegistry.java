@@ -4,7 +4,11 @@ import de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.effects.CelebrationEffect;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.effects.CompanionEffect;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.effects.HaloEffect;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.effects.RingEffect;
-import de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.gadgets.ChickenBomb;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.gadgets.*;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public enum CosmeticRegistry {
 
@@ -14,22 +18,32 @@ public enum CosmeticRegistry {
     CELEBRATION_EFFECT(CelebrationEffect.class, CosmeticCategory.EFFECT),
     HALO_EFFECT(HaloEffect.class, CosmeticCategory.EFFECT),
 
-    CHICKEN_BOMB_GADGET(ChickenBomb.class, CosmeticCategory.GADGETS);
+    CHICKEN_BOMB_GADGET(ChickenBombGadget.class, CosmeticCategory.GADGETS),
+    FUN_GUN_GADGET(FunGunGadget.class, CosmeticCategory.GADGETS),
+    MELON_THROWER_GADGET(MelonThrowerGadget.class, CosmeticCategory.GADGETS),
+    GRAPPLING_HOOK(GrapplingHookGadget.class, CosmeticCategory.GADGETS),
+    PAINTBALL_GUN_GADGET(PaintballGunGadget.class, CosmeticCategory.GADGETS);
 
-    private final Class<? extends ICosmetic> cosmeticClass;
+    private final Class<? extends BaseCosmetic> cosmeticClass;
     private final CosmeticCategory cosmeticCategory;
 
-    CosmeticRegistry(Class<? extends ICosmetic> cosmeticClass, CosmeticCategory cosmeticCategory) {
+    CosmeticRegistry(Class<? extends BaseCosmetic> cosmeticClass, CosmeticCategory cosmeticCategory) {
         this.cosmeticClass = cosmeticClass;
         this.cosmeticCategory = cosmeticCategory;
     }
 
-    public Class<? extends ICosmetic> getCosmeticClass() {
+    public Class<? extends BaseCosmetic> getCosmeticClass() {
         return this.cosmeticClass;
     }
 
     public CosmeticCategory getCosmeticCategory() {
         return this.cosmeticCategory;
+    }
+
+    public static Collection<CosmeticRegistry> filterByCategory(CosmeticCategory cosmeticCategory) {
+        return Stream.of(CosmeticRegistry.values())
+                .filter(cosmeticRegistry -> cosmeticRegistry.getCosmeticCategory() == cosmeticCategory)
+                .collect(Collectors.toList());
     }
 
 }

@@ -15,3 +15,5 @@ commands:
     description: Activate or deactivate the build mode for yourself or for another player
   setup:
     description: Setup the lobby
+  connectfour:
+    description: Internal game command

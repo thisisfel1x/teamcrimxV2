@@ -1,8 +1,11 @@
 package de.fel1x.teamcrimx.crimxlobby.inventories.rework;
 
+import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
+import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.BaseCosmetic;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.CosmeticCategory;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.CosmeticRegistry;
-import de.fel1x.teamcrimx.crimxapi.cosmetic.ICosmetic;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.database.ActiveCosmetics;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.database.CosmeticPlayer;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
@@ -106,8 +109,8 @@ public class CosmeticReworkInventory implements InventoryProvider {
                         .setLore(Component.empty(), Component.text("Klicke zum ausziehen", NamedTextColor.RED),
                                 Component.empty())
                         .toItemStack(), event -> {
-                    cosmeticPlayer.stopCosmeticByType(cosmeticRegistry.getCosmeticCategory(), player);
                     player.closeInventory();
+                    cosmeticPlayer.stopCosmeticByType(cosmeticRegistry.getCosmeticCategory(), player);
                 }));
                 column.getAndIncrement();
             }
@@ -172,7 +175,7 @@ public class CosmeticReworkInventory implements InventoryProvider {
                         CosmeticRegistry cosmeticRegistry = CosmeticRegistry.valueOf(key);
 
                         try {
-                            ICosmetic cosmetic = cosmeticRegistry.getCosmeticClass().getDeclaredConstructor().newInstance();
+                            BaseCosmetic cosmetic = cosmeticRegistry.getCosmeticClass().getDeclaredConstructor(Player.class, CrimxSpigotAPI.class).newInstance(player, CrimxSpigotAPI.getInstance());
 
                             boolean bought = cosmeticCategoryRegistryDocument.getBoolean(key);
 
@@ -189,10 +192,11 @@ public class CosmeticReworkInventory implements InventoryProvider {
 
                             cosmetics[count] = ClickableItem.of(itemStack, event -> {
                                 player.closeInventory();
-                                if (CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().containsKey(player.getUniqueId())) {
-                                    CrimxSpigotAPI.getInstance().getCosmeticTask().getActiveCosmetics().get(player.getUniqueId()).stopCosmetic(player);
+                                try {
+                                    CrimxSpigotAPI.getInstance().getActiveCosmeticsHashMap().get(player.getUniqueId()).getSelectedCosmetic().get(cosmeticCategory).stopCosmetic(player);
+                                } catch (NullPointerException ignored) {
                                 }
-                                cosmetic.initializeCosmetic(player);
+                                cosmetic.startCosmetic(player);
                                 new CosmeticPlayer(player.getUniqueId()).saveSelectedCosmeticToDatabase(cosmeticRegistry);
                             });
                             count++;

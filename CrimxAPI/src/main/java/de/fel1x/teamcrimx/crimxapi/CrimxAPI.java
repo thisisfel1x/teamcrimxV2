@@ -80,7 +80,7 @@ public final class CrimxAPI {
         return this.clanDatabase;
     }
 
-    public boolean isDisplayCosmetics() {
+    public boolean shouldDisplayCosmetics() {
         return this.displayCosmetics;
     }
 

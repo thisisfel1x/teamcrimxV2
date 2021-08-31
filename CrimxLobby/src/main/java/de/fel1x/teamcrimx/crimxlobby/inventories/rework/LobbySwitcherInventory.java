@@ -31,7 +31,6 @@ public class LobbySwitcherInventory {
     private GuiItem[] servers;
 
     public LobbySwitcherInventory(CrimxLobby crimxLobby) {
-
         lobbySwitcherGui = Gui.paginated()
                 .title(Component.text("● Lobby wechseln"))
                 .rows(6)

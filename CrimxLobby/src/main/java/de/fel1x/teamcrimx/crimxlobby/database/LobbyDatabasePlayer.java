@@ -2,22 +2,12 @@ package de.fel1x.teamcrimx.crimxlobby.database;
 
 public class LobbyDatabasePlayer {
 
-    private boolean hotbarSoundEnabled;
     private boolean spawnAtLastLocation;
     private long lastReward;
 
-    public LobbyDatabasePlayer(boolean hotbarSoundEnabled, boolean spawnAtLastLocation, long lastReward) {
-        this.hotbarSoundEnabled = hotbarSoundEnabled;
+    public LobbyDatabasePlayer(boolean spawnAtLastLocation, long lastReward) {
         this.spawnAtLastLocation = spawnAtLastLocation;
         this.lastReward = lastReward;
-    }
-
-    public boolean isHotbarSoundEnabled() {
-        return this.hotbarSoundEnabled;
-    }
-
-    public void setHotbarSoundEnabled(boolean hotbarSoundEnabled) {
-        this.hotbarSoundEnabled = hotbarSoundEnabled;
     }
 
     public boolean isSpawnAtLastLocation() {

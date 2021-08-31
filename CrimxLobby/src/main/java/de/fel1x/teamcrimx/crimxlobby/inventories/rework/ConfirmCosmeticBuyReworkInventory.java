@@ -2,8 +2,9 @@ package de.fel1x.teamcrimx.crimxlobby.inventories.rework;
 
 import de.fel1x.teamcrimx.crimxapi.coins.CrimxCoins;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.CosmeticRegistry;
-import de.fel1x.teamcrimx.crimxapi.cosmetic.ICosmetic;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.InventoryCosmetic;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.database.CosmeticPlayer;
+import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.crimxlobby.CrimxLobby;
 import fr.minuskube.inv.ClickableItem;
@@ -38,7 +39,8 @@ public class ConfirmCosmeticBuyReworkInventory implements InventoryProvider {
         }
 
         try {
-            ICosmetic cosmetic = selectedCosmetic.getCosmeticClass().getDeclaredConstructor().newInstance();
+            InventoryCosmetic cosmetic = selectedCosmetic.getCosmeticClass()
+                    .getDeclaredConstructor(Player.class, CrimxSpigotAPI.class).newInstance(player, CrimxSpigotAPI.getInstance());
 
             contents.set(0, 3, ClickableItem.empty(new ItemBuilder(cosmetic.getDisplayMaterial())
                     .setName(cosmetic.getDisplayName())

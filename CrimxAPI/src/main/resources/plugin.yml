@@ -7,6 +7,7 @@ website: teamcrimx.de
 api-version: 1.16
 depend:
   - ProtocolLib
+  - PlayerParticles
 
 commands:
   joinme:

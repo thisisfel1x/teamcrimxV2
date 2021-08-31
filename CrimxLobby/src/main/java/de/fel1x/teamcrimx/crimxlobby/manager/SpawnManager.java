@@ -15,6 +15,14 @@ public class SpawnManager {
     private final File configfile = new File("plugins/CrimxLobby/", "spawns.yml");
     private final FileConfiguration config = YamlConfiguration.loadConfiguration(this.configfile);
 
+    public String getWorldName(String root) {
+        try {
+            return this.config.getString(root + ".World");
+        } catch(NullPointerException ignored) {
+            return null;
+        }
+    }
+
     public void saveLocation(Location location, String root, Player player) {
         location = location.toCenterLocation();
 
@@ -53,5 +61,4 @@ public class SpawnManager {
             return null;
         }
     }
-
 }
