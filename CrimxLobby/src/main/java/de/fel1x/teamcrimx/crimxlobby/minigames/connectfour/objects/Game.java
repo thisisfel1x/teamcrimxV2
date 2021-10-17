@@ -241,7 +241,7 @@ public class Game {
 
         this.getPartner(winner).sendMessage(this.crimxLobby.getConnectFourGameManager().getPrefix()
                 .append(Component.text("Du hast das Spiel gegen ", NamedTextColor.GRAY))
-                .append(this.getPartner(winner).displayName())
+                .append(winner.displayName())
                 .append(Component.text( " verloren! ", NamedTextColor.RED)));
         this.getPartner(winner)
                 .playSound(this.getPartner(winner).getLocation(), Sound.ENTITY_VILLAGER_NO, 0.75f, 1f);
