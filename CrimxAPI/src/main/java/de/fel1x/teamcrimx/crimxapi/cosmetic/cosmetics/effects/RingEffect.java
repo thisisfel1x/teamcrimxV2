@@ -51,11 +51,13 @@ public class RingEffect extends EffectCosmetic {
 
     @Override
     public void startCosmetic(Player player) {
+        super.startCosmetic(player);
         PlayerParticlesAPI.getInstance().addActivePlayerParticle(player, ParticleEffect.TOTEM_OF_UNDYING, DefaultStyles.RINGS);
     }
 
     @Override
     public void stopCosmetic(Player player) {
+        super.stopCosmetic(player);
         PlayerParticlesAPI.getInstance().removeActivePlayerParticles(player, DefaultStyles.RINGS);
     }
 

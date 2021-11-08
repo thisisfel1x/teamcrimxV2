@@ -35,7 +35,7 @@ public class MoveListener implements Listener {
 
         Player player = event.getPlayer();
         Location location = player.getLocation();
-        GamePlayer gamePlayer = new GamePlayer(player);
+        GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 

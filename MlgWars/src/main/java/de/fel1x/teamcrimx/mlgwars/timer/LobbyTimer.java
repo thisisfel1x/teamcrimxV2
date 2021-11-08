@@ -2,9 +2,14 @@ package de.fel1x.teamcrimx.mlgwars.timer;
 
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
+import de.fel1x.teamcrimx.mlgwars.inventories.rework.GameTypeVoteInventory;
 import de.fel1x.teamcrimx.mlgwars.maphandler.ChestFiller;
+import de.fel1x.teamcrimx.mlgwars.maphandler.gametype.GameType;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class LobbyTimer implements ITimer {
 
@@ -29,36 +34,46 @@ public class LobbyTimer implements ITimer {
 
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
                 switch (this.countdown) {
-                    case 60:
-                    case 50:
-                    case 40:
-                    case 30:
-                    case 20:
-                    case 10:
-                    case 5:
-                    case 4:
-                    case 3:
-                    case 2:
-                    case 1:
+                    case 60, 50, 40, 30, 20, 10, 5, 4, 3, 2, 1 -> {
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Die Runde startet in §e"
                                 + (this.countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
-                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2f, 3f));
-                        break;
-
-                    case 0:
+                        Bukkit.getServer().playSound(net.kyori.adventure.sound.Sound.sound(Sound.BLOCK_NOTE_BLOCK_BASS.key(),
+                                net.kyori.adventure.sound.Sound.Source.BLOCK, 2f, 3f));
+                    }
+                    case 0 -> {
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§aDie Runde beginnt!");
+                        Bukkit.getServer().playSound(net.kyori.adventure.sound.Sound.sound(Sound.ENTITY_PLAYER_LEVELUP.key(),
+                                net.kyori.adventure.sound.Sound.Source.PLAYER, 2f, 3f));
                         Bukkit.getOnlinePlayers().forEach(player -> {
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 3f, 5f);
                             player.setLevel(0);
                             player.setExp(0);
                         });
                         this.stop();
                         this.mlgWars.startTimerByClass(DelayTimer.class);
-                        break;
+                    }
+                }
+
+                if(this.countdown == 10) {
+                    GameTypeVoteInventory.ImplementedMode implementedMode = this.mlgWars.getForcedMode();
+                    if(implementedMode == null) {
+                        implementedMode = this.mlgWars.getGameTypeVoteInventory().calculateMode();
+                    }
+
+                    if(implementedMode != GameTypeVoteInventory.ImplementedMode.NORMAL) {
+                        try {
+                            GameType gameType = implementedMode.getGameType().getDeclaredConstructor(MlgWars.class).newInstance(this.mlgWars);
+                            this.mlgWars.setGameType(gameType);
+                        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {}
+                    }
+                    Bukkit.getOnlinePlayers().forEach(player -> this.mlgWars.getScoreboardHandler()
+                            .updateBoardMiniMessage(player, "<#5035f4>" + this.mlgWars.getGameType().getGameTypeName(), "mode"));
                 }
 
                 if (this.countdown == 5) {
-                    new ChestFiller();
+                    this.mlgWars.getGameType().fillChests();
+                    this.mlgWars.getServer()
+                            .showTitle(Title.title(this.mlgWars.miniMessage().parse("<yellow>" + this.mlgWars.getSelectedMap().getMapName()),
+                                    this.mlgWars.miniMessage().parse("<gray>Gebaut von <yellow>" + this.mlgWars.getSelectedMap().getMapBuilder())));
                 }
 
                 if (this.countdown >= 1) {

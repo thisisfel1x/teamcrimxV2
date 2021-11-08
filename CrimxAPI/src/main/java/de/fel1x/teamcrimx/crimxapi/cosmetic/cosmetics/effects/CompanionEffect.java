@@ -52,11 +52,13 @@ public class CompanionEffect extends EffectCosmetic {
 
     @Override
     public void startCosmetic(Player player) {
+        super.startCosmetic(player);
         PlayerParticlesAPI.getInstance().addActivePlayerParticle(player, ParticleEffect.DUST, DefaultStyles.COMPANION, OrdinaryColor.RAINBOW);
     }
 
     @Override
     public void stopCosmetic(Player player) {
+        super.stopCosmetic(player);
         PlayerParticlesAPI.getInstance().removeActivePlayerParticles(player, DefaultStyles.COMPANION);
     }
 

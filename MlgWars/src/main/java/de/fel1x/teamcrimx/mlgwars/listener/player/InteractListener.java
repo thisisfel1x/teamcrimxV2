@@ -3,61 +3,49 @@ package de.fel1x.teamcrimx.mlgwars.listener.player;
 import de.fel1x.teamcrimx.crimxapi.utils.*;
 import de.fel1x.teamcrimx.mlgwars.Data;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
-import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
-import de.fel1x.teamcrimx.mlgwars.inventories.ForcemapInventory;
-import de.fel1x.teamcrimx.mlgwars.inventories.KitInventory;
 import de.fel1x.teamcrimx.mlgwars.inventories.SpectatorInventory;
 import de.fel1x.teamcrimx.mlgwars.inventories.TeamInventory;
+import de.fel1x.teamcrimx.mlgwars.inventories.rework.ForcemapReworkInventory;
+import de.fel1x.teamcrimx.mlgwars.inventories.rework.KitOverviewInventory;
+import de.fel1x.teamcrimx.mlgwars.inventories.rework.SpectatorReworkInventory;
+import de.fel1x.teamcrimx.mlgwars.inventories.rework.TeamReworkInventory;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
-import de.fel1x.teamcrimx.mlgwars.utils.Tornado;
-import me.libraryaddict.disguise.DisguiseAPI;
-import me.libraryaddict.disguise.disguisetypes.DisguiseType;
-import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
 public class InteractListener implements Listener {
 
     private final MlgWars mlgWars;
-    private final Data data;
-    private final Set<Material> transparent = new HashSet<>();
-    private final Random random = new Random();
-    private final Material[] woolTypes = {
-            Material.WHITE_WOOL, Material.ORANGE_WOOL, Material.MAGENTA_WOOL, Material.LIGHT_BLUE_WOOL, Material.YELLOW_WOOL,
-            Material.LIME_WOOL, Material.PINK_WOOL, Material.GRAY_WOOL, Material.LIGHT_GRAY_WOOL, Material.CYAN_WOOL,
-            Material.PURPLE_WOOL, Material.BLUE_WOOL, Material.GREEN_WOOL, Material.RED_WOOL
-    };
-    private int count;
+
+    private final KitOverviewInventory kitOverviewInventory;
+    private final ForcemapReworkInventory forcemapReworkInventory;
+    private final SpectatorReworkInventory spectatorReworkInventory;
 
     public InteractListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
-        this.data = this.mlgWars.getData();
         this.mlgWars.getPluginManager().registerEvents(this, this.mlgWars);
 
-        this.transparent.add(Material.AIR);
+        this.kitOverviewInventory = new KitOverviewInventory(this.mlgWars);
+        this.forcemapReworkInventory = new ForcemapReworkInventory(this.mlgWars);
+        this.spectatorReworkInventory = new SpectatorReworkInventory(this.mlgWars);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void on(PlayerInteractEvent event) {
 
         Player player = event.getPlayer();
-        GamePlayer gamePlayer = new GamePlayer(player);
-
-        Material interactedMaterial = event.getMaterial();
+        GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
@@ -75,16 +63,23 @@ public class InteractListener implements Listener {
                 if (event.hasItem()) {
                     if (event.getMaterial() == Material.CHEST_MINECART) {
                         player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 2f, 0.75f);
-                        KitInventory.KIT_OVERVIEW_INVENTORY.open(player);
+                        this.kitOverviewInventory.openInventory(player);
                     } else if (event.getMaterial() == Material.REDSTONE_TORCH) {
                         if (this.mlgWars.getLobbyCountdown() <= 10) {
                             player.sendMessage(this.mlgWars.getPrefix() + "§7Du kannst die Map nicht mehr ändern");
                         } else {
-                            ForcemapInventory.FORCEMAP_INVENTORY.open(player);
+                            this.forcemapReworkInventory.openForcemapInventory(player);
                         }
-                    } else if (event.getMaterial() == Material.RED_BED && this.mlgWars.getTeamSize() > 1) {
-                        TeamInventory.TEAM_INVENTORY.open(player);
-                    } else {
+                    } else if (event.getMaterial() == Material.AMETHYST_SHARD /*&& this.mlgWars.getTeamSize() > 1*/) {
+                        player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_PLACE, 1f, 1.2f);
+                        this.mlgWars.getTeamReworkInventory().open(player);
+                    } else if(event.getMaterial() == Material.GLOW_BERRIES && this.mlgWars.getTeamSize() == 1) {
+                        if (this.mlgWars.getLobbyCountdown() <= 10) {
+                            player.sendMessage(this.mlgWars.getPrefix() + "§7Du kannst nicht mehr abstimmen");
+                        } else {
+                            this.mlgWars.getGameTypeVoteInventory().openInventory(player);
+                        }
+                    } else if(player.getInventory().getHeldItemSlot() != 4) {
                         event.setCancelled(true);
                     }
                 } else {
@@ -96,7 +91,7 @@ public class InteractListener implements Listener {
                 if (gamePlayer.isSpectator()) {
                     event.setCancelled(true);
                     if (event.hasItem() && event.getMaterial() == Material.COMPASS) {
-                        SpectatorInventory.INVENTORY.open(player);
+                        this.spectatorReworkInventory.openInventory(player);
                     }
                     return;
                 }
@@ -117,8 +112,8 @@ public class InteractListener implements Listener {
                         }
                     }
 
-                    switch (gamePlayer.getSelectedKit()) {
-                        case EXPLODER:
+                    /*switch (gamePlayer.getSelectedKit()) {
+                        /*case EXPLODER:
                             if (interactedMaterial == Material.LEVER) {
                                 for (Block block : this.mlgWars.getData().getPlacedExploderTnt().get(player.getUniqueId())) {
                                     if (block.getType() != Material.TNT) continue;
@@ -663,7 +658,7 @@ public class InteractListener implements Listener {
                                 };
                                 bukkitRunnable.runTaskTimer(this.mlgWars, 0L, 5L);
                                 this.data.getCsgoTasks().get(player.getUniqueId()).add(bukkitRunnable);
-                            } */
+                            }
                             break;
                         case VALORANT:
                             if (interactedMaterial == Material.SPECTRAL_ARROW) {
@@ -728,7 +723,7 @@ public class InteractListener implements Listener {
 
                             this.spawnBouncePad(player.getLocation());
 
-                    }
+                    } */
                 }
             }
         }
@@ -848,7 +843,7 @@ public class InteractListener implements Listener {
             if (!(entity instanceof Player)) continue;
             if (entity.getUniqueId().equals(owner.getUniqueId())) continue;
             Player player = (Player) entity;
-            GamePlayer gamePlayer = new GamePlayer(player);
+            GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
             if (!gamePlayer.isPlayer()) continue;
 
             double distance = entity.getLocation().distanceSquared(center);

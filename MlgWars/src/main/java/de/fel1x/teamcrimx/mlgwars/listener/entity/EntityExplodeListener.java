@@ -2,10 +2,10 @@ package de.fel1x.teamcrimx.mlgwars.listener.entity;
 
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
+import de.fel1x.teamcrimx.mlgwars.maphandler.gametype.types.TntMadnessGameType;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,31 +36,5 @@ public class EntityExplodeListener implements Listener {
         this.drops.add(new ItemBuilder(Material.TNT, 1)
                 .setName("§cInstant TNT Boost").addGlow()
                 .toItemStack());
-    }
-
-    @EventHandler
-    public void on(EntityExplodeEvent event) {
-
-        Entity entity = event.getEntity();
-
-        if (this.mlgWars.isLabor()) {
-            if (entity instanceof TNTPrimed) {
-                if (entity.hasMetadata("velocity")) {
-                    for (Entity nearbyEntity : entity.getNearbyEntities(3, 3, 3)) {
-                        if (nearbyEntity instanceof Player) {
-                            Player player = (Player) nearbyEntity;
-                            player.setVelocity(player.getLocation().getDirection().multiply(5D).setY(1.5D));
-                        } else {
-                            nearbyEntity.setVelocity(nearbyEntity.getVelocity().multiply(5D).setY(1.5D));
-                        }
-                    }
-                }
-            }
-
-            for (Block block : event.blockList()) {
-                block.getDrops().clear();
-                block.getDrops().addAll(this.drops);
-            }
-        }
     }
 }

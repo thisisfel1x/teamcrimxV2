@@ -51,11 +51,13 @@ public class HaloEffect extends EffectCosmetic {
 
     @Override
     public void startCosmetic(Player player) {
+        super.startCosmetic(player);
         PlayerParticlesAPI.getInstance().addActivePlayerParticle(player, ParticleEffect.DUST, DefaultStyles.HALO, new OrdinaryColor(255, 255, 0));
     }
 
     @Override
     public void stopCosmetic(Player player) {
+        super.stopCosmetic(player);
         PlayerParticlesAPI.getInstance().removeActivePlayerParticles(player, DefaultStyles.HALO);
     }
 

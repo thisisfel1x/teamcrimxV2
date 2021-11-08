@@ -1,15 +1,12 @@
 package de.fel1x.teamcrimx.mlgwars.maphandler;
 
-import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
-import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
-import org.bukkit.Chunk;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
@@ -21,113 +18,10 @@ import java.util.Random;
 
 public class ChestFiller {
 
-    private ArrayList<ItemStack> items;
-    private ArrayList<ItemStack> itemsTier2;
+    private final static Random random = new Random();
 
-    public ChestFiller() {
-
-        MlgWars mlgWars = MlgWars.getInstance();
-        if (mlgWars.isNoMap()) return;
-
-        Random random = new Random(); // Will be the instance of the random chance to generate all our random numbers.
-
-        this.items = new ArrayList<>();
-        this.itemsTier2 = new ArrayList<>();
-
-        if (mlgWars.isLabor()) {
-            this.addLaborItems(this.items);
-            this.addLaborItems(this.itemsTier2);
-        } else {
-            this.addItems(this.items);
-            this.addItemsTier2(this.itemsTier2);
-        }
-
-        Cuboid cuboid = new Cuboid(Spawns.LOC_1.getLocation(), Spawns.LOC_2.getLocation());
-        Cuboid middleCube = new Cuboid(Spawns.MIDDLE_1.getLocation(), Spawns.MIDDLE_2.getLocation());
-
-        for (Chunk c : cuboid.getChunks()) {
-            for (BlockState b : c.getTileEntities()) {
-
-                if (b instanceof Chest) {
-
-                    Chest chest = (Chest) b;
-
-                    if (b.getBlock().getType() != Material.CHEST) continue;
-
-                    chest.getBlockInventory().clear();
-
-                    Collections.shuffle(this.items);
-
-                    boolean[] chosen = new boolean[chest.getBlockInventory().getSize()]; // This checks which slots are already taken in the inventory.
-
-                    int loot = random.nextInt(7);
-                    for (int i = 0; i < (8 + loot); i++) {
-
-                        Inventory chestInv = chest.getBlockInventory();
-
-                        int slot;
-
-                        do {
-                            slot = random.nextInt(chestInv.getSize());
-                        } while (chosen[slot]); // Make sure the slot does not already have an item in it.
-
-                        chosen[slot] = true;
-                        ItemStack is = this.items.get(random.nextInt(this.items.size()));
-                        Material current = is.getType();
-
-                        while (chest.getBlockInventory().contains(current)) {
-                            is = this.items.get(random.nextInt(this.items.size()));
-                            current = is.getType();
-                        }
-
-                        chestInv.setItem(random.nextInt(chestInv.getSize()), is); // Set the item in the chest to a random place (which is not taken).
-                    }
-                }
-            }
-        }
-
-        for (Chunk c1 : middleCube.getChunks()) {
-            for (BlockState b : c1.getTileEntities()) {
-
-                if (b instanceof Chest) {
-
-                    Chest chest = (Chest) b;
-                    chest.getBlockInventory().clear();
-
-                    Collections.shuffle(this.itemsTier2);
-
-                    boolean[] chosen = new boolean[chest.getBlockInventory().getSize()]; // This checks which slots are already taken in the inventory.
-
-                    int loot = random.nextInt(7);
-                    for (int i = 0; i < (10 + loot); i++) {
-
-                        Inventory chestInv = chest.getBlockInventory();
-
-                        int slot;
-
-                        do {
-                            slot = random.nextInt(chestInv.getSize());
-                        } while (chosen[slot]); // Make sure the slot does not already have an item in it.
-
-                        chosen[slot] = true;
-                        ItemStack is = this.itemsTier2.get(random.nextInt(this.itemsTier2.size()));
-                        Material current = is.getType();
-
-                        while (chest.getBlockInventory().contains(current)) {
-                            is = this.items.get(random.nextInt(this.items.size()));
-                            current = is.getType();
-                        }
-
-                        chestInv.setItem(random.nextInt(chestInv.getSize()), is); // Set the item in the chest to a random place (which is not taken).
-                    }
-                }
-            }
-        }
-    }
-
-    private void addLaborItems(ArrayList<ItemStack> items) {
-
-        Random random = new Random();
+    public static ArrayList<ItemStack> getLaborItems() {
+        ArrayList<ItemStack> items = new ArrayList<>();
 
         for (PotionType potionType : PotionType.values()) {
             if (potionType == PotionType.UNCRAFTABLE) continue;
@@ -151,6 +45,7 @@ public class ChestFiller {
         for (int i = 0; i < 20; i++) {
             items.add(new ItemBuilder(Material.TNT, 5 + random.nextInt(20))
                     .setName("§cInstant TNT").setLore("§7Dieses TNT explodiert sofort")
+                    .setPDC(MlgWars.getInstance(), "instatnt", "")
                     .toItemStack());
 
             items.add(new ItemBuilder(Material.STONE, 20 + random.nextInt(44)).toItemStack());
@@ -158,9 +53,11 @@ public class ChestFiller {
 
             items.add(new ItemBuilder(Material.TNT, random.nextInt(5) + 1)
                     .setName("§cVelocity TNT").addGlow().setLore("§7Dieses TNT boostet dich weit")
+                    .setPDC(MlgWars.getInstance(), "velocitytnt", "")
                     .toItemStack());
             items.add(new ItemBuilder(Material.TNT, 1 + random.nextInt(2))
                     .setName("§cInstant TNT Boost").setLore("§7Dieses TNT baut einen TNT Boost auf").addGlow()
+                    .setPDC(MlgWars.getInstance(), "instaboost", "")
                     .toItemStack());
             items.add(new ItemBuilder(Material.ARROW, 3 + random.nextInt(6)).toItemStack());
         }
@@ -174,8 +71,10 @@ public class ChestFiller {
             items.add(new ItemBuilder(Material.SKELETON_SPAWN_EGG).setColor(61).toItemStack());
             items.add(new ItemBuilder(Material.ZOMBIE_SPAWN_EGG).setColor(60).toItemStack());
 
-            items.add(new ItemBuilder(Material.BOW).addGlow().setName("Explosionsbogen").toItemStack());
-            items.add(new ItemBuilder(Material.BOW).addGlow().setName("TNT-Bogen").toItemStack());
+            items.add(new ItemBuilder(Material.BOW).addGlow().setName("Explosionsbogen")
+                    .setPDC(MlgWars.getInstance(), "explodebow", "").toItemStack());
+            items.add(new ItemBuilder(Material.BOW).addGlow().setName("TNT-Bogen")
+                    .setPDC(MlgWars.getInstance(), "tntbow", "").toItemStack());
 
             items.add(new ItemBuilder(Material.COOKED_CHICKEN, 3 + random.nextInt(8)).toItemStack());
             items.add(new ItemBuilder(Material.COOKED_BEEF, 3 + random.nextInt(8)).toItemStack());
@@ -190,6 +89,7 @@ public class ChestFiller {
             items.add(new ItemBuilder(Material.COBWEB).toItemStack());
             items.add(new ItemBuilder(Material.SNOWBALL, 1 + random.nextInt(4))
                     .setName("§cWerfbares TNT")
+                    .setPDC(MlgWars.getInstance(), "snowtnt", "")
                     .addGlow()
                     .setLore("§7Werfe mit TNT")
                     .toItemStack());
@@ -203,11 +103,11 @@ public class ChestFiller {
 
         Collections.shuffle(items);
 
+        return items;
     }
 
-    private void addItems(ArrayList<ItemStack> items) {
-
-        Random r = new Random();
+    public static ArrayList<ItemStack> getTier1Items() {
+        ArrayList<ItemStack> items = new ArrayList<>();
 
         ItemStack potion = new ItemStack(Material.SPLASH_POTION);
         PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
@@ -237,17 +137,17 @@ public class ChestFiller {
 
         for (int i = 0; i < 20; i++) {
 
-            items.add(new ItemBuilder(Material.STONE, 20 + r.nextInt(44)).toItemStack());
-            items.add(new ItemBuilder(Material.BRICKS, 20 + r.nextInt(44)).toItemStack());
-            items.add(new ItemBuilder(Material.TNT, 5 + r.nextInt(4)).toItemStack());
-            items.add(new ItemBuilder(Material.OAK_PLANKS, 20 + r.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.STONE, 20 + random.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.BRICKS, 20 + random.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.TNT, 5 + random.nextInt(4)).toItemStack());
+            items.add(new ItemBuilder(Material.OAK_PLANKS, 20 + random.nextInt(44)).toItemStack());
 
         }
 
         for (int i = 0; i < 3; i++) {
 
-            items.add(new ItemBuilder(Material.EXPERIENCE_BOTTLE, 5 + r.nextInt(10)).toItemStack());
-            items.add(new ItemBuilder(Material.LAPIS_LAZULI, 2 + r.nextInt(5)).toItemStack());
+            items.add(new ItemBuilder(Material.EXPERIENCE_BOTTLE, 5 + random.nextInt(10)).toItemStack());
+            items.add(new ItemBuilder(Material.LAPIS_LAZULI, 2 + random.nextInt(5)).toItemStack());
 
         }
 
@@ -256,7 +156,7 @@ public class ChestFiller {
 
         for (int i = 0; i < 5; i++) {
 
-            items.add(new ItemBuilder(Material.DIAMOND, 2 + r.nextInt(4)).toItemStack());
+            items.add(new ItemBuilder(Material.DIAMOND, 2 + random.nextInt(4)).toItemStack());
 
         }
 
@@ -266,36 +166,40 @@ public class ChestFiller {
 
         for (int i = 0; i < 6; i++) {
 
-            items.add(new ItemBuilder(Material.IRON_INGOT, 3 + r.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.IRON_INGOT, 3 + random.nextInt(8)).toItemStack());
 
         }
 
         for (int i = 0; i < 5; i++) {
 
-            items.add(new ItemBuilder(Material.COOKED_CHICKEN, 3 + r.nextInt(8)).toItemStack());
-            items.add(new ItemBuilder(Material.BEEF, 3 + r.nextInt(8)).toItemStack());
-            items.add(new ItemBuilder(Material.COOKED_BEEF, 3 + r.nextInt(8)).toItemStack());
-            items.add(new ItemBuilder(Material.PUMPKIN_PIE, 3 + r.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.COOKED_CHICKEN, 3 + random.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.BEEF, 3 + random.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.COOKED_BEEF, 3 + random.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.PUMPKIN_PIE, 3 + random.nextInt(8)).toItemStack());
 
         }
 
         for (int i = 0; i < 6; i++) {
 
-            items.add(new ItemBuilder(Material.STICK, 3 + r.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.STICK, 3 + random.nextInt(8)).toItemStack());
             items.add(new ItemBuilder(Material.LAVA_BUCKET).toItemStack());
             items.add(new ItemBuilder(Material.COMPASS).toItemStack());
 
         }
 
-        items.add(new ItemBuilder(Material.DIRT).setName("§f§l§kI§r §aM§6a§5g§e§ci§bs§1c§3h§2e §4E§5r§8d§9e §r§f§l§kI")
-                .setLore("§7Huch! Wie kommt", "§7die denn hier rein?!").toItemStack());
+        items.add(new ItemBuilder(Material.DIRT)
+                .setName(MiniMessage.builder().build().parse("<rainbow>Magische Erde</rainbow>"))
+                .setLore(Component.empty(), Component.text("Huch? Wie kommt",
+                                TextColor.fromHexString("#dda1fc")),
+                        Component.text("die denn hier rein?!", TextColor.fromHexString("#dda1fc")))
+                .toItemStack());
 
         for (int i = 0; i < 30; i++) {
             items.add(new ItemBuilder(Material.WATER_BUCKET).toItemStack());
         }
 
         for (int i = 0; i < 25; i++) {
-            items.add(new ItemBuilder(Material.COBWEB, r.nextInt(5) + 3).toItemStack());
+            items.add(new ItemBuilder(Material.COBWEB, random.nextInt(5) + 3).toItemStack());
         }
 
         for (int i = 0; i < 5; i++) {
@@ -307,7 +211,7 @@ public class ChestFiller {
 
         for (int i = 0; i < 5; i++) {
             items.add(new ItemBuilder(Material.FLINT, 1).toItemStack());
-            items.add(new ItemBuilder(Material.FLINT_AND_STEEL).setDurability((short) 50).toItemStack());
+            items.add(new ItemBuilder(Material.FLINT_AND_STEEL).toItemStack());
 
         }
 
@@ -365,10 +269,12 @@ public class ChestFiller {
         Collections.shuffle(items);
         Collections.shuffle(items);
 
+        return items;
+
     }
 
-    public void addItemsTier2(ArrayList<ItemStack> items) {
-        Random r = new Random();
+    public static ArrayList<ItemStack> getTier2Items() {
+        ArrayList<ItemStack> items = new ArrayList<>();
 
         ItemStack potion = new ItemStack(Material.SPLASH_POTION);
         PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
@@ -398,24 +304,24 @@ public class ChestFiller {
 
         for (int i = 0; i < 10; i++) {
 
-            items.add(new ItemBuilder(Material.STONE, 20 + r.nextInt(44)).toItemStack());
-            items.add(new ItemBuilder(Material.BRICKS, 20 + r.nextInt(44)).toItemStack());
-            items.add(new ItemBuilder(Material.TNT, 5 + r.nextInt(4)).toItemStack());
-            items.add(new ItemBuilder(Material.OAK_PLANKS, 20 + r.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.STONE, 20 + random.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.BRICKS, 20 + random.nextInt(44)).toItemStack());
+            items.add(new ItemBuilder(Material.TNT, 5 + random.nextInt(4)).toItemStack());
+            items.add(new ItemBuilder(Material.OAK_PLANKS, 20 + random.nextInt(44)).toItemStack());
 
         }
         for (int i = 0; i < 5; i++) {
 
-            items.add(new ItemBuilder(Material.EXPERIENCE_BOTTLE, 5 + r.nextInt(10)).toItemStack());
-            items.add(new ItemBuilder(Material.EXPERIENCE_BOTTLE, 5 + r.nextInt(10)).toItemStack());
+            items.add(new ItemBuilder(Material.EXPERIENCE_BOTTLE, 5 + random.nextInt(10)).toItemStack());
+            items.add(new ItemBuilder(Material.EXPERIENCE_BOTTLE, 5 + random.nextInt(10)).toItemStack());
             items.add(new ItemBuilder(Material.GOLDEN_APPLE).toItemStack());
-            items.add(new ItemBuilder(Material.LAPIS_LAZULI, 2 + r.nextInt(5), (byte) 4).toItemStack());
+            items.add(new ItemBuilder(Material.LAPIS_LAZULI, 2 + random.nextInt(5)).toItemStack());
 
         }
 
         for (int i = 0; i < 5; i++) {
 
-            items.add(new ItemBuilder(Material.DIAMOND, 2 + r.nextInt(4)).toItemStack());
+            items.add(new ItemBuilder(Material.DIAMOND, 2 + random.nextInt(4)).toItemStack());
 
         }
 
@@ -425,22 +331,22 @@ public class ChestFiller {
 
         for (int i = 0; i < 3; i++) {
 
-            items.add(new ItemBuilder(Material.IRON_INGOT, 3 + r.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.IRON_INGOT, 3 + random.nextInt(8)).toItemStack());
 
         }
 
         for (int i = 0; i < 3; i++) {
 
-            items.add(new ItemBuilder(Material.COOKED_CHICKEN, 3 + r.nextInt(8)).toItemStack());
-            items.add(new ItemBuilder(Material.BEEF, 3 + r.nextInt(8)).toItemStack());
-            items.add(new ItemBuilder(Material.COOKED_BEEF, 3 + r.nextInt(8)).toItemStack());
-            items.add(new ItemBuilder(Material.PUMPKIN_PIE, 3 + r.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.COOKED_CHICKEN, 3 + random.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.BEEF, 3 + random.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.COOKED_BEEF, 3 + random.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.PUMPKIN_PIE, 3 + random.nextInt(8)).toItemStack());
 
         }
 
         for (int i = 0; i < 6; i++) {
 
-            items.add(new ItemBuilder(Material.STICK, 3 + r.nextInt(8)).toItemStack());
+            items.add(new ItemBuilder(Material.STICK, 3 + random.nextInt(8)).toItemStack());
             items.add(new ItemBuilder(Material.LAVA_BUCKET).toItemStack());
             items.add(new ItemBuilder(Material.COMPASS).toItemStack());
 
@@ -454,7 +360,7 @@ public class ChestFiller {
         }
 
         for (int i = 0; i < 20; i++) {
-            items.add(new ItemBuilder(Material.COBWEB, r.nextInt(5) + 3).toItemStack());
+            items.add(new ItemBuilder(Material.COBWEB, random.nextInt(5) + 3).toItemStack());
         }
 
         for (int i = 0; i < 5; i++) {
@@ -463,8 +369,8 @@ public class ChestFiller {
 
 
         for (int i = 0; i < 7; i++) {
-            items.add(new ItemBuilder(Material.FLINT, r.nextInt(2)).toItemStack());
-            items.add(new ItemBuilder(Material.FLINT_AND_STEEL).setDurability((short) 50).toItemStack());
+            items.add(new ItemBuilder(Material.FLINT, random.nextInt(2)).toItemStack());
+            items.add(new ItemBuilder(Material.FLINT_AND_STEEL).toItemStack());
 
         }
 
@@ -498,8 +404,8 @@ public class ChestFiller {
             items.add(new ItemBuilder(Material.DIAMOND_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
             items.add(new ItemBuilder(Material.DIAMOND_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
 
-            items.add(new ItemBuilder(Material.SNOWBALL, 10 + r.nextInt(6)).toItemStack());
-            items.add(new ItemBuilder(Material.EGG, 10 + r.nextInt(6)).toItemStack());
+            items.add(new ItemBuilder(Material.SNOWBALL, 10 + random.nextInt(6)).toItemStack());
+            items.add(new ItemBuilder(Material.EGG, 10 + random.nextInt(6)).toItemStack());
 
         }
 
@@ -509,14 +415,8 @@ public class ChestFiller {
         Collections.shuffle(items);
         Collections.shuffle(items);
 
-    }
+        return items;
 
-    public ArrayList<ItemStack> getItems() {
-        return this.items;
-    }
-
-    public ArrayList<ItemStack> getItemsTier2() {
-        return this.itemsTier2;
     }
 
 }

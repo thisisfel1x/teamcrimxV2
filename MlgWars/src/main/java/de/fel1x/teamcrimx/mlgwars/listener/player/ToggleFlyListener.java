@@ -6,6 +6,7 @@ import de.fel1x.teamcrimx.mlgwars.Data;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
+import de.fel1x.teamcrimx.mlgwars.kit.rework.KitRegistry;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -33,15 +34,15 @@ public class ToggleFlyListener implements Listener {
     public void on(PlayerToggleFlightEvent event) {
 
         Player player = event.getPlayer();
-        GamePlayer gamePlayer = new GamePlayer(player);
+        GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
-        Kit selectedKit = gamePlayer.getSelectedKit();
+        KitRegistry selectedKit = gamePlayer.getSelectedKit();
 
         if (gamePlayer.isSpectator()) return;
 
         if (gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
-            if (selectedKit == Kit.KANGAROO) {
+            /*if (selectedKit == Kit.KANGAROO) { TODO
 
                 event.setCancelled(true);
                 player.setFlying(false);
@@ -98,7 +99,7 @@ public class ToggleFlyListener implements Listener {
 
                 this.data.getKangarooTask().get(player.getUniqueId()).runTaskTimer(this.mlgWars, 0L, 20L);
 
-            }
+            } */
         }
 
     }

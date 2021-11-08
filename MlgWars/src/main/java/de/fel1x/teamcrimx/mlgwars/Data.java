@@ -1,9 +1,8 @@
 package de.fel1x.teamcrimx.mlgwars;
 
 import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
-import de.fel1x.teamcrimx.mlgwars.kit.Kit;
-import de.fel1x.teamcrimx.mlgwars.objects.ScoreboardTeam;
-import org.bson.Document;
+import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
+import de.fel1x.teamcrimx.mlgwars.objects.MlgWarsTeam;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -16,20 +15,14 @@ public class Data {
     private final List<Player> players;
     private final List<Player> spectators;
 
-    private final Map<UUID, Long> playTime;
-
-    private final Map<Player, Kit> selectedKit;
+    private final HashMap<UUID, GamePlayer> gamePlayers;
 
     private final Map<Player, Player> lastHit;
 
     private final List<Location> playerSpawns;
 
-    private final Map<UUID, Document> mlgWarsPlayerDocument;
-    private final Map<UUID, Document> networkPlayerDocument;
+    private final Map<Integer, MlgWarsTeam> gameTeams;
 
-    private final Map<Integer, ScoreboardTeam> gameTeams;
-
-    private final Map<UUID, Boolean> playerGg;
     // KIT-STORAGE
     private final Map<UUID, ArrayList<Block>> placedExploderTnt;
     private final Map<UUID, BukkitRunnable> thorTask;
@@ -46,20 +39,11 @@ public class Data {
         this.players = new ArrayList<>();
         this.spectators = new ArrayList<>();
 
-        this.playTime = new HashMap<>();
-
-        this.selectedKit = new HashMap<>();
-
         this.lastHit = new HashMap<>();
 
         this.playerSpawns = new ArrayList<>();
 
-        this.mlgWarsPlayerDocument = new HashMap<>();
-        this.networkPlayerDocument = new HashMap<>();
-
         this.gameTeams = new HashMap<>();
-
-        this.playerGg = new HashMap<>();
 
         this.placedExploderTnt = new HashMap<>();
         this.thorTask = new HashMap<>();
@@ -69,6 +53,12 @@ public class Data {
         this.eggTask = new HashMap<>();
         this.turtleTask = new HashMap<>();
         this.csgoTasks = new HashMap<>();
+
+        this.gamePlayers = new HashMap<>();
+    }
+
+    public HashMap<UUID, GamePlayer> getGamePlayers() {
+        return this.gamePlayers;
     }
 
     public List<Player> getPlayers() {
@@ -103,26 +93,6 @@ public class Data {
         this.mapRegion = mapRegion;
     }
 
-    public Map<UUID, Long> getPlayTime() {
-        return this.playTime;
-    }
-
-    public Map<UUID, Document> getMlgWarsPlayerDocument() {
-        return this.mlgWarsPlayerDocument;
-    }
-
-    public Map<UUID, Document> getNetworkPlayerDocument() {
-        return this.networkPlayerDocument;
-    }
-
-    public Map<Player, Kit> getSelectedKit() {
-        return this.selectedKit;
-    }
-
-    public Map<UUID, Boolean> getPlayerGg() {
-        return this.playerGg;
-    }
-
     public Map<UUID, ArrayList<Block>> getPlacedExploderTnt() {
         return this.placedExploderTnt;
     }
@@ -155,7 +125,7 @@ public class Data {
         return this.csgoTasks;
     }
 
-    public Map<Integer, ScoreboardTeam> getGameTeams() {
+    public Map<Integer, MlgWarsTeam> getGameTeams() {
         return this.gameTeams;
     }
 }

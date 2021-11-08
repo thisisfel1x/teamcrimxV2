@@ -10,6 +10,7 @@ depend:
   - CloudNet-Bridge
   - SmartInvs
   - ProtocolLib
+  - LibsDisguises
 
 commands:
   start:
@@ -18,3 +19,5 @@ commands:
     description: Setup a game
   stats:
     description: Check your current stats
+  forcemode:
+    description: Force the gamemode

@@ -5,8 +5,6 @@ import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.kit.IKit;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
-import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
-import de.fel1x.teamcrimx.mlgwars.scoreboard.MlgWarsScoreboard;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
@@ -24,14 +22,11 @@ public class KitInventory implements InventoryProvider {
             .title("§8● §e§lKits")
             .manager(MlgWars.getInstance().getInventoryManager())
             .build();
-    private final MlgWarsScoreboard mlgWarsScoreboard = new MlgWarsScoreboard();
 
     @Override
     public void init(Player player, InventoryContents contents) {
 
-        GamePlayer gamePlayer = new GamePlayer(player, true);
-
-        int column = 0;
+        /*int column = 0;
         int row = 0;
 
         for (Kit kit : Kit.values()) {
@@ -70,7 +65,7 @@ public class KitInventory implements InventoryProvider {
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     @Override

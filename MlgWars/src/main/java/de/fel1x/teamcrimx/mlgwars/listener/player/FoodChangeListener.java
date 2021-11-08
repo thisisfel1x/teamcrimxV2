@@ -23,7 +23,7 @@ public class FoodChangeListener implements Listener {
         if (!(event.getEntity() instanceof Player)) return;
 
         Player player = (Player) event.getEntity();
-        GamePlayer gamePlayer = new GamePlayer(player);
+        GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 

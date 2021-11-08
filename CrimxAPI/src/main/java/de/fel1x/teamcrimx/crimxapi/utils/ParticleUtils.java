@@ -1,9 +1,43 @@
 package de.fel1x.teamcrimx.crimxapi.utils;
 
+import org.apache.commons.lang.Validate;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Nullable;
 
 public class ParticleUtils {
+
+    public static void drawLine(Location location1, Location location2, double space, Particle particle, @Nullable Object data) {
+        World world = location1.getWorld();
+
+        /* Throw an error if the points are in different worlds */
+        Validate.isTrue(location2.getWorld().equals(world), "Lines cannot be in different worlds!");
+
+        /* Distance between the two particles */
+        double distance = location1.distance(location2);
+
+        /* The points as vectors */
+        Vector p1 = location1.toVector();
+        Vector p2 = location2.toVector();
+
+        /* Subtract gives you a vector between the points, we multiply by the space*/
+        Vector vector = p2.clone().subtract(p1).normalize().multiply(space);
+
+        /*The distance covered */
+        double covered = 0;
+
+        /* We run this code while we haven't covered the distance, we increase the point by the space every time*/
+        for (; covered < distance; p1.add(vector)) {
+            /*Spawn the particle at the point*/
+            world.spawnParticle(particle, p1.getX(), p1.getY(), p1.getZ(), 1, data);
+
+            /* We add the space covered */
+            covered += space;
+        }
+    }
 
     public static void drawParticleLine(Location from, Location to, Particles effect, int particles, int r, int g, int b) {
         Location location = from.clone();

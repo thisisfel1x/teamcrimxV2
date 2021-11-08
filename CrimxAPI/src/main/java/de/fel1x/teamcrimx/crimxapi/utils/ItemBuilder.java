@@ -1,10 +1,7 @@
 package de.fel1x.teamcrimx.crimxapi.utils;
 
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +9,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
@@ -441,6 +440,16 @@ public class ItemBuilder {
             potionMeta.setBasePotionData(new PotionData(potionEffectType));
             this.itemStack.setItemMeta(potionMeta);
         }
+        return this;
+    }
+
+    /**
+     *
+     */
+    public ItemBuilder setPDC(Plugin plugin, String key, String value) {
+        this.itemStack.editMeta(itemMeta -> {
+           itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, key), PersistentDataType.STRING, value);
+        });
         return this;
     }
 }

@@ -52,10 +52,6 @@ public class Stats {
         return this.placement;
     }
 
-    public void setPlacement(int placement) {
-        this.placement = placement;
-    }
-
     public void increaseKillsByOne() {
         this.setKills(this.getKills() + 1);
     }

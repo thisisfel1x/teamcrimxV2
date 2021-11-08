@@ -22,7 +22,7 @@ public class InventoryClickListener implements Listener {
         if (!(event.getWhoClicked() instanceof Player)) return;
 
         Player player = (Player) event.getWhoClicked();
-        GamePlayer gamePlayer = new GamePlayer(player);
+        GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 

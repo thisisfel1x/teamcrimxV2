@@ -7,6 +7,10 @@ import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,72 +30,37 @@ public class InGameTimer implements ITimer {
     private final MlgWars mlgWars = MlgWars.getInstance();
     private final Random random = new Random();
     private final ItemStack dumpItem = new ItemBuilder(Material.GOLDEN_SWORD)
-            .setName("§8● §6Müll §7(umtauschen verboten!)")
-            .setLore("", "", "", "", "", "", "", "", "§7§o(kann Gift verursachen)")
+            .setName(Component.text("● ", NamedTextColor.DARK_GRAY)
+                    .append(Component.text("Müll", NamedTextColor.GOLD))
+                    .append(Component.text(" (umtauschen verboten!)", NamedTextColor.GRAY)))
+            .setLore(Component.empty(), Component.empty(), Component.empty(), Component.empty(),
+                    Component.empty(), Component.empty(), Component.empty(), Component.empty(),
+                    Component.text("(kann Gift verursachen)",
+                            TextColor.fromHexString("#00bb2d")).decorate(TextDecoration.ITALIC))
             .toItemStack();
+
     private boolean running = false;
     private int taskId;
     private int gameTime = 0;
-    private int spawnTime = 0;
 
     @Override
     public void start() {
-
         if (!this.running) {
             this.running = true;
             this.mlgWars.getGamestateHandler().setGamestate(Gamestate.INGAME);
 
-            if (this.mlgWars.isLabor()) {
-                this.mlgWars.getData().getPlayers().forEach(player -> player.setGlowing(true));
-            }
-
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
 
-                if (this.mlgWars.isLabor()) {
-                    this.spawnTime++;
-
-                    if (this.spawnTime % 30 == 0) {
-                        Cuboid middleCuboid = this.mlgWars.getData().getMiddleRegion();
-                        Location center = middleCuboid.getCenter();
-
-                        for (int i = 0; i < 5; i++) {
-                            int x = this.random.nextInt(15) * (this.random.nextBoolean() ? 1 : -1);
-                            int z = this.random.nextInt(15) * (this.random.nextBoolean() ? 1 : -1);
-
-                            Block block = center.getWorld().getHighestBlockAt(x, z);
-
-                            while (block.getType() == Material.AIR) {
-                                x = this.random.nextInt(15) * (this.random.nextBoolean() ? 1 : -1);
-                                z = this.random.nextInt(15) * (this.random.nextBoolean() ? 1 : -1);
-
-                                block = center.getWorld().getHighestBlockAt(x, z);
-                            }
-
-                            block.getWorld().spawnEntity(block.getLocation().clone().add(0, 2, 0), EntityType.CREEPER);
-                            block.getWorld().spawnEntity(block.getLocation().clone().add(0, 2, 0), EntityType.SILVERFISH);
-
-                        }
-
-                    }
-
-                    if (this.spawnTime % 60 == 0) {
-                        Cuboid middleCuboid = this.mlgWars.getData().getMiddleRegion();
-                        Location center = middleCuboid.getCenter();
-
-                        this.getCirclePoints(center.clone().add(0, 40, 0), 3, 5).forEach(block -> block.getWorld().spawnEntity(block.getBlock().getLocation(), EntityType.PRIMED_TNT));
-                        this.getCirclePoints(center.clone().add(0, 40, 0), 15, 30).forEach(block -> block.getWorld().spawnEntity(block.getBlock().getLocation(), EntityType.PRIMED_TNT));
-                    }
-
-                }
+                this.mlgWars.getGameType().gameTick();
 
                 this.mlgWars.getData().getPlayers().forEach(player -> {
-                    GamePlayer gamePlayer = new GamePlayer(player);
+                    GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
                     if (gamePlayer.isPlayer()) {
 
-                        if (player.hasMetadata("team")) {
-                            int team = player.getMetadata("team").get(0).asInt() + 1;
+                        //if (player.hasMetadata("team")) {
+                            int team = gamePlayer.getPlayerMlgWarsTeamId() + 1;
                             Actionbar.sendActionbar(player, "§7Team §a#" + team);
-                        }
+                        //}
 
                         if (player.getInventory().contains(this.dumpItem)) {
                             player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 40, 0, false, false));
@@ -104,7 +73,7 @@ public class InGameTimer implements ITimer {
                             }
                         }
 
-                        if (gamePlayer.getSelectedKit() == Kit.STINKER) {
+                        /*if (gamePlayer.getSelectedKit() == Kit.STINKER) {
                             for (Entity nearbyEntity : player.getNearbyEntities(5, 2, 5)) {
                                 if (!(nearbyEntity instanceof Player)) continue;
                                 Player player1 = (Player) nearbyEntity;
@@ -126,7 +95,7 @@ public class InGameTimer implements ITimer {
                                 }
                                 Actionbar.sendActionbar(player, "§6Känguru §8● §a" + currentEssences + " §7Essenzen übrig");
                             }
-                        }
+                        } */
                     }
                 });
 
@@ -145,41 +114,32 @@ public class InGameTimer implements ITimer {
         }
     }
 
-    private Player getClosestEntity(Player owner, Location center) {
+    private Player getClosestEntity(Player player, Location center) {
         Player closestEntity = null;
         double closestDistance = 0.0;
 
-        for (Entity entity : center.getWorld().getNearbyEntities(center, 200, 200, 200)) {
-            if (!(entity instanceof Player)) continue;
-            if (entity.getUniqueId().equals(owner.getUniqueId())) continue;
+        for (Player foundPlayer : center.getWorld().getNearbyPlayers(center, 100, 100, 100)) {
+            if (foundPlayer.getUniqueId().equals(player.getUniqueId())) {
+                continue;
+            }
+            GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(foundPlayer.getUniqueId());
+            if(gamePlayer == null) {
+                continue;
+            }
+            if(!gamePlayer.isPlayer()) {
+                continue;
+            }
+            int teamId = gamePlayer.getPlayerMlgWarsTeamId();
+            if(this.mlgWars.getData().getGameTeams().get(teamId).getAlivePlayers().contains(player)) {
+                continue;
+            }
 
-            double distance = entity.getLocation().distanceSquared(center);
+            double distance = foundPlayer.getLocation().distanceSquared(center);
             if (closestEntity == null || distance < closestDistance) {
                 closestDistance = distance;
-                closestEntity = (Player) entity;
+                closestEntity = foundPlayer;
             }
         }
         return closestEntity;
     }
-
-    public ArrayList<Location> getCirclePoints(Location center, double radius, int amount) {
-
-        ArrayList<Location> points = new ArrayList<>();
-
-        double increment = (2 * Math.PI) / amount;
-        for (int i = 0; i < amount; i++) {
-
-            double angle = i * increment;
-            double x = center.getX() + (radius * Math.cos(angle));
-            double z = center.getZ() + (radius * Math.sin(angle));
-
-            Location current = new Location(center.getWorld(), x, center.getY(), z);
-            points.add(current);
-
-        }
-
-        return points;
-
-    }
-
 }

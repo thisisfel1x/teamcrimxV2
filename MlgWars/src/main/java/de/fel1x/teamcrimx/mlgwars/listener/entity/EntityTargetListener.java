@@ -2,11 +2,8 @@ package de.fel1x.teamcrimx.mlgwars.listener.entity;
 
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
-import de.fel1x.teamcrimx.mlgwars.objects.ScoreboardTeam;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetEvent;
@@ -25,16 +22,14 @@ public class EntityTargetListener implements Listener {
         Entity target = event.getTarget();
         Entity entity = event.getEntity();
 
-        if (target instanceof Player) {
-            Player player = (Player) target;
-            GamePlayer gamePlayer = new GamePlayer(player);
+        if (target instanceof Player player) {
+            GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
             if (gamePlayer.isSpectator()) {
                 event.setCancelled(true);
-                return;
             }
 
-            if (entity.getCustomName() != null) {
+            /*if (entity.getCustomName() != null) {
                 if (entity.getCustomName().equalsIgnoreCase(player.getDisplayName())) {
                     event.setTarget(null);
                     return;
@@ -63,7 +58,7 @@ public class EntityTargetListener implements Listener {
                 if (entity.getCustomName().equalsIgnoreCase(zombie.getCustomName())) {
                     event.setTarget(null);
                 }
-            }
-        }
+            } */
+         }
     }
 }

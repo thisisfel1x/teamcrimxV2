@@ -24,7 +24,7 @@ public class QuitListener implements Listener {
     public void on(PlayerQuitEvent event) {
 
         Player player = event.getPlayer();
-        GamePlayer gamePlayer = new GamePlayer(player);
+        GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
         String message = null;
         if (gamePlayer.isPlayer()) {
@@ -33,6 +33,8 @@ public class QuitListener implements Listener {
         event.setQuitMessage(message);
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
+
+        this.mlgWars.getGameTypeVoteInventory().quit(player);
 
         gamePlayer.cleanUpOnQuit();
         this.checkWinOnQuit(gamestate);
@@ -58,7 +60,7 @@ public class QuitListener implements Listener {
                 if (Bukkit.getOnlinePlayers().isEmpty()) {
                     Bukkit.getServer().shutdown();
                 } else {
-                    new WinDetection();
+                    new WinDetection(this.mlgWars);
                 }
                 break;
         }

@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 
+@Deprecated
 public class ForcemapInventory implements InventoryProvider {
 
     public static final SmartInventory FORCEMAP_INVENTORY = SmartInventory.builder()
@@ -48,16 +49,21 @@ public class ForcemapInventory implements InventoryProvider {
             String mapName = config.getString("name");
             Size size = this.mapHandler.getSize(mapName);
 
+            if(size.getTeamSize() != this.mlgWars.getTeamSize()) {
+                continue;
+            }
+
             contents.set(row, column, ClickableItem.of(new ItemBuilder(Material.PAPER).setName("§8● §7" + mapName).setLore("", "§7Größe §8● §b" + size.getName(), "").toItemStack(), event -> {
                 player.closeInventory();
-                if (mapName.equalsIgnoreCase(this.mlgWars.getWorldLoader().getMapName())) {
+                if (mapName.equalsIgnoreCase(this.mlgWars.getSelectedMap().getMapName())) {
                     player.sendMessage(this.mlgWars.getPrefix() + "§cDiese Map ist bereits ausgewählt");
                 } else {
                     if (this.mlgWars.getLobbyCountdown() <= 10) {
                         player.sendMessage(this.mlgWars.getPrefix() + "§7Du kannst die Map nicht mehr ändern");
                     } else {
                         player.sendMessage(this.mlgWars.getPrefix() + "§7Versuche §a'" + mapName + "' §7zu laden!");
-                        this.mlgWars.getWorldLoader().forceMap(mapName);
+                        //this.mlgWars.getWorldLoader().forceMap(mapName);
+                        this.mlgWars.getGameType().loadMap(mapName); // New GameType Impl
                         player.sendMessage(this.mlgWars.getPrefix() + "§aDie Map '" + mapName + "' wurde erfolgreich geladen!");
                     }
                     player.closeInventory();
