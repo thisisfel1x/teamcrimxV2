@@ -2,17 +2,14 @@ package de.fel1x.teamcrimx.mlgwars.listener.entity;
 
 import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
-import de.fel1x.teamcrimx.mlgwars.utils.entites.CustomZombie;
 import de.fel1x.teamcrimx.mlgwars.utils.entites.ZombieEquipment;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
-import net.minecraft.server.v1_16_R3.WorldServer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -57,37 +54,6 @@ public class ProjectileHitListener implements Listener {
                         block.setType(Material.COBWEB);
                     }
                 });
-            } else if (egg.hasMetadata("botDecoy")) {
-                if (!(egg.getShooter() instanceof Player)) return;
-
-                Player player = (Player) egg.getShooter();
-
-                CustomZombie customZombie = new CustomZombie(egg.getLocation().clone().add(0, 1.5, 0), player);
-
-                WorldServer world = ((CraftWorld) player.getWorld()).getHandle(); // Creates and NMS world
-                world.addEntity(customZombie);
-
-                Zombie entity = (Zombie) customZombie.getBukkitEntity();
-
-                Disguise disguise = new PlayerDisguise(player.getName(), player.getName());
-                disguise.setReplaceSounds(true);
-                DisguiseAPI.disguiseEntity(entity, disguise);
-
-                entity.setShouldBurnInDay(false);
-
-                entity.setCustomName(player.getDisplayName());
-                entity.setCustomNameVisible(true);
-                entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, true, false));
-
-                entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
-                entity.getEquipment().setItemInMainHand(this.zombieEquipment.getSwords()[this.random.nextInt(this.zombieEquipment.getSwords().length)]);
-
-                entity.getEquipment().setHelmet(this.zombieEquipment.getHelmets()[this.random.nextInt(this.zombieEquipment.getHelmets().length)]);
-                entity.getEquipment().setChestplate(this.zombieEquipment.getChestplates()[this.random.nextInt(this.zombieEquipment.getChestplates().length)]);
-                entity.getEquipment().setLeggings(this.zombieEquipment.getLeggins()[this.random.nextInt(this.zombieEquipment.getLeggins().length)]);
-                entity.getEquipment().setBoots(this.zombieEquipment.getShoes()[this.random.nextInt(this.zombieEquipment.getShoes().length)]);
-
-                entity.setMetadata("owner", new FixedMetadataValue(this.mlgWars, player.getName()));
             }
 
         } else if (event.getEntity() instanceof Fireball) {
@@ -104,12 +70,6 @@ public class ProjectileHitListener implements Listener {
                     if (replace) {
                         block.setType(Material.FIRE);
                     }
-                }
-            }
-        } else if (event.getEntity() instanceof Arrow) {
-            if (this.mlgWars.isLabor()) {
-                if (event.getEntity().hasMetadata("explode")) {
-                    event.getEntity().getWorld().createExplosion(event.getEntity().getLocation(), 3.5f, true);
                 }
             }
         } else if (event.getEntity() instanceof Snowball) {

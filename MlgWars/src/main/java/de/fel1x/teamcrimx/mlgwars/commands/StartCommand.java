@@ -20,12 +20,10 @@ public class StartCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String string, String[] args) {
-
-        if (!(commandSender instanceof Player)) {
+        if (!(commandSender instanceof Player player)) {
             return false;
         }
 
-        Player player = (Player) commandSender;
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
         if (!player.hasPermission("mlgwars.start")) {

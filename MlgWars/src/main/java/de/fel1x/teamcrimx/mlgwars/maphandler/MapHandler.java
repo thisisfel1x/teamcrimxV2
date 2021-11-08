@@ -99,6 +99,19 @@ public class MapHandler {
 
     }
 
+    public String getBuilder(String mapName) {
+        this.configfile = new File("plugins/MlgWars/maps", mapName + ".yml");
+        this.config = YamlConfiguration.loadConfiguration(this.configfile);
+
+        if (this.configfile.exists()) {
+            if(this.config.get("builder") != null) {
+                return this.config.getString("builder");
+            }
+        }
+
+        return "Unbekannt";
+    }
+
     public Size getSize(String mapName) {
 
         this.configfile = new File("plugins/MlgWars/maps", mapName + ".yml");

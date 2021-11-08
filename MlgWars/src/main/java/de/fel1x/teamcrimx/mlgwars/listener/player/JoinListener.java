@@ -8,10 +8,13 @@ import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.timer.LobbyTimer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.util.concurrent.Callable;
 
 public class JoinListener implements Listener {
 
@@ -24,16 +27,14 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void on(PlayerJoinEvent event) {
-
         Player player = event.getPlayer();
-        GamePlayer gamePlayer = new GamePlayer(player);
-        CrimxPlayer crimxPlayer = new CrimxPlayer(gamePlayer.getCloudPlayer());
+        GamePlayer gamePlayer = new GamePlayer(this.mlgWars, player);
 
-        event.setJoinMessage(null);
+        event.joinMessage(null);
 
         gamePlayer.cleanUpOnJoin();
 
-        if (!crimxPlayer.checkIfPlayerExistsInCollection(player.getUniqueId(), MongoDBCollection.MLGWARS)) {
+        if (!this.mlgWars.getCrimxAPI().getMongoDB().checkIfDocumentExistsSync(player.getUniqueId(), MongoDBCollection.MLGWARS)) {
             gamePlayer.createPlayerData();
         }
 
@@ -42,41 +43,24 @@ public class JoinListener implements Listener {
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
         switch (gamestate) {
-
-            case IDLE:
-            case LOBBY:
-
+            case IDLE, LOBBY -> {
                 gamePlayer.addToPlayers();
                 gamePlayer.setJoinItems();
                 gamePlayer.teleport(Spawns.LOBBY);
-
                 gamePlayer.setLobbyScoreboard();
                 BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(event.getPlayer());
-
                 event.setJoinMessage("§8» " + player.getDisplayName() + " §7hat das Spiel betreten");
-
-                break;
-
-
-            case DELAY:
-            case PREGAME:
-            case INGAME:
-
+            }
+            case DELAY, PREGAME, INGAME -> {
                 gamePlayer.addToSpectators();
                 gamePlayer.activateSpectatorModeOnJoin();
                 gamePlayer.teleport(Spawns.SPECTATOR);
-
                 gamePlayer.setInGameScoreboard();
-
-                break;
-
-            case ENDING:
-
+            }
+            case ENDING -> {
                 player.sendMessage(this.mlgWars.getPrefix() + "§7Das Spiel ist bereits vorbei!");
                 gamePlayer.teleport(Spawns.LOBBY);
-
-                break;
-
+            }
         }
 
         if (gamestate == Gamestate.IDLE) {
@@ -87,7 +71,5 @@ public class JoinListener implements Listener {
                 }
             }
         }
-
     }
-
 }

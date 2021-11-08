@@ -1,6 +1,7 @@
 package de.fel1x.teamcrimx.crimxapi.cosmetic;
 
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
+import de.fel1x.teamcrimx.crimxapi.server.ServerType;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import net.kyori.adventure.text.Component;
@@ -35,7 +36,10 @@ public abstract class Gadget extends BaseCosmetic {
     }
 
     public int getSlot(Player player) {
-        return player.hasPermission("crimxlobby.vip") ? 2 : 4;
+        if (CrimxAPI.getInstance().getServerType() == ServerType.LOBBY_SERVER) {
+            return player.hasPermission("crimxlobby.vip") ? 2 : 4;
+        }
+        return 4;
     }
 
     @Override
@@ -62,7 +66,7 @@ public abstract class Gadget extends BaseCosmetic {
         return true;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = false)
     public void on(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
@@ -97,7 +101,7 @@ public abstract class Gadget extends BaseCosmetic {
             }
         }
 
-        player.setMetadata("gadgetDelay", new FixedMetadataValue(CrimxSpigotAPI.getInstance(),
+        player.setMetadata("gadgetDelay", new FixedMetadataValue(this.crimxSpigotAPI,
                 System.currentTimeMillis() + (1000 * 5)));
 
         switch (event.getAction()) {

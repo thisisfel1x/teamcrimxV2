@@ -1,10 +1,19 @@
 package de.fel1x.teamcrimx.mlgwars.timer;
 
+import de.dytanic.cloudnet.driver.service.ServiceInfoSnapshot;
+import de.dytanic.cloudnet.ext.bridge.BridgeServiceProperty;
+import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class EndingTimer implements ITimer {
 
@@ -24,26 +33,18 @@ public class EndingTimer implements ITimer {
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
 
                 switch (this.countdown) {
-                    case 20:
-                    case 10:
-                    case 5:
-                    case 4:
-                    case 3:
-                    case 2:
-                    case 1:
+                    case 20, 10, 5, 4, 3, 2, 1 -> {
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§cDer Server startet in "
                                 + (this.countdown == 1 ? "einer Sekunde" : this.countdown + " Sekunden") + " neu");
-                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 2f, 3f));
-                        break;
-
-                    case 0:
+                        Bukkit.getServer().playSound(net.kyori.adventure.sound.Sound.sound(Sound.BLOCK_NOTE_BLOCK_BASS.key(),
+                                net.kyori.adventure.sound.Sound.Source.BLOCK, 2f, 3f));
+                    }
+                    case 0 -> {
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§cDer Server startet neu");
-                        Bukkit.getOnlinePlayers().forEach(player -> {
-                            GamePlayer gamePlayer = new GamePlayer(player);
-                            gamePlayer.sendToService("Lobby-1");
-                            player.playSound(player.getLocation(), Sound.ENTITY_CAT_HISS, 3f, 5f);
-                        });
-                        break;
+                        Bukkit.getServer().playSound(net.kyori.adventure.sound.Sound.sound(Sound.ENTITY_CAT_HISS.key(),
+                                net.kyori.adventure.sound.Sound.Source.BLOCK, 2f, 3f));
+                        Bukkit.getOnlinePlayers().forEach(this::sendToLobby);
+                    }
                 }
 
                 if (this.countdown < 0 && Bukkit.getOnlinePlayers().isEmpty()) {
@@ -55,6 +56,14 @@ public class EndingTimer implements ITimer {
             }, 0L, 20L);
         }
 
+    }
+
+    private void sendToLobby(Player player) {
+        List<ServiceInfoSnapshot> lobbies = Wrapper.getInstance().getCloudServiceProvider().getCloudServices("Lobby")
+                .stream().filter(service -> service.getProperty(BridgeServiceProperty.IS_ONLINE).orElse(false)
+                        && !service.getProperty(BridgeServiceProperty.IS_FULL).orElse(true)).collect(Collectors.toList());
+        this.mlgWars.getData().getGamePlayers().get(player.getUniqueId())
+                .connectToService(lobbies.get(new Random().nextInt(lobbies.size())).getName());
     }
 
     @Override

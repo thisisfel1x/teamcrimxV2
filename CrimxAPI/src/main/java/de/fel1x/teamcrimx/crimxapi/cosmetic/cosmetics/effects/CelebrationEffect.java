@@ -51,11 +51,13 @@ public class CelebrationEffect extends EffectCosmetic {
 
     @Override
     public void startCosmetic(Player player) {
+        super.startCosmetic(player);
         PlayerParticlesAPI.getInstance().addActivePlayerParticle(player, ParticleEffect.DUST, DefaultStyles.CELEBRATION, OrdinaryColor.RAINBOW);
     }
 
     @Override
     public void stopCosmetic(Player player) {
+        super.stopCosmetic(player);
         PlayerParticlesAPI.getInstance().removeActivePlayerParticles(player, DefaultStyles.CELEBRATION);
     }
 

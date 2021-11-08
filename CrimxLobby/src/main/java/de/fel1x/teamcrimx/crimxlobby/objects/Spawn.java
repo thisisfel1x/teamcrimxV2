@@ -9,6 +9,7 @@ public enum Spawn {
     SPAWN(null),
     SHOP_NPC(null),
     PROFILE_NPC(null),
+    MLGWARS_NPC(null),
 
     // MINIGAMES
     MLGWARS(null),

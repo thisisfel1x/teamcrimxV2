@@ -331,11 +331,15 @@ public class FriendPlayer implements IFriendPlayer {
     @Override
     public ArrayList<UUID> getOnlineFriends() {
         ArrayList<UUID> uuidArrayList = new ArrayList<>();
-        this.crimxAPI.getMongoDB().getStringArrayListFromDocumentSync(this.uuid, MongoDBCollection.FRIENDS, "friends")
-                .forEach(string -> uuidArrayList.add(UUID.fromString(string)));
+        try {
+            this.crimxAPI.getMongoDB().getStringArrayListFromDocumentSync(this.uuid, MongoDBCollection.FRIENDS, "friends")
+                    .forEach(string -> uuidArrayList.add(UUID.fromString(string)));
 
-        return uuidArrayList.stream().filter(playerUUID -> this.getOnlinePlayer(playerUUID) != null)
-                .collect(Collectors.toCollection(ArrayList::new));
+            return uuidArrayList.stream().filter(playerUUID -> this.getOnlinePlayer(playerUUID) != null)
+                    .collect(Collectors.toCollection(ArrayList::new));
+        } catch (Exception ignored) {
+            return uuidArrayList;
+        }
     }
 
     @Override

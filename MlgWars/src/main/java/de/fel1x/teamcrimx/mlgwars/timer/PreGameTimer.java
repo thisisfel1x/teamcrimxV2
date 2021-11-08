@@ -3,7 +3,7 @@ package de.fel1x.teamcrimx.mlgwars.timer;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
-import de.fel1x.teamcrimx.mlgwars.kit.Kit;
+import de.fel1x.teamcrimx.mlgwars.maphandler.gametype.types.TntMadnessGameType;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,7 +17,7 @@ public class PreGameTimer implements ITimer {
 
     private boolean running = false;
     private int taskId;
-    private int countdown = this.mlgWars.isLabor() ? 10 : 40;
+    private int countdown = this.mlgWars.getGameType().getClass() == TntMadnessGameType.class ? 10 : 40;
 
     @Override
     public void start() {
@@ -29,39 +29,31 @@ public class PreGameTimer implements ITimer {
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
 
                 switch (this.countdown) {
-                    case 30:
-                    case 20:
-                    case 10:
-                    case 5:
-                    case 4:
-                    case 3:
-                    case 2:
-                    case 1:
+                    case 30, 20, 10, 5, 4, 3, 2, 1 -> {
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Die Schutzzeit endet in §e"
                                 + (this.countdown == 1 ? "einer §7Sekunde" : this.countdown + " §7Sekunden"));
-                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(),
-                                Sound.BLOCK_NOTE_BLOCK_BASS, 2f, 3f));
-                        break;
-
-                    case 0:
+                        Bukkit.getServer().playSound(net.kyori.adventure.sound.Sound.sound(Sound.BLOCK_NOTE_BLOCK_BASS.key(),
+                                net.kyori.adventure.sound.Sound.Source.BLOCK, 2f, 3f));
+                    }
+                    case 0 -> {
                         Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§cDie Schutzzeit ist vorbei! Kämpft!");
-                        Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(),
-                                Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 3f, 5f));
+                        Bukkit.getServer().playSound(net.kyori.adventure.sound.Sound.sound(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE.key(),
+                                net.kyori.adventure.sound.Sound.Source.BLOCK, 2f, 3f));
                         this.mlgWars.startTimerByClass(InGameTimer.class);
-                        break;
+                    }
                 }
 
                 this.mlgWars.getData().getPlayers().forEach(player -> {
-                    GamePlayer gamePlayer = new GamePlayer(player);
+                    GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
                     if (gamePlayer.isPlayer()) {
 
-                        if (player.hasMetadata("team")) {
-                            int team = player.getMetadata("team").get(0).asInt() + 1;
+                        //if (player.hasMetadata("team")) {
+                            int team = gamePlayer.getPlayerMlgWarsTeamId() + 1;
                             Actionbar.sendActionbar(player, "§7Team §a#" + team);
-                        }
+                        //}
 
-                        if (gamePlayer.getSelectedKit() == Kit.KANGAROO) {
+                        /*if (gamePlayer.getSelectedKit() == Kit.KANGAROO) {
                             if (!this.mlgWars.getData().getKangarooTask().containsKey(player.getUniqueId())) {
                                 int currentEssences = 0;
                                 if (player.hasMetadata("essence")) {
@@ -69,7 +61,7 @@ public class PreGameTimer implements ITimer {
                                 }
                                 Actionbar.sendActionbar(player, "§6Känguru §8● §a" + currentEssences + " §7Essenzen übrig");
                             }
-                        }
+                        } */
                     }
 
                     if (this.mlgWars.getData().getPlayers().size() > 1) {

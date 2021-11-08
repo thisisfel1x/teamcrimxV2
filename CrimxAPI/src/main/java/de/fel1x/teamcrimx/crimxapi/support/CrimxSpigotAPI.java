@@ -1,6 +1,8 @@
 package de.fel1x.teamcrimx.crimxapi.support;
 
 import com.github.juliarn.npc.NPCPool;
+import de.dytanic.cloudnet.ext.bridge.BridgeHelper;
+import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
 import de.fel1x.teamcrimx.crimxapi.clanSystem.commands.ClanCommand;
@@ -43,6 +45,13 @@ public class CrimxSpigotAPI extends JavaPlugin {
         new CrimxAPI();
 
         this.setServerType();
+
+        if(CrimxAPI.getInstance().getServerType() == ServerType.GAME_SERVER) {
+            // Prevent "loading" sign
+            BukkitCloudNetHelper.setExtra("running");
+            BridgeHelper.updateServiceInfo();
+        }
+
         this.registerCommands();
         this.registerListener();
 
@@ -51,7 +60,7 @@ public class CrimxSpigotAPI extends JavaPlugin {
         this.npcPool = NPCPool.builder(this)
                 .spawnDistance(60)
                 .actionDistance(30)
-                .tabListRemoveTicks(20)
+                .tabListRemoveTicks(40)
                 .build();
 
         Bukkit.getConsoleSender().sendMessage("§aLoaded CrimxAPI v2 by fel1x");

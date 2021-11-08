@@ -23,7 +23,7 @@ public class BlockBreakListener implements Listener {
     public void on(BlockBreakEvent event) {
 
         Player player = event.getPlayer();
-        GamePlayer gamePlayer = new GamePlayer(player);
+        GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
@@ -40,16 +40,7 @@ public class BlockBreakListener implements Listener {
             case INGAME:
                 if (gamePlayer.isSpectator()) {
                     event.setCancelled(true);
-                    return;
-                } else {
-                    if (this.mlgWars.isLabor()) {
-                        event.getBlock().setType(Material.AIR);
-                        event.getBlock().getWorld().spawnEntity(event.getBlock().getLocation(), EntityType.PRIMED_TNT);
-                    }
                 }
-
         }
-
     }
-
 }

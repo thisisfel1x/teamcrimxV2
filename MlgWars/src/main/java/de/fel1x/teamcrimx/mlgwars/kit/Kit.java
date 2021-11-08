@@ -5,34 +5,34 @@ import de.fel1x.teamcrimx.mlgwars.kit.kits.*;
 public enum Kit {
 
     // NORMAL KIT's
-    STARTER(StandardKit.class),
-    GRAPPLER(GrapplerKit.class),
-    EXPLODER(ExploderKit.class),
-    MINER(MinerKit.class),
-    ASTRONAUT(AstronautKit.class),
+    STARTER(StandardKit.class), // ja
+    GRAPPLER(GrapplerKit.class), // ja
+    EXPLODER(ExploderKit.class), // ja
+    MINER(MinerKit.class), // nein
+    ASTRONAUT(AstronautKit.class), // ja
     SAVER(SaverKit.class),
     GHOST(GhostKit.class),
-    THROWER(ThrowerKit.class),
+    THROWER(ThrowerKit.class), // ja
     THOR(ThorKit.class),
-    KANGAROO(KangarooKit.class),
-    PULLER(PullerKit.class),
-    BOAT_GLIDER(BoatGliderKit.class),
+    KANGAROO(KangarooKit.class), // ja
+    PULLER(PullerKit.class), // ja
+    BOAT_GLIDER(BoatGliderKit.class), // ja
     CHICKEN_BRIDGE(ChickenBridgeKit.class),
-    WEB_TRAPPER(WebTrapperKit.class),
-    BOT_PVP(NpcKit.class),
+    WEB_TRAPPER(WebTrapperKit.class), // ja in turtle
+    BOT_PVP(NpcKit.class), // ja
     SOUPER(SouperKit.class),
-    FARMER(FarmerKit.class),
+    FARMER(FarmerKit.class), // ja
     ENDER_MAN(EnderPearlKit.class),
     VALORANT(ValorantKit.class),
     ELYTRA(ElytraKit.class),
 
     // USER-SPECIFIC KIT's
-    TORNADO(TornadoKit.class),
-    STINKER(StinkerKit.class),
-    TANK(TankKit.class),
-    TURTLE(TurtleKit.class),
+    TORNADO(TornadoKit.class), // ja
+    STINKER(StinkerKit.class), // ja
+    TANK(TankKit.class), // ja
+    TURTLE(TurtleKit.class), // ja
     CSGO(CSGOKit.class),
-    DUMP(DumpKit.class),
+    DUMP(DumpKit.class), // ja
     NUTS(NutsKit.class);
 
     // TESTING

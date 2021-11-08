@@ -62,8 +62,8 @@
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>snapshots</id>
-            <url>https://repo.cloudnetservice.eu/repository/snapshots</url>
+            <id>cloudnet-snapshots</id>
+            <url>https://repo.cloudnetservice.eu/repository/snapshots/</url>
         </repository>
         <repository>
             <id>jitpack.io</id>
@@ -91,21 +91,21 @@
         <dependency>
             <groupId>de.dytanic.cloudnet</groupId>
             <artifactId>cloudnet-driver</artifactId>
-            <version>3.4.0-SNAPSHOT</version>
+            <version>3.5.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!--  cloudnet wrapper for plugins -->
         <dependency>
             <groupId>de.dytanic.cloudnet</groupId>
             <artifactId>cloudnet-wrapper-jvm</artifactId>
-            <version>3.4.0-SNAPSHOT</version>
+            <version>3.5.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!--  cloudnet bridge module for plugins and modules -->
         <dependency>
             <groupId>de.dytanic.cloudnet</groupId>
             <artifactId>cloudnet-bridge</artifactId>
-            <version>3.4.0-SNAPSHOT</version>
+            <version>3.5.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 

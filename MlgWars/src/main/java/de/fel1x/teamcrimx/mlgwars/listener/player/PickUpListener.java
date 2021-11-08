@@ -27,32 +27,24 @@ public class PickUpListener implements Listener {
         if (!(event.getEntity() instanceof Player)) return;
 
         Player player = (Player) event.getEntity();
-        GamePlayer gamePlayer = new GamePlayer(player);
+        GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
         switch (gamestate) {
-
-            case IDLE:
-            case LOBBY:
-            case DELAY:
-            case ENDING:
-                event.setCancelled(true);
-                break;
-
-            case PREGAME:
-            case INGAME:
+            case IDLE, LOBBY, DELAY, ENDING -> event.setCancelled(true);
+            case PREGAME, INGAME -> {
                 if (gamePlayer.isSpectator()) {
                     event.setCancelled(true);
                     return;
                 }
-
-                if (gamePlayer.getSelectedKit() == Kit.DUMP) {
+                /*if (gamePlayer.getSelectedKit() == Kit.DUMP) { TODO
                     event.getItem()
                             .setItemStack(new ItemStack(this.mlgWars.getAllMaterials()
                                     .get(new Random().nextInt(this.mlgWars.getAllMaterials().size())),
                                     event.getItem().getItemStack().getAmount()));
-                }
+                } */
+            }
         }
     }
 }

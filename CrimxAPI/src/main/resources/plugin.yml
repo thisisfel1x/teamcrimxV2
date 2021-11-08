@@ -8,6 +8,8 @@ api-version: 1.16
 depend:
   - ProtocolLib
   - PlayerParticles
+loadbefore:
+  - LibsDisguises
 
 commands:
   joinme:

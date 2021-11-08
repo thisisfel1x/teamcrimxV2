@@ -21,7 +21,7 @@ public class DropListener implements Listener {
     public void on(PlayerDropItemEvent event) {
 
         Player player = event.getPlayer();
-        GamePlayer gamePlayer = new GamePlayer(player);
+        GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 

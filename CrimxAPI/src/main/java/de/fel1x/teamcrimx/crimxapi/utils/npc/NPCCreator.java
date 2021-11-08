@@ -5,6 +5,8 @@ import com.github.juliarn.npc.NPCPool;
 import com.github.juliarn.npc.modifier.MetadataModifier;
 import com.github.juliarn.npc.profile.Profile;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -57,7 +59,7 @@ public class NPCCreator {
         return this;
     }
 
-    public NPCCreator addHeaders(String[] lines) {
+    public NPCCreator addHeaders(Component[] lines) {
         Collections.reverse(Arrays.asList(lines));
 
         for (int i = 0; i < lines.length; i++) {
@@ -68,12 +70,23 @@ public class NPCCreator {
                                 armorStand.setVisible(false);
 
                                 armorStand.setCustomNameVisible(true);
-                                armorStand.setCustomName(lines[finalI]);
+                                armorStand.customName(lines[finalI]);
                                 armorStand.setGravity(false);
                             });
         }
 
         return this;
+    }
+
+    public NPCCreator addHeaders(String[] lines) {
+        Component[] componentLines = new Component[lines.length];
+        LegacyComponentSerializer legacyComponentSerializer = LegacyComponentSerializer.builder().build();
+
+        for (int i = 0; i < lines.length; i++) {
+            componentLines[i] = legacyComponentSerializer.deserialize(lines[i]);
+        }
+
+        return this.addHeaders(componentLines);
     }
 
     public NPC spawn() {

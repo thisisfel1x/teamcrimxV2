@@ -1,12 +1,8 @@
 package de.fel1x.teamcrimx.mlgwars.listener.player;
 
-import de.fel1x.teamcrimx.crimxapi.coins.CoinsAPI;
-import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
-import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
-import de.fel1x.teamcrimx.mlgwars.scoreboard.MlgWarsScoreboard;
 import de.fel1x.teamcrimx.mlgwars.utils.WinDetection;
 import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.Bukkit;
@@ -17,10 +13,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.util.UUID;
+
 public class DeathListener implements Listener {
 
     private final MlgWars mlgWars;
-    private final MlgWarsScoreboard mlgWarsScoreboard = new MlgWarsScoreboard();
 
     public DeathListener(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
@@ -32,13 +29,11 @@ public class DeathListener implements Listener {
 
         Player player = event.getEntity();
         Player killer;
-        GamePlayer gamePlayer = new GamePlayer(player, true);
+
+        GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
+        Gamestate gamestate = gamePlayer.getCurrentGamestate();
+
         gamePlayer.onDeath();
-
-        int deaths = (int) gamePlayer.getObjectFromMongoDocument("deaths", MongoDBCollection.MLGWARS);
-        gamePlayer.saveObjectInDocument("deaths", (deaths + 1), MongoDBCollection.MLGWARS);
-
-        Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
         if (gamestate == Gamestate.PREGAME || gamestate == Gamestate.INGAME) {
 
@@ -47,7 +42,8 @@ public class DeathListener implements Listener {
             } else if (this.mlgWars.getData().getLastHit().get(player) != null) {
                 killer = this.mlgWars.getData().getLastHit().get(player);
             } else if (player.hasMetadata("lastZombieHit")) {
-                killer = Bukkit.getPlayer(player.getMetadata("lastZombieHit").get(0).asString());
+                UUID ownerUUID = (UUID) player.getMetadata("lastZombieHit").get(0).value();
+                killer = ownerUUID != null ? Bukkit.getPlayer(ownerUUID) : null;
             } else {
                 killer = null;
             }
@@ -57,19 +53,17 @@ public class DeathListener implements Listener {
             }
 
             if (killer != null) {
+                GamePlayer killerGamePlayer = this.mlgWars.getData().getGamePlayers().get(killer.getUniqueId());
+                killerGamePlayer.getCrimxCoins().addCoinsAsync(100);
 
-                CoinsAPI coinsAPI = new CoinsAPI(killer.getUniqueId());
-                coinsAPI.addCoins(100);
-
-                GamePlayer killerGamePlayer = new GamePlayer(killer, true);
-
-                if (killerGamePlayer.getSelectedKit() == Kit.KANGAROO) {
+                /* if (killerGamePlayer.getSelectedKit() == Kit.KANGAROO) { TODO
                     int currentEssences = 0;
                     if (killer.hasMetadata("essence")) {
                         currentEssences = killer.getMetadata("essence").get(0).asInt();
                     }
                     killer.setMetadata("essence", new FixedMetadataValue(this.mlgWars, currentEssences + 2));
-                }
+                } */
+
 
                 int gameKills;
 
@@ -80,11 +74,9 @@ public class DeathListener implements Listener {
                 }
 
                 killer.setMetadata("kills", new FixedMetadataValue(this.mlgWars, gameKills));
-                this.mlgWarsScoreboard.updateBoard(killer, "§8● §b" + gameKills, "kills", "§b");
+                killerGamePlayer.getScoreboardHandler().updateBoard(killer, "§b" + gameKills, "kills");
 
-                int kills = (int) killerGamePlayer.getObjectFromMongoDocument("kills", MongoDBCollection.MLGWARS);
-                int toInsert = kills + 1;
-                killerGamePlayer.saveObjectInDocument("kills", toInsert, MongoDBCollection.MLGWARS);
+                killerGamePlayer.getStats().increaseKillsByOne();
 
                 killer.sendMessage(this.mlgWars.getPrefix() + "§7Du hast " + player.getDisplayName() + " §7getötet §a(+100 Coins)");
                 event.setDeathMessage(String.format("%s %s §7wurde von %s §7getötet", this.mlgWars.getPrefix(),
@@ -98,33 +90,24 @@ public class DeathListener implements Listener {
                 DisguiseAPI.undisguiseToAll(player);
             }
 
-            long onlineTimeInMillis;
-
-            try {
-                onlineTimeInMillis = (long) gamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS);
-            } catch (Exception ignored) {
-                onlineTimeInMillis = Integer.toUnsignedLong((Integer) gamePlayer.getObjectFromMongoDocument("onlinetime", MongoDBCollection.USERS));
-            }
-
-            long timePlayed = System.currentTimeMillis() - this.mlgWars.getData().getPlayTime().get(player.getUniqueId());
-            long added = timePlayed + onlineTimeInMillis;
-            gamePlayer.saveObjectInDocument("onlinetime", added, MongoDBCollection.USERS);
+            gamePlayer.updateOnlineTime();
 
             int playersLeft = this.mlgWars.getData().getPlayers().size();
 
             String playersLeftMessage = null;
 
-            if (this.mlgWars.getTeamSize() > 1) {
-                if (player.hasMetadata("team")) {
-                    int team = player.getMetadata("team").get(0).asInt();
-                    this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().remove(player);
+            int team = gamePlayer.getPlayerMlgWarsTeamId();
+            this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().remove(player);
 
-                    if (this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().isEmpty()) {
-                        this.mlgWars.getData().getGameTeams().remove(team);
-                    }
+            if (this.mlgWars.getData().getGameTeams().get(team).getAlivePlayers().isEmpty()) {
+                this.mlgWars.getData().getGameTeams().remove(team);
+            }
+
+            if (this.mlgWars.getTeamSize() > 1) {
+                //if (player.hasMetadata("team")) {
                     playersLeftMessage = "§a" + playersLeft + " Spieler verbleiben §8(§a"
                             + this.mlgWars.getData().getGameTeams().size() + " Teams§8)";
-                }
+                //}
             } else if (this.mlgWars.getTeamSize() == 1) {
                 playersLeftMessage = "§a" + playersLeft + " Spieler verbleiben";
             }
@@ -137,10 +120,14 @@ public class DeathListener implements Listener {
                 player.setGlowing(false);
             }
 
-            Bukkit.getOnlinePlayers().forEach(inGamePlayer ->
-                    this.mlgWarsScoreboard.updateBoard(inGamePlayer, "§8● §c" + MlgWars.getInstance().getData().getPlayers().size(), "players", "§c"));
+            Bukkit.getOnlinePlayers().forEach(inGamePlayer -> {
+                GamePlayer loopGamePlayer = this.mlgWars.getData().getGamePlayers().get(inGamePlayer.getUniqueId());
+                loopGamePlayer.getScoreboardHandler()
+                        .updateBoard(inGamePlayer, "§c" + MlgWars.getInstance().getData().getPlayers().size(), "players");
 
-            new WinDetection();
+            });
+
+            new WinDetection(this.mlgWars);
         }
 
     }

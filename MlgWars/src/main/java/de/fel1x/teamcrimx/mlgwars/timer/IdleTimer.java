@@ -22,8 +22,9 @@ public class IdleTimer implements ITimer {
             this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, () -> {
 
                 int neededPlayers = (this.mlgWars.getTeamSize() * 2) - this.mlgWars.getData().getPlayers().size();
-                Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Warten auf §e" + (neededPlayers == 1 ? "einen §7weiteren" : neededPlayers + " §7weitere") + " Spieler!");
-
+                if(Bukkit.getOnlinePlayers().size() > 0) {
+                    Bukkit.broadcastMessage(this.mlgWars.getPrefix() + "§7Warten auf §e" + (neededPlayers == 1 ? "einen §7weiteren" : neededPlayers + " §7weitere") + " Spieler!");
+                }
             }, 0L, 15 * 20L);
         }
 

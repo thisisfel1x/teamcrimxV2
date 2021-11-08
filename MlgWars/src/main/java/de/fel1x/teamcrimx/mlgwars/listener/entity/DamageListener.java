@@ -2,10 +2,11 @@ package de.fel1x.teamcrimx.mlgwars.listener.entity;
 
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
+import de.fel1x.teamcrimx.mlgwars.maphandler.gametype.types.TntMadnessGameType;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
-import de.fel1x.teamcrimx.mlgwars.utils.entites.CustomZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -31,14 +32,13 @@ public class DamageListener implements Listener {
             return;
         }
 
-        if (!(event.getEntity() instanceof Player)) {
+        if (!(event.getEntity() instanceof Player target)) {
             return;
         }
 
-        Player target = (Player) event.getEntity();
-
-        if (event.getDamager() instanceof CustomZombie) {
-            target.setMetadata("lastZombieHit", new FixedMetadataValue(this.mlgWars, event.getEntity().getCustomName()));
+        if(event.getDamager() instanceof Zombie zombie && zombie.hasMetadata("botOwner")) {
+            target.setMetadata("lastZombieHit", new FixedMetadataValue(this.mlgWars,
+                    zombie.getMetadata("botOwner").get(0).value()));
             return;
         }
 
@@ -50,8 +50,7 @@ public class DamageListener implements Listener {
 
         if (event.getDamager() instanceof Player) {
             damager = (Player) event.getDamager();
-        } else if (event.getDamager() instanceof Projectile) {
-            Projectile projectile = (Projectile) event.getDamager();
+        } else if (event.getDamager() instanceof Projectile projectile) {
             if (projectile.getShooter() instanceof Player) {
                 damager = (Player) projectile.getShooter();
             }
@@ -61,8 +60,8 @@ public class DamageListener implements Listener {
             return;
         }
 
-        GamePlayer gameDamager = new GamePlayer(damager);
-        GamePlayer gameTarget = new GamePlayer(target);
+        GamePlayer gameDamager = this.mlgWars.getData().getGamePlayers().get(damager.getUniqueId());
+        GamePlayer gameTarget = this.mlgWars.getData().getGamePlayers().get(target.getUniqueId());
 
         if ((gameDamager.isSpectator() && gameTarget.isPlayer()) || (gameDamager.isPlayer() && gameTarget.isSpectator())) {
             event.setCancelled(true);
@@ -70,30 +69,21 @@ public class DamageListener implements Listener {
         }
 
         if (this.mlgWars.getTeamSize() > 1) {
-            if (target.hasMetadata("team") && damager.hasMetadata("team")) {
-
-                int targetTeam = target.getMetadata("team").get(0).asInt();
-                int damagerTeam = damager.getMetadata("team").get(0).asInt();
-
-                if (this.mlgWars.getData().getGameTeams().get(targetTeam).getId() == this.mlgWars.getData().getGameTeams().get(damagerTeam).getId()) {
-                    event.setCancelled(true);
-                    return;
-                }
+            if (gameDamager.getPlayerMlgWarsTeamId() == gameTarget.getPlayerMlgWarsTeamId()) {
+                event.setCancelled(true);
+                return;
             }
         }
 
         this.mlgWars.getData().getLastHit().put(target, damager);
-
     }
 
     @EventHandler
     public void on(EntityDamageEvent event) {
-
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            GamePlayer gamePlayer = new GamePlayer(player);
+        if (event.getEntity() instanceof Player player) {
+            GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
             if (gamePlayer.isSpectator()) {
                 event.setCancelled(true);
                 return;
@@ -111,7 +101,7 @@ public class DamageListener implements Listener {
             event.setDamage(0.1D);
         }
 
-        if (this.mlgWars.isLabor()) {
+        if (this.mlgWars.getGameType().getClass() == TntMadnessGameType.class) {
             if (event.getEntity() instanceof Player) {
                 if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK
                         && event.getCause() != EntityDamageEvent.DamageCause.VOID) {

@@ -25,7 +25,7 @@ public class RespawnListener implements Listener {
     public void on(PlayerRespawnEvent event) {
 
         Player player = event.getPlayer();
-        GamePlayer gamePlayer = new GamePlayer(player);
+        GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
 
@@ -33,7 +33,6 @@ public class RespawnListener implements Listener {
             event.setRespawnLocation(Spawns.SPECTATOR.getLocation());
             Bukkit.getScheduler().runTaskLater(this.mlgWars, () -> {
                 gamePlayer.activateSpectatorMode();
-                WinDetection.stopTasks(player);
                 player.setAllowFlight(true);
                 player.setFlying(true);
             }, 2L);

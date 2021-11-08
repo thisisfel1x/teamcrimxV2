@@ -15,6 +15,7 @@ import de.fel1x.teamcrimx.crimxlobby.listeners.player.*;
 import de.fel1x.teamcrimx.crimxlobby.listeners.world.WeatherChangeListener;
 import de.fel1x.teamcrimx.crimxlobby.manager.SpawnManager;
 import de.fel1x.teamcrimx.crimxlobby.minigames.connectfour.ConnectFourGameManager;
+import de.fel1x.teamcrimx.crimxlobby.npc.gamesupport.MlgWarsNPC;
 import de.fel1x.teamcrimx.crimxlobby.objects.Spawn;
 import de.fel1x.teamcrimx.crimxlobby.scoreboard.LobbyScoreboard;
 import fr.minuskube.inv.InventoryManager;
@@ -100,6 +101,8 @@ public final class CrimxLobby extends JavaPlugin {
            wanderingTrader.customName(Component.text("Selbsthilfezentrale", TextColor.fromHexString("#09a0db"))
                    .decoration(TextDecoration.ITALIC, false));
         });
+
+        new MlgWarsNPC(this);
     }
 
     @Override
