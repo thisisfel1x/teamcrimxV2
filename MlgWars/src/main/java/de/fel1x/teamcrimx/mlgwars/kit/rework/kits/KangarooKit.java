@@ -4,6 +4,7 @@ import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.crimxapi.utils.ProgressBar;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.Kit;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -24,6 +25,7 @@ public class KangarooKit extends Kit {
     public void initializeKit() {
         super.initializeKit();
         this.player.setAllowFlight(true);
+        this.hasDelay = false;
     }
 
     @Override
@@ -63,6 +65,7 @@ public class KangarooKit extends Kit {
 
         if(this.timer <= 0) {
             this.hasDelay = false;
+            this.player.setAllowFlight(true);
             this.cancel();
         }
 

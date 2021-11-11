@@ -64,6 +64,7 @@ public class ForceModeCommand implements TabCompleter, CommandExecutor {
             GameTypeVoteInventory.ImplementedMode implementedMode = GameTypeVoteInventory.ImplementedMode.valueOf(args[0]);
             this.mlgWars.setForcedMode(implementedMode);
             player.sendMessage(this.mlgWars.getPrefix() + "§7Folgender Modus wird gespielt: " + implementedMode.name());
+            return true;
         } catch (Exception ignored) {}
 
         return false;

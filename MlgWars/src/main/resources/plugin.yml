@@ -21,3 +21,5 @@ commands:
     description: Check your current stats
   forcemode:
     description: Force the gamemode
+  multiplier:
+   description: Increase game items

@@ -102,7 +102,7 @@ public class BotPvPKit extends Kit {
 
                 try {
                     zombie.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(20);
-                    zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(15 + this.random.nextInt(5));
+                    zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20 + this.random.nextInt(5));
                 } catch (Exception ignored) {}
 
                 zombie.setMetadata(this.player.getName(), new FixedMetadataValue(this.mlgWars, null));
@@ -190,7 +190,18 @@ public class BotPvPKit extends Kit {
                             && !entity.getName().equalsIgnoreCase(BotPvPKit.this.player.getName())) // Todo: Team Implementation
                     .collect(Collectors.toList());
 
-            this.target =  (LivingEntity) possibleMobs.get(new Random().nextInt(possibleMobs.size()));
+            double closestDistance = -1.0;
+            Entity closestPlayer = null;
+            for (Entity player : possibleMobs) {
+                double distance = player.getLocation().distanceSquared(this.mob.getLocation());
+                if (closestDistance != -1.0 && !(distance < closestDistance)) {
+                    continue;
+                }
+                closestDistance = distance;
+                closestPlayer = player;
+            }
+            this.target = (LivingEntity) closestPlayer;
+            //this.target = (LivingEntity) possibleMobs.get(new Random().nextInt(possibleMobs.size()));
         }
     }
 }

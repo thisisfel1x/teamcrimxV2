@@ -18,10 +18,7 @@ import de.dytanic.cloudnet.ext.bridge.BridgeHelper;
 import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.fel1x.teamcrimx.crimxapi.CrimxAPI;
-import de.fel1x.teamcrimx.mlgwars.commands.ForceModeCommand;
-import de.fel1x.teamcrimx.mlgwars.commands.SetupCommand;
-import de.fel1x.teamcrimx.mlgwars.commands.StartCommand;
-import de.fel1x.teamcrimx.mlgwars.commands.StatsCommand;
+import de.fel1x.teamcrimx.mlgwars.commands.*;
 import de.fel1x.teamcrimx.mlgwars.enums.Size;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.gamestate.GamestateHandler;
@@ -305,6 +302,7 @@ public final class MlgWars extends JavaPlugin {
         new SetupCommand(this);
         new StatsCommand(this);
         new ForceModeCommand(this);
+        new ItemMultiplierCommand(this);
     }
 
     public void startTimerByClass(Class<?> clazz) {
