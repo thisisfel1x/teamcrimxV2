@@ -110,13 +110,13 @@
         </dependency>
 
         <!-- TODO: maven -->
-        <dependency>
+        <!-- <dependency>
             <groupId>dev.esophose.playerparticles</groupId>
             <artifactId>PlayerParticles</artifactId>
             <version>LATEST</version>
             <scope>system</scope>
             <systemPath>E:/teamcrimxV2/local-libraries/PlayerParticles_v7.18.jar</systemPath>
-        </dependency>
+        </dependency> -->
 
         <dependency>
             <groupId>com.github.juliarn</groupId>

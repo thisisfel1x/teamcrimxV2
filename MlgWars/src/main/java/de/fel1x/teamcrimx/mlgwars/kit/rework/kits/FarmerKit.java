@@ -82,7 +82,7 @@ public class FarmerKit extends Kit {
 
     @Override
     public void run() {
-        Actionbar.sendActionbar(this.player, "§6Farmer (versteckt) §8● "
+        this.gamePlayer.getMlgActionbar().sendActionbar(this.player, "§6Farmer (versteckt) §8● "
                 + ProgressBar.getProgressBar(this.timer, 60, 15,
                 '█', ChatColor.GREEN, ChatColor.DARK_GRAY));
 
@@ -90,7 +90,7 @@ public class FarmerKit extends Kit {
             if (DisguiseAPI.isDisguised(this.player)) {
                 DisguiseAPI.undisguiseToAll(this.player);
             }
-            Actionbar.sendActionbar(this.player, "§6Farmer §8● §7Du bist nun wieder §asichtbar");
+            this.gamePlayer.getMlgActionbar().sendActionbar(this.player, "§6Farmer §8● §7Du bist nun wieder §asichtbar");
             this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 2.5f, 0.5f);
 
             Actionbar.sendOnlySubtitle(this.player, "§aWieder sichtbar!", 5, 20, 5);

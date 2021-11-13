@@ -20,6 +20,7 @@ import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.InventoryKitManager;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.KitRegistry;
 import de.fel1x.teamcrimx.mlgwars.scoreboard.ScoreboardHandler;
+import de.fel1x.teamcrimx.mlgwars.utils.MlgActionbar;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bson.Document;
@@ -57,6 +58,8 @@ public class GamePlayer {
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
+    private final MlgActionbar mlgActionbar;
+
     public GamePlayer(MlgWars mlgWars, Player player) {
         this.mlgWars = mlgWars;
         this.data = this.mlgWars.getData();
@@ -69,6 +72,8 @@ public class GamePlayer {
         this.setFormattedChatName();
 
         this.data.getGamePlayers().put(this.player.getUniqueId(), this);
+
+        this.mlgActionbar = new MlgActionbar(this.mlgWars, this.player.getUniqueId());
     }
 
     public void initDatabasePlayer() {
@@ -179,6 +184,9 @@ public class GamePlayer {
         return this.data.getPlayers().contains(this.player);
     }
 
+    public MlgActionbar getMlgActionbar() {
+        return mlgActionbar;
+    }
 
     public void updateOnlineTime() {
         Bukkit.getScheduler().runTaskAsynchronously(this.mlgWars, () -> {
@@ -543,6 +551,8 @@ public class GamePlayer {
 
         this.playerMlgWarsTeamId = mlgWarsTeam.getId();
         this.data.getGameTeams().get(this.playerMlgWarsTeamId).getTeamPlayers().add(this.player);
+
+        this.player.setMetadata("team", new FixedMetadataValue(this.mlgWars, this.playerMlgWarsTeamId));
 
         this.player.sendMessage(this.mlgWars.getPrefix() + "§7Du bist nun in §aTeam #" + mlgWarsTeam.getTeamId());
 

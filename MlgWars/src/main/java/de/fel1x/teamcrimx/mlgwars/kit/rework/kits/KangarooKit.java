@@ -1,10 +1,8 @@
 package de.fel1x.teamcrimx.mlgwars.kit.rework.kits;
 
-import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.crimxapi.utils.ProgressBar;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.Kit;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -59,7 +57,7 @@ public class KangarooKit extends Kit {
 
     @Override
     public void run() {
-        Actionbar.sendActionbar(this.player, "§aKänguru  §8● "
+        this.gamePlayer.getMlgActionbar().sendActionbar(this.player, "§aKänguru  §8● "
                 + ProgressBar.getProgressBar(this.timer, 60, 15,
                 '█', ChatColor.GREEN, ChatColor.DARK_GRAY));
 

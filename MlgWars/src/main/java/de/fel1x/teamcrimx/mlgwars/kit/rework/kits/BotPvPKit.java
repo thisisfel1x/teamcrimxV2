@@ -101,8 +101,8 @@ public class BotPvPKit extends Kit {
                 zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, true, false));
 
                 try {
-                    zombie.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(20);
-                    zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20 + this.random.nextInt(5));
+                    zombie.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(20 + this.random.nextInt(5));
+                    zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(15 + this.random.nextInt(5));
                 } catch (Exception ignored) {}
 
                 zombie.setMetadata(this.player.getName(), new FixedMetadataValue(this.mlgWars, null));

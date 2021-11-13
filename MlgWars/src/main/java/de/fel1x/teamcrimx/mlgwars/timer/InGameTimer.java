@@ -58,8 +58,7 @@ public class InGameTimer implements ITimer {
                     if (gamePlayer.isPlayer()) {
 
                         //if (player.hasMetadata("team")) {
-                            int team = gamePlayer.getPlayerMlgWarsTeamId() + 1;
-                            Actionbar.sendActionbar(player, "§7Team §a#" + team);
+                        gamePlayer.getMlgActionbar().sendActionbar(player, (Component) null);
                         //}
 
                         if (player.getInventory().contains(this.dumpItem)) {

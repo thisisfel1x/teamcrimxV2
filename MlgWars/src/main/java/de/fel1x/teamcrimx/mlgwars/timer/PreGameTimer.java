@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.maphandler.gametype.types.TntMadnessGameType;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -47,21 +48,7 @@ public class PreGameTimer implements ITimer {
                     GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
                     if (gamePlayer.isPlayer()) {
-
-                        //if (player.hasMetadata("team")) {
-                            int team = gamePlayer.getPlayerMlgWarsTeamId() + 1;
-                            Actionbar.sendActionbar(player, "§7Team §a#" + team);
-                        //}
-
-                        /*if (gamePlayer.getSelectedKit() == Kit.KANGAROO) {
-                            if (!this.mlgWars.getData().getKangarooTask().containsKey(player.getUniqueId())) {
-                                int currentEssences = 0;
-                                if (player.hasMetadata("essence")) {
-                                    currentEssences = player.getMetadata("essence").get(0).asInt();
-                                }
-                                Actionbar.sendActionbar(player, "§6Känguru §8● §a" + currentEssences + " §7Essenzen übrig");
-                            }
-                        } */
+                        gamePlayer.getMlgActionbar().sendActionbar(player, (Component) null);
                     }
 
                     if (this.mlgWars.getData().getPlayers().size() > 1) {
