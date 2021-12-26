@@ -57,10 +57,9 @@ public class InGameTimer implements ITimer {
                     GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
                     if (gamePlayer.isPlayer()) {
 
-                        //if (player.hasMetadata("team")) {
-                            int team = gamePlayer.getPlayerMlgWarsTeamId() + 1;
-                            Actionbar.sendActionbar(player, "§7Team §a#" + team);
-                        //}
+                        if (gamePlayer.isPlayer() && !gamePlayer.isActionbarOverridden()) {
+                            gamePlayer.getMlgActionbar().sendActionbar(player, (Component) null);
+                        }
 
                         if (player.getInventory().contains(this.dumpItem)) {
                             player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 40, 0, false, false));

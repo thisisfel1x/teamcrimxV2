@@ -118,6 +118,7 @@ public class WinDetection {
             if (DisguiseAPI.isDisguised(player)) {
                 DisguiseAPI.undisguiseToAll(player);
             }
+            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
             BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
             player.playerListName(player.displayName());
         });

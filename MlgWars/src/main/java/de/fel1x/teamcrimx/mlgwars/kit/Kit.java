@@ -10,17 +10,17 @@ public enum Kit {
     EXPLODER(ExploderKit.class), // ja
     MINER(MinerKit.class), // nein
     ASTRONAUT(AstronautKit.class), // ja
-    SAVER(SaverKit.class),
-    GHOST(GhostKit.class),
+    SAVER(SaverKit.class), // nein
+    GHOST(GhostKit.class), // ja
     THROWER(ThrowerKit.class), // ja
-    THOR(ThorKit.class),
+    THOR(ThorKit.class), // ja
     KANGAROO(KangarooKit.class), // ja
     PULLER(PullerKit.class), // ja
     BOAT_GLIDER(BoatGliderKit.class), // ja
     CHICKEN_BRIDGE(ChickenBridgeKit.class),
     WEB_TRAPPER(WebTrapperKit.class), // ja in turtle
     BOT_PVP(NpcKit.class), // ja
-    SOUPER(SouperKit.class),
+    SOUPER(SouperKit.class), // nein
     FARMER(FarmerKit.class), // ja
     ENDER_MAN(EnderPearlKit.class),
     VALORANT(ValorantKit.class),

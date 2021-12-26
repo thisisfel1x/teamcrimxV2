@@ -1,6 +1,7 @@
 package de.fel1x.teamcrimx.mlgwars.kit.rework.kits;
 
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
+import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.Kit;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import org.bukkit.Material;
@@ -38,6 +39,10 @@ public class ThrowerKit extends Kit {
 
     @Override
     protected void onInteract(PlayerInteractEvent event) {
+        if(this.mlgWars.getGamestateHandler().getGamestate() != Gamestate.INGAME) {
+            return;
+        }
+
         ItemStack interactedItem = event.getItem();
         if(interactedItem == null
                 || !interactedItem.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(this.mlgWars,

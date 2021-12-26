@@ -20,12 +20,15 @@ import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.InventoryKitManager;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.KitRegistry;
 import de.fel1x.teamcrimx.mlgwars.scoreboard.ScoreboardHandler;
+import de.fel1x.teamcrimx.mlgwars.utils.MlgActionbar;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -43,6 +46,7 @@ public class GamePlayer {
     private final Player player;
 
     private boolean hasWrittenGG = false;
+    private boolean isActionbarOverridden = false;
     private KitRegistry selectedKit;
     private final Map<KitRegistry, Boolean> boughtKits;
     private long gameStartTime;
@@ -57,6 +61,8 @@ public class GamePlayer {
 
     private final IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
+    private final MlgActionbar mlgActionbar;
+
     public GamePlayer(MlgWars mlgWars, Player player) {
         this.mlgWars = mlgWars;
         this.data = this.mlgWars.getData();
@@ -69,6 +75,8 @@ public class GamePlayer {
         this.setFormattedChatName();
 
         this.data.getGamePlayers().put(this.player.getUniqueId(), this);
+
+        this.mlgActionbar = new MlgActionbar(this.mlgWars, this.player.getUniqueId());
     }
 
     public void initDatabasePlayer() {
@@ -179,6 +187,9 @@ public class GamePlayer {
         return this.data.getPlayers().contains(this.player);
     }
 
+    public MlgActionbar getMlgActionbar() {
+        return mlgActionbar;
+    }
 
     public void updateOnlineTime() {
         Bukkit.getScheduler().runTaskAsynchronously(this.mlgWars, () -> {
@@ -245,6 +256,14 @@ public class GamePlayer {
         return this.stats;
     }
 
+    public boolean isActionbarOverridden() {
+        return this.isActionbarOverridden;
+    }
+
+    public void setActionbarOverridden(boolean actionbarOverridden) {
+        this.isActionbarOverridden = actionbarOverridden;
+    }
+
     public void cleanUpOnJoin() {
 
         this.player.setMetadata("kills", new FixedMetadataValue(this.mlgWars, 0));
@@ -278,6 +297,18 @@ public class GamePlayer {
 
     public void cleanUpOnQuit() {
         this.removeFromPlayers();
+        this.activeKit.disableKit();
+
+        Location lastLocation = this.player.getLocation();
+
+        for (ItemStack content : this.getPlayer().getInventory().getContents()) {
+            if(content == null) {
+                continue;
+            }
+            lastLocation.getWorld().dropItemNaturally(lastLocation, content);
+        }
+        lastLocation.getWorld().spawn(lastLocation,
+                ExperienceOrb.class, experienceOrb -> experienceOrb.setExperience(this.player.getTotalExperience()));
 
         int playersLeft = this.mlgWars.getData().getPlayers().size();
 
@@ -420,7 +451,12 @@ public class GamePlayer {
 
     public void onDeath() {
         // Disable kit
-        this.getActiveKit().disableKit();
+        try {
+            this.activeKit.disableKit();
+        } catch (Exception exception) {
+            this.player.sendMessage(this.mlgWars.getPrefix() + "§cEin Fehler beim deaktivieren deines Kits ist aufgetreten:");
+            this.player.sendMessage("§c" + exception.getMessage());
+        }
 
         this.player.setAllowFlight(true);
         this.player.setFlying(true);
@@ -543,6 +579,8 @@ public class GamePlayer {
 
         this.playerMlgWarsTeamId = mlgWarsTeam.getId();
         this.data.getGameTeams().get(this.playerMlgWarsTeamId).getTeamPlayers().add(this.player);
+
+        this.player.setMetadata("team", new FixedMetadataValue(this.mlgWars, this.playerMlgWarsTeamId));
 
         this.player.sendMessage(this.mlgWars.getPrefix() + "§7Du bist nun in §aTeam #" + mlgWarsTeam.getTeamId());
 

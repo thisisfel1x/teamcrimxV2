@@ -68,8 +68,12 @@ public class AstronautKit extends Kit {
     public void disableKit() {
         super.disableKit();
 
-        this.firework.remove();
-        this.mobToControl.remove();
+        if(this.firework != null) {
+            this.firework.remove();
+        }
+        if(this.mobToControl != null) {
+            this.mobToControl.remove();
+        }
 
         this.firework = null;
         this.mobToControl = null;

@@ -15,10 +15,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.units.qual.A;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public abstract class GameType {
@@ -28,6 +30,7 @@ public abstract class GameType {
     public final MapHandler mapHandler = new MapHandler();
 
     private int teamSize = -1;
+    private int itemMultiplier = 1;
 
     public GameType(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
@@ -168,7 +171,22 @@ public abstract class GameType {
         return ChestFiller.getTier2Items();
     }
 
-    public void gameInit() {}
+    public void gameInit() {
+        if(this.itemMultiplier > 1) {
+            for (Player player : this.mlgWars.getData().getPlayers()) {
+                ItemStack[] inventoryContents = player.getInventory().getContents();
+                for (int i = 0; i < inventoryContents.length; i++) {
+                    ItemStack loopStack = inventoryContents[i];
+                    if(loopStack == null) {
+                        continue;
+                    }
+                    loopStack.setAmount(loopStack.getAmount() * this.itemMultiplier);
+                    inventoryContents[i] = loopStack;
+                }
+                player.getInventory().setContents(inventoryContents);
+            }
+        }
+    }
 
     public void gameTick() {}
 
@@ -257,6 +275,23 @@ public abstract class GameType {
                 }
             }
         }
+    }
+
+    public void kill(Player killer, Player deadPlayer) {
+
+    }
+
+    public void death(Player player) {
+
+    }
+
+    public void quit(Player player) {
+        this.death(player);
+
+    }
+
+    public void setItemMultiplier(int itemMultiplier) {
+        this.itemMultiplier = itemMultiplier;
     }
 
     private void sendErrorMessage(String error) {

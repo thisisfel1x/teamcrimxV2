@@ -83,14 +83,18 @@ public class HalloweenGameType extends SoloGameType {
                 Cuboid area = new Cuboid(player.getLocation().clone().add(2, 2, 2),
                         player.getLocation().clone().add(-2, -2, -2));
                 for(int i = 0; i < 5; i++) {
-                    Block foundBlock = area.getBlocks().get(this.random.nextInt(area.getBlocks().size()));
-                    while (!foundBlock.isSolid()
-                            || foundBlock.getLocation() == player.getLocation().clone().add(0, -1,0)) {
-                        foundBlock = area.getBlocks().get(this.random.nextInt(area.getBlocks().size()));
-                    }
-                    foundBlock.setType(this.possibleMaterials[this.random.nextInt(this.possibleMaterials.length)]);
-                    player.getWorld().spawnParticle(Particle.BLOCK_CRACK, foundBlock.getLocation(), 3,
-                            Bukkit.createBlockData(foundBlock.getType()));
+                    try {
+                        Block foundBlock = area.getBlocks().get(this.random.nextInt(area.getBlocks().size()));
+                        int attempts = 0;
+                        while (attempts < 3 && (/*!foundBlock.isSolid()
+                                || */ foundBlock.getLocation() == player.getLocation().clone().add(0, -1,0))) {
+                            foundBlock = area.getBlocks().get(this.random.nextInt(area.getBlocks().size()));
+                            attempts++;
+                        }
+                        foundBlock.setType(this.possibleMaterials[this.random.nextInt(this.possibleMaterials.length)]);
+                        player.getWorld().spawnParticle(Particle.BLOCK_CRACK, foundBlock.getLocation(), 3,
+                                Bukkit.createBlockData(foundBlock.getType()));
+                    } catch (Exception ignored) { }
                 }
             }
         }

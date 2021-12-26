@@ -19,6 +19,7 @@ public class StarterKit extends Kit {
 
     @Override
     public void initializeKit() {
+        super.initializeKit();
         this.player.getInventory().setItem(0, new ItemBuilder(Material.GOLDEN_SWORD)
                 .setName(Component.text("● ", NamedTextColor.DARK_GRAY)
                         .append(Component.text("Müll", NamedTextColor.GOLD))

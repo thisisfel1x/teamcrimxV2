@@ -28,7 +28,7 @@ public class SpectatorReworkInventory {
             gui.addItem(ItemBuilder.skull()
                     .owner(gamePlayer.getPlayer())
                     .name(gamePlayer.getPlayer().displayName())
-                            .lore(this.mlgWars.miniMessage().parse("<gray>Team <aqua>#" + gamePlayer.getPlayerMlgWarsTeamId() + 1))
+                            .lore(this.mlgWars.miniMessage().parse("<gray>Team <aqua>#" + (gamePlayer.getPlayerMlgWarsTeamId() + 1)))
                     .asGuiItem(event -> {
                         if(!event.getWhoClicked().getUniqueId().equals(player.getUniqueId())) {
                             return;
