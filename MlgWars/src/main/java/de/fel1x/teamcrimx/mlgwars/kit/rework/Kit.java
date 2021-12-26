@@ -19,12 +19,15 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 import java.util.UUID;
 
 public abstract class Kit extends BukkitRunnable implements Listener {
+
+    private final NamespacedKey kitNamespaceKey;
 
     public Player player;
     public MlgWars mlgWars;
@@ -36,6 +39,8 @@ public abstract class Kit extends BukkitRunnable implements Listener {
         this.player = player;
         this.mlgWars = mlgWars;
         this.gamePlayer = this.mlgWars.getData().getGamePlayers().get(this.player.getUniqueId());
+
+        this.kitNamespaceKey = new NamespacedKey(Kit.this.mlgWars, "KIT");
 
         // Register Listener
         this.mlgWars.getPluginManager().registerEvents(this, this.mlgWars);
@@ -153,8 +158,14 @@ public abstract class Kit extends BukkitRunnable implements Listener {
         if(this.getInteractionItemStack() != null && itemStack != null) {
             return itemStack.getType() == getInteractionItemStack().getType()
                     && itemStack.getItemMeta().getPersistentDataContainer()
-                    .has(new NamespacedKey(Kit.this.mlgWars, "KIT"), PersistentDataType.STRING);
+                    .has(this.kitNamespaceKey, PersistentDataType.STRING);
         }
         return false;
     }
+
+    public boolean checkPersistentDataContainer(@NotNull ItemStack itemStack, @NotNull Class<? extends Kit> clazz) {
+       return itemStack.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(this.mlgWars,
+               clazz.getName()), PersistentDataType.INTEGER);
+    }
+
 }

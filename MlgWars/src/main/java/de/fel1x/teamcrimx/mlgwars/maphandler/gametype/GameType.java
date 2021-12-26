@@ -172,6 +172,20 @@ public abstract class GameType {
     }
 
     public void gameInit() {
+        if(this.itemMultiplier > 1) {
+            for (Player player : this.mlgWars.getData().getPlayers()) {
+                ItemStack[] inventoryContents = player.getInventory().getContents();
+                for (int i = 0; i < inventoryContents.length; i++) {
+                    ItemStack loopStack = inventoryContents[i];
+                    if(loopStack == null) {
+                        continue;
+                    }
+                    loopStack.setAmount(loopStack.getAmount() * this.itemMultiplier);
+                    inventoryContents[i] = loopStack;
+                }
+                player.getInventory().setContents(inventoryContents);
+            }
+        }
     }
 
     public void gameTick() {}
@@ -261,6 +275,19 @@ public abstract class GameType {
                 }
             }
         }
+    }
+
+    public void kill(Player killer, Player deadPlayer) {
+
+    }
+
+    public void death(Player player) {
+
+    }
+
+    public void quit(Player player) {
+        this.death(player);
+
     }
 
     public void setItemMultiplier(int itemMultiplier) {

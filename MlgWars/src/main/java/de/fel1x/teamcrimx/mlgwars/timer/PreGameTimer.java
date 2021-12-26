@@ -47,7 +47,7 @@ public class PreGameTimer implements ITimer {
                 this.mlgWars.getData().getPlayers().forEach(player -> {
                     GamePlayer gamePlayer = this.mlgWars.getData().getGamePlayers().get(player.getUniqueId());
 
-                    if (gamePlayer.isPlayer()) {
+                    if (gamePlayer.isPlayer() && !gamePlayer.isActionbarOverridden()) {
                         gamePlayer.getMlgActionbar().sendActionbar(player, (Component) null);
                     }
 

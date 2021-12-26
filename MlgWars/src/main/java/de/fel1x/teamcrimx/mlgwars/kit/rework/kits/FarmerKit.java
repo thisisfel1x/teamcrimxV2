@@ -11,6 +11,7 @@ import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -78,6 +79,7 @@ public class FarmerKit extends Kit {
         DisguiseAPI.disguiseEntity(this.player, disguise);
 
         this.runTaskTimer(this.mlgWars, 0L, 20L);
+        this.gamePlayer.setActionbarOverridden(true);
     }
 
     @Override
@@ -98,6 +100,7 @@ public class FarmerKit extends Kit {
             this.player.setGlowing(this.hadGlow);
 
             this.cancel();
+            this.gamePlayer.setActionbarOverridden(false);
             return;
         }
 

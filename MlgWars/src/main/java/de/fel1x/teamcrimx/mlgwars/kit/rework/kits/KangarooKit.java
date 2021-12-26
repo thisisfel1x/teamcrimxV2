@@ -3,6 +3,7 @@ package de.fel1x.teamcrimx.mlgwars.kit.rework.kits;
 import de.fel1x.teamcrimx.crimxapi.utils.ProgressBar;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.Kit;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ public class KangarooKit extends Kit {
 
     private boolean hasDelay;
     private int timer;
+    private int taskId = -1;
 
     public KangarooKit(Player player, MlgWars mlgWars) {
         super(player, mlgWars);
@@ -22,8 +24,14 @@ public class KangarooKit extends Kit {
     @Override
     public void initializeKit() {
         super.initializeKit();
-        this.player.setAllowFlight(true);
         this.hasDelay = false;
+        Bukkit.getScheduler().runTaskLater(this.mlgWars, () -> this.player.setAllowFlight(true), 20L);
+    }
+
+    @Override
+    public void disableKit() {
+        super.disableKit();
+        Bukkit.getScheduler().cancelTask(this.taskId);
     }
 
     @Override
@@ -51,22 +59,28 @@ public class KangarooKit extends Kit {
         this.timer = 5;
         this.hasDelay = true;
 
-        this.runTaskTimer(this.mlgWars, 0L, 20L);
+        this.gamePlayer.setActionbarOverridden(true);
+        this.runKangarooTask();
+        this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.mlgWars, this::runKangarooTask, 0L, 20L);
+    }
 
+    public void runKangarooTask() {
+        this.gamePlayer.getMlgActionbar().sendActionbar(this.player, "§aKänguru  §8● "
+                + ProgressBar.getProgressBar(this.timer, 5, 5,
+                '█', ChatColor.GREEN, ChatColor.DARK_GRAY));
+
+        if(this.timer <= 0) {
+            this.gamePlayer.getMlgActionbar().sendActionbar(this.player, "§aKänguru §8● §aBereit");
+            Bukkit.getScheduler().cancelTask(this.taskId);
+            this.hasDelay = false;
+            this.player.setAllowFlight(true);
+            this.gamePlayer.setActionbarOverridden(false);
+        }
+
+        this.timer--;
     }
 
     @Override
     public void run() {
-        this.gamePlayer.getMlgActionbar().sendActionbar(this.player, "§aKänguru  §8● "
-                + ProgressBar.getProgressBar(this.timer, 60, 15,
-                '█', ChatColor.GREEN, ChatColor.DARK_GRAY));
-
-        if(this.timer <= 0) {
-            this.hasDelay = false;
-            this.player.setAllowFlight(true);
-            this.cancel();
-        }
-
-        this.timer--;
     }
 }

@@ -55,6 +55,12 @@ public class InventoryKitManager {
                 "", "§7Wer mit diesem Kit spielt", "§7erhält automatisch Dummheit Stufe 1000", "", "§6[für Pilzkuuh]"));
         this.registerKits(KitRegistry.KANGAROO, new InventoryKit("Känguru", 5000, Material.SLIME_BALL,
                 "", "§7Springe höher als die höchsten,", "§7und weiter als die weitesten!", ""));
+        this.registerKits(KitRegistry.THOR, new InventoryKit("Thor", 5000, Material.GOLDEN_AXE,
+                "", "soon", ""));
+        this.registerKits(KitRegistry.GHOST, new InventoryKit("Geist", 6500, Material.QUARTZ_BLOCK,
+                "", "§7Es wird gruselig!", "§7Laufe unsichtbar mit deiner Sense durch die Gegend!", ""));
+        this.registerKits(KitRegistry.CSGO, new InventoryKit("CounterStone", 5000, Material.FLINT_AND_STEEL,
+                "", "§7Heute ruhiger Stream,", "§7denn hier wirst du nicht gesniped!", "", "§6[für TurbomikLP]"));
     }
 
     private void registerKits(KitRegistry kitRegistry, InventoryKit inventoryKit) {

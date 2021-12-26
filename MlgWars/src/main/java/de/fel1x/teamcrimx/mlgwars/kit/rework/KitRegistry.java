@@ -17,12 +17,15 @@ public enum KitRegistry {
     THROWER(ThrowerKit.class),
     BOAT_GLIDER(BoatGliderKit.class),
     KANGAROO(KangarooKit.class),
+    THOR(ThorKit.class),
+    GHOST(GhostKit.class),
 
     // CUSTOM
     TORNADO(TornadoKit.class),
     STINKER(StinkerKit.class),
     TANK(TankKit.class),
-    DUMP(DumpKit.class);
+    DUMP(DumpKit.class),
+    CSGO(CounterStrikeKit.class);
 
     private final Class<? extends Kit> clazz;
 

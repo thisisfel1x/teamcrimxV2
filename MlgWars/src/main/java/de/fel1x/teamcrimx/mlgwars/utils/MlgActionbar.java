@@ -1,9 +1,7 @@
 package de.fel1x.teamcrimx.mlgwars.utils;
 
-import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.crimxapi.utils.actionbar.ActionbarImpl;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
-import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import net.kyori.adventure.text.Component;
 
 import java.util.UUID;

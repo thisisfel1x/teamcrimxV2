@@ -13,13 +13,13 @@ public class ActionbarImpl {
     }
 
     public void sendActionbar(Player player, @Nullable String content) {
-        this.send(player, LegacyComponentSerializer.legacySection().deserialize(content));
+        this.sendActionbar(player, LegacyComponentSerializer.legacySection().deserialize(content));
     }
 
     public void sendActionbar(Player player, @Nullable Component content) {
         Component finalComponent = this.getAdditionalComponent();
         if(content != null) {
-            finalComponent.append(Component.text(" x ", NamedTextColor.DARK_GRAY))
+            finalComponent = finalComponent.append(Component.text(" x ", NamedTextColor.DARK_GRAY))
                     .append(content);
         }
         this.send(player, finalComponent);

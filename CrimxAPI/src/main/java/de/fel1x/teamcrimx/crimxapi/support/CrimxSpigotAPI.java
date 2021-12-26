@@ -60,7 +60,7 @@ public class CrimxSpigotAPI extends JavaPlugin {
         this.npcPool = NPCPool.builder(this)
                 .spawnDistance(60)
                 .actionDistance(30)
-                .tabListRemoveTicks(40)
+                .tabListRemoveTicks(100)
                 .build();
 
         Bukkit.getConsoleSender().sendMessage("§aLoaded CrimxAPI v2 by fel1x");

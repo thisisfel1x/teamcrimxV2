@@ -37,6 +37,11 @@ public class QuitListener implements Listener {
         this.mlgWars.getGameTypeVoteInventory().quit(player);
 
         gamePlayer.cleanUpOnQuit();
+
+        /*if (gamestate.isInGame(gamestate)) {
+            player.setHealth(0D); // TODO: check if death event gets called
+        }*/
+
         this.checkWinOnQuit(gamestate);
 
     }
