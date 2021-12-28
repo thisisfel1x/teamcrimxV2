@@ -19,6 +19,7 @@ import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.InventoryKitManager;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.KitRegistry;
+import de.fel1x.teamcrimx.mlgwars.maphandler.gametype.types.Tournament;
 import de.fel1x.teamcrimx.mlgwars.scoreboard.ScoreboardHandler;
 import de.fel1x.teamcrimx.mlgwars.utils.MlgActionbar;
 import net.kyori.adventure.text.Component;
@@ -222,6 +223,16 @@ public class GamePlayer {
 
         this.mlgWars.getCrimxAPI().getMongoDB().updateDocumentInCollectionSync(this.player.getUniqueId(),
                 MongoDBCollection.MLGWARS, toUpdate);
+
+        if(this.mlgWars.getGameType() instanceof Tournament) {
+            int currentPoints = (int) this.mlgWars.getCrimxAPI().getMongoDB().getObjectFromDocumentSync(this.player.getUniqueId(),
+                    MongoDBCollection.MLGWARS_TOURNAMENT, "points");
+            currentPoints = currentPoints + this.stats.getGamePoints() + (this.stats.isWin() ? 1 : 0);
+            toUpdate.append("points", currentPoints);
+
+            this.mlgWars.getCrimxAPI().getMongoDB().updateDocumentInCollectionSync(this.player.getUniqueId(),
+                    MongoDBCollection.MLGWARS_TOURNAMENT, toUpdate);
+        }
     }
 
     public void setGameStartTime(long gameStartTime) {
@@ -618,5 +629,17 @@ public class GamePlayer {
             }
             baseCosmetic.stopCosmetic(this.player);
         }
+    }
+
+    public void createTournamentData() {
+        Document basicDBObject = new Document("_id", this.player.getUniqueId().toString())
+                .append("name", this.player.getName())
+                .append("kills", 0)
+                .append("deaths", 0)
+                .append("gamesPlayed", 0)
+                .append("gamesWon", 0)
+                .append("points", 0);
+
+        this.mlgWars.getCrimxAPI().getMongoDB().insertDocumentInCollectionSync(basicDBObject, MongoDBCollection.MLGWARS_TOURNAMENT);
     }
 }

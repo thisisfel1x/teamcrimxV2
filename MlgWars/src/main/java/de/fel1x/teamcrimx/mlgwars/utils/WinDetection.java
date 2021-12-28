@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
+import de.fel1x.teamcrimx.mlgwars.maphandler.gametype.types.Tournament;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.objects.MlgWarsTeam;
 import de.fel1x.teamcrimx.mlgwars.timer.EndingTimer;
@@ -36,6 +37,14 @@ public class WinDetection {
                         winner.sendMessage(mlgWars.getPrefix() + "§7Du hast das Spiel gewonnen! §a(+100 Coins)");
 
                         winnerGamePlayer.updateOnlineTime();
+
+                        if(mlgWars.getGameType() instanceof Tournament) {
+                            winnerGamePlayer.getStats().setWin(true);
+                            winnerGamePlayer.getStats().addPoints(1);
+                            winner.playSound(winner.getLocation(),
+                                    Sound.ENTITY_PLAYER_LEVELUP, 1f, 2.5f);
+                            winner.sendMessage(mlgWars.getPrefix() + "§aWin, +1 §7Punkt");
+                        }
 
                         this.cleanUpOnlinePlayers(mlgWars);
 
@@ -109,6 +118,8 @@ public class WinDetection {
     }
 
     private void cleanUpOnlinePlayers(MlgWars mlgWars) {
+        mlgWars.getGameType().finish();
+
         Bukkit.getOnlinePlayers().forEach(player -> {
             GamePlayer gamePlayer = mlgWars.getData().getGamePlayers().get(player.getUniqueId());
             gamePlayer.removeFromSpectators();

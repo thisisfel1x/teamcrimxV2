@@ -13,6 +13,7 @@ public class MongoDB extends MongoHandler {
     private final MongoCollection<Document> userCollection;
     private final MongoCollection<Document> lobbyCollection;
     private final MongoCollection<Document> mlgWarsCollection;
+    private final MongoCollection<Document> mlgWarsTournamentCollection;
     private final MongoCollection<Document> captureTheFlagCollection;
     private final MongoCollection<Document> bingoCollection;
     private final MongoCollection<Document> floorIsLavaCollection;
@@ -39,6 +40,7 @@ public class MongoDB extends MongoHandler {
         this.userCollection = this.networkDatabase.getCollection("users");
         this.lobbyCollection = this.networkDatabase.getCollection("lobby");
         this.mlgWarsCollection = this.networkDatabase.getCollection("mlgwars");
+        this.mlgWarsTournamentCollection = this.networkDatabase.getCollection(MongoDBCollection.MLGWARS_TOURNAMENT.getCollectionName());
         this.captureTheFlagCollection = this.networkDatabase.getCollection("capturetheflag");
         this.bingoCollection = this.networkDatabase.getCollection("bingo");
         this.floorIsLavaCollection = this.networkDatabase.getCollection("floorislava");
@@ -67,6 +69,10 @@ public class MongoDB extends MongoHandler {
 
     public MongoCollection<Document> getMlgWarsCollection() {
         return this.mlgWarsCollection;
+    }
+
+    public MongoCollection<Document> getMlgWarsTournamentCollection() {
+        return mlgWarsTournamentCollection;
     }
 
     public MongoCollection<Document> getCaptureTheFlagCollection() {

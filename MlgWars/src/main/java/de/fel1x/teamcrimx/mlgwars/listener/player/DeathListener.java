@@ -2,10 +2,12 @@ package de.fel1x.teamcrimx.mlgwars.listener.player;
 
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
+import de.fel1x.teamcrimx.mlgwars.maphandler.gametype.types.Tournament;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.utils.WinDetection;
 import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,6 +28,7 @@ public class DeathListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void on(PlayerDeathEvent event) {
+        boolean tournament = this.mlgWars.getGameType() instanceof Tournament;
 
         Player player = event.getEntity();
         Player killer;
@@ -82,6 +85,13 @@ public class DeathListener implements Listener {
                 event.setDeathMessage(String.format("%s %s §7wurde von %s §7getötet", this.mlgWars.getPrefix(),
                         player.getDisplayName(), killer.getDisplayName()));
 
+                if(tournament) {
+                    killerGamePlayer.getStats().addPoints(1);
+                    killer.playSound(killer.getLocation(),
+                            Sound.ENTITY_PLAYER_LEVELUP, 1f, 2.5f);
+                    killer.sendMessage(this.mlgWars.getPrefix() + "§aEliminierung, +1 §7Punkt");
+                }
+
             } else {
                 event.setDeathMessage(this.mlgWars.getPrefix() + player.getDisplayName() + " §7ist gestorben");
             }
@@ -126,6 +136,26 @@ public class DeathListener implements Listener {
                         .updateBoard(inGamePlayer, "§c" + MlgWars.getInstance().getData().getPlayers().size(), "players");
 
             });
+
+            if(tournament) {
+                int points = -1;
+                if(this.mlgWars.getData().getPlayers().size() == 5) {
+                    points = 5;
+                } else if(this.mlgWars.getData().getPlayers().size() == 3) {
+                    points = 3;
+                }
+                if(points != -1) {
+                    for (GamePlayer value : this.mlgWars.getData().getGamePlayers().values()) {
+                        if(!value.isPlayer()) {
+                            continue;
+                        }
+                        value.getStats().addPoints(points);
+                        value.getPlayer().playSound(value.getPlayer().getLocation(),
+                                Sound.ENTITY_PLAYER_LEVELUP, 1f, 2.5f);
+                        value.getPlayer().sendMessage(this.mlgWars.getPrefix() + "§a+" + points + "§7Placement Punkte");
+                    }
+                }
+            }
 
             new WinDetection(this.mlgWars);
         }
