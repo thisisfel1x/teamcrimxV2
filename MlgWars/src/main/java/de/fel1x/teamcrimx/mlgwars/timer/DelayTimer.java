@@ -7,7 +7,6 @@ import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.Kit;
 import de.fel1x.teamcrimx.mlgwars.maphandler.gametype.types.SoloGameType;
-import de.fel1x.teamcrimx.mlgwars.maphandler.gametype.types.TntMadnessGameType;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.objects.MlgWarsTeam;
 import org.bukkit.*;
@@ -47,7 +46,7 @@ public class DelayTimer implements ITimer {
 
                 gamePlayer.checkForTeam();
 
-                gamePlayer.clearCosmetics();
+                gamePlayer.stopCosmetics();
 
                 try {
                     Kit iKit = gamePlayer.getSelectedKit().getClazz().getDeclaredConstructor(Player.class, MlgWars.class).newInstance(player, this.mlgWars);

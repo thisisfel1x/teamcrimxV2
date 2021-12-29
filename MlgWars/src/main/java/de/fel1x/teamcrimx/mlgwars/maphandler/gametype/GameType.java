@@ -290,6 +290,10 @@ public abstract class GameType {
 
     }
 
+    public void finish() {
+
+    }
+
     public void setItemMultiplier(int itemMultiplier) {
         this.itemMultiplier = itemMultiplier;
     }

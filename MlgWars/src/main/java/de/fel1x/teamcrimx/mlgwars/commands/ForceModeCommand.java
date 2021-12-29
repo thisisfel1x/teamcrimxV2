@@ -18,14 +18,15 @@ import java.util.stream.Collectors;
 public class ForceModeCommand implements TabCompleter, CommandExecutor {
 
     private final MlgWars mlgWars;
-    private List<GameTypeVoteInventory.ImplementedMode> implementedModes;
+    private final List<GameTypeVoteInventory.ImplementedMode> implementedModes;
 
     public ForceModeCommand(MlgWars mlgWars) {
         this.mlgWars = mlgWars;
         this.mlgWars.getCommand("forcemode").setExecutor(this::onCommand);
         this.mlgWars.getCommand("forcemode").setTabCompleter(this::onTabComplete);
 
-        this.implementedModes = Arrays.stream(GameTypeVoteInventory.ImplementedMode.values()).filter(GameTypeVoteInventory.ImplementedMode::isActive).toList();
+        this.implementedModes = Arrays.stream(GameTypeVoteInventory.ImplementedMode.values())
+                .filter(GameTypeVoteInventory.ImplementedMode::isActive).toList();
     }
 
     @Override

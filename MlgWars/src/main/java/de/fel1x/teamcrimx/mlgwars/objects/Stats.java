@@ -7,6 +7,8 @@ public class Stats {
     private int gamesPlayed;
     private int gamesWon;
     private int placement;
+    private int gamePoints;
+    private boolean win = false;
 
     public Stats(int kills, int deaths, int gamesPlayed, int gamesWon, int placement) {
         this.kills = kills;
@@ -72,4 +74,19 @@ public class Stats {
         this.setGamesWon(this.getGamesWon() + 1);
     }
 
+    public void setWin(boolean win) {
+        this.win = win;
+    }
+
+    public boolean isWin() {
+        return win;
+    }
+
+    public int getGamePoints() {
+        return gamePoints;
+    }
+
+    public void addPoints(int amount) {
+        this.gamePoints = this.gamePoints + amount;
+    }
 }

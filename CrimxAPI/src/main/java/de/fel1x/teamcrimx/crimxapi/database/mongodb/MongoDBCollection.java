@@ -5,6 +5,7 @@ public enum MongoDBCollection {
     USERS("users"),
     LOBBY("lobby"),
     MLGWARS("mlgwars"),
+    MLGWARS_TOURNAMENT("mlgwars_tournament"),
     CAPTURE_THE_FLAG("capturetheflag"),
     BINGO("bingo"),
     FLOOR_IS_LAVA("floorislava"),

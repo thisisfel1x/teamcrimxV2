@@ -38,6 +38,10 @@ public class JoinListener implements Listener {
             gamePlayer.createPlayerData();
         }
 
+        if(!this.mlgWars.getCrimxAPI().getMongoDB().checkIfDocumentExistsSync(player.getUniqueId(), MongoDBCollection.MLGWARS_TOURNAMENT)) {
+            gamePlayer.createTournamentData();
+        }
+
         gamePlayer.initDatabasePlayer();
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();

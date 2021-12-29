@@ -1,7 +1,6 @@
 package de.fel1x.teamcrimx.mlgwars.kit.rework.kits;
 
 import com.destroystokyo.paper.ParticleBuilder;
-import de.fel1x.teamcrimx.crimxapi.utils.InstantFirework;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.Kit;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
@@ -20,19 +19,13 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CounterStrikeKit extends Kit {
 
-    private final Vector snowballVelocity;
-
     public CounterStrikeKit(Player player, MlgWars mlgWars) {
         super(player, mlgWars);
-        Snowball temp = this.player.launchProjectile(Snowball.class);
-        this.snowballVelocity = temp.getVelocity();
-        temp.remove();
     }
 
     @Override
@@ -122,10 +115,14 @@ public class CounterStrikeKit extends Kit {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    new InstantFirework(FireworkEffect.builder()
-                            .withColor(Color.WHITE, Color.YELLOW, Color.GRAY).build(),
-                            snowball.getLocation().clone().add(0, 1, 0));
-
+                    player.getWorld().spawn(snowball.getLocation().clone().add(0, 1, 0), Firework.class, firework -> {
+                       FireworkMeta fireworkMeta = firework.getFireworkMeta();
+                       fireworkMeta.setPower(0);
+                       fireworkMeta.addEffect(FireworkEffect.builder()
+                               .withColor(Color.WHITE, Color.YELLOW, Color.GRAY).build());
+                       firework.setFireworkMeta(fireworkMeta);
+                       firework.detonate();
+                    });
                     snowball.getNearbyEntities(5, 5, 5).forEach(entity -> {
                         if (!(entity instanceof LivingEntity livingEntity)) return;
                         livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,
@@ -143,14 +140,14 @@ public class CounterStrikeKit extends Kit {
                 @Override
                 public void run() {
                     new ParticleBuilder(Particle.EXPLOSION_HUGE)
-                            .location(snowball.getLocation().clone().add(0, 2.5, 0))
-                            .count(5)
+                            .location(snowball.getLocation().clone().add(0, 2, 0))
+                            .count(3)
                             .spawn();
 
                     snowball.getNearbyEntities(5, 5, 5).forEach(entity -> {
                         if (!(entity instanceof LivingEntity livingEntity)) return;
                         livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,
-                                25, 1, true, true));
+                                35, 1, true, true));
                     });
 
                     if(atomicInteger.getAndDecrement() <= 0) {
