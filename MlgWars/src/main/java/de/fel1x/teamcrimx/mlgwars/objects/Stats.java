@@ -87,6 +87,6 @@ public class Stats {
     }
 
     public void addPoints(int amount) {
-        this.gamePoints += amount;
+        this.gamePoints = this.gamePoints + amount;
     }
 }

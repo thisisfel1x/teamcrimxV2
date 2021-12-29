@@ -63,6 +63,8 @@ public class TntMadnessGameType extends SoloGameType implements Listener {
                     .addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 1).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).setUnbreakable().toItemStack());
             player.getInventory().setBoots(new ItemBuilder(Material.IRON_BOOTS)
                     .addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 1).addEnchant(Enchantment.PROTECTION_FALL, 2).setUnbreakable().toItemStack());
+            player.getInventory().addItem(dev.triumphteam.gui.builder.item.ItemBuilder.from(Material.IRON_SWORD)
+                    .enchant(Enchantment.DAMAGE_ALL).build());
             player.setGlowing(true);
         }
     }
@@ -188,13 +190,10 @@ public class TntMadnessGameType extends SoloGameType implements Listener {
     @EventHandler
     public void on(EntityExplodeEvent event) {
         Entity entity = event.getEntity();
-
-        if (this.mlgWars.getGameType().getClass() == TntMadnessGameType.class) {
-            if (entity instanceof TNTPrimed) {
-                if (entity.hasMetadata("velocity")) {
-                    for (Entity nearbyEntity : entity.getNearbyEntities(3, 3, 3)) {
-                        nearbyEntity.setVelocity(nearbyEntity.getVelocity().multiply(5D).setY(2D));
-                    }
+        if (entity instanceof TNTPrimed) {
+            if (entity.hasMetadata("velocity")) {
+                for (Entity nearbyEntity : entity.getNearbyEntities(3, 3, 3)) {
+                    nearbyEntity.setVelocity(nearbyEntity.getVelocity().multiply(5D).setY(2D));
                 }
             }
         }

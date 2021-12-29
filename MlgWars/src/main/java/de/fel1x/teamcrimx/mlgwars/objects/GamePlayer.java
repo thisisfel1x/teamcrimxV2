@@ -620,7 +620,7 @@ public class GamePlayer {
     }
 
     // TEMPORARY
-    public void clearCosmetics() {
+    public void stopCosmetics() {
         ActiveCosmetics activeCosmetics = CrimxSpigotAPI.getInstance().getActiveCosmeticsHashMap().get(this.player.getUniqueId());
         for (CosmeticCategory value : CosmeticCategory.values()) {
             BaseCosmetic baseCosmetic = activeCosmetics.getSelectedCosmetic().get(value);
@@ -628,6 +628,17 @@ public class GamePlayer {
                 continue;
             }
             baseCosmetic.stopCosmetic(this.player);
+        }
+    }
+
+    public void startCosmetics() {
+        ActiveCosmetics activeCosmetics = CrimxSpigotAPI.getInstance().getActiveCosmeticsHashMap().get(this.player.getUniqueId());
+        for (CosmeticCategory value : CosmeticCategory.values()) {
+            BaseCosmetic baseCosmetic = activeCosmetics.getSelectedCosmetic().get(value);
+            if(baseCosmetic == null) {
+                continue;
+            }
+            baseCosmetic.startCosmetic(this.player);
         }
     }
 

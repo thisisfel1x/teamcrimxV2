@@ -28,6 +28,7 @@ public class StarterKit extends Kit {
                                 Component.empty(), Component.empty(), Component.empty(), Component.empty(),
                                 Component.text("(kann Gift verursachen)",
                                         TextColor.fromHexString("#00bb2d")).decorate(TextDecoration.ITALIC))
+                .setUnbreakable()
                 .toItemStack());
     }
 

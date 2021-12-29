@@ -37,6 +37,7 @@ public class InGameTimer implements ITimer {
                     Component.empty(), Component.empty(), Component.empty(), Component.empty(),
                     Component.text("(kann Gift verursachen)",
                             TextColor.fromHexString("#00bb2d")).decorate(TextDecoration.ITALIC))
+            .setUnbreakable()
             .toItemStack();
 
     private boolean running = false;

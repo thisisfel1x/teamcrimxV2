@@ -26,7 +26,7 @@ public class ForceModeCommand implements TabCompleter, CommandExecutor {
         this.mlgWars.getCommand("forcemode").setTabCompleter(this::onTabComplete);
 
         this.implementedModes = Arrays.stream(GameTypeVoteInventory.ImplementedMode.values())
-                .filter(mode -> mode.isActive() && mode.isVotable()).toList();
+                .filter(GameTypeVoteInventory.ImplementedMode::isActive).toList();
     }
 
     @Override

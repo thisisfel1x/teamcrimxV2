@@ -31,7 +31,7 @@ public enum Kit {
     STINKER(StinkerKit.class), // ja
     TANK(TankKit.class), // ja
     TURTLE(TurtleKit.class), // ja
-    CSGO(CSGOKit.class),
+    CSGO(CSGOKit.class), // ja
     DUMP(DumpKit.class), // ja
     NUTS(NutsKit.class);
 

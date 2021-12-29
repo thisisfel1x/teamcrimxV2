@@ -40,7 +40,6 @@ public class WinDetection {
 
                         if(mlgWars.getGameType() instanceof Tournament) {
                             winnerGamePlayer.getStats().setWin(true);
-                            winnerGamePlayer.getStats().addPoints(1);
                             winner.playSound(winner.getLocation(),
                                     Sound.ENTITY_PLAYER_LEVELUP, 1f, 2.5f);
                             winner.sendMessage(mlgWars.getPrefix() + "§aWin, +1 §7Punkt");
@@ -125,6 +124,7 @@ public class WinDetection {
             gamePlayer.removeFromSpectators();
             gamePlayer.cleanUpOnJoin();
             gamePlayer.teleport(Spawns.LOBBY);
+            gamePlayer.startCosmetics();
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 0.5f);
             if (DisguiseAPI.isDisguised(player)) {
                 DisguiseAPI.undisguiseToAll(player);
