@@ -8,6 +8,7 @@ import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.fel1x.teamcrimx.crimxapi.coins.CrimxCoins;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.BaseCosmetic;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.CosmeticCategory;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.WinAnimationCosmetic;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.database.ActiveCosmetics;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
@@ -624,22 +625,24 @@ public class GamePlayer {
         ActiveCosmetics activeCosmetics = CrimxSpigotAPI.getInstance().getActiveCosmeticsHashMap().get(this.player.getUniqueId());
         for (CosmeticCategory value : CosmeticCategory.values()) {
             BaseCosmetic baseCosmetic = activeCosmetics.getSelectedCosmetic().get(value);
-            if(baseCosmetic == null) {
+            if(baseCosmetic == null || baseCosmetic.getCosmeticCategory() == CosmeticCategory.WIN_ANIMATION) {
                 continue;
             }
             baseCosmetic.stopCosmetic(this.player);
         }
     }
 
+    @Deprecated
+    // fix cosmetic system lol its not pausing just stopping
     public void startCosmetics() {
-        ActiveCosmetics activeCosmetics = CrimxSpigotAPI.getInstance().getActiveCosmeticsHashMap().get(this.player.getUniqueId());
+        /*ActiveCosmetics activeCosmetics = CrimxSpigotAPI.getInstance().getActiveCosmeticsHashMap().get(this.player.getUniqueId());
         for (CosmeticCategory value : CosmeticCategory.values()) {
             BaseCosmetic baseCosmetic = activeCosmetics.getSelectedCosmetic().get(value);
             if(baseCosmetic == null) {
                 continue;
             }
             baseCosmetic.startCosmetic(this.player);
-        }
+        } */
     }
 
     public void createTournamentData() {
@@ -652,5 +655,15 @@ public class GamePlayer {
                 .append("points", 0);
 
         this.mlgWars.getCrimxAPI().getMongoDB().insertDocumentInCollectionSync(basicDBObject, MongoDBCollection.MLGWARS_TOURNAMENT);
+    }
+
+    public void winAnimation() {
+        ActiveCosmetics activeCosmetics = CrimxSpigotAPI.getInstance().getActiveCosmeticsHashMap().get(this.player.getUniqueId());
+        BaseCosmetic baseCosmetic = activeCosmetics.getSelectedCosmetic().get(CosmeticCategory.WIN_ANIMATION);
+        if(baseCosmetic != null) {
+            if(baseCosmetic instanceof WinAnimationCosmetic winAnimationCosmetic) {
+                winAnimationCosmetic.win();
+            }
+        }
     }
 }

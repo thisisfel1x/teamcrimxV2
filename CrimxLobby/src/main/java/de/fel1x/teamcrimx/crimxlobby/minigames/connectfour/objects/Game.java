@@ -7,6 +7,7 @@ import dev.triumphteam.gui.guis.GuiItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -125,14 +126,29 @@ public class Game {
                         if(!this.hasTurn(player)) {
                             return;
                         }
-                        this.gridTable[finalRow][finalColumn] = this.getTurnId();
-                        this.gui.updateItem(event.getSlot(), this.getUpdatedGuiItem(player));
-                        this.checkWinOrNextTurn(finalRow, finalColumn);
+                        int slotToCheck = event.getSlot();
+                        int rowToCheck = finalRow;
+                        for(int checker = this.maxRows; checker > finalRow; checker--) {
+                            int slot = this.getSlotFromRowCol(checker, finalColumn);
+                            boolean empty = this.gui.getGuiItem(slot + 1).getItemStack().getType() == Material.WHITE_STAINED_GLASS_PANE;
+                            if(empty) {
+                                slotToCheck = slot + 1;
+                                rowToCheck = checker;
+                                break;
+                            }
+                        }
+                        this.gridTable[rowToCheck - 1][finalColumn] = this.getTurnId();
+                        this.gui.updateItem(slotToCheck, this.getUpdatedGuiItem(player));
+                        this.checkWinOrNextTurn(rowToCheck - 1, finalColumn);
                     }
                 }));
                 this.gridTable[row][column] = 0;
             }
         }
+    }
+
+    private int getSlotFromRowCol(final int row, final int col) {
+        return (col + (row - 1) * 9) - 1;
     }
 
 

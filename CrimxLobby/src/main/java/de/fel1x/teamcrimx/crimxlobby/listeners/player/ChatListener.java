@@ -17,7 +17,7 @@ public class ChatListener implements Listener {
     @EventHandler
     public void on(AsyncChatEvent event) {
 
-        IClanPlayer clanPlayer = (IClanPlayer) event.getPlayer().getMetadata("iClanPlayer").get(0).value();
+        /*IClanPlayer clanPlayer = (IClanPlayer) event.getPlayer().getMetadata("iClanPlayer").get(0).value();
         Component clanComponent = Component.empty();
 
         if(clanPlayer != null) {
@@ -26,8 +26,9 @@ public class ChatListener implements Listener {
                     .append(Component.text("] ", NamedTextColor.GRAY)));
         }
 
-        Component finalClanComponent = clanComponent;
-        event.renderer((source, sourceDisplayName, message, viewer) -> finalClanComponent.append(sourceDisplayName)
+        Component finalClanComponent = clanComponent; */
+
+        event.renderer((source, sourceDisplayName, message, viewer) -> sourceDisplayName
                 .append(Component.text(": ", NamedTextColor.DARK_GRAY))
                 .append(message.color(NamedTextColor.WHITE)));
 

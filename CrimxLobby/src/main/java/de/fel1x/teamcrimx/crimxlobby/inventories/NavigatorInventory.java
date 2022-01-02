@@ -24,9 +24,9 @@ import java.util.List;
 public class NavigatorInventory {
 
     private static final String mlgWarsLegacyDescription = "§7Kämpfe im Himmel mit außergewöhnlichen \n§eKit-Fähigkeiten §7und geladener \n§eMLG-Action §7um den Sieg";
-    private static final String floorIsLavaLegacyDescription = "§7Erfinde §eTaktiken §7und equipe dich, \n§7um der steigenden §eLava §7zu entkommen \n§7und dich gegen Spieler zu behaupten";
-    private static final String bingoLegacyDescription = "§7Sei mit deinem Team die Ersten, \n§7welche alle §e9 Items §7gesammelt, \n§7gecraftet oder verzaubert haben";
-    private static final String captureTheFlagLegacyDescription = "§7Arbeite mit deinem Team zusammen, \n§7um die §eFlagge §7des §egegnerischen Teams \n§7zu erobern und zu sichern!";
+    private static final String floorIsLavaLegacyDescription = "§7Erfinde §eTaktiken §7und equipe dich, \n§7um der steigenden §eLava §7zu entkommen \n§7und dich gegen Spieler zu behaupten \n\n§cLegacy: Dieser Modus erhält\n          §ckeine weiteren Updates";
+    private static final String bingoLegacyDescription = "§7Sei mit deinem Team die Ersten, \n§7welche alle §e9 Items §7gesammelt, \n§7gecraftet oder verzaubert haben \n\n§cLegacy: Dieser Modus erhält\n          §ckeine weiteren Updates";
+    private static final String captureTheFlagLegacyDescription = "§7Arbeite mit deinem Team zusammen, \n§7um die §eFlagge §7des §egegnerischen Teams \n§7zu erobern und zu sichern! \n\n§cLegacy: Dieser Modus erhält\n          §ckeine weiteren Updates";
     private static Gui navigatorInventory;
     private boolean showArrow = true;
     private int playerCount;

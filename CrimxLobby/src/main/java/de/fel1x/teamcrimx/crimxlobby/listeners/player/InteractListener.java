@@ -164,7 +164,7 @@ public class InteractListener implements Listener {
 
             Component invitationComponent = this.crimxLobby.getConnectFourGameManager().getPrefix()
                     .append(Component.text("Du wurdest von ", NamedTextColor.GRAY))
-                    .append(target.displayName())
+                    .append(whoInteracted.displayName())
                     .append(Component.text( " eingeladen. Klicke zum ", NamedTextColor.GRAY))
                     .append(Component.text("ANNEHMEN", NamedTextColor.GREEN, TextDecoration.BOLD)
                             .clickEvent(ClickEvent.runCommand("/connectfour accept=" + whoInteracted.getUniqueId())));

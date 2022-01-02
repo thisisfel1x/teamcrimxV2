@@ -54,6 +54,7 @@ public class WinDetection {
 
                         winnerGamePlayer.getStats().increaseWinsByOne();
                         winnerGamePlayer.saveStats();
+                        winnerGamePlayer.winAnimation();
 
                         mlgWars.startTimerByClass(EndingTimer.class);
                     } else if (mlgWars.getData().getPlayers().size() == 0) {
@@ -92,6 +93,7 @@ public class WinDetection {
                             winnerGamePlayer.getStats().increaseWinsByOne();
                             winnerGamePlayer.updateOnlineTime();
                             winnerGamePlayer.saveStats();
+                            winnerGamePlayer.winAnimation();
                         }
 
                         String winMessage = mlgWars.getPrefix() + "§7Das Team §a#" + winnerTeam.getTeamId()
@@ -134,34 +136,4 @@ public class WinDetection {
             player.playerListName(player.displayName());
         });
     }
-
-    @Deprecated
-    // new wining animation system
-    private void spawnFireworkCircle(Location center, double radius, int amount) {
-
-        World world = center.getWorld();
-        double increment = (2 * Math.PI) / amount;
-        for (int i = 0; i < amount; i++) {
-
-            double angle = i * increment;
-            double x = center.getX() + (radius * Math.cos(angle));
-            double z = center.getZ() + (radius * Math.sin(angle));
-
-            Location current = new Location(world, x, center.getY(), z);
-
-            Firework firework = (Firework) current.getWorld().spawnEntity(current, EntityType.FIREWORK);
-
-            FireworkMeta fireworkMeta = firework.getFireworkMeta();
-
-            Random random = new Random();
-
-            fireworkMeta.setPower(2);
-            fireworkMeta.addEffect(FireworkEffect.builder()
-                    .with(FireworkEffect.Type.values()[random.nextInt(FireworkEffect.Type.values().length)])
-                    .withColor(Color.fromBGR(random.nextInt(255), random.nextInt(255), random.nextInt(255))).flicker(true).build());
-            firework.setFireworkMeta(fireworkMeta);
-
-        }
-    }
-
 }

@@ -22,4 +22,6 @@ commands:
     description: Add some friends
   party:
     description: not yet
+  cosmeticdebug:
+    description: internal command
 

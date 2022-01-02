@@ -9,6 +9,7 @@ import de.fel1x.teamcrimx.crimxapi.clanSystem.commands.ClanCommand;
 import de.fel1x.teamcrimx.crimxapi.commands.CoinsCommand;
 import de.fel1x.teamcrimx.crimxapi.commands.JoinMeCommand;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.database.ActiveCosmetics;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.debug.CosmeticDebugCommand;
 import de.fel1x.teamcrimx.crimxapi.friends.commands.FriendCommand;
 import de.fel1x.teamcrimx.crimxapi.friends.listener.FriendListener;
 import de.fel1x.teamcrimx.crimxapi.party.commands.PartyCommand;
@@ -83,6 +84,9 @@ public class CrimxSpigotAPI extends JavaPlugin {
         new ClanCommand(this);
         new FriendCommand(this);
         new PartyCommand(this);
+
+        // DEBUG
+        new CosmeticDebugCommand(this);
 
     }
 
