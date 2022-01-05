@@ -352,8 +352,12 @@ public class ChestFiller {
 
         }
 
-        items.add(new ItemBuilder(Material.DIRT).setName("§f§l§kI§r §aM§6a§5g§e§ci§bs§1c§3h§2e §4E§5r§8d§9e §r§f§l§kI")
-                .setLore("§7Huch! Wie kommt", "§7die denn hier rein?!").toItemStack());
+        items.add(new ItemBuilder(Material.DIRT)
+                .setName(MiniMessage.builder().build().parse("<rainbow>Magische Erde</rainbow>"))
+                .setLore(Component.empty(), Component.text("Huch? Wie kommt",
+                                TextColor.fromHexString("#dda1fc")),
+                        Component.text("die denn hier rein?!", TextColor.fromHexString("#dda1fc")))
+                .toItemStack());
 
         for (int i = 0; i < 20; i++) {
             items.add(new ItemBuilder(Material.WATER_BUCKET).toItemStack());

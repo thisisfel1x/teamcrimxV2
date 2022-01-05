@@ -53,6 +53,7 @@ public class JoinListener implements Listener {
                 gamePlayer.teleport(Spawns.LOBBY);
                 gamePlayer.setLobbyScoreboard();
                 BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(event.getPlayer());
+                player.playerListName(player.displayName());
                 event.setJoinMessage("§8» " + player.getDisplayName() + " §7hat das Spiel betreten");
             }
             case DELAY, PREGAME, INGAME -> {

@@ -421,7 +421,11 @@ public class FriendPlayer implements IFriendPlayer {
 
     @Override
     public int getTotalFriendsCount() {
-        return this.crimxAPI.getMongoDB()
-                .getStringArrayListFromDocumentSync(this.uuid, MongoDBCollection.FRIENDS, "friends").size();
+        try {
+            return this.crimxAPI.getMongoDB()
+                    .getStringArrayListFromDocumentSync(this.uuid, MongoDBCollection.FRIENDS, "friends").size();
+        } catch (Exception ignored) {
+            return 0;
+        }
     }
 }

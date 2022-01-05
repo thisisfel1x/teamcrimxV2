@@ -295,8 +295,7 @@ public class GamePlayer {
         this.player.setAllowFlight(false);
         this.player.setFlying(false);
 
-
-        this.player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(24);
+        //this.player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(24);
 
         this.player.getActivePotionEffects().forEach(potionEffect -> this.player.removePotionEffect(potionEffect.getType()));
 
@@ -450,8 +449,10 @@ public class GamePlayer {
                 .setName("§8● §aSpieler beobachten")
                 .toItemStack());
 
-        this.player.setAllowFlight(true);
-        this.player.setFlying(true);
+        Bukkit.getScheduler().runTaskLater(this.mlgWars, () -> {
+            this.player.setAllowFlight(true);
+            this.player.setFlying(true);
+        }, 40L);
 
         this.removeFromPlayers();
         this.addToSpectators();

@@ -105,6 +105,9 @@ public class TrapperKit extends Kit {
         if (targetEntity == null) {
             double closestDistance = -1.0;
             for (Player possiblePlayer : targetLocation.getNearbyEntitiesByType(Player.class, 5)) {
+                if(this.mlgWars.getData().getSpectators().contains(possiblePlayer)) {
+                    continue;
+                }
                 double distance = targetLocation.distanceSquared(possiblePlayer.getLocation());
                 if (closestDistance != -1.0 && !(distance < closestDistance)) {
                     continue;

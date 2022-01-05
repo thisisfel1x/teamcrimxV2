@@ -255,7 +255,7 @@ public final class MlgWars extends JavaPlugin {
         return new TeamGameType(this);
     }
 
-    private void setMotd() {
+    public void setMotd() {
         BukkitCloudNetHelper.setMotd(this.selectedMap.getMapName() + " " + this.selectedMap.getSize().getName());
         BukkitCloudNetHelper.setMaxPlayers(this.selectedMap.getSize().getSize());
         BukkitCloudNetHelper.setExtra("lobby");
@@ -328,7 +328,7 @@ public final class MlgWars extends JavaPlugin {
         MongoCollection<Document> collection = tournament ? this.crimxAPI.getMongoDB().getMlgWarsTournamentCollection()
                 : this.crimxAPI.getMongoDB().getMlgWarsCollection();
         return StreamSupport.stream(collection.find()
-                        .sort(Sorts.descending("gamesWon")).limit(limit).spliterator(), false)
+                        .sort(Sorts.descending(tournament ? "points" : "gamesWon")).limit(limit).spliterator(), false)
                 .collect(Collectors.toList());
     }
 

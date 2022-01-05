@@ -35,10 +35,10 @@ public class FriendListener implements Listener {
                 () -> new FriendPlayer(event.getNetworkConnectionInfo().getUniqueId())
                         .sendOnlineFriendsMessageOnProxyJoinAsync().thenAccept(success -> {
                             if (!success) {
-                                Objects.requireNonNull(CrimxAPI.getInstance().getPlayerManager()
+                                /*Objects.requireNonNull(CrimxAPI.getInstance().getPlayerManager()
                                                 .getOnlinePlayer(event.getNetworkConnectionInfo().getUniqueId()))
                                         .getPlayerExecutor().sendChatMessage(CrimxAPI.getInstance().getFriendPrefix()
-                                                + "§cEin Fehler ist aufgetreten");
+                                                + "§cEin Fehler ist aufgetreten"); */
                             }
 
                         }), 10L);

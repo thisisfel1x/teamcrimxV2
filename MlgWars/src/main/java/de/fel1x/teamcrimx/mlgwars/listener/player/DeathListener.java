@@ -140,9 +140,9 @@ public class DeathListener implements Listener {
             if(tournament) {
                 int points = -1;
                 if(this.mlgWars.getData().getPlayers().size() == 5) {
-                    points = 5;
+                    points = 1;
                 } else if(this.mlgWars.getData().getPlayers().size() == 3) {
-                    points = 3;
+                    points = 1;
                 }
                 if(points != -1) {
                     for (GamePlayer value : this.mlgWars.getData().getGamePlayers().values()) {

@@ -1,5 +1,7 @@
 package de.fel1x.teamcrimx.mlgwars.maphandler.gametype;
 
+import de.dytanic.cloudnet.ext.bridge.BridgeHelper;
+import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
 import de.fel1x.teamcrimx.crimxapi.utils.Cuboid;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Size;
@@ -28,6 +30,8 @@ public abstract class GameType {
     public final MlgWars mlgWars;
     public final Random random = new Random();
     public final MapHandler mapHandler = new MapHandler();
+
+    private boolean firstStart = true;
 
     private int teamSize = -1;
     private int itemMultiplier = 1;
@@ -157,6 +161,18 @@ public abstract class GameType {
 
         Bukkit.getConsoleSender().sendMessage(this.mlgWars.getPrefix() + "§aDie Map " + mapName +
                 " wurde erfolgreich geladen");
+
+            if(!this.firstStart) {
+                BukkitCloudNetHelper.setMotd(mapName + " " + size.getName());
+                BukkitCloudNetHelper.setMaxPlayers(size.getSize());
+                BukkitCloudNetHelper.setExtra("lobby");
+                BukkitCloudNetHelper.setState("LOBBY");
+                BridgeHelper.updateServiceInfo();
+            }
+
+        if(this.firstStart) {
+            this.firstStart = false;
+        }
 
         this.mlgWars.getData().getPlayers().forEach(player ->
                 this.mlgWars.getData().getGamePlayers().get(player.getUniqueId()).getScoreboardHandler()
