@@ -8,6 +8,7 @@ import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.fel1x.teamcrimx.crimxapi.coins.CrimxCoins;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.BaseCosmetic;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.CosmeticCategory;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.WinAnimationCosmetic;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.database.ActiveCosmetics;
 import de.fel1x.teamcrimx.crimxapi.database.mongodb.MongoDBCollection;
 import de.fel1x.teamcrimx.crimxapi.support.CrimxSpigotAPI;
@@ -19,6 +20,7 @@ import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.Kit;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.InventoryKitManager;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.KitRegistry;
+import de.fel1x.teamcrimx.mlgwars.maphandler.gametype.types.Tournament;
 import de.fel1x.teamcrimx.mlgwars.scoreboard.ScoreboardHandler;
 import de.fel1x.teamcrimx.mlgwars.utils.MlgActionbar;
 import net.kyori.adventure.text.Component;
@@ -222,6 +224,16 @@ public class GamePlayer {
 
         this.mlgWars.getCrimxAPI().getMongoDB().updateDocumentInCollectionSync(this.player.getUniqueId(),
                 MongoDBCollection.MLGWARS, toUpdate);
+
+        if(this.mlgWars.getGameType() instanceof Tournament) {
+            int currentPoints = (int) this.mlgWars.getCrimxAPI().getMongoDB().getObjectFromDocumentSync(this.player.getUniqueId(),
+                    MongoDBCollection.MLGWARS_TOURNAMENT, "points");
+            currentPoints = currentPoints + this.stats.getGamePoints() + (this.stats.isWin() ? 1 : 0);
+            toUpdate.append("points", currentPoints);
+
+            this.mlgWars.getCrimxAPI().getMongoDB().updateDocumentInCollectionSync(this.player.getUniqueId(),
+                    MongoDBCollection.MLGWARS_TOURNAMENT, toUpdate);
+        }
     }
 
     public void setGameStartTime(long gameStartTime) {
@@ -283,8 +295,7 @@ public class GamePlayer {
         this.player.setAllowFlight(false);
         this.player.setFlying(false);
 
-
-        this.player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(24);
+        //this.player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(24);
 
         this.player.getActivePotionEffects().forEach(potionEffect -> this.player.removePotionEffect(potionEffect.getType()));
 
@@ -438,8 +449,10 @@ public class GamePlayer {
                 .setName("§8● §aSpieler beobachten")
                 .toItemStack());
 
-        this.player.setAllowFlight(true);
-        this.player.setFlying(true);
+        Bukkit.getScheduler().runTaskLater(this.mlgWars, () -> {
+            this.player.setAllowFlight(true);
+            this.player.setFlying(true);
+        }, 40L);
 
         this.removeFromPlayers();
         this.addToSpectators();
@@ -609,14 +622,49 @@ public class GamePlayer {
     }
 
     // TEMPORARY
-    public void clearCosmetics() {
+    public void stopCosmetics() {
         ActiveCosmetics activeCosmetics = CrimxSpigotAPI.getInstance().getActiveCosmeticsHashMap().get(this.player.getUniqueId());
+        for (CosmeticCategory value : CosmeticCategory.values()) {
+            BaseCosmetic baseCosmetic = activeCosmetics.getSelectedCosmetic().get(value);
+            if(baseCosmetic == null || baseCosmetic.getCosmeticCategory() == CosmeticCategory.WIN_ANIMATION) {
+                continue;
+            }
+            baseCosmetic.stopCosmetic(this.player);
+        }
+    }
+
+    @Deprecated
+    // fix cosmetic system lol its not pausing just stopping
+    public void startCosmetics() {
+        /*ActiveCosmetics activeCosmetics = CrimxSpigotAPI.getInstance().getActiveCosmeticsHashMap().get(this.player.getUniqueId());
         for (CosmeticCategory value : CosmeticCategory.values()) {
             BaseCosmetic baseCosmetic = activeCosmetics.getSelectedCosmetic().get(value);
             if(baseCosmetic == null) {
                 continue;
             }
-            baseCosmetic.stopCosmetic(this.player);
+            baseCosmetic.startCosmetic(this.player);
+        } */
+    }
+
+    public void createTournamentData() {
+        Document basicDBObject = new Document("_id", this.player.getUniqueId().toString())
+                .append("name", this.player.getName())
+                .append("kills", 0)
+                .append("deaths", 0)
+                .append("gamesPlayed", 0)
+                .append("gamesWon", 0)
+                .append("points", 0);
+
+        this.mlgWars.getCrimxAPI().getMongoDB().insertDocumentInCollectionSync(basicDBObject, MongoDBCollection.MLGWARS_TOURNAMENT);
+    }
+
+    public void winAnimation() {
+        ActiveCosmetics activeCosmetics = CrimxSpigotAPI.getInstance().getActiveCosmeticsHashMap().get(this.player.getUniqueId());
+        BaseCosmetic baseCosmetic = activeCosmetics.getSelectedCosmetic().get(CosmeticCategory.WIN_ANIMATION);
+        if(baseCosmetic != null) {
+            if(baseCosmetic instanceof WinAnimationCosmetic winAnimationCosmetic) {
+                winAnimationCosmetic.win();
+            }
         }
     }
 }

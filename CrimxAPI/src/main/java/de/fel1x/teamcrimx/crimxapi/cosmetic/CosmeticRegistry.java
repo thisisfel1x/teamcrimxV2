@@ -5,6 +5,8 @@ import de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.effects.CompanionEffect;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.effects.HaloEffect;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.effects.RingEffect;
 import de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.gadgets.*;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.win.FireworkWinEffect;
+import de.fel1x.teamcrimx.crimxapi.cosmetic.cosmetics.win.FortniteWinEffect;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -18,11 +20,16 @@ public enum CosmeticRegistry {
     CELEBRATION_EFFECT(CelebrationEffect.class, CosmeticCategory.EFFECT),
     HALO_EFFECT(HaloEffect.class, CosmeticCategory.EFFECT),
 
+    /* GADGET */
     CHICKEN_BOMB_GADGET(ChickenBombGadget.class, CosmeticCategory.GADGETS),
     FUN_GUN_GADGET(FunGunGadget.class, CosmeticCategory.GADGETS),
     MELON_THROWER_GADGET(MelonThrowerGadget.class, CosmeticCategory.GADGETS),
     GRAPPLING_HOOK(GrapplingHookGadget.class, CosmeticCategory.GADGETS),
-    PAINTBALL_GUN_GADGET(PaintballGunGadget.class, CosmeticCategory.GADGETS);
+    PAINTBALL_GUN_GADGET(PaintballGunGadget.class, CosmeticCategory.GADGETS),
+
+    /* WIN */
+    FIREWORK_WIN_ANIMATION(FireworkWinEffect.class, CosmeticCategory.WIN_ANIMATION),
+    FORTNITE_WIN_ANIMATION(FortniteWinEffect.class, CosmeticCategory.WIN_ANIMATION);
 
     private final Class<? extends BaseCosmetic> cosmeticClass;
     private final CosmeticCategory cosmeticCategory;

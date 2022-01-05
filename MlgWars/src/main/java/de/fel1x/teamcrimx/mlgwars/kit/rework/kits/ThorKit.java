@@ -1,6 +1,7 @@
 package de.fel1x.teamcrimx.mlgwars.kit.rework.kits;
 
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
+import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.Kit;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import org.bukkit.Bukkit;
@@ -60,8 +61,12 @@ public class ThorKit extends Kit {
 
     @Override
     protected void onInteract(PlayerInteractEvent event) {
-        this.player.setCooldown(Material.GOLDEN_AXE, 20 * 5); // 5 sec cooldown
-        this.setCooldown(1000 * 5);
+        if(this.mlgWars.getGamestateHandler().getGamestate() != Gamestate.INGAME) {
+            return;
+        }
+
+        this.player.setCooldown(Material.GOLDEN_AXE, 20 * 7); // 5 sec cooldown
+        this.setCooldown(1000 * 7);
 
         Block targetBlock = this.player.getTargetBlock(100);
         Entity targetEntity = this.player.getTargetEntity(100);
@@ -90,6 +95,9 @@ public class ThorKit extends Kit {
         if (targetEntity == null) {
             double closestDistance = -1.0;
             for (Player possiblePlayer : targetLocation.getNearbyEntitiesByType(Player.class, 5)) {
+                if(this.mlgWars.getData().getSpectators().contains(possiblePlayer)) {
+                    continue;
+                }
                 double distance = targetLocation.distanceSquared(possiblePlayer.getLocation());
                 if (closestDistance != -1.0 && !(distance < closestDistance)) {
                     continue;
@@ -101,7 +109,7 @@ public class ThorKit extends Kit {
 
         Location finalLocation = closestPlayer != null ? closestPlayer.getLocation() : targetLocation;
 
-        this.player.getWorld().strikeLightning(finalLocation).setFlashCount(5);
+        this.player.getWorld().strikeLightningEffect(finalLocation).setFlashCount(5);
         this.player.getWorld().spawn(finalLocation, TNTPrimed.class, tnt -> {
             tnt.setMetadata("THOR", new FixedMetadataValue(this.mlgWars, true));
             tnt.setFuseTicks(0);

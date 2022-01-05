@@ -31,15 +31,14 @@ public class ChatListener implements Listener {
 
         if (currentState == Gamestate.DELAY || currentState == Gamestate.PREGAME || currentState == Gamestate.INGAME) {
             if (gamePlayer.isSpectator()) {
-                String format = "§8§o[§4✖§8] " + gamePlayer.getFormattedChatName() + event.getMessage();
-                for (Player spectator : this.mlgWars.getData().getPlayers()) {
+                String format = "§8[§4✖§8] " + gamePlayer.getFormattedChatName() + event.getMessage();
+                for (Player spectator : this.mlgWars.getData().getSpectators()) {
                     spectator.sendMessage(format);
                 }
-                return;
+            } else {
+                event.setFormat(gamePlayer.getFormattedChatName() + event.getMessage());
             }
         }
-
-        event.setFormat(gamePlayer.getFormattedChatName() + event.getMessage());
 
         if (currentState == Gamestate.ENDING) {
             String message = event.getMessage().toLowerCase();
@@ -54,7 +53,7 @@ public class ChatListener implements Listener {
                     player.sendMessage(this.mlgWars.getPrefix() + "§7Du hast §e" + coins + " Coins §7erhalten!");
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 1.75f);
 
-                    gamePlayer.getCrimxCoins().addCoinsAsync(coins);
+                    gamePlayer.getCrimxCoins().addCoinsSync(coins);
                 }
             }
         }

@@ -101,7 +101,7 @@ public class BotPvPKit extends Kit {
                 zombie.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, true, false));
 
                 try {
-                    zombie.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(20 + this.random.nextInt(5));
+                    zombie.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(24 + this.random.nextInt(5));
                     zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(15 + this.random.nextInt(5));
                 } catch (Exception ignored) {}
 
@@ -185,10 +185,9 @@ public class BotPvPKit extends Kit {
 
         private void findTarget() {
             List<Entity> possibleMobs = this.mob.getWorld().getNearbyEntities(this.mob.getLocation(), 50, 20, 50,
-                    entity -> entity.getType() == EntityType.ZOMBIE || entity.getType() == EntityType.PLAYER)
+                            entity -> entity.getType() == EntityType.ZOMBIE || entity.getType() == EntityType.PLAYER)
                     .stream().filter(entity -> !entity.hasMetadata(BotPvPKit.this.player.getName())
-                            && !entity.getName().equalsIgnoreCase(BotPvPKit.this.player.getName())) // Todo: Team Implementation
-                    .collect(Collectors.toList());
+                            && !entity.getName().equalsIgnoreCase(BotPvPKit.this.player.getName())).toList();
 
             double closestDistance = -1.0;
             Entity closestPlayer = null;

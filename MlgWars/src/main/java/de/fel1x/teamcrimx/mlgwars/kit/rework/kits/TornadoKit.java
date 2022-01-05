@@ -3,6 +3,7 @@ package de.fel1x.teamcrimx.mlgwars.kit.rework.kits;
 import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.crimxapi.utils.ItemBuilder;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
+import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
 import de.fel1x.teamcrimx.mlgwars.kit.rework.Kit;
 import de.fel1x.teamcrimx.mlgwars.utils.Tornado;
 import net.kyori.adventure.text.Component;
@@ -52,6 +53,10 @@ public class TornadoKit extends Kit {
 
     @Override
     protected void onInteract(PlayerInteractEvent event) {
+        if(this.mlgWars.getGamestateHandler().getGamestate() != Gamestate.INGAME) {
+            return;
+        }
+
         Block block = this.player.getTargetBlock(120);
         if(block == null) {
             return;
@@ -62,14 +67,18 @@ public class TornadoKit extends Kit {
         this.setCooldown(3000);
 
         Location location = block.getLocation();
+        for (Player nearbyPlayer : location.getNearbyPlayers(5)) {
+            nearbyPlayer.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 5,4));
+            nearbyPlayer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 5,4));
+        }
 
         Tornado.spawnTornado(MlgWars.getInstance(), location, block.getType(), block.getData(),
                 null, 0.6, 50, 20 * 10, true, true);
 
-        location.getWorld().strikeLightning(location.clone().add(1, 0, 0));
-        location.getWorld().strikeLightning(location.clone().add(-1, 0, 0));
-        location.getWorld().strikeLightning(location.clone().add(0, 0, 1));
-        location.getWorld().strikeLightning(location.clone().add(0, 0, -1));
+        location.getWorld().strikeLightningEffect(location.clone().add(1, 0, 0));
+        location.getWorld().strikeLightningEffect(location.clone().add(-1, 0, 0));
+        location.getWorld().strikeLightningEffect(location.clone().add(0, 0, 1));
+        location.getWorld().strikeLightningEffect(location.clone().add(0, 0, -1));
 
         for (Player player1 : this.mlgWars.getData().getPlayers()) {
             if (player1.equals(this.player)) continue;

@@ -38,6 +38,10 @@ public class JoinListener implements Listener {
             gamePlayer.createPlayerData();
         }
 
+        if(!this.mlgWars.getCrimxAPI().getMongoDB().checkIfDocumentExistsSync(player.getUniqueId(), MongoDBCollection.MLGWARS_TOURNAMENT)) {
+            gamePlayer.createTournamentData();
+        }
+
         gamePlayer.initDatabasePlayer();
 
         Gamestate gamestate = this.mlgWars.getGamestateHandler().getGamestate();
@@ -49,6 +53,7 @@ public class JoinListener implements Listener {
                 gamePlayer.teleport(Spawns.LOBBY);
                 gamePlayer.setLobbyScoreboard();
                 BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(event.getPlayer());
+                player.playerListName(player.displayName());
                 event.setJoinMessage("§8» " + player.getDisplayName() + " §7hat das Spiel betreten");
             }
             case DELAY, PREGAME, INGAME -> {

@@ -8,4 +8,9 @@ public abstract class WinAnimationCosmetic extends BaseCosmetic {
     public WinAnimationCosmetic(Player player, CrimxSpigotAPI crimxSpigotAPI) {
         super(player, crimxSpigotAPI);
     }
+
+    public void win() {
+
+    }
+
 }

@@ -5,6 +5,7 @@ import de.fel1x.teamcrimx.crimxapi.utils.Actionbar;
 import de.fel1x.teamcrimx.mlgwars.MlgWars;
 import de.fel1x.teamcrimx.mlgwars.enums.Spawns;
 import de.fel1x.teamcrimx.mlgwars.gamestate.Gamestate;
+import de.fel1x.teamcrimx.mlgwars.maphandler.gametype.types.Tournament;
 import de.fel1x.teamcrimx.mlgwars.objects.GamePlayer;
 import de.fel1x.teamcrimx.mlgwars.objects.MlgWarsTeam;
 import de.fel1x.teamcrimx.mlgwars.timer.EndingTimer;
@@ -37,6 +38,13 @@ public class WinDetection {
 
                         winnerGamePlayer.updateOnlineTime();
 
+                        if(mlgWars.getGameType() instanceof Tournament) {
+                            winnerGamePlayer.getStats().setWin(true);
+                            winner.playSound(winner.getLocation(),
+                                    Sound.ENTITY_PLAYER_LEVELUP, 1f, 2.5f);
+                            winner.sendMessage(mlgWars.getPrefix() + "§aWin, +1 §7Punkt");
+                        }
+
                         this.cleanUpOnlinePlayers(mlgWars);
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
@@ -46,6 +54,7 @@ public class WinDetection {
 
                         winnerGamePlayer.getStats().increaseWinsByOne();
                         winnerGamePlayer.saveStats();
+                        winnerGamePlayer.winAnimation();
 
                         mlgWars.startTimerByClass(EndingTimer.class);
                     } else if (mlgWars.getData().getPlayers().size() == 0) {
@@ -84,6 +93,7 @@ public class WinDetection {
                             winnerGamePlayer.getStats().increaseWinsByOne();
                             winnerGamePlayer.updateOnlineTime();
                             winnerGamePlayer.saveStats();
+                            winnerGamePlayer.winAnimation();
                         }
 
                         String winMessage = mlgWars.getPrefix() + "§7Das Team §a#" + winnerTeam.getTeamId()
@@ -109,11 +119,14 @@ public class WinDetection {
     }
 
     private void cleanUpOnlinePlayers(MlgWars mlgWars) {
+        mlgWars.getGameType().finish();
+
         Bukkit.getOnlinePlayers().forEach(player -> {
             GamePlayer gamePlayer = mlgWars.getData().getGamePlayers().get(player.getUniqueId());
             gamePlayer.removeFromSpectators();
             gamePlayer.cleanUpOnJoin();
             gamePlayer.teleport(Spawns.LOBBY);
+            gamePlayer.startCosmetics();
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 0.5f);
             if (DisguiseAPI.isDisguised(player)) {
                 DisguiseAPI.undisguiseToAll(player);
@@ -123,34 +136,4 @@ public class WinDetection {
             player.playerListName(player.displayName());
         });
     }
-
-    @Deprecated
-    // new wining animation system
-    private void spawnFireworkCircle(Location center, double radius, int amount) {
-
-        World world = center.getWorld();
-        double increment = (2 * Math.PI) / amount;
-        for (int i = 0; i < amount; i++) {
-
-            double angle = i * increment;
-            double x = center.getX() + (radius * Math.cos(angle));
-            double z = center.getZ() + (radius * Math.sin(angle));
-
-            Location current = new Location(world, x, center.getY(), z);
-
-            Firework firework = (Firework) current.getWorld().spawnEntity(current, EntityType.FIREWORK);
-
-            FireworkMeta fireworkMeta = firework.getFireworkMeta();
-
-            Random random = new Random();
-
-            fireworkMeta.setPower(2);
-            fireworkMeta.addEffect(FireworkEffect.builder()
-                    .with(FireworkEffect.Type.values()[random.nextInt(FireworkEffect.Type.values().length)])
-                    .withColor(Color.fromBGR(random.nextInt(255), random.nextInt(255), random.nextInt(255))).flicker(true).build());
-            firework.setFireworkMeta(fireworkMeta);
-
-        }
-    }
-
 }

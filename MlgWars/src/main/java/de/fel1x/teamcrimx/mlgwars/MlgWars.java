@@ -8,6 +8,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.*;
 import com.google.common.collect.Lists;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Sorts;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
@@ -254,7 +255,7 @@ public final class MlgWars extends JavaPlugin {
         return new TeamGameType(this);
     }
 
-    private void setMotd() {
+    public void setMotd() {
         BukkitCloudNetHelper.setMotd(this.selectedMap.getMapName() + " " + this.selectedMap.getSize().getName());
         BukkitCloudNetHelper.setMaxPlayers(this.selectedMap.getSize().getSize());
         BukkitCloudNetHelper.setExtra("lobby");
@@ -320,8 +321,14 @@ public final class MlgWars extends JavaPlugin {
     }
 
     public List<Document> getTop(int limit) {
-        return StreamSupport.stream(this.crimxAPI.getMongoDB().getMlgWarsCollection().find()
-                .sort(Sorts.descending("gamesWon")).limit(limit).spliterator(), false)
+        return this.getTop(limit, false);
+    }
+
+    public List<Document> getTop(int limit, boolean tournament) {
+        MongoCollection<Document> collection = tournament ? this.crimxAPI.getMongoDB().getMlgWarsTournamentCollection()
+                : this.crimxAPI.getMongoDB().getMlgWarsCollection();
+        return StreamSupport.stream(collection.find()
+                        .sort(Sorts.descending(tournament ? "points" : "gamesWon")).limit(limit).spliterator(), false)
                 .collect(Collectors.toList());
     }
 

@@ -16,9 +16,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class GhostKit extends Kit {
 
-    private int timer = 20;
+    private int timer = 80;
     private boolean active = false;
-    private boolean debugFlag = true;
+    private boolean debugFlag = false;
 
     public GhostKit(Player player, MlgWars mlgWars) {
         super(player, mlgWars);
@@ -41,6 +41,16 @@ public class GhostKit extends Kit {
     }
 
     @Override
+    public void disableKit() {
+        super.disableKit();
+
+        this.active = false;
+
+        this.player.setInvisible(false);
+        this.gamePlayer.setActionbarOverridden(false);
+    }
+
+    @Override
     protected void onInteract(PlayerInteractEvent event) {
         if(!this.debugFlag) {
             this.removeItemByAmount(1);
@@ -52,7 +62,7 @@ public class GhostKit extends Kit {
         this.player.getWorld().playSound(this.player.getLocation(), Sound.ENTITY_VILLAGER_WORK_CLERIC, 1f, 1f);
         this.gamePlayer.setActionbarOverridden(true);
 
-        this.runTaskTimer(this.mlgWars, 0L, 20L);
+        this.runTaskTimer(this.mlgWars, 0L, 5L);
     }
 
     @EventHandler
@@ -64,26 +74,27 @@ public class GhostKit extends Kit {
             return;
         }
 
-        Vector vectorFrom = event.getFrom().toVector();
+        /*Vector vectorFrom = event.getFrom().toVector();
         Vector vectorTo = event.getTo().toVector();
         Vector subtract = vectorTo.subtract(vectorFrom);
 
         if(this.player.getLocation().getBlock().isSolid()) {
             if(this.player.isSneaking()) {
-                subtract.add(this.player.getEyeLocation().toVector());
+                //subtract.add(this.player.getEyeLocation().toVector());
+                subtract.setY(-0.075);
             } else {
-                subtract.setY(0.075);
+                subtract.setY(1.25).multiply(2);
             }
         }
 
         this.player.setVelocity(subtract);
-        this.player.getWorld().spawnParticle(Particle.GLOW, this.player.getLocation(), 1);
+        this.player.getWorld().spawnParticle(Particle.GLOW, this.player.getLocation(), 1); */
     }
 
     @Override
     public void run() {
         this.gamePlayer.getMlgActionbar().sendActionbar(this.player, "§fGeist  §8● "
-                + ProgressBar.getProgressBar(this.timer, 10, 5,
+                + ProgressBar.getProgressBar(this.timer, 80, 5,
                 '█', ChatColor.GREEN, ChatColor.DARK_GRAY));
 
         if(this.timer <= 0) {

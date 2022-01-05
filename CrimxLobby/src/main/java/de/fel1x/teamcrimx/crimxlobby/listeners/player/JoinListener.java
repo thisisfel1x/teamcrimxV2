@@ -54,7 +54,7 @@ public class JoinListener implements Listener {
         BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player);
 
         // TODO: rework clan system
-        BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player, player1 -> {
+        /* BukkitCloudNetCloudPermissionsPlugin.getInstance().updateNameTags(player, player1 -> {
             IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(player1.getUniqueId());
             IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(permissionUser);
 
@@ -72,7 +72,7 @@ public class JoinListener implements Listener {
             }
 
             return permissionGroup;
-        });
+        }); */
 
         boolean vipPerms = player.hasPermission("crimxlobby.vip");
         int playerState = this.crimxLobby.getData().getPlayerHiderState().get(player.getUniqueId());
