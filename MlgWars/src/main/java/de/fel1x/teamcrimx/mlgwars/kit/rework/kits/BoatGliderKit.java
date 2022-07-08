@@ -26,7 +26,7 @@ public class BoatGliderKit extends Kit {
     @Override
     public @Nullable ItemStack getInteractionItemStack() {
         return new ItemBuilder(Material.OAK_BOAT, 5)
-                .setName(this.mlgWars.miniMessage().parse("<rainbow>MLG BOOOOOOOOOT"))
+                .setName(this.mlgWars.miniMessage().deserialize("<rainbow>MLG BOOOOOOOOOT"))
                 .setPDC(this.mlgWars, "KIT", this.getClass().getName())
                 .toItemStack();
     }

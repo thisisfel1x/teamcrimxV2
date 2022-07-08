@@ -41,7 +41,7 @@ public class ThorKit extends Kit {
     @Override
     public @Nullable ItemStack getInteractionItemStack() {
         return ItemBuilder.from(Material.GOLDEN_AXE)
-                .name(this.mlgWars.miniMessage().parse("<rainbow>Thors Axt LOLOLOLOLOL"))
+                .name(this.mlgWars.miniMessage().deserialize("<rainbow>Thors Axt LOLOLOLOLOL"))
                 .enchant(Enchantment.DAMAGE_ALL)
                 .unbreakable()
                 .pdc(persistentDataContainer -> persistentDataContainer.set(new NamespacedKey(this.mlgWars, "KIT"),

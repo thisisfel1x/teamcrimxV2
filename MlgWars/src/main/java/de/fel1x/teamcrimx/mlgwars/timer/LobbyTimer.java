@@ -72,8 +72,8 @@ public class LobbyTimer implements ITimer {
                 if (this.countdown == 5) {
                     this.mlgWars.getGameType().fillChests();
                     this.mlgWars.getServer()
-                            .showTitle(Title.title(this.mlgWars.miniMessage().parse("<yellow>" + this.mlgWars.getSelectedMap().getMapName()),
-                                    this.mlgWars.miniMessage().parse("<gray>Gebaut von <yellow>" + this.mlgWars.getSelectedMap().getMapBuilder())));
+                            .showTitle(Title.title(this.mlgWars.miniMessage().deserialize("<yellow>" + this.mlgWars.getSelectedMap().getMapName()),
+                                    this.mlgWars.miniMessage().deserialize("<gray>Gebaut von <yellow>" + this.mlgWars.getSelectedMap().getMapBuilder())));
                 }
 
                 if (this.countdown >= 1) {

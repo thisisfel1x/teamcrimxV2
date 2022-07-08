@@ -28,7 +28,7 @@ public class SpectatorReworkInventory {
             gui.addItem(ItemBuilder.skull()
                     .owner(gamePlayer.getPlayer())
                     .name(gamePlayer.getPlayer().displayName())
-                            .lore(this.mlgWars.miniMessage().parse("<gray>Team <aqua>#" + (gamePlayer.getPlayerMlgWarsTeamId() + 1)))
+                            .lore(this.mlgWars.miniMessage().deserialize("<gray>Team <aqua>#" + (gamePlayer.getPlayerMlgWarsTeamId() + 1)))
                     .asGuiItem(event -> {
                         if(!event.getWhoClicked().getUniqueId().equals(player.getUniqueId())) {
                             return;
@@ -36,7 +36,7 @@ public class SpectatorReworkInventory {
                         player.closeInventory();
                         if(!gamePlayer.isPlayer()) {
                             player.sendMessage(this.mlgWars.prefix().append(this.mlgWars.miniMessage()
-                                    .parse("<red>Der Spieler " + gamePlayer.getPlayer().getName() + " lebt nicht mehr")));
+                                    .deserialize("<red>Der Spieler " + gamePlayer.getPlayer().getName() + " lebt nicht mehr")));
                             return;
                         }
                         player.teleport(gamePlayer.getPlayer().getLocation());

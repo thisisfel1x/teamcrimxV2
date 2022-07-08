@@ -24,7 +24,7 @@ public class ThrowerKit extends Kit {
     public void initializeKit() {
         super.initializeKit();
         this.player.getInventory().addItem(ItemBuilder.from(Material.TNT).name(this.mlgWars.miniMessage()
-                .parse("<red>Werfbares TNT")).amount(16).pdc(persistentDataContainer ->
+                .deserialize("<red>Werfbares TNT")).amount(16).pdc(persistentDataContainer ->
                 persistentDataContainer.set(new NamespacedKey(this.mlgWars, this.getClass().getName()), PersistentDataType.INTEGER, 1))
                 .build(),
                 ItemBuilder.from(Material.WITHER_SKELETON_SKULL).amount(8)

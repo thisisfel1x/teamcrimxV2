@@ -69,6 +69,7 @@ public final class MlgWars extends JavaPlugin {
 
     private ProtocolManager protocolManager;
     private MiniMessage miniMessage;
+    private MiniMessage miniMessage0;
 
     private List<Map> availableMaps;
 
@@ -110,6 +111,7 @@ public final class MlgWars extends JavaPlugin {
 
         this.protocolManager = ProtocolLibrary.getProtocolManager();
         this.miniMessage = MiniMessage.builder().build();
+        this.miniMessage0 = MiniMessage.builder().build();
 
         File configFile = new File(this.getDataFolder(), "config.yml");
         if (!configFile.exists()) {
@@ -390,7 +392,7 @@ public final class MlgWars extends JavaPlugin {
                     String newDisplayName = prefix + "T" + (teamId + 1) + " | " + playerInfoData.getProfile().getName();
 
                     PlayerInfoData newPlayerInfoData = new PlayerInfoData(profile, playerInfoData.getLatency(), playerInfoData.getGameMode(),
-                            AdventureComponentConverter.fromComponent(MlgWars.this.miniMessage.parse(newDisplayName)));
+                            AdventureComponentConverter.fromComponent(MiniMessage.builder().build().deserialize(newDisplayName)));
                     newPlayerInfoDataList.add(newPlayerInfoData);
                 }
 

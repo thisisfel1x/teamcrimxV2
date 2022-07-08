@@ -47,7 +47,7 @@ public class Tournament extends SoloGameType {
 
                     String component = color + "#" + (i + 1) + " " + name + "<reset><dark_gray> - <green>" + points + " Punkte";
 
-                    messages.add(this.mlgWars.miniMessage().parse(component));
+                    messages.add(this.mlgWars.miniMessage().deserialize(component));
 
                 } catch (Exception ignored) {}
             }

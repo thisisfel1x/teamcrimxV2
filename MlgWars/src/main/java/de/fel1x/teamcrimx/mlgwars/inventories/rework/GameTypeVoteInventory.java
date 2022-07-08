@@ -41,7 +41,7 @@ public class GameTypeVoteInventory {
         for (ImplementedMode activeMode : this.activeModes) {
             int votes = this.votes.get(activeMode).size();
             gui.addItem(ItemBuilder.from(activeMode.skull)
-                    .lore(this.mlgWars.miniMessage().parse("<gray>Stimmen: <aqua>"
+                    .lore(this.mlgWars.miniMessage().deserialize("<gray>Stimmen: <aqua>"
                             + votes))
                     .glow(this.votes.get(activeMode).contains(player))
                     .asGuiItem(event -> {
@@ -81,23 +81,23 @@ public class GameTypeVoteInventory {
 
     public enum ImplementedMode {
         NORMAL(SoloGameType.class, true, true, ItemBuilder.skull()
-                .name(MlgWars.getInstance().miniMessage().parse("<yellow>Normal"))
+                .name(MlgWars.getInstance().miniMessage().deserialize("<yellow>Normal"))
                 .texture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzQ5MmNhOTQwNzkxMzZkMjUyNTcwM2QzNzVjMjU1N2VhYzIwMWVlN2RkMzljZTExYzY0YTljMzgxNDdlY2M0ZCJ9fX0=")
                 .build()),
         TNT_MADNESS(TntMadnessGameType.class, true, true, ItemBuilder.skull()
-                .name(MlgWars.getInstance().miniMessage().parse("<#7F3060>TNT-Wahnsinn"))
+                .name(MlgWars.getInstance().miniMessage().deserialize("<#7F3060>TNT-Wahnsinn"))
                 .texture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2FmNTk3NzZmMmYwMzQxMmM3YjU5NDdhNjNhMGNmMjgzZDUxZmU2NWFjNmRmN2YyZjg4MmUwODM0NDU2NWU5In19fQ==")
                 .build()),
         HALLOWEEN(HalloweenGameType.class, true, true, ItemBuilder.skull()
-                .name(MlgWars.getInstance().miniMessage().parse("<#FF7E24>Halloween"))
+                .name(MlgWars.getInstance().miniMessage().deserialize("<#FF7E24>Halloween"))
                 .texture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTMyMWNlNDcwZjIzMmI5ZTczZmNlMDkxY2U4NDhkZTkzODYwYTAzMzgxZDMxMDBjNDJiMzk2YzAyNTRiZTBlZiJ9fX0=")
                 .build()),
         TOURNAMENT(Tournament.class, false, true, ItemBuilder.skull()
-                .name(MlgWars.getInstance().miniMessage().parse("<#32b8e7>Turnier"))
+                .name(MlgWars.getInstance().miniMessage().deserialize("<#32b8e7>Turnier"))
                 .texture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWE2OTZlMTUyMzYzYWQ0NzdlZDZjYjVhNTE4YmZlYTg0YjAzNjE0OGZlY2FjMDU4MWYzMmM1YjUzOTY5NTgifX19")
                 .build()),
         TOURNAMENT_TNT(TournamentTntMadnessGameType.class, false, true, ItemBuilder.skull()
-                .name(MlgWars.getInstance().miniMessage().parse("<#32b8e7>Turnier (TNT-Wahnsinn)"))
+                .name(MlgWars.getInstance().miniMessage().deserialize("<#32b8e7>Turnier (TNT-Wahnsinn)"))
                 .texture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2FmNTk3NzZmMmYwMzQxMmM3YjU5NDdhNjNhMGNmMjgzZDUxZmU2NWFjNmRmN2YyZjg4MmUwODM0NDU2NWU5In19fQ==")
                 .build()),
         TEST(null, false, false, ItemBuilder.from(Material.PAPER).build());

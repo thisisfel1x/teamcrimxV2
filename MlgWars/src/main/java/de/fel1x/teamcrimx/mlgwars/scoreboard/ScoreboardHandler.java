@@ -24,20 +24,20 @@ public class ScoreboardHandler {
     public void setLobbyScoreboard(Player player) {
         Scoreboard scoreboard = this.mlgWars.getServer().getScoreboardManager().getNewScoreboard();
         Objective objective = scoreboard.registerNewObjective("dummy", "test",
-                this.mlgWars.miniMessage().parse("<dark_gray>» <aqua>teamcrimx<bold>DE</bold> <dark_gray>«"));
+                this.mlgWars.miniMessage().deserialize("<dark_gray>» <aqua>teamcrimx<bold>DE</bold> <dark_gray>«"));
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         Team mapTeam = scoreboard.registerNewTeam("map");
         mapTeam.addEntry("§a");
-        mapTeam.prefix(this.mlgWars.miniMessage().parse("<dark_gray>● <yellow>N/A"));
+        mapTeam.prefix(this.mlgWars.miniMessage().deserialize("<dark_gray>● <yellow>N/A"));
 
         Team kitTeam = scoreboard.registerNewTeam("kit");
         kitTeam.addEntry("§b");
-        kitTeam.prefix(this.mlgWars.miniMessage().parse("<dark_gray>● <gold>N/A"));
+        kitTeam.prefix(this.mlgWars.miniMessage().deserialize("<dark_gray>● <gold>N/A"));
 
         Team modeTeam = scoreboard.registerNewTeam("mode");
         modeTeam.addEntry("§c");
-        modeTeam.prefix(this.mlgWars.miniMessage().parse("<dark_gray>● <#5035f4>N/A"));
+        modeTeam.prefix(this.mlgWars.miniMessage().deserialize("<dark_gray>● <#5035f4>N/A"));
 
         objective.getScore("§1").setScore(9);
         objective.getScore("§fMap:").setScore(8);
@@ -67,24 +67,24 @@ public class ScoreboardHandler {
     public void setIngameScoreboard(Player player) {
         Scoreboard scoreboard = this.mlgWars.getServer().getScoreboardManager().getNewScoreboard();
         Objective objective = scoreboard.registerNewObjective("dummy", "test",
-                this.mlgWars.miniMessage().parse("<dark_gray>» <aqua>teamcrimx<bold>DE</bold> <dark_gray>«"));
+                this.mlgWars.miniMessage().deserialize("<dark_gray>» <aqua>teamcrimx<bold>DE</bold> <dark_gray>«"));
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         Team mapTeam = scoreboard.registerNewTeam("map");
         mapTeam.addEntry("§a");
-        mapTeam.prefix(this.mlgWars.miniMessage().parse("<dark_gray>● <yellow>N/A"));
+        mapTeam.prefix(this.mlgWars.miniMessage().deserialize("<dark_gray>● <yellow>N/A"));
 
         Team killsTeam = scoreboard.registerNewTeam("kills");
         killsTeam.addEntry("§b");
-        killsTeam.prefix(this.mlgWars.miniMessage().parse("<dark_gray>● <aqua>N/A"));
+        killsTeam.prefix(this.mlgWars.miniMessage().deserialize("<dark_gray>● <aqua>N/A"));
 
         Team playersTeam = scoreboard.registerNewTeam("players");
         playersTeam.addEntry("§c");
-        playersTeam.prefix(this.mlgWars.miniMessage().parse("<dark_gray>● <red>N/A"));
+        playersTeam.prefix(this.mlgWars.miniMessage().deserialize("<dark_gray>● <red>N/A"));
 
         Team kitTeam = scoreboard.registerNewTeam("kit");
         kitTeam.addEntry("§d");
-        kitTeam.prefix(this.mlgWars.miniMessage().parse("<dark_gray>● <gold>N/A"));
+        kitTeam.prefix(this.mlgWars.miniMessage().deserialize("<dark_gray>● <gold>N/A"));
 
         objective.getScore("§1").setScore(12);
         objective.getScore("§fMap:").setScore(11);
@@ -114,7 +114,7 @@ public class ScoreboardHandler {
 
     public void updateBoard(Player player, String value, String score) {
         if (player.getScoreboard().getTeam("map") != null) {
-            player.getScoreboard().getTeam(score).prefix(this.mlgWars.miniMessage().parse("<dark_gray>● ")
+            player.getScoreboard().getTeam(score).prefix(this.mlgWars.miniMessage().deserialize("<dark_gray>● ")
                     .append(this.legacyComponentSerializer.deserialize(value)));
         } else {
             this.setLobbyScoreboard(player);
@@ -124,8 +124,8 @@ public class ScoreboardHandler {
 
     public void updateBoardMiniMessage(Player player, String value, String score) {
         if (player.getScoreboard().getTeam("map") != null) {
-            player.getScoreboard().getTeam(score).prefix(this.mlgWars.miniMessage().parse("<dark_gray>● ")
-                    .append(this.mlgWars.miniMessage().parse(value)));
+            player.getScoreboard().getTeam(score).prefix(this.mlgWars.miniMessage().deserialize("<dark_gray>● ")
+                    .append(this.mlgWars.miniMessage().deserialize(value)));
         } else {
             this.setLobbyScoreboard(player);
             updateBoard(player, value, score);
