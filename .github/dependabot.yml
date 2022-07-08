@@ -27,7 +27,7 @@ updates:
       interval: "daily"
     labels:
       - "dependencies"
-      target-branch: "dev/1.19"
+    target-branch: "dev/1.19"
 
   - package-ecosystem: "maven"
     directory: "/MlgWars/"
