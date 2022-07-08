@@ -4,7 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.fel1x.teamcrimx</groupId>
     <artifactId>CrimxLobby</artifactId>
     <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -12,13 +11,13 @@
     <name>CrimxLobby</name>
 
     <description>Our Lobby System for navigating in our lobby</description>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
-        <java.version>16</java.version>
-    </properties>
-    <url>teamcrimx.de</url>
+    <url>teamcrimx.de/lobby</url>
+
+    <parent>
+        <groupId>de.fel1x</groupId>
+        <artifactId>teamcrimxV2</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
 
     <build>
         <plugins>
@@ -56,80 +55,11 @@
         </resources>
     </build>
 
-    <repositories>
-        <repository>
-            <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
-        </repository>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-        <repository>
-            <id>cloudnet-snapshots</id>
-            <url>https://repo.cloudnetservice.eu/repository/snapshots/</url>
-        </repository>
-        <repository>
-            <id>repo</id>
-            <url>https://repo.mattstudios.me/artifactory/public/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
-        <dependency>
-            <groupId>io.papermc.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>de.fel1x.teamcrimx</groupId>
             <artifactId>CrimxAPI</artifactId>
             <version>2.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- old inventory api -->
-        <dependency>
-            <groupId>fr.minuskube.inv</groupId>
-            <artifactId>smart-invs</artifactId>
-            <version>1.2.7</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- new inventory api -->
-        <dependency>
-            <groupId>dev.triumphteam</groupId>
-            <artifactId>triumph-gui</artifactId>
-            <version>3.0.3</version>
-        </dependency>
-
-        <!--  cloudnet -->
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-driver</artifactId>
-            <version>3.5.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-bridge</artifactId>
-            <version>3.5.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-cloudperms</artifactId>
-            <version>3.5.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-wrapper-jvm</artifactId>
-            <version>3.5.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

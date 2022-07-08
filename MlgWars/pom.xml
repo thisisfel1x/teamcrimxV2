@@ -4,7 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.fel1x.teamcrimx</groupId>
     <artifactId>MlgWars</artifactId>
     <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -12,13 +11,13 @@
     <name>MlgWars</name>
 
     <description>A minigame with too much mlg</description>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
-        <java.version>16</java.version>
-    </properties>
-    <url>teamcrimx.de</url>
+    <url>teamcrimx.de/mlgwars</url>
+
+    <parent>
+        <groupId>de.fel1x.teamcrimx</groupId>
+        <artifactId>teamcrimxV2</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
 
     <build>
         <plugins>
@@ -58,31 +57,8 @@
 
     <repositories>
         <repository>
-            <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
-        </repository>
-        <repository>
-            <id>releases</id>
-            <url>https://repo.cloudnetservice.eu/repository/releases/</url>
-        </repository>
-        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
-        </repository>
-        <!-- ProtocolLib -->
-        <repository>
-            <id>dmulloy2-repo</id>
-            <url>https://repo.dmulloy2.net/repository/public/</url>
-        </repository>
-        <!-- new inventory api -->
-        <repository>
-            <id>repo</id>
-            <url>https://repo.mattstudios.me/artifactory/public/</url>
-        </repository>
-        <!-- MiniMessage -->
-        <repository>
-            <id>sonatype-oss-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
         <!-- FAWE -->
         <repository>
@@ -93,41 +69,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.papermc.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>de.fel1x.teamcrimx</groupId>
             <artifactId>CrimxAPI</artifactId>
             <version>2.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--  cloudnet -->
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-driver</artifactId>
-            <version>3.4.0-RELEASE</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-bridge</artifactId>
-            <version>3.4.0-RELEASE</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-cloudperms</artifactId>
-            <version>3.4.0-RELEASE</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-wrapper-jvm</artifactId>
-            <version>3.4.0-RELEASE</version>
             <scope>provided</scope>
         </dependency>
 
@@ -138,42 +82,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>4.7.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- old inventory api -->
-        <dependency>
-            <groupId>fr.minuskube.inv</groupId>
-            <artifactId>smart-invs</artifactId>
-            <version>1.2.7</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- new inventory api -->
-        <dependency>
-            <groupId>dev.triumphteam</groupId>
-            <artifactId>triumph-gui</artifactId>
-            <version>3.0.3</version>
-        </dependency>
-        <!-- MiniMessage for rainbow effect and easy message styling -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>com.fastasyncworldedit</groupId>
             <artifactId>FastAsyncWorldEdit-Bukkit</artifactId>
-            <version>1.17-346</version>
+            <version>2.3.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

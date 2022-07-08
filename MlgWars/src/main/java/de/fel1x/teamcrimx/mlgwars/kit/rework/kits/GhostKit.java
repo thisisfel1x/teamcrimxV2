@@ -33,7 +33,7 @@ public class GhostKit extends Kit {
     @Override
     public @Nullable ItemStack getInteractionItemStack() {
         return ItemBuilder.from(Material.POTION)
-                .name(this.mlgWars.miniMessage().parse("<white>Trank der Unsichtbarkeit"))
+                .name(this.mlgWars.miniMessage().deserialize("<white>Trank der Unsichtbarkeit"))
                 .glow()
                 .pdc(persistentDataContainer -> persistentDataContainer.set(new NamespacedKey(this.mlgWars, "KIT"),
                         PersistentDataType.STRING, this.getClass().getName()))

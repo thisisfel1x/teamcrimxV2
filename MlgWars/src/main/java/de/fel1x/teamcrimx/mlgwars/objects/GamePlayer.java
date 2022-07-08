@@ -579,7 +579,7 @@ public class GamePlayer {
 
         if(mlgWarsTeam.getTeamPlayers().size() == mlgWarsTeam.getMaxPlayers()) {
             this.player.sendMessage(this.mlgWars.prefix().append(this.mlgWars.miniMessage()
-                    .parse("<#" + mlgWarsTeam.getColor().getRGB() + ">Team " + mlgWarsTeam.getTeamId()
+                    .deserialize("<#" + mlgWarsTeam.getColor().getRGB() + ">Team " + mlgWarsTeam.getTeamId()
                             + " <gray>ist bereits voll")));
             return -1;
         }

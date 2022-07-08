@@ -105,10 +105,10 @@ public class MlgWarsTeam {
             lore.add(completeLore);
         }
         lore.add(Component.empty());
-        lore.add(miniMessage.parse(joinInformation));
+        lore.add(miniMessage.deserialize(joinInformation));
 
         return ItemBuilder.from(itemStack)
-                .name(miniMessage.parse(displayName))
+                .name(miniMessage.deserialize(displayName))
                 .lore(lore)
                 .build();
     }

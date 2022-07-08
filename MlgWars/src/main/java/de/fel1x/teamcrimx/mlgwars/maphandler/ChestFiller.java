@@ -188,7 +188,7 @@ public class ChestFiller {
         }
 
         items.add(new ItemBuilder(Material.DIRT)
-                .setName(MiniMessage.builder().build().parse("<rainbow>Magische Erde</rainbow>"))
+                .setName(MiniMessage.builder().build().deserialize("<rainbow>Magische Erde</rainbow>"))
                 .setLore(Component.empty(), Component.text("Huch? Wie kommt",
                                 TextColor.fromHexString("#dda1fc")),
                         Component.text("die denn hier rein?!", TextColor.fromHexString("#dda1fc")))
@@ -353,7 +353,7 @@ public class ChestFiller {
         }
 
         items.add(new ItemBuilder(Material.DIRT)
-                .setName(MiniMessage.builder().build().parse("<rainbow>Magische Erde</rainbow>"))
+                .setName(MiniMessage.builder().build().deserialize("<rainbow>Magische Erde</rainbow>"))
                 .setLore(Component.empty(), Component.text("Huch? Wie kommt",
                                 TextColor.fromHexString("#dda1fc")),
                         Component.text("die denn hier rein?!", TextColor.fromHexString("#dda1fc")))

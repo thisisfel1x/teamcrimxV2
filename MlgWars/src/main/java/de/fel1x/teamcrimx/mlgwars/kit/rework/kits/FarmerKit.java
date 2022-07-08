@@ -68,7 +68,7 @@ public class FarmerKit extends Kit {
 
         DisguiseType toDisguise = this.disguiseType[this.random.nextInt(this.disguiseType.length)];
         this.player.sendMessage(this.mlgWars.prefix()
-                .append(this.mlgWars.miniMessage().parse("<gray>Du bist nun als <green>"))
+                .append(this.mlgWars.miniMessage().deserialize("<gray>Du bist nun als <green>"))
                         .append(Component.translatable(toDisguise.getEntityType().translationKey()))
                 .append(Component.text(" für 60 Sekunden versteckt", NamedTextColor.GRAY)));
 

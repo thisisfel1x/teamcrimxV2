@@ -12,13 +12,13 @@
     <name>CrimxAPI</name>
 
     <description>An API to connect our minigames with other stuff</description>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
-        <java.version>16</java.version>
-    </properties>
-    <url>teamcrimx.de</url>
+    <url>api.teamcrimx.de</url>
+
+    <parent>
+        <groupId>de.fel1x.teamcrimx</groupId>
+        <artifactId>teamcrimxV2</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
 
     <build>
         <plugins>
@@ -58,88 +58,27 @@
 
     <repositories>
         <repository>
-            <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
-        </repository>
-        <repository>
-            <id>cloudnet-snapshots</id>
-            <url>https://repo.cloudnetservice.eu/repository/snapshots/</url>
-        </repository>
-        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <!-- ProtocolLib -->
         <repository>
-            <id>dmulloy2-repo</id>
-            <url>https://repo.dmulloy2.net/repository/public/</url>
+            <id>codemc.io</id>
+            <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
+
     </repositories>
 
     <dependencies>
-        <!-- Paper dependency for Minecraft -->
         <dependency>
-            <groupId>io.papermc.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <groupId>dev.esophose</groupId>
+            <artifactId>playerparticles</artifactId>
+            <version>7.25</version>
         </dependency>
-
-        <!-- MongoDB dependency - sync -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver</artifactId>
-            <version>LATEST</version>
-        </dependency>
-
-        <!--  cloudnet driver for plugins and modules -->
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-driver</artifactId>
-            <version>3.5.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--  cloudnet wrapper for plugins -->
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-wrapper-jvm</artifactId>
-            <version>3.5.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--  cloudnet bridge module for plugins and modules -->
-        <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-bridge</artifactId>
-            <version>3.5.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- TODO: maven -->
-        <dependency>
-            <groupId>dev.esophose.playerparticles</groupId>
-            <artifactId>PlayerParticles</artifactId>
-            <version>LATEST</version>
-            <scope>system</scope>
-            <systemPath>E:/teamcrimxV2/local-libraries/PlayerParticles_v7.18.jar</systemPath>
-        </dependency>
-
         <dependency>
             <groupId>com.github.juliarn</groupId>
             <artifactId>npc-lib</artifactId>
-            <version>development-SNAPSHOT</version>
+            <version>2.6-RELEASE</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>4.7.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>fr.minuskube.inv</groupId>
-            <artifactId>smart-invs</artifactId>
-            <version>1.2.7</version>
-            <scope>provided</scope>
         </dependency>
 
     </dependencies>

@@ -19,7 +19,7 @@ public class MlgActionbar extends ActionbarImpl {
     @Override
     public Component getAdditionalComponent() {
         int teamId = this.mlgWars.getData().getGamePlayers().get(this.playerUUID).getPlayerMlgWarsTeamId() + 1;
-        return this.mlgWars.miniMessage().parse("<gray>Team <green>#" + teamId);
+        return this.mlgWars.miniMessage().deserialize("<gray>Team <green>#" + teamId);
     }
 
 }
