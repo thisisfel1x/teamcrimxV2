@@ -29,6 +29,42 @@
         <module>FloorIsLava2</module>
     </modules>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
     <repositories>
         <!-- CloudNet -->
         <repository>
@@ -75,21 +111,21 @@
         <dependency>
             <groupId>de.dytanic.cloudnet</groupId>
             <artifactId>cloudnet-driver</artifactId>
-            <version>3.4.0-RELEASE</version>
+            <version>3.4.5-RELEASE</version>
             <scope>provided</scope>
         </dependency>
         <!--  cloudnet wrapper for plugins -->
         <dependency>
             <groupId>de.dytanic.cloudnet</groupId>
             <artifactId>cloudnet-wrapper-jvm</artifactId>
-            <version>3.4.0-RELEASE</version>
+            <version>3.4.5-RELEASE</version>
             <scope>provided</scope>
         </dependency>
         <!--  cloudnet bridge module for plugins and modules -->
         <dependency>
             <groupId>de.dytanic.cloudnet</groupId>
             <artifactId>cloudnet-bridge</artifactId>
-            <version>3.4.0-RELEASE</version>
+            <version>3.4.5-RELEASE</version>
             <scope>provided</scope>
         </dependency>
         <!--  cloudnet cloudperms module for plugins and modules -->
