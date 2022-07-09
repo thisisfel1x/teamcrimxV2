@@ -12,3 +12,51 @@ updates:
     labels:
       - "dependencies"
     target-branch: "dev/1.19"
+
+  - package-ecosystem: "maven"
+    directory: "/CrimxAPI/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+    target-branch: "dev/1.19"
+
+  - package-ecosystem: "maven"
+    directory: "/CrimxLobby/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+    target-branch: "dev/1.19"
+
+  - package-ecosystem: "maven"
+    directory: "/MlgWars/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+    target-branch: "dev/1.19"
+
+  - package-ecosystem: "maven"
+    directory: "/Bingo/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+    target-branch: "dev/1.19"
+
+  - package-ecosystem: "maven"
+    directory: "/FloorIsLava2/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+    target-branch: "dev/1.19"
+
+  - package-ecosystem: "maven"
+    directory: "/CaptureTheFlag/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+    target-branch: "dev/1.19"
