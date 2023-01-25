@@ -132,7 +132,7 @@
         <dependency>
             <groupId>de.dytanic.cloudnet</groupId>
             <artifactId>cloudnet-cloudperms</artifactId>
-            <version>3.4.0-RELEASE</version>
+            <version>3.4.5-RELEASE</version>
             <scope>provided</scope>
         </dependency>
         <!-- ProtocolLib -->
