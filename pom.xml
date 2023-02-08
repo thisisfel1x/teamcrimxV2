@@ -105,7 +105,7 @@
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver</artifactId>
-            <version>LATEST</version>
+            <version>3.12.12</version>
         </dependency>
         <!--  cloudnet driver for plugins and modules -->
         <dependency>
